@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stock Timing Dashboard</title>
+<script>const DATA_ALL = {"TSLA": {"ticker": "TSLA", "generated": "2026-07-22 09:12 AM ET", "price": 378.9299926757813, "monthName": "July", "ranges": {"daily": {"low": 369.98, "high": 384.07}, "weekly": {"low": 369.43, "high": 386.61}, "monthly": {"low": 369.43, "high": 432.86}, "yearly": {"low": 297.82, "high": 498.83}}, "intraday15m": {"days": 60, "high": {"09:30": 33.3, "09:45": 5.0, "10:00": 5.0, "10:45": 6.7, "11:00": 3.3, "11:15": 1.7, "11:30": 3.3, "11:45": 1.7, "12:15": 3.3, "12:45": 1.7, "13:00": 1.7, "13:15": 1.7, "13:30": 1.7, "14:00": 3.3, "14:30": 6.7, "15:00": 3.3, "15:15": 3.3, "15:30": 3.3, "15:45": 10.0}, "low": {"09:30": 33.3, "09:45": 6.7, "10:00": 1.7, "10:15": 6.7, "10:30": 8.3, "10:45": 1.7, "11:00": 1.7, "11:15": 1.7, "11:45": 3.3, "12:00": 3.3, "12:15": 1.7, "12:30": 3.3, "12:45": 1.7, "13:15": 1.7, "14:45": 6.7, "15:00": 1.7, "15:15": 8.3, "15:30": 1.7, "15:45": 5.0}}, "intradayHourly": {"days": 721, "high": {"09:30": 51.2, "10:30": 11.2, "11:30": 7.6, "12:30": 6.1, "13:30": 5.3, "14:30": 6.7, "15:30": 11.9}, "low": {}}, "weekday": {"weeks": 260, "high": {"Monday": 27.7, "Tuesday": 16.5, "Wednesday": 18.5, "Thursday": 11.5, "Friday": 25.8}, "low": {"Monday": 29.6, "Tuesday": 17.7, "Wednesday": 10.4, "Thursday": 14.2, "Friday": 28.1}}, "dayOfMonth": {"months": 59, "high": {"early (1st-10th)": 39.0, "mid (11th-20th)": 18.6, "late (21st-31st)": 42.4}, "low": {"early (1st-10th)": 44.1, "mid (11th-20th)": 20.3, "late (21st-31st)": 35.6}}, "seasonality": {"Jan": {"avgRet": 5.45, "winRate": 56.0, "n": 16}, "Feb": {"avgRet": 0.97, "winRate": 44.0, "n": 16}, "Mar": {"avgRet": -1.23, "winRate": 44.0, "n": 16}, "Apr": {"avgRet": 5.94, "winRate": 62.0, "n": 16}, "May": {"avgRet": 6.64, "winRate": 50.0, "n": 16}, "Jun": {"avgRet": 8.24, "winRate": 69.0, "n": 16}, "Jul": {"avgRet": 3.12, "winRate": 47.0, "n": 17}, "Aug": {"avgRet": 5.98, "winRate": 50.0, "n": 16}, "Sep": {"avgRet": 2.3, "winRate": 44.0, "n": 16}, "Oct": {"avgRet": 2.48, "winRate": 38.0, "n": 16}, "Nov": {"avgRet": 10.6, "winRate": 69.0, "n": 16}, "Dec": {"avgRet": 1.03, "winRate": 62.0, "n": 16}}, "seasonalityYears": 17, "swing": {"thresholdPct": 10.0, "pivotCount": 71, "medianSpacingTradingDays": 14, "medianAmplitudePct": 21.6, "hitRate2d": 15.0, "hitRate3d": 23.0, "tested": 65, "recentPivots": [{"date": "2025-10-10", "type": "low", "price": 413.49}, {"date": "2025-11-03", "type": "high", "price": 468.37}, {"date": "2025-11-21", "type": "low", "price": 391.09}, {"date": "2025-12-16", "type": "high", "price": 489.88}, {"date": "2026-04-08", "type": "low", "price": 343.25}, {"date": "2026-05-13", "type": "high", "price": 445.27}, {"date": "2026-06-25", "type": "low", "price": 375.12}, {"date": "2026-07-01", "type": "high", "price": 425.3}]}, "levels": {"support": [{"price": 362.89, "touches": 1, "distPct": -4.2}, {"price": 353.12, "touches": 6, "distPct": -6.8}, {"price": 342.04, "touches": 2, "distPct": -9.7}], "resistance": [{"price": 397.3, "touches": 5, "distPct": 4.8}, {"price": 418.34, "touches": 6, "distPct": 10.4}, {"price": 428.77, "touches": 3, "distPct": 13.2}]}, "backtests": {"overnight": {"avgPct": 0.088, "winRate": 54.7, "totalPct": 127.0, "n": 1252}, "intraday": {"avgPct": 0.026, "winRate": 50.2, "totalPct": -23.0, "n": 1253}, "buy1030SellClose": {"avgPct": 0.056, "winRate": 51.5, "totalPct": 27.0, "n": 721}, "openToClose2y": {"avgPct": 0.023, "winRate": 48.5, "totalPct": -12.0, "n": 721}}, "methods": {"gann": {"rate": 11.9, "control": 10.8, "counts": [30, 45, 60, 90, 120, 144, 180, 270, 360], "annivHits": 27, "pivots": 71, "upcoming": [{"date": "2026-07-25", "rule": "30 days from low 06/25"}, {"date": "2026-07-31", "rule": "30 days from high 07/01"}, {"date": "2026-08-09", "rule": "45 days from low 06/25"}, {"date": "2026-08-11", "rule": "90 days from high 05/13"}, {"date": "2026-08-15", "rule": "45 days from high 07/01"}, {"date": "2026-08-24", "rule": "60 days from low 06/25"}, {"date": "2026-08-30", "rule": "60 days from high 07/01"}, {"date": "2026-09-10", "rule": "120 days from high 05/13"}]}, "fib": {"rate": 14.4, "control": 14.7, "counts": [8, 13, 21, 34, 55, 89, 144], "upcoming": [{"date": "2026-07-27", "rule": "Fib 21 bars from low 06/25"}, {"date": "2026-07-31", "rule": "Fib 21 bars from high 07/01"}, {"date": "2026-08-03", "rule": "Fib 55 bars from high 05/13"}, {"date": "2026-08-13", "rule": "Fib 34 bars from low 06/25"}, {"date": "2026-08-19", "rule": "Fib 34 bars from high 07/01"}, {"date": "2026-09-11", "rule": "Fib 55 bars from low 06/25"}, {"date": "2026-09-17", "rule": "Fib 55 bars from high 07/01"}]}, "hurst": {"cycles": {"10": {"nextTroughDays": 2, "nextCrestDays": 7, "ampPct": 1.86, "lowsAlignedPct": 26.0, "chancePct": 50.0}, "20": {"nextTroughDays": 2, "nextCrestDays": 12, "ampPct": 2.06, "lowsAlignedPct": 23.0, "chancePct": 35.0}, "40": {"nextTroughDays": 15, "nextCrestDays": 35, "ampPct": 1.28, "lowsAlignedPct": 29.0, "chancePct": 32.0}, "80": {"nextTroughDays": 6, "nextCrestDays": 46, "ampPct": 5.9, "lowsAlignedPct": 31.0, "chancePct": 31.0}}, "upcoming": [{"date": "2026-07-23", "cycle": "10-day", "kind": "trough"}, {"date": "2026-07-23", "cycle": "20-day", "kind": "trough"}, {"date": "2026-07-29", "cycle": "80-day", "kind": "trough"}, {"date": "2026-07-30", "cycle": "10-day", "kind": "crest"}, {"date": "2026-08-06", "cycle": "20-day", "kind": "crest"}, {"date": "2026-08-11", "cycle": "40-day", "kind": "trough"}, {"date": "2026-09-08", "cycle": "40-day", "kind": "crest"}]}, "astro": {"moonLowPct": 11.0, "moonHighPct": 19.0, "moonChance": 20.0, "retroPivPct": 21.0, "retroChance": 19.0, "moonsNext": [{"date": "2026-07-29", "time": "10:35 AM ET", "kind": "full"}, {"date": "2026-08-12", "time": "1:36 PM ET", "kind": "new"}, {"date": "2026-08-28", "time": "12:18 AM ET", "kind": "full"}, {"date": "2026-09-10", "time": "11:26 PM ET", "kind": "new"}], "retroRanges": [["2026-07-23", "2026-07-24"]]}}, "vibration": {"high": [{"aspect": "Moon sextile Uranus", "lift": 2.71, "hits": 10, "n": 36, "basePct": 10.2}, {"aspect": "Moon conjunct Mercury", "lift": 2.51, "hits": 5, "n": 36, "basePct": 5.5}, {"aspect": "Moon trine Uranus", "lift": 2.03, "hits": 7, "n": 36, "basePct": 9.6}, {"aspect": "Sun conjunct Mercury", "lift": 2.15, "hits": 6, "n": 36, "basePct": 7.7}, {"aspect": "Mars trine Saturn", "lift": 2.47, "hits": 4, "n": 36, "basePct": 4.5}], "low": [{"aspect": "Mars sextile Uranus", "lift": 4.55, "hits": 5, "n": 35, "basePct": 3.1}, {"aspect": "Moon conjunct Mars", "lift": 3.62, "hits": 7, "n": 35, "basePct": 5.5}, {"aspect": "Sun sextile Jupiter", "lift": 4.14, "hits": 4, "n": 35, "basePct": 2.8}, {"aspect": "Moon trine Neptune", "lift": 2.31, "hits": 8, "n": 35, "basePct": 9.9}, {"aspect": "Mercury conjunct Venus", "lift": 2.97, "hits": 4, "n": 35, "basePct": 3.8}], "retro": [{"planet": "Venus", "lift": 1.65, "hits": 8, "n": 71}, {"planet": "Mars", "lift": 1.7, "hits": 10, "n": 71}], "numerology": {"tickerNumber": 7, "lift": 0.89, "hits": 7, "n": 71, "basePct": 11.0}, "chanceLift": 6.41, "sepharial": {"tests": [{"name": "any planet station day", "lift": 0.75, "hits": 12, "n": 71, "basePct": 22.5}, {"name": "Moon declination extreme", "lift": 1.03, "hits": 16, "n": 71, "basePct": 21.9}, {"name": "Moon crossing equator", "lift": 0.83, "hits": 13, "n": 71, "basePct": 22.1}], "chaldeanNumber": 2, "rulingPlanet": "Moon"}, "upcoming": [{"date": "2026-08-17", "rule": "Moon trine Uranus (highs)"}, {"date": "2026-08-25", "rule": "Moon trine Uranus (highs)"}, {"date": "2026-08-26", "rule": "Moon trine Uranus (highs)"}, {"date": "2026-08-27", "rule": "Moon trine Uranus (highs)"}, {"date": "2026-09-07", "rule": "Moon sextile Uranus (highs)"}, {"date": "2026-09-07", "rule": "Moon conjunct Mars (lows)"}, {"date": "2026-09-08", "rule": "Moon sextile Uranus (highs)"}, {"date": "2026-09-08", "rule": "Moon conjunct Mars (lows)"}, {"date": "2026-09-09", "rule": "Moon sextile Uranus (highs)"}, {"date": "2026-09-11", "rule": "Moon conjunct Mercury (highs)"}]}, "trackRecord": {"since": "2026-07-09", "resolved": [], "n": 0, "hit2Rate": null, "hit3Rate": null, "methodFactors": {}, "famStats": {}}, "predictions": [{"n": 1, "type": "high", "date": "Mon 07/27", "isoDate": "2026-07-27", "time": "9:30 AM ET", "timePct": 33.3, "altTime": "3:45 PM ET", "altTimePct": 10.0, "astroTime": null, "price": 418.34, "dateWindow": "07/23\u201307/29", "score": 4.07, "scoreMax": 4.07, "methods": ["Gann 30 days from low 06/25", "Fib 21 bars from low 06/25"]}, {"n": 2, "type": "low", "date": "Fri 07/31", "isoDate": "2026-07-31", "time": "9:30 AM ET", "timePct": 33.3, "altTime": "3:15 PM ET", "altTimePct": 8.3, "astroTime": null, "price": 342.04, "dateWindow": "07/29\u201308/04", "score": 2.68, "scoreMax": 4.07, "methods": ["Gann 30 days from high 07/01", "Fib 21 bars from high 07/01"]}, {"n": 3, "type": "high", "date": "Mon 08/10", "isoDate": "2026-08-10", "time": "9:30 AM ET", "timePct": 33.3, "altTime": "3:45 PM ET", "altTimePct": 10.0, "astroTime": null, "price": 418.34, "dateWindow": "08/06\u201308/12", "score": 3.72, "scoreMax": 4.07, "methods": ["Gann 45 days from low 06/25"]}, {"n": 4, "type": "low", "date": "Mon 08/17", "isoDate": "2026-08-17", "time": "9:30 AM ET", "timePct": 33.3, "altTime": "3:15 PM ET", "altTimePct": 8.3, "astroTime": null, "price": 342.04, "dateWindow": "08/13\u201308/19", "score": 2.04, "scoreMax": 4.07, "methods": ["Gann 45 days from high 07/01", "Vibe: Moon trine Uranus"]}, {"n": 5, "type": "high", "date": "Mon 08/31", "isoDate": "2026-08-31", "time": "9:30 AM ET", "timePct": 33.3, "altTime": "3:45 PM ET", "altTimePct": 10.0, "astroTime": null, "price": 418.34, "dateWindow": "08/27\u201309/02", "score": 3.12, "scoreMax": 4.07, "methods": ["Gann 60 days from high 07/01"]}], "predictionBasis": {"lastPivot": {"date": "2026-07-01", "type": "high", "price": 425.3}, "medianSpacing": 14, "medianAmpPct": 21.6, "medianUpPct": 23.4, "medianDownPct": 19.8, "hitRate2d": 15.0, "hitRate3d": 23.0}, "chart": {"dates": ["2025-10-15", "2025-10-16", "2025-10-17", "2025-10-20", "2025-10-21", "2025-10-22", "2025-10-23", "2025-10-24", "2025-10-27", "2025-10-28", "2025-10-29", "2025-10-30", "2025-10-31", "2025-11-03", "2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-10", "2025-11-11", "2025-11-12", "2025-11-13", "2025-11-14", "2025-11-17", "2025-11-18", "2025-11-19", "2025-11-20", "2025-11-21", "2025-11-24", "2025-11-25", "2025-11-26", "2025-11-28", "2025-12-01", "2025-12-02", "2025-12-03", "2025-12-04", "2025-12-05", "2025-12-08", "2025-12-09", "2025-12-10", "2025-12-11", "2025-12-12", "2025-12-15", "2025-12-16", "2025-12-17", "2025-12-18", "2025-12-19", "2025-12-22", "2025-12-23", "2025-12-24", "2025-12-26", "2025-12-29", "2025-12-30", "2025-12-31", "2026-01-02", "2026-01-05", "2026-01-06", "2026-01-07", "2026-01-08", "2026-01-09", "2026-01-12", "2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-12", "2026-02-13", "2026-02-17", "2026-02-18", "2026-02-19", "2026-02-20", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-02-27", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-06", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15", "2026-07-16", "2026-07-17", "2026-07-20", "2026-07-21"], "closes": [435.15, 428.75, 439.31, 447.43, 442.6, 438.97, 448.98, 433.72, 452.42, 460.55, 461.51, 440.1, 456.56, 468.37, 444.26, 462.07, 445.91, 429.52, 445.23, 439.62, 430.6, 401.99, 404.35, 408.92, 401.25, 403.99, 395.23, 391.09, 417.78, 419.4, 426.58, 430.17, 430.14, 429.24, 446.74, 454.53, 455.0, 439.58, 445.17, 451.45, 446.89, 458.96, 475.31, 489.88, 467.26, 483.37, 481.2, 488.73, 485.56, 485.4, 475.19, 459.64, 454.43, 449.72, 438.07, 451.67, 432.96, 431.41, 435.8, 445.01, 448.96, 447.2, 439.2, 438.57, 437.5, 419.25, 431.44, 449.36, 449.06, 435.2, 430.9, 431.46, 416.56, 430.41, 421.81, 421.96, 406.01, 397.21, 411.11, 417.32, 425.21, 428.27, 417.07, 417.44, 410.63, 411.32, 411.71, 411.82, 399.83, 409.38, 417.4, 408.58, 402.51, 403.32, 392.43, 405.94, 405.55, 396.73, 398.68, 399.24, 407.82, 395.01, 391.2, 395.56, 399.27, 392.78, 380.3, 367.96, 380.85, 383.03, 385.95, 372.11, 361.83, 355.28, 371.75, 381.26, 360.59, 352.82, 346.65, 343.25, 345.62, 348.95, 352.42, 364.2, 391.95, 388.9, 400.62, 392.5, 386.42, 387.51, 373.72, 376.3, 378.67, 376.02, 372.8, 381.63, 390.82, 392.51, 389.37, 398.73, 411.79, 428.35, 445.0, 433.45, 445.27, 443.3, 422.24, 409.99, 404.11, 417.26, 417.85, 426.01, 433.59, 440.36, 442.1, 435.79, 415.88, 423.74, 423.7, 418.45, 391.0, 408.95, 396.68, 381.59, 399.15, 406.43, 411.15, 404.66, 396.38, 400.49, 405.05, 381.61, 375.53, 375.12, 379.71, 411.84, 420.6, 425.3, 393.45, 419.77, 402.9, 394.06, 406.55, 407.76, 394.76, 396.18, 394.46, 391.06, 380.84, 369.57, 378.93], "pivots": [{"date": "2025-11-03", "type": "high", "price": 468.37}, {"date": "2025-11-21", "type": "low", "price": 391.09}, {"date": "2025-12-16", "type": "high", "price": 489.88}, {"date": "2026-04-08", "type": "low", "price": 343.25}, {"date": "2026-05-13", "type": "high", "price": 445.27}, {"date": "2026-06-25", "type": "low", "price": 375.12}, {"date": "2026-07-01", "type": "high", "price": 425.3}]}}, "HOOD": {"ticker": "HOOD", "generated": "2026-07-22 09:12 AM ET", "price": 106.36000061035156, "monthName": "July", "ranges": {"daily": {"low": 102.82, "high": 108.21}, "weekly": {"low": 98.61, "high": 108.21}, "monthly": {"low": 96.59, "high": 120.05}, "yearly": {"low": 63.51, "high": 153.86}}, "intraday15m": {"days": 60, "high": {"09:30": 28.3, "09:45": 5.0, "10:00": 5.0, "10:15": 1.7, "10:30": 1.7, "10:45": 1.7, "11:00": 1.7, "11:15": 5.0, "11:45": 1.7, "12:00": 5.0, "12:15": 1.7, "12:30": 5.0, "12:45": 3.3, "13:00": 1.7, "13:30": 1.7, "13:45": 1.7, "14:00": 1.7, "14:30": 1.7, "14:45": 3.3, "15:15": 1.7, "15:30": 6.7, "15:45": 13.3}, "low": {"09:30": 40.0, "09:45": 16.7, "10:00": 1.7, "10:15": 3.3, "10:30": 6.7, "10:45": 1.7, "11:45": 3.3, "12:15": 1.7, "12:30": 1.7, "12:45": 1.7, "13:30": 1.7, "13:45": 1.7, "14:00": 3.3, "14:15": 1.7, "14:30": 1.7, "14:45": 3.3, "15:30": 5.0, "15:45": 3.3}}, "intradayHourly": {"days": 721, "high": {"09:30": 46.9, "10:30": 10.5, "11:30": 7.9, "12:30": 6.9, "13:30": 5.1, "14:30": 9.7, "15:30": 12.9}, "low": {}}, "weekday": {"weeks": 259, "high": {"Monday": 21.6, "Tuesday": 18.9, "Wednesday": 15.4, "Thursday": 16.2, "Friday": 27.8}, "low": {"Monday": 27.0, "Tuesday": 18.5, "Wednesday": 10.8, "Thursday": 14.3, "Friday": 29.3}}, "dayOfMonth": {"months": 59, "high": {"early (1st-10th)": 40.7, "mid (11th-20th)": 22.0, "late (21st-31st)": 37.3}, "low": {"early (1st-10th)": 49.2, "mid (11th-20th)": 16.9, "late (21st-31st)": 33.9}}, "seasonality": {"Jan": {"avgRet": 3.85, "winRate": 40.0, "n": 5}, "Feb": {"avgRet": 1.23, "winRate": 20.0, "n": 5}, "Mar": {"avgRet": 1.35, "winRate": 40.0, "n": 5}, "Apr": {"avgRet": -6.24, "winRate": 40.0, "n": 5}, "May": {"avgRet": 18.84, "winRate": 100.0, "n": 5}, "Jun": {"avgRet": 10.03, "winRate": 80.0, "n": 5}, "Jul": {"avgRet": 9.13, "winRate": 80.0, "n": 5}, "Aug": {"avgRet": 3.01, "winRate": 60.0, "n": 5}, "Sep": {"avgRet": 8.96, "winRate": 60.0, "n": 5}, "Oct": {"avgRet": -1.05, "winRate": 60.0, "n": 5}, "Nov": {"avgRet": -0.02, "winRate": 20.0, "n": 5}, "Dec": {"avgRet": -2.92, "winRate": 20.0, "n": 5}}, "seasonalityYears": 6, "swing": {"thresholdPct": 10.0, "pivotCount": 85, "medianSpacingTradingDays": 10, "medianAmplitudePct": 23.0, "hitRate2d": 24.0, "hitRate3d": 35.0, "tested": 79, "recentPivots": [{"date": "2026-03-30", "type": "low", "price": 65.16}, {"date": "2026-04-20", "type": "high", "price": 91.28}, {"date": "2026-04-29", "type": "low", "price": 71.2}, {"date": "2026-05-29", "type": "high", "price": 94.3}, {"date": "2026-06-05", "type": "low", "price": 82.47}, {"date": "2026-06-18", "type": "high", "price": 108.15}, {"date": "2026-06-25", "type": "low", "price": 93.47}, {"date": "2026-07-06", "type": "high", "price": 117.55}]}, "levels": {"support": [{"price": 99.5, "touches": 4, "distPct": -6.5}, {"price": 93.89, "touches": 2, "distPct": -11.7}, {"price": 91.27, "touches": 2, "distPct": -14.2}], "resistance": [{"price": 109.09, "touches": 4, "distPct": 2.6}, {"price": 114.71, "touches": 5, "distPct": 7.9}, {"price": 117.55, "touches": 1, "distPct": 10.5}]}, "backtests": {"overnight": {"avgPct": 0.018, "winRate": 47.6, "totalPct": -19.0, "n": 1248}, "intraday": {"avgPct": 0.176, "winRate": 51.3, "totalPct": 244.0, "n": 1249}, "buy1030SellClose": {"avgPct": 0.155, "winRate": 52.0, "totalPct": 143.0, "n": 721}, "openToClose2y": {"avgPct": 0.246, "winRate": 53.0, "totalPct": 266.0, "n": 721}}, "methods": {"gann": {"rate": 12.3, "control": 11.4, "counts": [30, 45, 60, 90, 120, 144, 180, 270, 360], "annivHits": 36, "pivots": 85, "upcoming": [{"date": "2026-07-25", "rule": "30 days from low 06/25"}, {"date": "2026-08-02", "rule": "45 days from high 06/18"}, {"date": "2026-08-05", "rule": "30 days from high 07/06"}, {"date": "2026-08-09", "rule": "45 days from low 06/25"}, {"date": "2026-08-17", "rule": "60 days from high 06/18"}, {"date": "2026-08-20", "rule": "45 days from high 07/06"}, {"date": "2026-08-24", "rule": "60 days from low 06/25"}, {"date": "2026-09-04", "rule": "60 days from high 07/06"}, {"date": "2026-09-16", "rule": "90 days from high 06/18"}]}, "fib": {"rate": 15.1, "control": 13.1, "counts": [8, 13, 21, 34, 55, 89, 144], "upcoming": [{"date": "2026-07-23", "rule": "Fib 13 bars from high 07/06"}, {"date": "2026-07-27", "rule": "Fib 21 bars from low 06/25"}, {"date": "2026-08-04", "rule": "Fib 21 bars from high 07/06"}, {"date": "2026-08-07", "rule": "Fib 34 bars from high 06/18"}, {"date": "2026-08-13", "rule": "Fib 34 bars from low 06/25"}, {"date": "2026-08-21", "rule": "Fib 34 bars from high 07/06"}, {"date": "2026-09-07", "rule": "Fib 55 bars from high 06/18"}, {"date": "2026-09-11", "rule": "Fib 55 bars from low 06/25"}]}, "hurst": {"cycles": {"10": {"nextTroughDays": 3, "nextCrestDays": 8, "ampPct": 2.26, "lowsAlignedPct": 40.0, "chancePct": 50.0}, "20": {"nextTroughDays": 18, "nextCrestDays": 8, "ampPct": 1.7, "lowsAlignedPct": 33.0, "chancePct": 35.0}, "40": {"nextTroughDays": 2, "nextCrestDays": 22, "ampPct": 2.9, "lowsAlignedPct": 38.0, "chancePct": 32.0}, "80": {"nextTroughDays": 18, "nextCrestDays": 58, "ampPct": 4.92, "lowsAlignedPct": 26.0, "chancePct": 31.0}}, "upcoming": [{"date": "2026-07-23", "cycle": "40-day", "kind": "trough"}, {"date": "2026-07-24", "cycle": "10-day", "kind": "trough"}, {"date": "2026-07-31", "cycle": "10-day", "kind": "crest"}, {"date": "2026-07-31", "cycle": "20-day", "kind": "crest"}, {"date": "2026-08-14", "cycle": "20-day", "kind": "trough"}, {"date": "2026-08-14", "cycle": "80-day", "kind": "trough"}, {"date": "2026-08-20", "cycle": "40-day", "kind": "crest"}]}, "astro": {"moonLowPct": 19.0, "moonHighPct": 14.0, "moonChance": 20.0, "retroPivPct": 24.0, "retroChance": 19.0, "moonsNext": [{"date": "2026-07-29", "time": "10:35 AM ET", "kind": "full"}, {"date": "2026-08-12", "time": "1:36 PM ET", "kind": "new"}, {"date": "2026-08-28", "time": "12:18 AM ET", "kind": "full"}, {"date": "2026-09-10", "time": "11:26 PM ET", "kind": "new"}], "retroRanges": [["2026-07-23", "2026-07-24"]]}}, "vibration": {"high": [{"aspect": "Moon opposite Mercury", "lift": 3.58, "hits": 7, "n": 43, "basePct": 4.5}, {"aspect": "Moon sextile Uranus", "lift": 1.82, "hits": 8, "n": 43, "basePct": 10.2}, {"aspect": "Moon trine Venus", "lift": 1.72, "hits": 9, "n": 43, "basePct": 12.2}, {"aspect": "Moon conjunct Pluto", "lift": 2.17, "hits": 5, "n": 43, "basePct": 5.4}, {"aspect": "Moon opposite Mars", "lift": 2.39, "hits": 4, "n": 43, "basePct": 3.9}], "low": [{"aspect": "Mercury square Uranus", "lift": 3.73, "hits": 5, "n": 42, "basePct": 3.2}, {"aspect": "Venus sextile Neptune", "lift": 2.93, "hits": 4, "n": 42, "basePct": 3.2}, {"aspect": "Mercury trine Pluto", "lift": 2.63, "hits": 4, "n": 42, "basePct": 3.6}, {"aspect": "Mercury conjunct Venus", "lift": 2.48, "hits": 4, "n": 42, "basePct": 3.8}, {"aspect": "Moon sextile Venus", "lift": 1.78, "hits": 8, "n": 42, "basePct": 10.7}], "retro": [{"planet": "Mars", "lift": 1.42, "hits": 10, "n": 85}], "numerology": {"tickerNumber": 6, "lift": 1.07, "hits": 10, "n": 85, "basePct": 11.0}, "chanceLift": 5.37, "sepharial": {"tests": [{"name": "Mercury station (turning retro/direct)", "lift": 1.12, "hits": 8, "n": 85, "basePct": 8.4}, {"name": "any planet station day", "lift": 0.99, "hits": 19, "n": 85, "basePct": 22.5}, {"name": "Moon declination extreme", "lift": 0.86, "hits": 16, "n": 85, "basePct": 21.9}, {"name": "Moon crossing equator", "lift": 1.17, "hits": 22, "n": 85, "basePct": 22.1}], "chaldeanNumber": 5, "rulingPlanet": "Mercury"}, "upcoming": [{"date": "2026-07-27", "rule": "Moon opposite Mercury (highs)"}, {"date": "2026-07-27", "rule": "Moon trine Venus (highs)"}, {"date": "2026-07-28", "rule": "Moon opposite Mercury (highs)"}, {"date": "2026-07-28", "rule": "Moon trine Venus (highs)"}, {"date": "2026-07-29", "rule": "Moon opposite Mercury (highs)"}, {"date": "2026-07-29", "rule": "Moon trine Venus (highs)"}, {"date": "2026-08-26", "rule": "Moon trine Venus (highs)"}, {"date": "2026-08-27", "rule": "Moon opposite Mercury (highs)"}, {"date": "2026-08-27", "rule": "Moon trine Venus (highs)"}, {"date": "2026-08-27", "rule": "Mercury square Uranus (lows)"}, {"date": "2026-08-28", "rule": "Moon opposite Mercury (highs)"}, {"date": "2026-08-28", "rule": "Moon trine Venus (highs)"}, {"date": "2026-08-28", "rule": "Mercury square Uranus (lows)"}, {"date": "2026-09-07", "rule": "Moon sextile Uranus (highs)"}, {"date": "2026-09-08", "rule": "Moon sextile Uranus (highs)"}, {"date": "2026-09-09", "rule": "Moon sextile Uranus (highs)"}, {"date": "2026-09-11", "rule": "Mercury trine Pluto (lows)"}, {"date": "2026-09-14", "rule": "Mercury trine Pluto (lows)"}]}, "trackRecord": {"since": "2026-07-09", "resolved": [], "n": 0, "hit2Rate": null, "hit3Rate": null, "methodFactors": {}, "famStats": {}}, "predictions": [{"n": 1, "type": "high", "date": "Thu 07/23", "isoDate": "2026-07-23", "time": "9:30 AM ET", "timePct": 28.3, "altTime": "3:45 PM ET", "altTimePct": 13.3, "astroTime": null, "price": 114.71, "dateWindow": "07/21\u201307/27", "score": 3.69, "scoreMax": 4.1, "methods": ["Rhythm 10-bar", "Fib 13 bars from high 07/06", "Hurst 40-day trough"]}, {"n": 2, "type": "low", "date": "Mon 07/27", "isoDate": "2026-07-27", "time": "9:30 AM ET", "timePct": 40.0, "altTime": "3:30 PM ET", "altTimePct": 5.0, "astroTime": null, "price": 93.89, "dateWindow": "07/23\u201307/29", "score": 4.1, "scoreMax": 4.1, "methods": ["Gann 30 days from low 06/25", "Fib 21 bars from low 06/25", "Vibe: Moon opposite Mercury", "Vibe: Moon trine Venus"]}, {"n": 3, "type": "high", "date": "Mon 08/03", "isoDate": "2026-08-03", "time": "9:30 AM ET", "timePct": 28.3, "altTime": "3:45 PM ET", "altTimePct": 13.3, "astroTime": null, "price": 117.55, "dateWindow": "07/30\u201308/05", "score": 3.22, "scoreMax": 4.1, "methods": ["Gann 45 days from high 06/18"]}, {"n": 4, "type": "low", "date": "Mon 08/10", "isoDate": "2026-08-10", "time": "9:30 AM ET", "timePct": 40.0, "altTime": "3:30 PM ET", "altTimePct": 5.0, "astroTime": null, "price": 93.89, "dateWindow": "08/06\u201308/12", "score": 2.77, "scoreMax": 4.1, "methods": ["Gann 45 days from low 06/25"]}, {"n": 5, "type": "high", "date": "Mon 08/17", "isoDate": "2026-08-17", "time": "9:30 AM ET", "timePct": 28.3, "altTime": "3:45 PM ET", "altTimePct": 13.3, "astroTime": null, "price": 117.55, "dateWindow": "08/13\u201308/19", "score": 3.1, "scoreMax": 4.1, "methods": ["Gann 60 days from high 06/18"]}], "predictionBasis": {"lastPivot": {"date": "2026-07-06", "type": "high", "price": 117.55}, "medianSpacing": 10, "medianAmpPct": 23.0, "medianUpPct": 27.4, "medianDownPct": 19.9, "hitRate2d": 24.0, "hitRate3d": 35.0}, "chart": {"dates": ["2025-10-15", "2025-10-16", "2025-10-17", "2025-10-20", "2025-10-21", "2025-10-22", "2025-10-23", "2025-10-24", "2025-10-27", "2025-10-28", "2025-10-29", "2025-10-30", "2025-10-31", "2025-11-03", "2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-10", "2025-11-11", "2025-11-12", "2025-11-13", "2025-11-14", "2025-11-17", "2025-11-18", "2025-11-19", "2025-11-20", "2025-11-21", "2025-11-24", "2025-11-25", "2025-11-26", "2025-11-28", "2025-12-01", "2025-12-02", "2025-12-03", "2025-12-04", "2025-12-05", "2025-12-08", "2025-12-09", "2025-12-10", "2025-12-11", "2025-12-12", "2025-12-15", "2025-12-16", "2025-12-17", "2025-12-18", "2025-12-19", "2025-12-22", "2025-12-23", "2025-12-24", "2025-12-26", "2025-12-29", "2025-12-30", "2025-12-31", "2026-01-02", "2026-01-05", "2026-01-06", "2026-01-07", "2026-01-08", "2026-01-09", "2026-01-12", "2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-12", "2026-02-13", "2026-02-17", "2026-02-18", "2026-02-19", "2026-02-20", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-02-27", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-06", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15", "2026-07-16", "2026-07-17", "2026-07-20", "2026-07-21"], "closes": [134.15, 131.44, 129.91, 135.8, 131.84, 127.22, 134.33, 139.79, 145.86, 146.25, 144.8, 138.07, 146.78, 147.08, 136.8, 142.48, 127.08, 130.36, 135.88, 131.93, 132.98, 121.53, 122.5, 115.97, 114.3, 118.16, 106.21, 107.3, 114.97, 115.57, 128.2, 128.49, 123.24, 125.95, 133.64, 137.08, 131.95, 136.43, 135.71, 135.66, 123.38, 119.5, 115.26, 119.4, 115.8, 117.16, 121.35, 122.37, 120.24, 120.44, 118.13, 117.43, 115.45, 113.1, 115.21, 123.24, 121.7, 116.97, 115.39, 115.27, 117.52, 120.24, 119.67, 110.35, 108.74, 105.78, 105.92, 106.25, 106.99, 107.0, 105.24, 103.4, 101.24, 99.48, 89.91, 87.07, 80.62, 72.68, 82.82, 86.56, 85.6, 77.97, 71.12, 75.97, 75.44, 75.21, 75.65, 76.11, 71.78, 73.39, 77.53, 79.45, 75.85, 78.78, 76.07, 82.21, 80.56, 77.09, 79.35, 78.53, 78.69, 76.12, 73.39, 75.31, 77.35, 74.9, 74.16, 70.89, 72.49, 69.08, 72.54, 70.35, 66.02, 65.16, 69.3, 70.11, 68.9, 69.78, 69.65, 71.83, 70.12, 69.19, 71.67, 79.09, 87.32, 86.85, 90.75, 91.28, 86.43, 88.43, 83.54, 84.71, 83.95, 82.07, 71.2, 72.89, 73.66, 76.55, 77.03, 79.05, 76.28, 77.03, 80.78, 78.27, 76.75, 80.7, 77.14, 77.15, 74.16, 75.76, 75.92, 73.64, 74.09, 76.23, 84.84, 94.3, 90.73, 88.16, 82.85, 88.33, 82.47, 85.04, 83.77, 86.36, 92.23, 93.19, 98.12, 96.71, 105.2, 108.15, 105.71, 103.25, 97.19, 93.47, 98.69, 101.83, 100.28, 108.65, 112.73, 117.55, 112.9, 113.53, 115.11, 111.97, 109.86, 113.45, 115.54, 106.02, 99.96, 99.28, 106.36], "pivots": [{"date": "2025-10-22", "type": "low", "price": 127.22}, {"date": "2025-11-03", "type": "high", "price": 147.08}, {"date": "2025-11-20", "type": "low", "price": 106.21}, {"date": "2025-12-04", "type": "high", "price": 137.08}, {"date": "2026-02-05", "type": "low", "price": 72.68}, {"date": "2026-02-09", "type": "high", "price": 86.56}, {"date": "2026-02-12", "type": "low", "price": 71.12}, {"date": "2026-03-04", "type": "high", "price": 82.21}, {"date": "2026-03-30", "type": "low", "price": 65.16}, {"date": "2026-04-20", "type": "high", "price": 91.28}, {"date": "2026-04-29", "type": "low", "price": 71.2}, {"date": "2026-05-29", "type": "high", "price": 94.3}, {"date": "2026-06-05", "type": "low", "price": 82.47}, {"date": "2026-06-18", "type": "high", "price": 108.15}, {"date": "2026-06-25", "type": "low", "price": 93.47}, {"date": "2026-07-06", "type": "high", "price": 117.55}]}}, "QQQ": {"ticker": "QQQ", "generated": "2026-07-22 09:12 AM ET", "price": 708.969970703125, "monthName": "July", "ranges": {"daily": {"low": 702.8, "high": 710.05}, "weekly": {"low": 695.51, "high": 710.05}, "monthly": {"low": 686.76, "high": 731.92}, "yearly": {"low": 551.68, "high": 748.65}}, "intraday15m": {"days": 60, "high": {"09:30": 11.7, "09:45": 8.3, "10:00": 5.0, "10:15": 3.3, "10:30": 3.3, "10:45": 3.3, "11:00": 3.3, "11:15": 3.3, "11:30": 5.0, "11:45": 1.7, "12:00": 5.0, "12:15": 1.7, "12:30": 1.7, "13:00": 1.7, "13:15": 1.7, "13:30": 3.3, "13:45": 8.3, "14:00": 1.7, "14:15": 1.7, "15:00": 3.3, "15:15": 3.3, "15:30": 1.7, "15:45": 16.7}, "low": {"09:30": 23.3, "09:45": 13.3, "10:00": 8.3, "10:15": 11.7, "10:30": 6.7, "10:45": 1.7, "11:00": 1.7, "11:15": 1.7, "11:45": 1.7, "12:00": 3.3, "12:30": 3.3, "12:45": 1.7, "13:15": 1.7, "13:45": 1.7, "14:45": 3.3, "15:00": 1.7, "15:15": 3.3, "15:30": 1.7, "15:45": 8.3}}, "intradayHourly": {"days": 721, "high": {"09:30": 36.3, "10:30": 11.4, "11:30": 8.0, "12:30": 6.5, "13:30": 7.8, "14:30": 12.8, "15:30": 17.2}, "low": {}}, "weekday": {"weeks": 260, "high": {"Monday": 18.1, "Tuesday": 13.8, "Wednesday": 16.2, "Thursday": 16.2, "Friday": 35.8}, "low": {"Monday": 30.4, "Tuesday": 16.2, "Wednesday": 13.5, "Thursday": 11.9, "Friday": 28.1}}, "dayOfMonth": {"months": 59, "high": {"early (1st-10th)": 30.5, "mid (11th-20th)": 16.9, "late (21st-31st)": 52.5}, "low": {"early (1st-10th)": 47.5, "mid (11th-20th)": 25.4, "late (21st-31st)": 27.1}}, "seasonality": {"Jan": {"avgRet": 0.91, "winRate": 63.0, "n": 27}, "Feb": {"avgRet": -0.45, "winRate": 41.0, "n": 27}, "Mar": {"avgRet": 0.6, "winRate": 63.0, "n": 27}, "Apr": {"avgRet": 2.03, "winRate": 64.0, "n": 28}, "May": {"avgRet": 1.49, "winRate": 61.0, "n": 28}, "Jun": {"avgRet": 0.82, "winRate": 57.0, "n": 28}, "Jul": {"avgRet": 1.77, "winRate": 68.0, "n": 28}, "Aug": {"avgRet": 1.01, "winRate": 59.0, "n": 27}, "Sep": {"avgRet": -1.9, "winRate": 48.0, "n": 27}, "Oct": {"avgRet": 3.04, "winRate": 63.0, "n": 27}, "Nov": {"avgRet": 2.58, "winRate": 74.0, "n": 27}, "Dec": {"avgRet": 0.34, "winRate": 52.0, "n": 27}}, "seasonalityYears": 28, "swing": {"thresholdPct": 3.4, "pivotCount": 77, "medianSpacingTradingDays": 10, "medianAmplitudePct": 7.2, "hitRate2d": 23.0, "hitRate3d": 37.0, "tested": 71, "recentPivots": [{"date": "2025-12-17", "type": "low", "price": 600.41}, {"date": "2026-01-28", "type": "high", "price": 633.22}, {"date": "2026-03-30", "type": "low", "price": 558.28}, {"date": "2026-06-02", "type": "high", "price": 746.16}, {"date": "2026-06-10", "type": "low", "price": 693.69}, {"date": "2026-06-15", "type": "high", "price": 744.0}, {"date": "2026-06-26", "type": "low", "price": 706.52}, {"date": "2026-06-30", "type": "high", "price": 736.4}]}, "levels": {"support": [{"price": 634.49, "touches": 2, "distPct": -10.5}, {"price": 617.28, "touches": 8, "distPct": -12.9}, {"price": 592.27, "touches": 6, "distPct": -16.5}], "resistance": [{"price": 724.01, "touches": 2, "distPct": 2.1}, {"price": 741.79, "touches": 4, "distPct": 4.6}]}, "backtests": {"overnight": {"avgPct": 0.035, "winRate": 54.6, "totalPct": 49.0, "n": 1252}, "intraday": {"avgPct": 0.028, "winRate": 53.7, "totalPct": 30.0, "n": 1253}, "buy1030SellClose": {"avgPct": 0.018, "winRate": 56.0, "totalPct": 11.0, "n": 721}, "openToClose2y": {"avgPct": 0.014, "winRate": 54.2, "totalPct": 7.0, "n": 721}}, "methods": {"gann": {"rate": 12.9, "control": 11.7, "counts": [30, 45, 60, 90, 120, 144, 180, 270, 360], "annivHits": 27, "pivots": 77, "upcoming": [{"date": "2026-07-26", "rule": "30 days from low 06/26"}, {"date": "2026-07-30", "rule": "45 days from high 06/15"}, {"date": "2026-07-30", "rule": "30 days from high 06/30"}, {"date": "2026-08-10", "rule": "45 days from low 06/26"}, {"date": "2026-08-14", "rule": "60 days from high 06/15"}, {"date": "2026-08-14", "rule": "45 days from high 06/30"}, {"date": "2026-08-25", "rule": "60 days from low 06/26"}, {"date": "2026-08-29", "rule": "60 days from high 06/30"}, {"date": "2026-09-13", "rule": "90 days from high 06/15"}]}, "fib": {"rate": 14.5, "control": 14.0, "counts": [8, 13, 21, 34, 55, 89, 144], "upcoming": [{"date": "2026-07-28", "rule": "Fib 21 bars from low 06/26"}, {"date": "2026-07-30", "rule": "Fib 21 bars from high 06/30"}, {"date": "2026-08-04", "rule": "Fib 34 bars from high 06/15"}, {"date": "2026-08-14", "rule": "Fib 34 bars from low 06/26"}, {"date": "2026-08-18", "rule": "Fib 34 bars from high 06/30"}, {"date": "2026-09-02", "rule": "Fib 55 bars from high 06/15"}, {"date": "2026-09-14", "rule": "Fib 55 bars from low 06/26"}, {"date": "2026-09-16", "rule": "Fib 55 bars from high 06/30"}]}, "hurst": {"cycles": {"10": {"nextTroughDays": 2, "nextCrestDays": 7, "ampPct": 0.82, "lowsAlignedPct": 39.0, "chancePct": 50.0}, "20": {"nextTroughDays": 1, "nextCrestDays": 11, "ampPct": 0.43, "lowsAlignedPct": 32.0, "chancePct": 35.0}, "40": {"nextTroughDays": 36, "nextCrestDays": 16, "ampPct": 0.82, "lowsAlignedPct": 29.0, "chancePct": 32.0}, "80": {"nextTroughDays": 3, "nextCrestDays": 43, "ampPct": 2.73, "lowsAlignedPct": 37.0, "chancePct": 31.0}}, "upcoming": [{"date": "2026-07-22", "cycle": "20-day", "kind": "trough"}, {"date": "2026-07-23", "cycle": "10-day", "kind": "trough"}, {"date": "2026-07-24", "cycle": "80-day", "kind": "trough"}, {"date": "2026-07-30", "cycle": "10-day", "kind": "crest"}, {"date": "2026-08-05", "cycle": "20-day", "kind": "crest"}, {"date": "2026-08-12", "cycle": "40-day", "kind": "crest"}, {"date": "2026-09-09", "cycle": "40-day", "kind": "trough"}, {"date": "2026-09-18", "cycle": "80-day", "kind": "crest"}]}, "astro": {"moonLowPct": 13.0, "moonHighPct": 23.0, "moonChance": 20.0, "retroPivPct": 22.0, "retroChance": 19.0, "moonsNext": [{"date": "2026-07-29", "time": "10:35 AM ET", "kind": "full"}, {"date": "2026-08-12", "time": "1:36 PM ET", "kind": "new"}, {"date": "2026-08-28", "time": "12:18 AM ET", "kind": "full"}, {"date": "2026-09-10", "time": "11:26 PM ET", "kind": "new"}], "retroRanges": [["2026-07-23", "2026-07-24"]]}}, "vibration": {"high": [{"aspect": "Mars trine Saturn", "lift": 2.85, "hits": 5, "n": 39, "basePct": 4.5}, {"aspect": "Moon square Jupiter", "lift": 2.03, "hits": 8, "n": 39, "basePct": 10.1}, {"aspect": "Moon opposite Mars", "lift": 2.63, "hits": 4, "n": 39, "basePct": 3.9}, {"aspect": "Moon trine Mars", "lift": 1.73, "hits": 7, "n": 39, "basePct": 10.4}, {"aspect": "Sun opposite Moon", "lift": 2.18, "hits": 4, "n": 39, "basePct": 4.7}], "low": [{"aspect": "Mercury conjunct Venus", "lift": 3.42, "hits": 5, "n": 38, "basePct": 3.8}, {"aspect": "Moon conjunct Mars", "lift": 2.86, "hits": 6, "n": 38, "basePct": 5.5}, {"aspect": "Mercury trine Pluto", "lift": 2.9, "hits": 4, "n": 38, "basePct": 3.6}, {"aspect": "Moon sextile Mercury", "lift": 1.83, "hits": 7, "n": 38, "basePct": 10.1}, {"aspect": "Saturn square Uranus", "lift": 2.16, "hits": 4, "n": 38, "basePct": 4.9}], "retro": [], "numerology": {"tickerNumber": 6, "lift": 0.94, "hits": 8, "n": 77, "basePct": 11.0}, "chanceLift": 5.92, "sepharial": {"tests": [{"name": "ruling planet Jupiter in exact aspect", "lift": 0.97, "hits": 50, "n": 77, "basePct": 66.9}, {"name": "Jupiter station (turning retro/direct)", "lift": 0.49, "hits": 1, "n": 77, "basePct": 2.7}, {"name": "any planet station day", "lift": 1.15, "hits": 20, "n": 77, "basePct": 22.5}, {"name": "Moon declination extreme", "lift": 0.83, "hits": 14, "n": 77, "basePct": 21.9}, {"name": "Moon crossing equator", "lift": 0.82, "hits": 14, "n": 77, "basePct": 22.1}], "chaldeanNumber": 3, "rulingPlanet": "Jupiter"}, "upcoming": [{"date": "2026-07-23", "rule": "Moon square Jupiter (highs)"}, {"date": "2026-08-18", "rule": "Moon square Jupiter (highs)"}, {"date": "2026-08-19", "rule": "Moon square Jupiter (highs)"}, {"date": "2026-08-20", "rule": "Moon square Jupiter (highs)"}, {"date": "2026-09-07", "rule": "Moon conjunct Mars (lows)"}, {"date": "2026-09-08", "rule": "Moon conjunct Mars (lows)"}, {"date": "2026-09-11", "rule": "Mercury trine Pluto (lows)"}, {"date": "2026-09-14", "rule": "Mercury trine Pluto (lows)"}]}, "trackRecord": {"since": "2026-07-09", "resolved": [], "n": 0, "hit2Rate": null, "hit3Rate": null, "methodFactors": {}, "famStats": {}}, "predictions": [{"n": 1, "type": "high", "date": "Thu 07/23", "isoDate": "2026-07-23", "time": "3:45 PM ET", "timePct": 16.7, "altTime": "3:45 PM ET", "altTimePct": 16.7, "astroTime": null, "price": 724.01, "dateWindow": "07/21\u201307/27", "score": 3.22, "scoreMax": 4.27, "methods": ["Rhythm 10-bar", "Hurst 10-day trough", "Vibe: Moon square Jupiter"]}, {"n": 2, "type": "low", "date": "Mon 07/27", "isoDate": "2026-07-27", "time": "9:30 AM ET", "timePct": 23.3, "altTime": "3:45 PM ET", "altTimePct": 8.3, "astroTime": null, "price": 688.42, "dateWindow": "07/23\u201307/29", "score": 4.27, "scoreMax": 4.27, "methods": ["Gann 30 days from low 06/26"]}, {"n": 3, "type": "high", "date": "Mon 08/10", "isoDate": "2026-08-10", "time": "3:45 PM ET", "timePct": 16.7, "altTime": "3:45 PM ET", "altTimePct": 16.7, "astroTime": null, "price": 741.79, "dateWindow": "08/06\u201308/12", "score": 2.53, "scoreMax": 4.27, "methods": ["Gann 45 days from low 06/26"]}, {"n": 4, "type": "low", "date": "Fri 08/14", "isoDate": "2026-08-14", "time": "9:30 AM ET", "timePct": 23.3, "altTime": "3:45 PM ET", "altTimePct": 8.3, "astroTime": null, "price": 689.53, "dateWindow": "08/12\u201308/18", "score": 3.6, "scoreMax": 4.27, "methods": ["Gann 60 days from high 06/15", "Gann 45 days from high 06/30", "Fib 34 bars from low 06/26"]}, {"n": 5, "type": "high", "date": "Mon 09/14", "isoDate": "2026-09-14", "time": "3:45 PM ET", "timePct": 16.7, "altTime": "3:45 PM ET", "altTimePct": 16.7, "astroTime": null, "price": 741.79, "dateWindow": "09/10\u201309/16", "score": 3.87, "scoreMax": 4.27, "methods": ["Gann 90 days from high 06/15", "Fib 55 bars from low 06/26", "Vibe: Mercury trine Pluto"]}], "predictionBasis": {"lastPivot": {"date": "2026-06-30", "type": "high", "price": 736.4}, "medianSpacing": 10, "medianAmpPct": 7.2, "medianUpPct": 8.1, "medianDownPct": 7.0, "hitRate2d": 23.0, "hitRate3d": 37.0}, "chart": {"dates": ["2025-10-15", "2025-10-16", "2025-10-17", "2025-10-20", "2025-10-21", "2025-10-22", "2025-10-23", "2025-10-24", "2025-10-27", "2025-10-28", "2025-10-29", "2025-10-30", "2025-10-31", "2025-11-03", "2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-10", "2025-11-11", "2025-11-12", "2025-11-13", "2025-11-14", "2025-11-17", "2025-11-18", "2025-11-19", "2025-11-20", "2025-11-21", "2025-11-24", "2025-11-25", "2025-11-26", "2025-11-28", "2025-12-01", "2025-12-02", "2025-12-03", "2025-12-04", "2025-12-05", "2025-12-08", "2025-12-09", "2025-12-10", "2025-12-11", "2025-12-12", "2025-12-15", "2025-12-16", "2025-12-17", "2025-12-18", "2025-12-19", "2025-12-22", "2025-12-23", "2025-12-24", "2025-12-26", "2025-12-29", "2025-12-30", "2025-12-31", "2026-01-02", "2026-01-05", "2026-01-06", "2026-01-07", "2026-01-08", "2026-01-09", "2026-01-12", "2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-12", "2026-02-13", "2026-02-17", "2026-02-18", "2026-02-19", "2026-02-20", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-02-27", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-06", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15", "2026-07-16", "2026-07-17", "2026-07-20", "2026-07-21"], "closes": [602.22, 599.99, 603.93, 611.54, 611.38, 605.49, 610.58, 617.1, 628.09, 632.92, 635.77, 626.05, 629.07, 632.08, 619.25, 623.28, 611.67, 609.74, 623.23, 621.57, 621.08, 608.4, 608.86, 603.66, 596.31, 599.87, 585.67, 590.07, 605.16, 608.89, 614.27, 619.25, 617.17, 622.0, 623.52, 622.94, 625.48, 624.28, 625.05, 627.61, 625.58, 613.62, 610.54, 611.75, 600.41, 609.11, 617.05, 619.21, 622.11, 623.93, 623.89, 620.87, 619.43, 614.31, 613.12, 617.99, 623.42, 624.02, 620.47, 626.65, 627.17, 626.24, 619.55, 621.78, 621.26, 608.06, 616.28, 620.76, 622.72, 625.46, 631.13, 633.22, 629.43, 621.87, 626.14, 616.52, 605.75, 597.03, 609.65, 614.32, 611.47, 613.11, 600.64, 601.92, 601.3, 605.79, 603.47, 608.81, 601.41, 607.87, 616.68, 609.24, 607.29, 608.09, 601.58, 610.75, 608.91, 599.75, 607.76, 607.77, 607.69, 597.26, 593.72, 600.38, 603.31, 594.9, 593.02, 582.06, 588.0, 583.98, 587.82, 573.79, 562.58, 558.28, 577.18, 584.31, 584.98, 588.5, 588.59, 606.09, 610.19, 611.07, 617.39, 628.6, 637.4, 640.47, 648.85, 646.79, 644.33, 655.11, 651.42, 663.88, 664.23, 657.55, 661.57, 667.74, 674.15, 672.88, 681.61, 695.77, 694.94, 711.23, 713.29, 707.24, 714.71, 719.79, 708.93, 705.88, 701.53, 713.15, 714.51, 717.54, 730.28, 729.45, 735.6, 738.31, 742.74, 746.16, 744.21, 740.61, 705.06, 716.07, 707.83, 693.69, 717.12, 721.34, 744.0, 729.86, 722.51, 740.62, 737.95, 713.65, 710.62, 716.38, 706.52, 724.08, 736.4, 725.17, 712.6, 722.82, 709.43, 711.44, 723.28, 725.51, 711.74, 719.69, 717.74, 705.94, 695.33, 696.06, 708.97], "pivots": [{"date": "2025-10-29", "type": "high", "price": 635.77}, {"date": "2025-11-20", "type": "low", "price": 585.67}, {"date": "2025-12-10", "type": "high", "price": 627.61}, {"date": "2025-12-17", "type": "low", "price": 600.41}, {"date": "2026-01-28", "type": "high", "price": 633.22}, {"date": "2026-03-30", "type": "low", "price": 558.28}, {"date": "2026-06-02", "type": "high", "price": 746.16}, {"date": "2026-06-10", "type": "low", "price": 693.69}, {"date": "2026-06-15", "type": "high", "price": 744.0}, {"date": "2026-06-26", "type": "low", "price": 706.52}, {"date": "2026-06-30", "type": "high", "price": 736.4}]}}, "JPM": {"ticker": "JPM", "generated": "2026-07-22 09:12 AM ET", "price": 345.2300109863281, "monthName": "July", "ranges": {"daily": {"low": 337.3, "high": 345.74}, "weekly": {"low": 337.3, "high": 345.74}, "monthly": {"low": 325.01, "high": 351.24}, "yearly": {"low": 279.1, "high": 351.24}}, "intraday15m": {"days": 60, "high": {"09:30": 45.0, "09:45": 5.0, "10:00": 5.0, "10:30": 3.3, "10:45": 5.0, "11:00": 3.3, "11:15": 3.3, "12:15": 3.3, "12:30": 5.0, "12:45": 1.7, "13:30": 1.7, "14:00": 1.7, "14:15": 1.7, "14:30": 3.3, "14:45": 1.7, "15:15": 3.3, "15:30": 3.3, "15:45": 3.3}, "low": {"09:30": 40.0, "09:45": 8.3, "10:00": 3.3, "10:15": 5.0, "10:30": 1.7, "10:45": 1.7, "11:00": 1.7, "11:30": 1.7, "12:00": 3.3, "12:30": 1.7, "12:45": 1.7, "13:00": 3.3, "13:30": 1.7, "14:30": 1.7, "14:45": 3.3, "15:00": 5.0, "15:15": 1.7, "15:30": 1.7, "15:45": 11.7}}, "intradayHourly": {"days": 721, "high": {"09:30": 46.0, "10:30": 9.7, "11:30": 7.4, "12:30": 6.4, "13:30": 5.7, "14:30": 8.0, "15:30": 16.8}, "low": {}}, "weekday": {"weeks": 260, "high": {"Monday": 21.2, "Tuesday": 16.9, "Wednesday": 14.2, "Thursday": 11.5, "Friday": 36.2}, "low": {"Monday": 33.1, "Tuesday": 14.6, "Wednesday": 14.6, "Thursday": 14.2, "Friday": 23.5}}, "dayOfMonth": {"months": 59, "high": {"early (1st-10th)": 33.9, "mid (11th-20th)": 20.3, "late (21st-31st)": 45.8}, "low": {"early (1st-10th)": 47.5, "mid (11th-20th)": 25.4, "late (21st-31st)": 27.1}}, "seasonality": {"Jan": {"avgRet": 3.02, "winRate": 63.0, "n": 46}, "Feb": {"avgRet": 2.35, "winRate": 57.0, "n": 46}, "Mar": {"avgRet": 0.59, "winRate": 43.0, "n": 46}, "Apr": {"avgRet": 2.78, "winRate": 57.0, "n": 47}, "May": {"avgRet": 0.97, "winRate": 57.0, "n": 47}, "Jun": {"avgRet": -0.21, "winRate": 47.0, "n": 47}, "Jul": {"avgRet": 1.57, "winRate": 64.0, "n": 47}, "Aug": {"avgRet": 0.12, "winRate": 50.0, "n": 46}, "Sep": {"avgRet": -2.21, "winRate": 50.0, "n": 46}, "Oct": {"avgRet": 1.68, "winRate": 59.0, "n": 46}, "Nov": {"avgRet": 2.0, "winRate": 57.0, "n": 46}, "Dec": {"avgRet": 1.25, "winRate": 54.0, "n": 46}}, "seasonalityYears": 47, "swing": {"thresholdPct": 4.0, "pivotCount": 64, "medianSpacingTradingDays": 13, "medianAmplitudePct": 9.6, "hitRate2d": 14.0, "hitRate3d": 22.0, "tested": 58, "recentPivots": [{"date": "2026-01-06", "type": "high", "price": 334.61}, {"date": "2026-01-23", "type": "low", "price": 297.72}, {"date": "2026-02-06", "type": "high", "price": 322.4}, {"date": "2026-03-12", "type": "low", "price": 282.89}, {"date": "2026-03-25", "type": "high", "price": 295.42}, {"date": "2026-03-27", "type": "low", "price": 282.84}, {"date": "2026-04-20", "type": "high", "price": 316.99}, {"date": "2026-05-19", "type": "low", "price": 295.7}]}, "levels": {"support": [{"price": 335.6, "touches": 4, "distPct": -2.8}, {"price": 324.67, "touches": 8, "distPct": -6.0}, {"price": 311.67, "touches": 14, "distPct": -9.7}], "resistance": [{"price": 351.24, "touches": 1, "distPct": 1.7}]}, "backtests": {"overnight": {"avgPct": 0.025, "winRate": 53.3, "totalPct": 30.0, "n": 1252}, "intraday": {"avgPct": 0.053, "winRate": 52.3, "totalPct": 75.0, "n": 1253}, "buy1030SellClose": {"avgPct": 0.026, "winRate": 53.0, "totalPct": 17.0, "n": 721}, "openToClose2y": {"avgPct": 0.089, "winRate": 53.8, "totalPct": 80.0, "n": 721}}, "methods": {"gann": {"rate": 11.1, "control": 11.6, "counts": [30, 45, 60, 90, 120, 144, 180, 270, 360], "annivHits": 22, "pivots": 64, "upcoming": [{"date": "2026-07-25", "rule": "120 days from low 03/27"}, {"date": "2026-08-17", "rule": "90 days from low 05/19"}, {"date": "2026-08-18", "rule": "144 days from low 03/27"}, {"date": "2026-08-18", "rule": "120 days from high 04/20"}, {"date": "2026-09-11", "rule": "144 days from high 04/20"}, {"date": "2026-09-16", "rule": "120 days from low 05/19"}]}, "fib": {"rate": 14.7, "control": 12.0, "counts": [8, 13, 21, 34, 55, 89, 144], "upcoming": [{"date": "2026-08-05", "rule": "Fib 89 bars from low 03/27"}, {"date": "2026-08-07", "rule": "Fib 55 bars from low 05/19"}, {"date": "2026-08-26", "rule": "Fib 89 bars from high 04/20"}]}, "hurst": {"cycles": {"10": {"nextTroughDays": 3, "nextCrestDays": 8, "ampPct": 0.71, "lowsAlignedPct": 47.0, "chancePct": 50.0}, "20": {"nextTroughDays": 12, "nextCrestDays": 2, "ampPct": 0.66, "lowsAlignedPct": 31.0, "chancePct": 35.0}, "40": {"nextTroughDays": 37, "nextCrestDays": 17, "ampPct": 1.91, "lowsAlignedPct": 44.0, "chancePct": 32.0}, "80": {"nextTroughDays": 70, "nextCrestDays": 30, "ampPct": 0.56, "lowsAlignedPct": 50.0, "chancePct": 31.0}}, "upcoming": [{"date": "2026-07-23", "cycle": "20-day", "kind": "crest"}, {"date": "2026-07-24", "cycle": "10-day", "kind": "trough"}, {"date": "2026-07-31", "cycle": "10-day", "kind": "crest"}, {"date": "2026-08-06", "cycle": "20-day", "kind": "trough"}, {"date": "2026-08-13", "cycle": "40-day", "kind": "crest"}, {"date": "2026-09-01", "cycle": "80-day", "kind": "crest"}, {"date": "2026-09-10", "cycle": "40-day", "kind": "trough"}]}, "astro": {"moonLowPct": 19.0, "moonHighPct": 6.0, "moonChance": 20.0, "retroPivPct": 28.0, "retroChance": 19.0, "moonsNext": [{"date": "2026-07-29", "time": "10:35 AM ET", "kind": "full"}, {"date": "2026-08-12", "time": "1:36 PM ET", "kind": "new"}, {"date": "2026-08-28", "time": "12:18 AM ET", "kind": "full"}, {"date": "2026-09-10", "time": "11:26 PM ET", "kind": "new"}], "retroRanges": [["2026-07-23", "2026-07-24"]]}}, "vibration": {"high": [{"aspect": "Sun sextile Moon", "lift": 2.37, "hits": 8, "n": 32, "basePct": 10.6}, {"aspect": "Moon trine Venus", "lift": 2.05, "hits": 8, "n": 32, "basePct": 12.2}, {"aspect": "Moon trine Mercury", "lift": 2.07, "hits": 7, "n": 32, "basePct": 10.6}, {"aspect": "Moon trine Pluto", "lift": 1.99, "hits": 6, "n": 32, "basePct": 9.4}, {"aspect": "Moon opposite Neptune", "lift": 2.4, "hits": 4, "n": 32, "basePct": 5.2}], "low": [{"aspect": "Moon conjunct Pluto", "lift": 2.33, "hits": 4, "n": 32, "basePct": 5.4}, {"aspect": "Moon sextile Mercury", "lift": 1.86, "hits": 6, "n": 32, "basePct": 10.1}, {"aspect": "Moon square Jupiter", "lift": 1.85, "hits": 6, "n": 32, "basePct": 10.1}, {"aspect": "Moon sextile Saturn", "lift": 1.66, "hits": 5, "n": 32, "basePct": 9.4}, {"aspect": "Moon sextile Neptune", "lift": 1.5, "hits": 5, "n": 32, "basePct": 10.4}], "retro": [{"planet": "Mercury", "lift": 1.46, "hits": 18, "n": 64}], "numerology": {"tickerNumber": 3, "lift": 1.26, "hits": 9, "n": 64, "basePct": 11.2}, "chanceLift": 7.21, "sepharial": {"tests": [{"name": "Uranus station (turning retro/direct)", "lift": 0.58, "hits": 1, "n": 64, "basePct": 2.7}, {"name": "any planet station day", "lift": 1.25, "hits": 18, "n": 64, "basePct": 22.5}, {"name": "Moon declination extreme", "lift": 1.14, "hits": 16, "n": 64, "basePct": 21.9}, {"name": "Moon crossing equator", "lift": 1.06, "hits": 15, "n": 64, "basePct": 22.1}], "chaldeanNumber": 4, "rulingPlanet": "Uranus"}, "upcoming": [{"date": "2026-07-23", "rule": "Moon trine Mercury (highs)"}, {"date": "2026-07-23", "rule": "Moon square Jupiter (lows)"}, {"date": "2026-07-24", "rule": "Moon trine Mercury (highs)"}, {"date": "2026-07-27", "rule": "Moon trine Venus (highs)"}, {"date": "2026-07-28", "rule": "Moon trine Venus (highs)"}, {"date": "2026-07-29", "rule": "Moon trine Venus (highs)"}, {"date": "2026-08-03", "rule": "Moon trine Mercury (highs)"}, {"date": "2026-08-06", "rule": "Moon sextile Mercury (lows)"}, {"date": "2026-08-07", "rule": "Moon sextile Mercury (lows)"}, {"date": "2026-08-18", "rule": "Moon square Jupiter (lows)"}, {"date": "2026-08-19", "rule": "Moon square Jupiter (lows)"}, {"date": "2026-08-20", "rule": "Moon square Jupiter (lows)"}, {"date": "2026-08-26", "rule": "Moon trine Venus (highs)"}, {"date": "2026-08-27", "rule": "Moon trine Venus (highs)"}, {"date": "2026-08-28", "rule": "Moon trine Venus (highs)"}, {"date": "2026-09-15", "rule": "Sun sextile Moon (highs)"}, {"date": "2026-09-16", "rule": "Sun sextile Moon (highs)"}, {"date": "2026-09-17", "rule": "Sun sextile Moon (highs)"}]}, "trackRecord": {"since": "2026-07-09", "resolved": [], "n": 0, "hit2Rate": null, "hit3Rate": null, "methodFactors": {}, "famStats": {}}, "predictions": [{"n": 1, "type": "low", "date": "Mon 07/27", "isoDate": "2026-07-27", "time": "9:30 AM ET", "timePct": 40.0, "altTime": "3:45 PM ET", "altTimePct": 11.7, "astroTime": null, "price": 335.6, "dateWindow": "07/23\u201307/29", "score": 2.48, "scoreMax": 3.23, "methods": ["Gann 120 days from low 03/27", "Vibe: Moon trine Venus"]}, {"n": 2, "type": "high", "date": "Mon 08/17", "isoDate": "2026-08-17", "time": "9:30 AM ET", "timePct": 45.0, "altTime": "12:30 PM ET", "altTimePct": 5.0, "astroTime": null, "price": 370.72, "dateWindow": "08/13\u201308/19", "score": 3.23, "scoreMax": 3.23, "methods": ["Gann 90 days from low 05/19"]}, {"n": 3, "type": "low", "date": "Fri 08/28", "isoDate": "2026-08-28", "time": "9:30 AM ET", "timePct": 40.0, "altTime": "3:45 PM ET", "altTimePct": 11.7, "astroTime": "12:18 AM ET", "price": 335.6, "dateWindow": "08/26\u201309/01", "score": 2.66, "scoreMax": 3.23, "methods": ["Rhythm 13-bar", "full moon 12:18 AM ET", "Vibe: Moon trine Venus"]}, {"n": 4, "type": "high", "date": "Tue 09/01", "isoDate": "2026-09-01", "time": "9:30 AM ET", "timePct": 45.0, "altTime": "12:30 PM ET", "altTimePct": 5.0, "astroTime": null, "price": 373.06, "dateWindow": "08/28\u201309/03", "score": 2.65, "scoreMax": 3.23, "methods": ["Hurst 80-day crest"]}, {"n": 5, "type": "low", "date": "Thu 09/10", "isoDate": "2026-09-10", "time": "9:30 AM ET", "timePct": 40.0, "altTime": "3:45 PM ET", "altTimePct": 11.7, "astroTime": "11:26 PM ET", "price": 335.6, "dateWindow": "09/08\u201309/14", "score": 2.42, "scoreMax": 3.23, "methods": ["Hurst 40-day trough", "new moon 11:26 PM ET"]}], "predictionBasis": {"lastPivot": {"date": "2026-05-19", "type": "low", "price": 295.7}, "medianSpacing": 13, "medianAmpPct": 9.6, "medianUpPct": 11.2, "medianDownPct": 8.6, "hitRate2d": 14.0, "hitRate3d": 22.0}, "chart": {"dates": ["2025-10-15", "2025-10-16", "2025-10-17", "2025-10-20", "2025-10-21", "2025-10-22", "2025-10-23", "2025-10-24", "2025-10-27", "2025-10-28", "2025-10-29", "2025-10-30", "2025-10-31", "2025-11-03", "2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-10", "2025-11-11", "2025-11-12", "2025-11-13", "2025-11-14", "2025-11-17", "2025-11-18", "2025-11-19", "2025-11-20", "2025-11-21", "2025-11-24", "2025-11-25", "2025-11-26", "2025-11-28", "2025-12-01", "2025-12-02", "2025-12-03", "2025-12-04", "2025-12-05", "2025-12-08", "2025-12-09", "2025-12-10", "2025-12-11", "2025-12-12", "2025-12-15", "2025-12-16", "2025-12-17", "2025-12-18", "2025-12-19", "2025-12-22", "2025-12-23", "2025-12-24", "2025-12-26", "2025-12-29", "2025-12-30", "2025-12-31", "2026-01-02", "2026-01-05", "2026-01-06", "2026-01-07", "2026-01-08", "2026-01-09", "2026-01-12", "2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-12", "2026-02-13", "2026-02-17", "2026-02-18", "2026-02-19", "2026-02-20", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-02-27", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-06", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15", "2026-07-16", "2026-07-17", "2026-07-20", "2026-07-21"], "closes": [305.69, 298.54, 297.56, 302.36, 297.09, 294.11, 294.54, 300.44, 304.15, 305.36, 305.51, 309.44, 311.12, 309.35, 309.25, 311.68, 313.42, 314.21, 316.89, 315.62, 320.41, 309.48, 303.61, 300.37, 299.41, 303.27, 298.38, 298.02, 298.0, 303.0, 307.64, 313.08, 308.92, 307.88, 312.13, 316.1, 315.04, 315.21, 300.51, 310.11, 317.38, 318.52, 320.02, 315.55, 314.98, 313.0, 317.21, 323.09, 325.93, 329.17, 327.91, 323.75, 323.42, 322.22, 325.48, 334.04, 334.61, 326.99, 329.79, 329.19, 324.49, 310.9, 307.87, 309.26, 312.47, 302.74, 302.04, 303.63, 297.72, 301.04, 300.31, 300.77, 306.42, 305.89, 308.14, 314.85, 317.27, 310.16, 322.4, 322.1, 318.28, 310.82, 302.64, 302.55, 307.13, 308.78, 308.05, 310.79, 297.67, 297.3, 303.3, 306.13, 300.3, 297.56, 300.26, 299.39, 293.55, 289.48, 289.92, 288.73, 287.52, 282.89, 283.44, 286.16, 286.89, 287.74, 287.97, 286.56, 289.91, 292.4, 295.42, 291.66, 282.84, 283.77, 294.16, 295.38, 294.6, 295.45, 297.4, 307.97, 310.33, 309.87, 313.68, 311.12, 305.93, 309.95, 310.29, 316.99, 313.0, 313.02, 311.69, 308.28, 311.63, 311.45, 309.25, 313.23, 312.47, 307.65, 309.4, 314.9, 306.27, 302.1, 300.0, 304.88, 300.25, 299.91, 297.81, 300.73, 295.7, 301.98, 303.0, 306.38, 306.74, 299.28, 296.73, 299.31, 296.58, 300.96, 300.85, 310.89, 312.37, 311.11, 312.7, 309.14, 313.49, 320.72, 319.4, 331.14, 333.46, 325.22, 331.48, 334.14, 333.45, 335.12, 329.05, 329.39, 327.33, 334.07, 334.47, 337.72, 339.22, 330.62, 335.47, 336.47, 334.53, 342.89, 346.91, 343.15, 341.1, 338.87, 345.23], "pivots": [{"date": "2025-10-22", "type": "low", "price": 294.11}, {"date": "2025-11-12", "type": "high", "price": 320.41}, {"date": "2025-11-24", "type": "low", "price": 298.0}, {"date": "2025-12-04", "type": "high", "price": 316.1}, {"date": "2025-12-09", "type": "low", "price": 300.51}, {"date": "2026-01-06", "type": "high", "price": 334.61}, {"date": "2026-01-23", "type": "low", "price": 297.72}, {"date": "2026-02-06", "type": "high", "price": 322.4}, {"date": "2026-03-12", "type": "low", "price": 282.89}, {"date": "2026-03-25", "type": "high", "price": 295.42}, {"date": "2026-03-27", "type": "low", "price": 282.84}, {"date": "2026-04-20", "type": "high", "price": 316.99}, {"date": "2026-05-19", "type": "low", "price": 295.7}]}}, "GOOGL": {"ticker": "GOOGL", "generated": "2026-07-22 09:12 AM ET", "price": 347.1499938964844, "monthName": "July", "ranges": {"daily": {"low": 347.0, "high": 351.32}, "weekly": {"low": 347.0, "high": 359.68}, "monthly": {"low": 341.36, "high": 375.27}, "yearly": {"low": 187.46, "high": 408.61}}, "intraday15m": {"days": 60, "high": {"09:30": 28.3, "09:45": 6.7, "10:00": 1.7, "10:15": 8.3, "10:30": 5.0, "10:45": 3.3, "11:00": 3.3, "11:15": 3.3, "11:30": 1.7, "11:45": 1.7, "12:00": 3.3, "12:15": 3.3, "12:30": 1.7, "12:45": 1.7, "13:45": 5.0, "14:00": 1.7, "14:15": 1.7, "14:30": 1.7, "15:30": 5.0, "15:45": 11.7}, "low": {"09:30": 33.3, "09:45": 11.7, "10:00": 8.3, "10:15": 5.0, "10:30": 1.7, "11:00": 1.7, "11:15": 3.3, "12:00": 1.7, "12:15": 1.7, "12:30": 1.7, "13:00": 3.3, "13:15": 1.7, "14:30": 1.7, "14:45": 1.7, "15:00": 1.7, "15:15": 3.3, "15:30": 3.3, "15:45": 13.3}}, "intradayHourly": {"days": 721, "high": {"09:30": 50.1, "10:30": 9.8, "11:30": 6.4, "12:30": 6.9, "13:30": 5.7, "14:30": 5.3, "15:30": 15.8}, "low": {}}, "weekday": {"weeks": 260, "high": {"Monday": 22.3, "Tuesday": 16.9, "Wednesday": 13.8, "Thursday": 16.2, "Friday": 30.8}, "low": {"Monday": 29.2, "Tuesday": 18.8, "Wednesday": 9.6, "Thursday": 14.2, "Friday": 28.1}}, "dayOfMonth": {"months": 59, "high": {"early (1st-10th)": 33.9, "mid (11th-20th)": 18.6, "late (21st-31st)": 47.5}, "low": {"early (1st-10th)": 42.4, "mid (11th-20th)": 16.9, "late (21st-31st)": 40.7}}, "seasonality": {"Jan": {"avgRet": 2.28, "winRate": 77.0, "n": 22}, "Feb": {"avgRet": -2.96, "winRate": 36.0, "n": 22}, "Mar": {"avgRet": 0.11, "winRate": 55.0, "n": 22}, "Apr": {"avgRet": 5.29, "winRate": 64.0, "n": 22}, "May": {"avgRet": 3.28, "winRate": 64.0, "n": 22}, "Jun": {"avgRet": -0.42, "winRate": 45.0, "n": 22}, "Jul": {"avgRet": 5.01, "winRate": 68.0, "n": 22}, "Aug": {"avgRet": 0.15, "winRate": 48.0, "n": 21}, "Sep": {"avgRet": 2.7, "winRate": 64.0, "n": 22}, "Oct": {"avgRet": 8.69, "winRate": 73.0, "n": 22}, "Nov": {"avgRet": 1.08, "winRate": 64.0, "n": 22}, "Dec": {"avgRet": 1.82, "winRate": 68.0, "n": 22}}, "seasonalityYears": 23, "swing": {"thresholdPct": 5.0, "pivotCount": 51, "medianSpacingTradingDays": 15, "medianAmplitudePct": 14.1, "hitRate2d": 13.0, "hitRate3d": 18.0, "tested": 45, "recentPivots": [{"date": "2025-11-14", "type": "low", "price": 276.41}, {"date": "2025-11-25", "type": "high", "price": 323.44}, {"date": "2025-12-17", "type": "low", "price": 296.72}, {"date": "2026-02-02", "type": "high", "price": 343.69}, {"date": "2026-03-30", "type": "low", "price": 273.5}, {"date": "2026-05-13", "type": "high", "price": 402.62}, {"date": "2026-06-26", "type": "low", "price": 337.39}, {"date": "2026-07-15", "type": "high", "price": 370.92}]}, "levels": {"support": [{"price": 338.2, "touches": 5, "distPct": -2.6}, {"price": 322.72, "touches": 2, "distPct": -7.0}, {"price": 312.95, "touches": 2, "distPct": -9.9}], "resistance": [{"price": 355.96, "touches": 3, "distPct": 2.5}, {"price": 370.85, "touches": 4, "distPct": 6.8}, {"price": 387.35, "touches": 1, "distPct": 11.6}]}, "backtests": {"overnight": {"avgPct": 0.018, "winRate": 51.0, "totalPct": 12.0, "n": 1252}, "intraday": {"avgPct": 0.082, "winRate": 53.5, "totalPct": 138.0, "n": 1253}, "buy1030SellClose": {"avgPct": 0.029, "winRate": 53.8, "totalPct": 18.0, "n": 721}, "openToClose2y": {"avgPct": 0.093, "winRate": 55.2, "totalPct": 81.0, "n": 721}}, "methods": {"gann": {"rate": 10.2, "control": 11.8, "counts": [30, 45, 60, 90, 120, 144, 180, 270, 360], "annivHits": 12, "pivots": 51, "upcoming": [{"date": "2026-07-26", "rule": "30 days from low 06/26"}, {"date": "2026-08-10", "rule": "45 days from low 06/26"}, {"date": "2026-08-11", "rule": "90 days from high 05/13"}, {"date": "2026-08-14", "rule": "30 days from high 07/15"}, {"date": "2026-08-25", "rule": "60 days from low 06/26"}, {"date": "2026-08-29", "rule": "45 days from high 07/15"}, {"date": "2026-09-10", "rule": "120 days from high 05/13"}, {"date": "2026-09-13", "rule": "60 days from high 07/15"}]}, "fib": {"rate": 12.5, "control": 13.1, "counts": [8, 13, 21, 34, 55, 89, 144], "upcoming": [{"date": "2026-07-27", "rule": "Fib 8 bars from high 07/15"}, {"date": "2026-07-28", "rule": "Fib 21 bars from low 06/26"}, {"date": "2026-08-03", "rule": "Fib 55 bars from high 05/13"}, {"date": "2026-08-03", "rule": "Fib 13 bars from high 07/15"}, {"date": "2026-08-13", "rule": "Fib 21 bars from high 07/15"}, {"date": "2026-08-14", "rule": "Fib 34 bars from low 06/26"}, {"date": "2026-09-01", "rule": "Fib 34 bars from high 07/15"}, {"date": "2026-09-14", "rule": "Fib 55 bars from low 06/26"}]}, "hurst": {"cycles": {"10": {"nextTroughDays": 3, "nextCrestDays": 8, "ampPct": 1.5, "lowsAlignedPct": 44.0, "chancePct": 50.0}, "20": {"nextTroughDays": 3, "nextCrestDays": 13, "ampPct": 2.32, "lowsAlignedPct": 32.0, "chancePct": 35.0}, "40": {"nextTroughDays": 16, "nextCrestDays": 36, "ampPct": 0.76, "lowsAlignedPct": 20.0, "chancePct": 32.0}, "80": {"nextTroughDays": 76, "nextCrestDays": 36, "ampPct": 5.03, "lowsAlignedPct": 40.0, "chancePct": 31.0}}, "upcoming": [{"date": "2026-07-24", "cycle": "10-day", "kind": "trough"}, {"date": "2026-07-24", "cycle": "20-day", "kind": "trough"}, {"date": "2026-07-31", "cycle": "10-day", "kind": "crest"}, {"date": "2026-08-07", "cycle": "20-day", "kind": "crest"}, {"date": "2026-08-12", "cycle": "40-day", "kind": "trough"}, {"date": "2026-09-09", "cycle": "40-day", "kind": "crest"}, {"date": "2026-09-09", "cycle": "80-day", "kind": "crest"}]}, "astro": {"moonLowPct": 4.0, "moonHighPct": 23.0, "moonChance": 20.0, "retroPivPct": 20.0, "retroChance": 19.0, "moonsNext": [{"date": "2026-07-29", "time": "10:35 AM ET", "kind": "full"}, {"date": "2026-08-12", "time": "1:36 PM ET", "kind": "new"}, {"date": "2026-08-28", "time": "12:18 AM ET", "kind": "full"}, {"date": "2026-09-10", "time": "11:26 PM ET", "kind": "new"}], "retroRanges": [["2026-07-23", "2026-07-24"]]}}, "vibration": {"high": [{"aspect": "Moon sextile Uranus", "lift": 2.63, "hits": 7, "n": 26, "basePct": 10.2}, {"aspect": "Moon sextile Mercury", "lift": 1.91, "hits": 5, "n": 26, "basePct": 10.1}, {"aspect": "Sun conjunct Mercury", "lift": 1.99, "hits": 4, "n": 26, "basePct": 7.7}, {"aspect": "Moon square Mercury", "lift": 1.72, "hits": 4, "n": 26, "basePct": 8.9}], "low": [{"aspect": "Sun square Moon", "lift": 1.87, "hits": 5, "n": 25, "basePct": 10.7}, {"aspect": "Moon square Mars", "lift": 1.86, "hits": 4, "n": 25, "basePct": 8.6}, {"aspect": "Sun trine Moon", "lift": 1.52, "hits": 4, "n": 25, "basePct": 10.6}], "retro": [], "numerology": {"tickerNumber": 2, "lift": 1.58, "hits": 9, "n": 51, "basePct": 11.2}, "chanceLift": 7.89, "sepharial": {"tests": [{"name": "Mercury station (turning retro/direct)", "lift": 1.64, "hits": 7, "n": 51, "basePct": 8.4}, {"name": "any planet station day", "lift": 1.39, "hits": 16, "n": 51, "basePct": 22.5}, {"name": "Moon declination extreme", "lift": 0.45, "hits": 5, "n": 51, "basePct": 21.9}, {"name": "Moon crossing equator", "lift": 0.98, "hits": 11, "n": 51, "basePct": 22.1}], "chaldeanNumber": 5, "rulingPlanet": "Mercury"}, "upcoming": [{"date": "2026-07-23", "rule": "Sun trine Moon (lows)"}, {"date": "2026-07-23", "rule": "Sepharial: Mercury station (turning retro/direct)"}, {"date": "2026-07-23", "rule": "Sepharial: any planet station day"}, {"date": "2026-07-24", "rule": "Sun trine Moon (lows)"}, {"date": "2026-07-24", "rule": "Sepharial: Mercury station (turning retro/direct)"}, {"date": "2026-07-24", "rule": "Sepharial: any planet station day"}, {"date": "2026-07-27", "rule": "Sepharial: Mercury station (turning retro/direct)"}, {"date": "2026-07-27", "rule": "Sepharial: any planet station day"}, {"date": "2026-07-28", "rule": "Sepharial: any planet station day"}, {"date": "2026-07-29", "rule": "Sepharial: any planet station day"}, {"date": "2026-07-30", "rule": "Numerology day 2"}, {"date": "2026-07-30", "rule": "Sepharial: any planet station day"}, {"date": "2026-08-05", "rule": "Sun square Moon (lows)"}, {"date": "2026-08-06", "rule": "Moon sextile Mercury (highs)"}, {"date": "2026-08-06", "rule": "Sun square Moon (lows)"}, {"date": "2026-08-07", "rule": "Moon sextile Mercury (highs)"}, {"date": "2026-08-07", "rule": "Sun square Moon (lows)"}, {"date": "2026-08-11", "rule": "Numerology day 2"}]}, "trackRecord": {"since": "2026-07-09", "resolved": [], "n": 0, "hit2Rate": null, "hit3Rate": null, "methodFactors": {}, "famStats": {}}, "predictions": [{"n": 1, "type": "high", "date": "Mon 07/27", "isoDate": "2026-07-27", "time": "9:30 AM ET", "timePct": 28.3, "altTime": "3:45 PM ET", "altTimePct": 11.7, "astroTime": null, "price": 355.96, "dateWindow": "07/23\u201307/29", "score": 4.42, "scoreMax": 4.42, "methods": ["Gann 30 days from low 06/26", "Fib 8 bars from high 07/15", "Sepharial: Mercury station (turning retro/direct)", "Sepharial: any planet station day"]}, {"n": 2, "type": "low", "date": "Mon 08/03", "isoDate": "2026-08-03", "time": "9:30 AM ET", "timePct": 33.3, "altTime": "3:45 PM ET", "altTimePct": 13.3, "astroTime": null, "price": 322.72, "dateWindow": "07/30\u201308/05", "score": 2.31, "scoreMax": 4.42, "methods": ["Fib 55 bars from high 05/13", "Fib 13 bars from high 07/15"]}, {"n": 3, "type": "high", "date": "Mon 08/10", "isoDate": "2026-08-10", "time": "9:30 AM ET", "timePct": 28.3, "altTime": "3:45 PM ET", "altTimePct": 11.7, "astroTime": null, "price": 370.85, "dateWindow": "08/06\u201308/12", "score": 2.38, "scoreMax": 4.42, "methods": ["Gann 45 days from low 06/26"]}, {"n": 4, "type": "low", "date": "Thu 09/10", "isoDate": "2026-09-10", "time": "9:30 AM ET", "timePct": 33.3, "altTime": "3:45 PM ET", "altTimePct": 13.3, "astroTime": "11:26 PM ET", "price": 338.2, "dateWindow": "09/08\u201309/14", "score": 3.78, "scoreMax": 4.42, "methods": ["Gann 120 days from high 05/13", "new moon 11:26 PM ET", "Vibe: Numerology day 2", "Sepharial: any planet station day"]}, {"n": 5, "type": "high", "date": "Mon 09/14", "isoDate": "2026-09-14", "time": "9:30 AM ET", "timePct": 28.3, "altTime": "3:45 PM ET", "altTimePct": 11.7, "astroTime": null, "price": 387.35, "dateWindow": "09/10\u201309/16", "score": 3.56, "scoreMax": 4.42, "methods": ["Gann 60 days from high 07/15", "Fib 55 bars from low 06/26", "Sepharial: any planet station day"]}], "predictionBasis": {"lastPivot": {"date": "2026-07-15", "type": "high", "price": 370.92}, "medianSpacing": 15, "medianAmpPct": 14.1, "medianUpPct": 17.4, "medianDownPct": 9.3, "hitRate2d": 13.0, "hitRate3d": 18.0}, "chart": {"dates": ["2025-10-15", "2025-10-16", "2025-10-17", "2025-10-20", "2025-10-21", "2025-10-22", "2025-10-23", "2025-10-24", "2025-10-27", "2025-10-28", "2025-10-29", "2025-10-30", "2025-10-31", "2025-11-03", "2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-10", "2025-11-11", "2025-11-12", "2025-11-13", "2025-11-14", "2025-11-17", "2025-11-18", "2025-11-19", "2025-11-20", "2025-11-21", "2025-11-24", "2025-11-25", "2025-11-26", "2025-11-28", "2025-12-01", "2025-12-02", "2025-12-03", "2025-12-04", "2025-12-05", "2025-12-08", "2025-12-09", "2025-12-10", "2025-12-11", "2025-12-12", "2025-12-15", "2025-12-16", "2025-12-17", "2025-12-18", "2025-12-19", "2025-12-22", "2025-12-23", "2025-12-24", "2025-12-26", "2025-12-29", "2025-12-30", "2025-12-31", "2026-01-02", "2026-01-05", "2026-01-06", "2026-01-07", "2026-01-08", "2026-01-09", "2026-01-12", "2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-12", "2026-02-13", "2026-02-17", "2026-02-18", "2026-02-19", "2026-02-20", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-02-27", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-06", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15", "2026-07-16", "2026-07-17", "2026-07-20", "2026-07-21"], "closes": [251.03, 251.46, 253.3, 256.55, 250.46, 251.69, 253.08, 259.92, 269.27, 267.47, 274.57, 281.48, 281.19, 283.72, 277.54, 284.31, 284.75, 278.83, 290.1, 291.31, 286.71, 278.57, 276.41, 285.02, 284.28, 292.81, 289.45, 299.66, 318.58, 323.44, 319.95, 320.18, 314.89, 315.81, 319.63, 317.62, 321.27, 313.72, 317.08, 320.21, 312.43, 309.29, 308.22, 306.57, 296.72, 302.46, 307.16, 309.78, 314.35, 314.09, 313.51, 313.56, 313.85, 313.0, 315.15, 316.54, 314.34, 321.98, 325.44, 328.57, 331.86, 335.97, 335.84, 332.78, 330.0, 322.0, 328.38, 330.54, 327.93, 333.26, 334.55, 336.01, 338.25, 338.0, 343.69, 339.71, 333.04, 331.25, 322.86, 324.32, 318.58, 310.96, 309.0, 305.72, 302.02, 303.33, 302.85, 314.98, 311.49, 310.9, 312.9, 307.38, 311.76, 306.52, 303.58, 303.13, 300.88, 298.52, 306.36, 307.04, 308.7, 303.55, 302.28, 305.56, 310.92, 307.69, 307.13, 301.0, 302.06, 290.44, 290.93, 280.92, 274.34, 273.5, 287.56, 297.39, 295.77, 299.99, 305.46, 317.32, 318.49, 317.24, 321.31, 332.91, 337.12, 336.02, 341.68, 337.42, 332.29, 339.32, 338.89, 344.4, 350.34, 349.78, 349.94, 384.8, 385.69, 383.25, 388.43, 398.04, 397.99, 400.8, 388.64, 387.35, 402.62, 401.07, 396.78, 396.94, 387.66, 388.91, 387.66, 382.97, 388.88, 388.83, 390.13, 380.34, 376.37, 361.85, 358.99, 372.19, 368.53, 363.31, 364.26, 356.38, 357.77, 359.68, 369.35, 373.25, 363.79, 368.03, 349.68, 346.13, 345.29, 343.71, 337.39, 353.65, 357.37, 361.21, 359.91, 366.46, 367.03, 361.92, 358.89, 357.18, 352.51, 359.51, 370.92, 354.46, 346.77, 351.99, 347.15], "pivots": [{"date": "2025-11-11", "type": "high", "price": 291.31}, {"date": "2025-11-14", "type": "low", "price": 276.41}, {"date": "2025-11-25", "type": "high", "price": 323.44}, {"date": "2025-12-17", "type": "low", "price": 296.72}, {"date": "2026-02-02", "type": "high", "price": 343.69}, {"date": "2026-03-30", "type": "low", "price": 273.5}, {"date": "2026-05-13", "type": "high", "price": 402.62}, {"date": "2026-06-26", "type": "low", "price": 337.39}, {"date": "2026-07-15", "type": "high", "price": 370.92}]}}, "GC=F": {"ticker": "GC=F", "generated": "2026-07-22 09:12 AM ET", "price": 4121.60009765625, "monthName": "July", "ranges": {"daily": {"low": 4081.0, "high": 4146.0}, "weekly": {"low": 3999.7, "high": 4146.0}, "monthly": {"low": 3963.0, "high": 4199.7}, "yearly": {"low": 3263.9, "high": 5586.2}}, "intraday15m": {"days": 59, "high": {"00:00": 6.8, "00:15": 6.8, "01:15": 1.7, "01:30": 1.7, "01:45": 1.7, "02:00": 3.4, "02:15": 5.1, "03:00": 1.7, "03:30": 1.7, "03:45": 1.7, "04:15": 1.7, "04:45": 1.7, "06:00": 1.7, "07:00": 1.7, "08:15": 1.7, "08:30": 1.7, "08:45": 1.7, "09:30": 3.4, "09:45": 3.4, "10:00": 1.7, "10:15": 1.7, "10:30": 1.7, "11:00": 1.7, "11:15": 1.7, "11:45": 1.7, "12:15": 3.4, "12:30": 1.7, "13:45": 3.4, "14:30": 1.7, "18:00": 5.1, "18:45": 1.7, "19:15": 1.7, "20:00": 1.7, "20:15": 3.4, "21:00": 1.7, "21:15": 1.7, "21:30": 3.4, "21:45": 1.7, "22:45": 3.4, "23:15": 3.4}, "low": {"00:00": 6.8, "00:15": 3.4, "00:30": 1.7, "00:45": 1.7, "01:30": 3.4, "01:45": 1.7, "02:00": 1.7, "02:30": 1.7, "03:15": 1.7, "03:30": 1.7, "03:45": 1.7, "04:00": 1.7, "08:45": 1.7, "09:00": 1.7, "09:30": 1.7, "09:45": 3.4, "10:00": 6.8, "10:30": 3.4, "11:15": 1.7, "11:30": 1.7, "14:00": 3.4, "15:15": 1.7, "15:30": 3.4, "16:00": 1.7, "18:00": 1.7, "18:15": 1.7, "18:30": 1.7, "19:00": 1.7, "19:15": 1.7, "20:00": 3.4, "20:15": 1.7, "20:30": 1.7, "21:00": 1.7, "21:30": 1.7, "21:45": 1.7, "23:00": 5.1, "23:15": 5.1, "23:30": 3.4, "23:45": 5.1}}, "intradayHourly": {"days": 724, "high": {"00:00": 6.9, "01:00": 5.1, "02:00": 3.6, "03:00": 2.2, "04:00": 1.9, "05:00": 2.6, "06:00": 2.9, "07:00": 3.2, "08:00": 5.1, "09:00": 6.8, "09:30": 0.3, "10:00": 7.0, "10:30": 0.1, "11:00": 5.1, "11:30": 0.1, "12:00": 3.5, "12:30": 0.1, "13:00": 2.9, "14:00": 1.7, "15:00": 1.0, "16:00": 2.1, "18:00": 8.6, "19:00": 1.7, "20:00": 5.2, "21:00": 5.9, "22:00": 5.5, "23:00": 8.8}, "low": {}}, "weekday": {"weeks": 260, "high": {"Monday": 21.2, "Tuesday": 16.9, "Wednesday": 13.8, "Thursday": 14.2, "Friday": 33.8}, "low": {"Monday": 36.2, "Tuesday": 13.5, "Wednesday": 13.8, "Thursday": 16.9, "Friday": 19.6}}, "dayOfMonth": {"months": 60, "high": {"early (1st-10th)": 38.3, "mid (11th-20th)": 28.3, "late (21st-31st)": 33.3}, "low": {"early (1st-10th)": 53.3, "mid (11th-20th)": 16.7, "late (21st-31st)": 30.0}}, "seasonality": {"Jan": {"avgRet": 3.0, "winRate": 65.0, "n": 26}, "Feb": {"avgRet": 1.19, "winRate": 54.0, "n": 26}, "Mar": {"avgRet": 0.28, "winRate": 46.0, "n": 26}, "Apr": {"avgRet": 1.21, "winRate": 62.0, "n": 26}, "May": {"avgRet": 0.28, "winRate": 50.0, "n": 26}, "Jun": {"avgRet": -0.9, "winRate": 42.0, "n": 26}, "Jul": {"avgRet": 1.04, "winRate": 58.0, "n": 26}, "Aug": {"avgRet": 2.02, "winRate": 72.0, "n": 25}, "Sep": {"avgRet": 0.76, "winRate": 50.0, "n": 26}, "Oct": {"avgRet": 0.21, "winRate": 50.0, "n": 26}, "Nov": {"avgRet": 1.36, "winRate": 58.0, "n": 26}, "Dec": {"avgRet": 1.41, "winRate": 65.0, "n": 26}}, "seasonalityYears": 27, "swing": {"thresholdPct": 5.5, "pivotCount": 9, "medianSpacingTradingDays": 16, "medianAmplitudePct": 13.8, "hitRate2d": 0.0, "hitRate3d": 33.0, "tested": 3, "recentPivots": [{"date": "2025-11-04", "type": "low", "price": 3947.7}, {"date": "2026-01-29", "type": "high", "price": 5318.4}, {"date": "2026-02-02", "type": "low", "price": 4622.5}, {"date": "2026-03-02", "type": "high", "price": 5294.4}, {"date": "2026-03-26", "type": "low", "price": 4375.5}, {"date": "2026-04-17", "type": "high", "price": 4857.6}, {"date": "2026-06-11", "type": "low", "price": 4090.3}, {"date": "2026-06-17", "type": "high", "price": 4358.9}]}, "levels": {"support": [{"price": 4073.4, "touches": 2, "distPct": -1.2}, {"price": 3974.53, "touches": 3, "distPct": -3.6}, {"price": 3425.42, "touches": 5, "distPct": -16.9}], "resistance": [{"price": 4179.75, "touches": 2, "distPct": 1.4}, {"price": 4356.9, "touches": 5, "distPct": 5.7}, {"price": 4532.8, "touches": 3, "distPct": 10.0}]}, "backtests": {"overnight": {"avgPct": 0.045, "winRate": 54.5, "totalPct": 72.0, "n": 1254}, "intraday": {"avgPct": 0.028, "winRate": 51.1, "totalPct": 33.0, "n": 1255}, "buy1030SellClose": null, "openToClose2y": {"avgPct": 0.102, "winRate": 53.8, "totalPct": 96.0, "n": 717}}, "methods": {"gann": {"rate": 22.2, "control": 5.6, "counts": [30, 45, 60, 90, 120, 144, 180, 270, 360], "annivHits": 0, "pivots": 9, "upcoming": [{"date": "2026-07-26", "rule": "45 days from low 06/11"}, {"date": "2026-08-01", "rule": "45 days from high 06/17"}, {"date": "2026-08-10", "rule": "60 days from low 06/11"}, {"date": "2026-08-15", "rule": "120 days from high 04/17"}, {"date": "2026-08-16", "rule": "60 days from high 06/17"}, {"date": "2026-09-08", "rule": "144 days from high 04/17"}, {"date": "2026-09-09", "rule": "90 days from low 06/11"}, {"date": "2026-09-15", "rule": "90 days from high 06/17"}]}, "fib": {"rate": 15.2, "control": 15.2, "counts": [8, 13, 21, 34, 55, 89, 144], "upcoming": [{"date": "2026-07-31", "rule": "Fib 34 bars from low 06/11"}, {"date": "2026-08-06", "rule": "Fib 34 bars from high 06/17"}, {"date": "2026-08-25", "rule": "Fib 89 bars from high 04/17"}, {"date": "2026-08-31", "rule": "Fib 55 bars from low 06/11"}, {"date": "2026-09-04", "rule": "Fib 55 bars from high 06/17"}]}, "hurst": {"cycles": {"10": {"nextTroughDays": 3, "nextCrestDays": 8, "ampPct": 1.33, "lowsAlignedPct": 75.0, "chancePct": 50.0}, "20": {"nextTroughDays": 3, "nextCrestDays": 13, "ampPct": 0.72, "lowsAlignedPct": 50.0, "chancePct": 35.0}, "40": {"nextTroughDays": 3, "nextCrestDays": 23, "ampPct": 1.65, "lowsAlignedPct": 50.0, "chancePct": 32.0}, "80": {"nextTroughDays": 3, "nextCrestDays": 43, "ampPct": 3.26, "lowsAlignedPct": 25.0, "chancePct": 31.0}}, "upcoming": [{"date": "2026-07-27", "cycle": "10-day", "kind": "trough"}, {"date": "2026-07-27", "cycle": "20-day", "kind": "trough"}, {"date": "2026-07-27", "cycle": "40-day", "kind": "trough"}, {"date": "2026-07-27", "cycle": "80-day", "kind": "trough"}, {"date": "2026-08-03", "cycle": "10-day", "kind": "crest"}, {"date": "2026-08-10", "cycle": "20-day", "kind": "crest"}, {"date": "2026-08-24", "cycle": "40-day", "kind": "crest"}]}, "astro": {"moonLowPct": 50.0, "moonHighPct": 60.0, "moonChance": 20.0, "retroPivPct": 11.0, "retroChance": 19.0, "moonsNext": [{"date": "2026-07-29", "time": "10:35 AM ET", "kind": "full"}, {"date": "2026-08-12", "time": "1:36 PM ET", "kind": "new"}, {"date": "2026-08-28", "time": "12:18 AM ET", "kind": "full"}, {"date": "2026-09-10", "time": "11:26 PM ET", "kind": "new"}], "retroRanges": [["2026-07-23", "2026-07-24"]]}}, "vibration": {"high": [], "low": [], "retro": [], "numerology": {"tickerNumber": 7, "lift": 0.0, "hits": 0, "n": 9, "basePct": 11.0}, "chanceLift": 20.52, "sepharial": {"tests": [{"name": "Mercury station (turning retro/direct)", "lift": 0.0, "hits": 0, "n": 9, "basePct": 8.4}, {"name": "any planet station day", "lift": 0.0, "hits": 0, "n": 9, "basePct": 22.5}, {"name": "Moon declination extreme", "lift": 1.01, "hits": 2, "n": 9, "basePct": 21.9}, {"name": "Moon crossing equator", "lift": 2.01, "hits": 4, "n": 9, "basePct": 22.1}], "chaldeanNumber": 5, "rulingPlanet": "Mercury"}, "upcoming": [{"date": "2026-08-03", "rule": "Sepharial: Moon crossing equator"}, {"date": "2026-08-04", "rule": "Sepharial: Moon crossing equator"}, {"date": "2026-08-17", "rule": "Sepharial: Moon crossing equator"}, {"date": "2026-08-31", "rule": "Sepharial: Moon crossing equator"}, {"date": "2026-09-11", "rule": "Sepharial: Moon crossing equator"}]}, "trackRecord": {"since": "2026-07-22", "resolved": [], "n": 0, "hit2Rate": null, "hit3Rate": null, "methodFactors": {}, "famStats": {}}, "predictions": [{"n": 1, "type": "high", "date": "Mon 07/27", "isoDate": "2026-07-27", "time": "12:00 AM ET", "timePct": 6.8, "altTime": "12:15 PM ET", "altTimePct": 3.4, "astroTime": null, "price": 4179.75, "dateWindow": "07/23\u201307/29", "score": 8.42, "scoreMax": 8.42, "methods": ["Gann 45 days from low 06/11", "Hurst 10-day trough", "Hurst 20-day trough", "Hurst 40-day trough"]}, {"n": 2, "type": "low", "date": "Mon 08/03", "isoDate": "2026-08-03", "time": "12:00 AM ET", "timePct": 6.8, "altTime": "2:00 PM ET", "altTimePct": 3.4, "astroTime": null, "price": 3974.53, "dateWindow": "07/30\u201308/05", "score": 3.64, "scoreMax": 8.42, "methods": ["Gann 45 days from high 06/17", "Hurst 10-day crest", "Sepharial: Moon crossing equator"]}, {"n": 3, "type": "high", "date": "Mon 08/10", "isoDate": "2026-08-10", "time": "12:00 AM ET", "timePct": 6.8, "altTime": "12:15 PM ET", "altTimePct": 3.4, "astroTime": null, "price": 4356.9, "dateWindow": "08/06\u201308/12", "score": 3.47, "scoreMax": 8.42, "methods": ["Gann 60 days from low 06/11", "Hurst 20-day crest"]}, {"n": 4, "type": "low", "date": "Mon 08/17", "isoDate": "2026-08-17", "time": "12:00 AM ET", "timePct": 6.8, "altTime": "2:00 PM ET", "altTimePct": 3.4, "astroTime": null, "price": 3974.53, "dateWindow": "08/13\u201308/19", "score": 6.7, "scoreMax": 8.42, "methods": ["Gann 120 days from high 04/17", "Gann 60 days from high 06/17", "Sepharial: Moon crossing equator"]}, {"n": 5, "type": "high", "date": "Tue 09/08", "isoDate": "2026-09-08", "time": "12:00 AM ET", "timePct": 6.8, "altTime": "12:15 PM ET", "altTimePct": 3.4, "astroTime": null, "price": 4356.9, "dateWindow": "09/04\u201309/10", "score": 3.1, "scoreMax": 8.42, "methods": ["Gann 144 days from high 04/17"]}], "predictionBasis": {"lastPivot": {"date": "2026-06-17", "type": "high", "price": 4358.9}, "medianSpacing": 16, "medianAmpPct": 13.8, "medianUpPct": 12.8, "medianDownPct": 14.4, "hitRate2d": 0.0, "hitRate3d": 33.0}, "chart": {"dates": ["2025-10-16", "2025-10-17", "2025-10-20", "2025-10-21", "2025-10-22", "2025-10-23", "2025-10-24", "2025-10-27", "2025-10-28", "2025-10-29", "2025-10-30", "2025-10-31", "2025-11-03", "2025-11-04", "2025-11-05", "2025-11-06", "2025-11-07", "2025-11-10", "2025-11-11", "2025-11-12", "2025-11-13", "2025-11-14", "2025-11-17", "2025-11-18", "2025-11-19", "2025-11-20", "2025-11-21", "2025-11-24", "2025-11-25", "2025-11-26", "2025-11-28", "2025-12-01", "2025-12-02", "2025-12-03", "2025-12-04", "2025-12-05", "2025-12-08", "2025-12-09", "2025-12-10", "2025-12-11", "2025-12-12", "2025-12-15", "2025-12-16", "2025-12-17", "2025-12-18", "2025-12-19", "2025-12-22", "2025-12-23", "2025-12-24", "2025-12-26", "2025-12-29", "2025-12-30", "2025-12-31", "2026-01-02", "2026-01-05", "2026-01-06", "2026-01-07", "2026-01-08", "2026-01-09", "2026-01-12", "2026-01-13", "2026-01-14", "2026-01-15", "2026-01-16", "2026-01-20", "2026-01-21", "2026-01-22", "2026-01-23", "2026-01-26", "2026-01-27", "2026-01-28", "2026-01-29", "2026-01-30", "2026-02-02", "2026-02-03", "2026-02-04", "2026-02-05", "2026-02-06", "2026-02-09", "2026-02-10", "2026-02-11", "2026-02-12", "2026-02-13", "2026-02-17", "2026-02-18", "2026-02-19", "2026-02-20", "2026-02-23", "2026-02-24", "2026-02-25", "2026-02-26", "2026-02-27", "2026-03-02", "2026-03-03", "2026-03-04", "2026-03-05", "2026-03-06", "2026-03-09", "2026-03-10", "2026-03-11", "2026-03-12", "2026-03-13", "2026-03-16", "2026-03-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-03-25", "2026-03-26", "2026-03-27", "2026-03-30", "2026-03-31", "2026-04-01", "2026-04-02", "2026-04-06", "2026-04-07", "2026-04-08", "2026-04-09", "2026-04-10", "2026-04-13", "2026-04-14", "2026-04-15", "2026-04-16", "2026-04-17", "2026-04-20", "2026-04-21", "2026-04-22", "2026-04-23", "2026-04-24", "2026-04-27", "2026-04-28", "2026-04-29", "2026-04-30", "2026-05-01", "2026-05-04", "2026-05-05", "2026-05-06", "2026-05-07", "2026-05-08", "2026-05-11", "2026-05-12", "2026-05-13", "2026-05-14", "2026-05-15", "2026-05-18", "2026-05-19", "2026-05-20", "2026-05-21", "2026-05-22", "2026-05-26", "2026-05-27", "2026-05-28", "2026-05-29", "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05", "2026-06-08", "2026-06-09", "2026-06-10", "2026-06-11", "2026-06-12", "2026-06-15", "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-22", "2026-06-23", "2026-06-24", "2026-06-25", "2026-06-26", "2026-06-29", "2026-06-30", "2026-07-01", "2026-07-02", "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10", "2026-07-13", "2026-07-14", "2026-07-15", "2026-07-16", "2026-07-17", "2026-07-20", "2026-07-21", "2026-07-22"], "closes": [4280.2, 4189.9, 4336.4, 4087.7, 4044.4, 4125.5, 4118.4, 4001.9, 3966.2, 3983.7, 4001.3, 3982.2, 4000.3, 3947.7, 3980.3, 3979.9, 3999.4, 4111.8, 4106.8, 4204.4, 4186.9, 4087.6, 4068.3, 4061.3, 4077.7, 4056.5, 4076.7, 4091.9, 4139.2, 4165.2, 4218.3, 4239.3, 4186.6, 4199.3, 4211.8, 4212.9, 4187.2, 4206.7, 4196.4, 4285.5, 4300.1, 4306.7, 4304.5, 4347.5, 4339.5, 4361.4, 4444.6, 4482.8, 4480.6, 4529.1, 4325.1, 4370.1, 4325.6, 4314.4, 4436.9, 4482.2, 4449.3, 4449.7, 4490.3, 4604.3, 4589.2, 4626.3, 4616.3, 4588.4, 4759.6, 4831.8, 4908.8, 4976.2, 5079.7, 5079.9, 5301.6, 5318.4, 4713.9, 4622.5, 4903.7, 4920.4, 4861.4, 4951.2, 5050.9, 5003.8, 5071.6, 4923.7, 5022.0, 4882.9, 4986.5, 4975.9, 5059.3, 5204.7, 5155.8, 5206.4, 5176.5, 5230.5, 5294.4, 5107.4, 5120.2, 5065.3, 5146.1, 5091.5, 5229.7, 5167.4, 5115.8, 5052.5, 4994.0, 5001.0, 4889.9, 4600.7, 4570.4, 4404.1, 4399.3, 4549.8, 4375.5, 4492.0, 4526.0, 4647.6, 4783.2, 4651.5, 4656.8, 4657.1, 4749.5, 4792.2, 4761.9, 4742.4, 4825.0, 4800.0, 4785.4, 4857.6, 4806.6, 4698.4, 4732.5, 4705.1, 4722.3, 4675.4, 4591.5, 4545.2, 4614.7, 4629.9, 4519.5, 4555.8, 4681.9, 4699.8, 4720.4, 4718.7, 4677.6, 4697.7, 4678.1, 4555.8, 4552.5, 4506.3, 4531.3, 4539.8, 4521.0, 4500.4, 4447.5, 4499.3, 4560.5, 4475.2, 4489.1, 4436.7, 4475.8, 4337.1, 4335.9, 4260.0, 4108.2, 4090.3, 4215.0, 4328.0, 4330.9, 4358.9, 4224.1, 4181.9, 4129.9, 3990.3, 4030.5, 4078.7, 4022.3, 4022.9, 4068.3, 4112.7, 4155.1, 4145.3, 4070.9, 4130.6, 4104.1, 3997.0, 4061.1, 4044.0, 3985.6, 4012.7, 4010.3, 4071.1, 4121.6], "pivots": [{"date": "2025-10-20", "type": "high", "price": 4336.4}, {"date": "2025-11-04", "type": "low", "price": 3947.7}, {"date": "2026-01-29", "type": "high", "price": 5318.4}, {"date": "2026-02-02", "type": "low", "price": 4622.5}, {"date": "2026-03-02", "type": "high", "price": 5294.4}, {"date": "2026-03-26", "type": "low", "price": 4375.5}, {"date": "2026-04-17", "type": "high", "price": 4857.6}, {"date": "2026-06-11", "type": "low", "price": 4090.3}, {"date": "2026-06-17", "type": "high", "price": 4358.9}]}}};</script>
+<style>
+  :root{
+    --bg:#f6f8fa; --panel:#ffffff; --panel2:#f0f3f6; --border:#d0d7de;
+    --text:#1f2328; --dim:#57606a; --green:#1a7f37; --red:#cf222e;
+    --amber:#9a6700; --blue:#0969da; --accent:#8250df;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--bg); color:var(--text);
+    font-family:"Segoe UI",system-ui,-apple-system,sans-serif; padding:24px; max-width:1200px; margin:0 auto}
+  h1{font-size:26px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap}
+  h1 .px{color:var(--green); font-variant-numeric:tabular-nums}
+  h2{font-size:17px; margin-bottom:10px; color:var(--blue)}
+  h3{font-size:14px; color:var(--dim); font-weight:600; margin-bottom:6px}
+  .sub{color:var(--dim); font-size:13px; margin-top:4px}
+  .tabs{display:flex; gap:8px; margin-top:16px; flex-wrap:wrap}
+  .tab{padding:8px 22px; border:1px solid var(--border); border-radius:8px; background:var(--panel);
+    font-size:15px; font-weight:700; cursor:pointer; color:var(--dim)}
+  .tab:hover{border-color:var(--blue); color:var(--blue)}
+  .tab.on{background:var(--blue); border-color:var(--blue); color:#fff}
+  .tab .tp{display:block; font-size:11px; font-weight:400}
+  .panel{background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:18px; margin-top:18px; box-shadow:0 1px 3px rgba(31,35,40,.05)}
+  .warn{background:#fff8c5; border-color:#d4a72c; color:#7d4e00; font-size:13px; line-height:1.55}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+  @media(max-width:800px){.grid2{grid-template-columns:1fr}}
+  table{width:100%; border-collapse:collapse; font-size:14px}
+  th{color:var(--dim); text-align:left; font-weight:600; padding:8px 10px; border-bottom:1px solid var(--border); font-size:12px; text-transform:uppercase; letter-spacing:.04em}
+  td{padding:10px; border-bottom:1px solid #eaeef2; vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .badge{display:inline-block; padding:3px 10px; border-radius:20px; font-weight:700; font-size:12px}
+  .bH{background:#dafbe1; color:var(--green); border:1px solid #aceebb}
+  .bL{background:#ffebe9; color:var(--red); border:1px solid #ffcecb}
+  .chip{display:inline-block; background:var(--panel2); border:1px solid var(--border);
+    border-radius:12px; padding:2px 9px; font-size:11px; color:var(--dim); margin:2px 2px 0 0}
+  .num{font-variant-numeric:tabular-nums}
+  .big{font-size:17px; font-weight:700}
+  .conf{height:7px; background:#eaeef2; border-radius:4px; overflow:hidden; margin-top:5px; width:110px}
+  .conf i{display:block; height:100%; background:var(--amber)}
+  canvas{width:100%; height:auto; display:block}
+  .rangebar{margin:14px 0}
+  .rb-track{position:relative; height:12px; background:linear-gradient(90deg,#ffd8d3,#eaeef2 50%,#c8f0d2); border-radius:6px}
+  .rb-mark{position:absolute; top:-4px; width:3px; height:20px; background:var(--blue); border-radius:2px}
+  .rb-lbl{display:flex; justify-content:space-between; font-size:12px; color:var(--dim); margin-top:5px}
+  .rb-title{display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px}
+  .good{color:var(--green)} .bad{color:var(--red)} .mid{color:var(--amber)}
+  .play li{margin:10px 0 10px 18px; line-height:1.5; font-size:14px}
+  .play b{color:var(--blue)}
+  .foot{color:var(--dim); font-size:12px; line-height:1.6; margin-top:18px}
+  .tag{font-size:11px; color:var(--dim)}
+  .verdict-good{font-weight:700; color:var(--green)}
+  .verdict-none{font-weight:700; color:var(--red)}
+  .verdict-weak{font-weight:700; color:var(--amber)}
+  .cal td{padding:6px 10px; font-size:13px}
+  .tblwrap{overflow-x:auto; -webkit-overflow-scrolling:touch}
+  .tblwrap table{min-width:560px}
+  .chartwrap{overflow-x:auto; -webkit-overflow-scrolling:touch}
+
+  /* ---------- mobile ---------- */
+  @media(max-width:640px){
+    body{padding:10px}
+    h1{font-size:21px; gap:8px}
+    .panel{padding:12px; margin-top:12px}
+    h2{font-size:15px}
+    .tabs{position:sticky; top:0; z-index:9; background:var(--bg); padding:8px 0; gap:6px}
+    .tab{padding:8px 12px; font-size:13px; flex:1; min-width:60px; text-align:center}
+    .tab .tp{font-size:10px}
+    .big{font-size:15px}
+    /* predictions table becomes stacked cards */
+    #predTable tr:first-child{display:none}
+    #predTable, #predTable tbody, #predTable tr, #predTable td{display:block; width:100%}
+    #predTable tr{border:1px solid var(--border); border-radius:10px; margin:10px 0; padding:6px 4px; background:var(--panel2)}
+    #predTable td{border:none; padding:3px 10px}
+    #predTable td[data-l]::before{content:attr(data-l) ": "; font-size:11px; color:var(--dim); text-transform:uppercase; letter-spacing:.03em}
+    #predTable td:first-child{display:none}
+    #predTable td[data-l="date"], #predTable td[data-l="target"]{display:none}
+    .mobonly{display:inline}
+    /* timing scorecard becomes stacked cards too */
+    #scoreTable{min-width:0}
+    #scoreTable tr:first-child{display:none}
+    #scoreTable, #scoreTable tbody, #scoreTable tr, #scoreTable td{display:block; width:100%}
+    #scoreTable tr{border:1px solid var(--border); border-radius:10px; margin:10px 0; padding:6px 4px; background:var(--panel2)}
+    #scoreTable td{border:none; padding:3px 10px}
+    #scoreTable td[data-l]::before{content:attr(data-l) ": "; font-size:11px; color:var(--dim); text-transform:uppercase; letter-spacing:.03em}
+    /* signal calendar fits naturally on phones */
+    #calTable{min-width:0}
+  }
+  @media(min-width:641px){ .mobonly{display:none} }
+</style>
+</head>
+<body>
+
+<h1><span id="tkr"></span> <span class="px" id="price"></span> <span class="sub" id="updated"></span></h1>
+<div class="sub">Timing dashboard — when highs &amp; lows tend to happen, with Gann, Hurst, astro &amp; Fibonacci
+  methods backtested per stock. To refresh data: double-click <b>refresh.bat</b>. To change the stock list:
+  edit <b>tickers.txt</b> (one symbol per line), then refresh.</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="panel">
+  <h2>Next 5 projected highs / lows — multi-method confluence</h2>
+  <div class="sub" id="basis"></div>
+  <table id="predTable"></table>
+  <div class="sub" style="margin-top:8px" id="hitnote"></div>
+</div>
+
+<div class="panel">
+  <h2>Support &amp; resistance — <span class="tkr2"></span></h2>
+  <div class="sub">Price levels where <span class="tkr2"></span>'s swing turns have clustered over 2 years.
+    More touches = stronger level. They're also drawn on the chart below (green = support, red = resistance).</div>
+  <div id="srBody" style="margin-top:8px"></div>
+</div>
+
+<div class="panel">
+  <h2>Price, detected swings (H/L), and projected path</h2>
+  <div class="chartwrap"><canvas id="chart" width="1140" height="360"></canvas></div>
+  <div class="tag" id="chartTag"></div>
+</div>
+
+<div class="panel">
+  <h2>Prediction track record — graded daily</h2>
+  <div class="sub" id="trSub"></div>
+  <div id="trBody" class="tblwrap" style="margin-top:8px"></div>
+</div>
+
+<div class="panel">
+  <h2>Timing-school scorecard — what actually tested out on <span class="tkr2"></span></h2>
+  <div class="sub" id="scoreSub"></div>
+  <div class="tblwrap"><table id="scoreTable" style="margin-top:8px"></table></div>
+</div>
+
+<div class="panel">
+  <h2>Vibration lab — <span class="tkr2"></span>'s own astro &amp; numerology signature</h2>
+  <div class="sub" id="vibSub"></div>
+  <div id="vibBody" style="margin-top:8px"></div>
+</div>
+
+<div class="panel">
+  <h2>Upcoming signal calendar (next ~60 days)</h2>
+  <div class="sub">Every date each school flags, merged chronologically — exact times where the method gives one.</div>
+  <div class="tblwrap"><table class="cal" id="calTable" style="margin-top:8px"></table></div>
+</div>
+
+<div class="panel">
+  <h2>Current price vs. its ranges</h2>
+  <div id="ranges"></div>
+</div>
+
+<div class="grid2">
+  <div class="panel">
+    <h2>What time of day do highs &amp; lows happen?</h2>
+    <div class="sub" id="todSub"></div>
+    <h3 style="margin-top:12px">Day's HIGH set at this time (% of days)</h3>
+    <canvas id="todHigh" width="540" height="150"></canvas>
+    <h3 style="margin-top:12px">Day's LOW set at this time (% of days)</h3>
+    <canvas id="todLow" width="540" height="150"></canvas>
+  </div>
+
+  <div class="panel">
+    <h2>Which weekday sets the week's high / low?</h2>
+    <div class="sub" id="wdSub"></div>
+    <h3 style="margin-top:12px">Week's HIGH lands on… (%)</h3>
+    <canvas id="wdHigh" width="540" height="150"></canvas>
+    <h3 style="margin-top:12px">Week's LOW lands on… (%)</h3>
+    <canvas id="wdLow" width="540" height="150"></canvas>
+  </div>
+
+  <div class="panel">
+    <h2>Where in the month do highs / lows land?</h2>
+    <div class="sub" id="domSub"></div>
+    <div id="domTable" style="margin-top:10px"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Monthly seasonality (avg return, <span id="seasYears"></span> years)</h2>
+    <canvas id="seas" width="540" height="180"></canvas>
+    <div class="tag">Green: month historically up on average. Number = average return that month.</div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Strategy backtests — what actually made money on <span class="tkr2"></span></h2>
+  <div class="tblwrap"><table id="btTable"></table></div>
+</div>
+
+<div class="panel">
+  <h2>How to act on this — the playbook for <span class="tkr2"></span></h2>
+  <ol class="play" id="playbook"></ol>
+</div>
+
+<div class="foot" id="foot"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const fmt$ = v => "$" + v.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+const pct = v => (v===null||v===undefined) ? "n/a" : v + "%";
+const argmax = obj => Object.keys(obj).reduce((a,b)=>obj[a]>=obj[b]?a:b);
+const TICKERS = Object.keys(DATA_ALL);
+const NICE = {"GC=F": "GOLD/oz"};
+const nice = t => NICE[t] || t;
+let CUR = localStorage.getItem("tkr");
+if(!TICKERS.includes(CUR)) CUR = TICKERS[0];
+
+/* ---------- ticker tabs ---------- */
+function renderTabs(){
+  $("tabs").innerHTML = TICKERS.map(t=>{
+    const d = DATA_ALL[t];
+    return `<button class="tab${t===CUR?' on':''}" onclick="switchTo('${t}')">${nice(t)}
+      <span class="tp num">${fmt$(d.price)}</span></button>`;
+  }).join("");
+}
+function switchTo(t){
+  CUR = t; localStorage.setItem("tkr", t);
+  renderTabs(); renderAll(DATA_ALL[t]);
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* size a canvas to its container so charts fit phone screens */
+function fit(c, maxW, ratio){
+  const w = Math.max(300, Math.min(maxW, (c.parentElement.clientWidth || maxW) - 4));
+  c.width = w;
+  c.height = Math.round(w * (w < 600 ? Math.max(ratio, 0.42) : ratio));
+}
+
+/* ---------- bar chart helper ---------- */
+function bars(id, labels, values, opts={}){
+  const c=$(id);
+  fit(c, 540, opts.tall ? 0.333 : 0.278);
+  const x=c.getContext("2d"), W=c.width, H=c.height, B=20, T=14;
+  x.clearRect(0,0,W,H);
+  const vmax = Math.max(...values.map(Math.abs))*1.15 || 1;
+  const bw = (W-10)/values.length;
+  const maxI = values.indexOf(Math.max(...values));
+  values.forEach((v,i)=>{
+    const h=(Math.abs(v)/vmax)*(H-B-T), bx=5+i*bw, by=H-B-h;
+    x.fillStyle = i===maxI ? (opts.hot||"#bf8700") : (opts.color||"#7aa7d4");
+    if(opts.signed) x.fillStyle = v>=0 ? "#2da44e" : "#cf222e";
+    x.fillRect(bx+1, by, bw-3, h);
+    if(Math.abs(v)>=vmax*0.10 || opts.allVals){
+      x.fillStyle="#1f2328"; x.font="10px Segoe UI"; x.textAlign="center";
+      x.fillText((opts.valFmt||(n=>n))(v), bx+bw/2, by-3);
+    }
+    if(labels[i]!==""){
+      x.fillStyle="#57606a"; x.font="10px Segoe UI"; x.textAlign="center";
+      x.fillText(labels[i], bx+bw/2, H-6);
+    }
+  });
+}
+
+/* ---------- main render ---------- */
+function renderAll(D){
+  const pb = D.predictionBasis;
+  $("tkr").textContent = nice(D.ticker);
+  document.querySelectorAll(".tkr2").forEach(e=>e.textContent=nice(D.ticker));
+  $("price").textContent = fmt$(D.price);
+  $("updated").textContent = "updated " + D.generated;
+
+  /* predictions */
+  $("basis").innerHTML = `Forecast = the dates where the most methods stack up (swing rhythm, Gann counts,
+   Fibonacci counts, Hurst cycle turns, lunar events), weighted by how well each tested on ${D.ticker}.
+   Anchor: last confirmed swing ${pb.lastPivot.type.toUpperCase()} on ${pb.lastPivot.date} at
+   ${fmt$(pb.lastPivot.price)}; ${D.ticker} turns ≥${D.swing.thresholdPct}% about every
+   <b>${pb.medianSpacing} trading days</b> (up ~${pb.medianUpPct}% into highs, down ~${pb.medianDownPct}% into lows).`;
+  let rows = `<tr><th>#</th><th>Type</th><th>Date</th><th>Window</th><th>Time of day</th><th>Projected price</th><th>Signals agreeing</th><th>Strength</th></tr>`;
+  for (const p of D.predictions) {
+    const strength = Math.round(p.score / p.scoreMax * 100);
+    rows += `<tr>
+      <td>${p.n}</td>
+      <td><span class="badge ${p.type==="high"?"bH":"bL"}">${p.type.toUpperCase()}</span>
+          <span class="big num mobonly" style="margin-left:6px">${p.date} — ${fmt$(p.price)}</span></td>
+      <td class="big num" data-l="date">${p.date}</td>
+      <td class="num" data-l="window">${p.dateWindow}</td>
+      <td class="num" data-l="time">${p.time} <span class="tag">(${p.timePct}%)</span>
+          ${p.altTime !== p.time ? `<br><span class="tag">2nd: ${p.altTime} (${p.altTimePct}%)</span>` : ""}
+          ${p.astroTime ? `<br><span class="tag">🌙 exact lunar time: ${p.astroTime}</span>` : ""}</td>
+      <td class="big num" data-l="target">${fmt$(p.price)}</td>
+      <td data-l="signals">${p.methods.map(m=>`<span class="chip">${m}</span>`).join("")||"<span class='tag'>—</span>"}</td>
+      <td data-l="strength"><span class="num">${strength}%</span>
+          <div class="conf"><i style="width:${strength}%"></i></div></td>
+    </tr>`;
+  }
+  $("predTable").innerHTML = rows;
+  $("hitnote").innerHTML = `<b>Honesty check:</b> on ${D.swing.tested} past ${D.ticker} swings, the rhythm method
+   landed within ±2 trading days ${pct(pb.hitRate2d)} of the time (±3 days: ${pct(pb.hitRate3d)}). Stacking methods
+   narrows attention, it doesn't create certainty. The most reliable part is time-of-day: the open
+   (9:30–10:00 AM ET) sets the day's extreme far more often than any other slot.`;
+
+  /* support & resistance */
+  (function(){
+    const Lv = D.levels;
+    if(!Lv){ $("srBody").innerHTML = "<div class='tag'>Run a data refresh to compute.</div>"; return; }
+    const row = (l, cls, name) => `<tr>
+      <td><b class="${cls}">${name}</b></td>
+      <td class="num big">${fmt$(l.price)}</td>
+      <td class="num">${l.distPct > 0 ? "+" : ""}${l.distPct}%</td>
+      <td class="num">${l.touches} touch${l.touches > 1 ? "es" : ""}</td></tr>`;
+    let h = `<table><tr><th>Level</th><th>Price</th><th>From current</th><th>Strength</th></tr>`;
+    const resis = Lv.resistance.slice().reverse();   // farthest first, R1 nearest
+    resis.forEach((l, i) => h += row(l, "bad", "R" + (resis.length - i)));
+    h += `<tr><td colspan="4" style="background:var(--panel2); text-align:center" class="num">
+      — current price <b>${fmt$(D.price)}</b> —</td></tr>`;
+    Lv.support.forEach((l, i) => h += row(l, "good", "S" + (i + 1)));
+    $("srBody").innerHTML = h + "</table>";
+  })();
+
+  /* chart */
+  (function(){
+    const c = $("chart"), x = c.getContext("2d");
+    const wrap = c.parentElement;
+    const mob = (wrap.clientWidth || 1140) < 600;
+    if (mob) {
+      // phones: draw at full width inside a swipeable strip
+      c.width = 1000; c.height = 340;
+      c.style.width = "1000px"; c.style.maxWidth = "none";
+    } else {
+      c.style.width = "100%"; c.style.maxWidth = "";
+      fit(c, 1140, 0.316);
+    }
+    x.clearRect(0,0,c.width,c.height);
+    const dates = D.chart.dates, closes = D.chart.closes, preds = D.predictions;
+    const allDates = dates.concat(preds.map(p=>p.isoDate));
+    const allPx = closes.concat(preds.map(p=>p.price));
+    const t0 = new Date(allDates[0]).getTime(), t1 = new Date(allDates[allDates.length-1]).getTime();
+    const pMin = Math.min(...allPx)*0.96, pMax = Math.max(...allPx)*1.04;
+    const W=c.width, H=c.height, L=52, R=16, T=16, B=24;
+    const X = d => L + (new Date(d).getTime()-t0)/(t1-t0)*(W-L-R);
+    const Y = p => T + (1-(p-pMin)/(pMax-pMin))*(H-T-B);
+    x.strokeStyle="#eaeef2"; x.fillStyle="#57606a"; x.font="11px Segoe UI"; x.textAlign="right";
+    for(let g=0; g<=4; g++){
+      const p = pMin + g*(pMax-pMin)/4, y = Y(p);
+      x.beginPath(); x.moveTo(L,y); x.lineTo(W-R,y); x.stroke();
+      x.fillText("$"+Math.round(p), L-4, y+4);
+    }
+    x.textAlign="center";
+    let lastM=-1;
+    for(const d of allDates){
+      const dt=new Date(d);
+      if(dt.getMonth()!==lastM){ lastM=dt.getMonth();
+        x.fillText(dt.toLocaleString("en",{month:"short"}), X(d), H-8);}
+    }
+    if(D.levels){
+      x.setLineDash([2,3]); x.lineWidth=1; x.textAlign="left"; x.font="10px Segoe UI";
+      for(const [arr,color] of [[D.levels.resistance,"#cf222e"],[D.levels.support,"#1a7f37"]]){
+        for(const l of arr){
+          if(l.price < pMin || l.price > pMax) continue;
+          x.strokeStyle=color; x.beginPath();
+          x.moveTo(L, Y(l.price)); x.lineTo(W-R, Y(l.price)); x.stroke();
+          x.fillStyle=color; x.fillText("$"+Math.round(l.price), L+4, Y(l.price)-3);
+        }
+      }
+      x.setLineDash([]); x.textAlign="center";
+    }
+    x.strokeStyle="#0969da"; x.lineWidth=1.6; x.beginPath();
+    dates.forEach((d,i)=>{ const px=X(d), py=Y(closes[i]); i?x.lineTo(px,py):x.moveTo(px,py); });
+    x.stroke();
+    for(const p of D.chart.pivots){
+      if(new Date(p.date).getTime() < t0) continue;
+      x.fillStyle = p.type==="high" ? "#1a7f37" : "#cf222e";
+      x.beginPath(); x.arc(X(p.date), Y(p.price), 4.5, 0, 7); x.fill();
+      x.fillStyle="#1f2328"; x.font="10px Segoe UI";
+      x.fillText(p.type==="high"?"H":"L", X(p.date), Y(p.price) + (p.type==="high"?-8:16));
+    }
+    x.strokeStyle="#8250df"; x.setLineDash([6,5]); x.lineWidth=1.4; x.beginPath();
+    x.moveTo(X(dates[dates.length-1]), Y(closes[closes.length-1]));
+    for(const p of preds) x.lineTo(X(p.isoDate), Y(p.price));
+    x.stroke(); x.setLineDash([]);
+    for(const p of preds){
+      const px = X(p.isoDate), py = Y(p.price);
+      x.fillStyle = p.type==="high" ? "#1a7f37" : "#cf222e";
+      x.beginPath(); x.arc(px, py, 5, 0, 7); x.fill();
+      x.strokeStyle="#8250df"; x.lineWidth=1.5; x.beginPath(); x.arc(px, py, 8, 0, 7); x.stroke();
+      x.fillStyle="#1f2328"; x.textAlign="center";
+      if(p.type==="high"){
+        x.font="bold 11px Segoe UI"; x.fillText("$"+Math.round(p.price), px, py-26);
+        x.font="10px Segoe UI";      x.fillText(p.date.split(" ")[1], px, py-14);
+      }else{
+        x.font="10px Segoe UI";      x.fillText(p.date.split(" ")[1], px, py+20);
+        x.font="bold 11px Segoe UI"; x.fillText("$"+Math.round(p.price), px, py+33);
+      }
+    }
+    if (mob) wrap.scrollLeft = wrap.scrollWidth;   // land on the newest data
+    $("chartTag").textContent = `Solid line: actual daily closes (9 months). Dots: confirmed ${D.swing.thresholdPct}% swing pivots. Dashed: the confluence forecast with date & price at each marker — an illustration of rhythm, not a promise.` + (mob ? " Swipe the chart left/right to see history; pinch to zoom." : "");
+  })();
+
+  /* track record */
+  (function(){
+    const tr = D.trackRecord;
+    if(!tr){ $("trSub").textContent = "Tracking starts with the next data refresh."; $("trBody").innerHTML=""; return; }
+    $("trSub").innerHTML = `Every refresh logs that day's 5 predictions for ${D.ticker}. Once enough time passes
+     to confirm what the market actually did, each one is graded: a <b>hit</b> means a real swing
+     ${""}turn of the predicted type happened within ±2 trading days. Methods that keep hitting earn extra weight
+     in future forecasts; methods that keep missing lose weight — the system recalibrates itself daily.
+     Logging since <b>${tr.since}</b>.`;
+    if(!tr.n){
+      $("trBody").innerHTML = `<div class="sub">No graded predictions yet — predictions need ~2–3 weeks to mature
+       before they can be scored honestly. Keep refreshing daily (or let the auto-refresh do it) and grades will
+       appear here.</div>`;
+      return;
+    }
+    let h = `<div class="kpiline" style="margin-bottom:8px"><b>${tr.n}</b> graded ·
+      <b>${pct(tr.hit2Rate)}</b> hit within ±2 days · <b>${pct(tr.hit3Rate)}</b> within ±3 days`;
+    const mf = Object.entries(tr.methodFactors||{});
+    if(mf.length) h += ` · learned weights: ` + mf.map(([f,v])=>`<span class="chip">${f} ×${v}</span>`).join(" ");
+    h += `</div><table><tr><th>Predicted on</th><th>Called for</th><th>Actual turn</th><th>Off by</th><th>Result</th></tr>`;
+    for(const r of tr.resolved.slice().reverse()){
+      h += `<tr>
+        <td class="num">${r.logged}</td>
+        <td class="num"><span class="badge ${r.type==="high"?"bH":"bL"}">${r.type.toUpperCase()}</span>
+            ${r.predDate} ${fmt$(r.predPrice)}</td>
+        <td class="num">${r.actualDate ? `${r.actualDate} ${fmt$(r.actualPrice)}` : "no turn within ±10 days"}</td>
+        <td class="num">${r.errDays===null?"—":(r.errDays>0?"+":"")+r.errDays+"d"}</td>
+        <td>${r.hit2?'<b class="good">HIT ±2d</b>':(r.hit3?'<b class="mid">near (±3d)</b>':'<b class="bad">miss</b>')}</td>
+      </tr>`;
+    }
+    $("trBody").innerHTML = h + "</table>";
+  })();
+
+  /* scorecard */
+  (function(){
+    const M = D.methods, H = M.hurst.cycles, bt = D.backtests;
+    $("scoreSub").textContent = `Every method tested against ${D.ticker}'s ${M.gann.pivots} real swing pivots
+     (5 years). "vs chance" compares to random-number controls — a method only has an edge if it beats its control.`;
+    const v = (cls,txt)=>`<span class="verdict-${cls}">${txt}</span>`;
+    const ovnEdge = bt.overnight && bt.intraday && bt.overnight.totalPct > Math.max(0, bt.intraday.totalPct);
+    const near = (a,b)=>Math.abs(a-b) <= Math.max(2, b*0.15);
+    const rows = [
+     ["<b>Statistics: overnight &amp; open effects</b>",
+      "Gains cluster overnight; the open sets the day's extreme",
+      `Overnight ${bt.overnight.totalPct>0?"+":""}${bt.overnight.totalPct}% vs day-session
+       ${bt.intraday.totalPct>0?"+":""}${bt.intraday.totalPct}% (5y)`,
+      ovnEdge ? v("good","REAL EDGE — trade this") : v("weak","MIXED on this stock")],
+     ["<b>Swing rhythm (zigzag)</b>",
+      `${D.ticker} turns ≥${D.swing.thresholdPct}% on a semi-regular beat`,
+      `Median ${pb.medianSpacing} trading days between turns; dates hit ±2d ${pct(pb.hitRate2d)} / ±3d ${pct(pb.hitRate3d)}`,
+      v("weak","MODEST — windows, not dates")],
+     ["<b>W.D. Gann time counts</b>",
+      "Turns come 30/45/60/90/144/180/270/360 days after prior turns",
+      `${M.gann.rate}% of pivot pairs matched vs ${M.gann.control}% for random control numbers`,
+      M.gann.rate > M.gann.control*1.25 ? v("weak","SLIGHT LEAN — verify before trusting") : v("none","NO EDGE on "+D.ticker)],
+     ["<b>Gann anniversary dates</b>",
+      "Markets turn near the same calendar dates each year",
+      `${M.gann.annivHits} of ${M.gann.pivots} pivots within ±3 days of a prior-year pivot — matches the pivot-density baseline`,
+      v("none","NOT DISTINGUISHABLE from chance")],
+     ["<b>Fibonacci day counts</b>",
+      "Turns come 8/13/21/34/55/89/144 bars after prior turns",
+      `${M.fib.rate}% matched vs ${M.fib.control}% for control numbers`,
+      M.fib.rate > M.fib.control*1.25 ? v("weak","SLIGHT LEAN — verify before trusting") : v("none","NO EDGE on "+D.ticker)],
+     ["<b>Hurst nominal cycles</b>",
+      "Nested 10/20/40/80-day cycles trough in sync",
+      `Lows aligned with modeled troughs: 10d ${pct(H["10"].lowsAlignedPct)} (chance ${pct(H["10"].chancePct)}),
+       20d ${pct(H["20"].lowsAlignedPct)} (${pct(H["20"].chancePct)}), 40d ${pct(H["40"].lowsAlignedPct)}
+       (${pct(H["40"].chancePct)}), 80d ${pct(H["80"].lowsAlignedPct)} (${pct(H["80"].chancePct)})`,
+      v("none","≈ CHANCE — useful only as a rhythm frame")],
+     ["<b>Lunar phases (astro)</b>",
+      "Highs/lows cluster near new &amp; full moons",
+      `Highs within ±1 day of a moon event ${pct(M.astro.moonHighPct)} vs ${pct(M.astro.moonChance)} chance; lows ${pct(M.astro.moonLowPct)}`,
+      Math.max(M.astro.moonHighPct,M.astro.moonLowPct) > M.astro.moonChance*1.4
+        ? v("weak","LEAN — small sample, be skeptical") : v("none","NO TRADABLE EDGE")],
+     ["<b>Mercury retrograde (astro)</b>",
+      "More turns during retrograde",
+      `${pct(M.astro.retroPivPct)} of pivots fell in retrograde vs ${pct(M.astro.retroChance)} of days being retrograde`,
+      near(M.astro.retroPivPct, M.astro.retroChance) ? v("none","≈ CHANCE") :
+        (M.astro.retroPivPct > M.astro.retroChance ? v("weak","LEAN — small sample") : v("none","BELOW chance"))],
+    ];
+    $("scoreTable").innerHTML = `<tr><th>Method</th><th>The claim</th><th>Test result on ${D.ticker}</th><th>Verdict</th></tr>` +
+      rows.map(r=>`<tr><td>${r[0]}</td><td data-l="claim">${r[1]}</td><td data-l="tested">${r[2]}</td><td data-l="verdict">${r[3]}</td></tr>`).join("");
+  })();
+
+  /* vibration lab */
+  (function(){
+    const V = D.vibration;
+    if(!V){ $("vibSub").textContent = "Run a data refresh to compute."; $("vibBody").innerHTML=""; return; }
+    $("vibSub").innerHTML = `Every planet pair (Sun→Pluto), every major aspect, every retrograde — tested against
+     ${D.ticker}'s actual swing highs &amp; lows (±1 day, 5 years). <b>Lift</b> = how much more often pivots fall on
+     those days than the aspect's normal frequency. <b>Honesty control:</b> random date-sets of the same size
+     typically show a best lift of <b>×${V.chanceLift}</b> just by luck across this many combinations — treat
+     anything below that as noise, and even winners as candidates to keep grading, not gospel.`;
+    const row = r => `<tr><td><b>${r.aspect}</b></td><td class="num">×${r.lift}</td>
+      <td class="num">${r.hits} of ${r.n} pivots</td><td class="num tag">${r.basePct}% of all days</td></tr>`;
+    let h = "";
+    const sec = (title, arr, empty) => {
+      h += `<h3 style="margin-top:10px">${title}</h3>`;
+      h += arr && arr.length
+        ? `<table><tr><th>Aspect</th><th>Lift</th><th>Hit rate</th><th>Baseline</th></tr>${arr.map(row).join("")}</table>`
+        : `<div class="tag">${empty}</div>`;
+    };
+    sec(`Aspects recurring at ${D.ticker} HIGHS`, V.high, "Nothing beat the ×1.5 lift bar for highs.");
+    sec(`Aspects recurring at ${D.ticker} LOWS`, V.low, "Nothing beat the ×1.5 lift bar for lows.");
+    if(V.retro && V.retro.length){
+      h += `<h3 style="margin-top:10px">Retrogrades</h3><table>` +
+        V.retro.map(r=>`<tr><td><b>${r.planet} retrograde</b></td><td class="num">×${r.lift}</td>
+        <td class="num">${r.hits} of ${r.n} pivots</td></tr>`).join("") + `</table>`;
+    }
+    const N = V.numerology;
+    if(N && N.tickerNumber){
+      h += `<h3 style="margin-top:10px">Numerology</h3>
+        <div style="font-size:13px">${D.ticker}'s Pythagorean number is <b>${N.tickerNumber}</b>. Pivots on dates whose
+        digits reduce to ${N.tickerNumber}: <b>${N.hits} of ${N.n}</b> — lift <b>×${N.lift}</b>
+        (such dates are ${N.basePct}% of all days). ${N.lift >= 1.3 ? "Above chance — feeding it into the forecast with a small weight to earn its keep." : "≈ chance on this stock — tracked but not trusted."}</div>`;
+    }
+    const S = V.sepharial;
+    if(S && S.rulingPlanet){
+      h += `<h3 style="margin-top:10px">Sepharial's techniques (Chaldean kabala, stations, Moon declination)</h3>
+        <div style="font-size:13px; margin-bottom:6px">By Sepharial's Chaldean kabala, ${D.ticker}'s name-number is
+        <b>${S.chaldeanNumber}</b>, ruled by <b>${S.rulingPlanet}</b>. His signal days, tested against ${D.ticker}'s
+        real pivots:</div>
+        <table><tr><th>Sepharial signal</th><th>Lift</th><th>Hit rate</th><th>Baseline</th></tr>` +
+        S.tests.map(t=>`<tr><td>${t.name}${t.lift>=1.3?' <b class="good">✓</b>':''}</td>
+          <td class="num">×${t.lift}</td><td class="num">${t.hits} of ${t.n}</td>
+          <td class="num tag">${t.basePct}% of days</td></tr>`).join("") + `</table>
+        <div class="tag" style="margin-top:4px">✓ = above ×1.3 lift → feeds the forecast with a small weight and
+        gets graded daily like everything else.</div>`;
+    }
+    if(V.upcoming && V.upcoming.length){
+      h += `<h3 style="margin-top:10px">Upcoming vibration dates (next 60 days)</h3><table>` +
+        V.upcoming.map(u=>{const dt=new Date(u.date+"T12:00:00");
+          return `<tr><td class="num"><b>${dt.toLocaleDateString("en-US",{weekday:"short",month:"numeric",day:"numeric"})}</b></td><td>${u.rule}</td></tr>`;}).join("") + `</table>`;
+    }
+    $("vibBody").innerHTML = h;
+  })();
+
+  /* signal calendar */
+  (function(){
+    const M = D.methods;
+    const items = [];
+    if(D.vibration && D.vibration.upcoming)
+      for(const v of D.vibration.upcoming) items.push({d:v.date, s:"Vibration", t:v.rule});
+    for(const g of M.gann.upcoming) items.push({d:g.date, s:"Gann", t:g.rule});
+    for(const f of M.fib.upcoming) items.push({d:f.date, s:"Fibonacci", t:f.rule});
+    for(const h of M.hurst.upcoming) items.push({d:h.date, s:"Hurst", t:`${h.cycle} cycle ${h.kind} (${h.kind==="trough"?"low":"high"} due)`});
+    for(const m of M.astro.moonsNext) items.push({d:m.date, s:"Astro", t:`${m.kind==="new"?"New":"Full"} moon at ${m.time}`});
+    for(const r of M.astro.retroRanges) items.push({d:r[0], s:"Astro", t:`Mercury retrograde ${r[0]} → ${r[1]} (tested: no effect)`});
+    items.sort((a,b)=>a.d.localeCompare(b.d));
+    $("calTable").innerHTML = `<tr><th>Date</th><th>School</th><th>Signal</th></tr>` +
+      items.map(i=>{
+        const dt = new Date(i.d+"T12:00:00");
+        return `<tr><td class="num"><b>${dt.toLocaleDateString("en-US",{weekday:"short",month:"numeric",day:"numeric"})}</b></td>
+          <td>${i.s}</td><td>${i.t}</td></tr>`;}).join("");
+  })();
+
+  /* ranges */
+  (function(){
+    const names = {daily:"Today", weekly:"This week", monthly:`This month (${D.monthName})`, yearly:"52 weeks"};
+    let html = "";
+    for(const k of ["daily","weekly","monthly","yearly"]){
+      const r = D.ranges[k]; if(!r) continue;
+      const pos = Math.min(99, Math.max(1, (D.price-r.low)/(r.high-r.low)*100));
+      html += `<div class="rangebar">
+        <div class="rb-title"><b>${names[k]}</b>
+          <span class="num tag">now ${fmt$(D.price)} — ${Math.round(pos)}% of range</span></div>
+        <div class="rb-track"><div class="rb-mark" style="left:${pos}%"></div></div>
+        <div class="rb-lbl"><span class="num">low ${fmt$(r.low)}</span><span class="num">high ${fmt$(r.high)}</span></div>
+      </div>`;
+    }
+    $("ranges").innerHTML = html;
+  })();
+
+  /* time-of-day */
+  (function(){
+    const buckets=[];
+    for(let h=9;h<16;h++)for(let m=0;m<60;m+=15){
+      if(h===9&&m<30)continue;
+      buckets.push(`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`);
+    }
+    const lbl = buckets.map(b=>["09:30","10:30","11:30","12:30","13:30","14:30","15:30"].includes(b)
+        ? b.replace(/^0/,"") : "");
+    bars("todHigh", lbl, buckets.map(b=>D.intraday15m.high[b]||0), {hot:"#2da44e"});
+    bars("todLow", lbl, buckets.map(b=>D.intraday15m.low[b]||0), {hot:"#cf222e"});
+    $("todSub").textContent = `Based on ${D.intraday15m.days} recent trading days of 15-minute data. Percentages = share of days whose high/low occurred in that 15-min slot.`;
+  })();
+
+  /* weekday */
+  (function(){
+    const lbl=["Mon","Tue","Wed","Thu","Fri"];
+    const days=["Monday","Tuesday","Wednesday","Thursday","Friday"];
+    bars("wdHigh", lbl, days.map(d=>D.weekday.high[d]), {hot:"#2da44e", allVals:true, valFmt:v=>v+"%"});
+    bars("wdLow", lbl, days.map(d=>D.weekday.low[d]), {hot:"#cf222e", allVals:true, valFmt:v=>v+"%"});
+    $("wdSub").textContent = `Based on ${D.weekday.weeks} weeks (5 years). Random chance would be ~20% per day.`;
+  })();
+
+  /* day of month */
+  (function(){
+    const k=Object.keys(D.dayOfMonth.high);
+    let h=`<table><tr><th></th>${k.map(x=>`<th>${x}</th>`).join("")}</tr>`;
+    h+=`<tr><td><b class="good">Month's HIGH</b></td>${k.map(x=>`<td class="num">${D.dayOfMonth.high[x]}%</td>`).join("")}</tr>`;
+    h+=`<tr><td><b class="bad">Month's LOW</b></td>${k.map(x=>`<td class="num">${D.dayOfMonth.low[x]}%</td>`).join("")}</tr></table>`;
+    $("domTable").innerHTML=h;
+    $("domSub").textContent=`Based on ${D.dayOfMonth.months} months (5 years). Random chance ≈33% per bucket.`;
+  })();
+
+  /* seasonality */
+  (function(){
+    const m=Object.keys(D.seasonality);
+    bars("seas", m, m.map(x=>D.seasonality[x].avgRet), {signed:true, allVals:true, valFmt:v=>v+"%", tall:true});
+    $("seasYears").textContent = D.seasonalityYears;
+  })();
+
+  /* backtests */
+  (function(){
+    const bt=D.backtests;
+    const ovnEdge = bt.overnight.totalPct > Math.max(0, bt.intraday.totalPct);
+    const row=(name,period,s,verdict)=>s?`<tr><td><b>${name}</b></td><td>${period}</td>
+      <td class="num">${s.n}</td><td class="num">${s.winRate}%</td>
+      <td class="num ${s.avgPct>=0?'good':'bad'}">${s.avgPct>0?'+':''}${s.avgPct}%</td>
+      <td class="num big ${s.totalPct>=0?'good':'bad'}">${s.totalPct>0?'+':''}${s.totalPct}%</td>
+      <td style="max-width:260px">${verdict}</td></tr>`:"";
+    let h=`<tr><th>Strategy</th><th>Period</th><th>Trades</th><th>Win rate</th><th>Avg/trade</th><th>Total return</th><th>Verdict</th></tr>`;
+    h+=row("Overnight hold (buy close → sell next open)","5 years",bt.overnight,
+      ovnEdge ? `<b class='good'>The strong session.</b> Most of ${D.ticker}'s gains happened while the market was closed.`
+              : `Overnight vs day split shown for comparison.`);
+    h+=row("Day hold (buy open → sell close)","5 years",bt.intraday,
+      bt.intraday.totalPct<0 ? `<b class='bad'>Money loser.</b> Holding only during market hours lost money over 5 years.`
+                             : `Regular-hours holding was ${bt.intraday.totalPct>bt.overnight.totalPct?"the stronger":"the weaker"} session for ${D.ticker}.`);
+    h+=row("Skip the first hour (buy 10:30 AM → sell close)","2 years",bt.buy1030SellClose,
+      bt.buy1030SellClose && bt.openToClose2y && bt.buy1030SellClose.totalPct>bt.openToClose2y.totalPct
+        ? `Beats buying at the open — the 9:30–10:30 chop is where day-buyers get hurt.`
+        : `Did not beat buying at the open on this stock.`);
+    h+=row("Buy at open → sell close (same 2 years)","2 years",bt.openToClose2y,
+      `Baseline for the row above.`);
+    $("btTable").innerHTML = h;
+  })();
+
+  /* playbook */
+  (function(){
+    const bt=D.backtests, wd=D.weekday, dm=D.dayOfMonth;
+    const ovnEdge = bt.overnight.totalPct > Math.max(0, bt.intraday.totalPct);
+    const loDay = argmax(wd.low), hiDay = argmax(wd.high);
+    const loBucket = argmax(dm.low), hiBucket = argmax(dm.high);
+    const items=[];
+    if(ovnEdge) items.push(
+     `<b>Buy late in the day, sell early in the day.</b> Over 5 years, ${D.ticker}'s net gains came
+      <i>overnight</i> (${bt.overnight.totalPct>0?"+":""}${bt.overnight.totalPct}% holding close→open) while
+      regular-hours holding returned ${bt.intraday.totalPct}%. Place buys near the close (3:45–4:00 PM ET);
+      take profits in the first half hour (9:30–10:00 AM ET).`);
+    else items.push(
+     `<b>Overnight vs day session.</b> On ${D.ticker} the overnight edge is ${bt.overnight.totalPct}% vs
+      ${bt.intraday.totalPct}% intraday over 5 years — check the backtest table before assuming either session is free money.`);
+    items.push(
+     `<b>The open sets the extreme.</b> The day's high or low is most often set right at 9:30–9:45 AM ET.
+      Have limit orders sitting before the open — don't chase with market orders at 9:30.`,
+     `<b>${loDay} & ${hiDay} matter.</b> The week's LOW lands on ${loDay} ${wd.low[loDay]}% of the time; the week's
+      HIGH on ${hiDay} ${wd.high[hiDay]}% (vs ~20% random).`,
+     `<b>Month rhythm.</b> Monthly lows cluster ${loBucket} (${dm.low[loBucket]}%), monthly highs ${hiBucket}
+      (${dm.high[hiBucket]}%).`,
+     `<b>Use Gann/astro/Fib dates as attention flags, not triggers.</b> Check the scorecard — where a school fails
+      its random control on ${D.ticker}, its dates only matter when they stack with the rhythm window (that's what
+      the confluence table scores). Watch the tape on those days; act on price, not the calendar.`,
+     `<b>Use windows and scale in.</b> ${D.ticker} turns roughly every ${pb.medianSpacing} trading days by
+      ~${pb.medianAmpPct}%, but dates hit ±2 days only ${pct(pb.hitRate2d)} of the time — enter in thirds across
+      the window instead of all-in on one day.`,
+     `<b>Check the calendar first.</b> Earnings, Fed meetings and product/delivery news override every pattern here.`,
+     `<b>Risk rule.</b> Median swing ~${pb.medianAmpPct}%. Decide the exit before you enter: stop below the
+      projected low, position sized so a full ${pb.medianAmpPct}% adverse swing is survivable.`);
+    $("playbook").innerHTML = items.map(i=>`<li>${i}</li>`).join("");
+  })();
+
+  $("foot").innerHTML = `Method: swing pivots via ${D.swing.thresholdPct}% zigzag on daily closes (5y, threshold
+   auto-scaled to ${D.ticker}'s volatility); Gann counts 30–360 calendar days with random-number controls; Fibonacci
+   8–144 trading-bar counts with controls; Hurst 10/20/40/80-day cycles fit by least squares; lunar/Mercury positions
+   via the <i>ephem</i> astronomy library; intraday timing from ${D.intraday15m.days} days of 15-min bars;
+   seasonality over ${D.seasonalityYears} years. Data: Yahoo Finance. Generated ${D.generated}.
+   Statistical research, not financial advice. Past patterns do not guarantee future results.`;
+}
+
+renderTabs();
+renderAll(DATA_ALL[CUR]);
+
+/* re-render on rotation / resize so charts refit the screen */
+let _rt = null;
+window.addEventListener("resize", () => {
+  clearTimeout(_rt);
+  _rt = setTimeout(() => renderAll(DATA_ALL[CUR]), 250);
+});
+</script>
+</body>
+</html>

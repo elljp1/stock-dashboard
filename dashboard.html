@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Stock Timing Dashboard</title>
+<script src="data.js"></script>
+<style>
+  :root{
+    --bg:#f6f8fa; --panel:#ffffff; --panel2:#f0f3f6; --border:#d0d7de;
+    --text:#1f2328; --dim:#57606a; --green:#1a7f37; --red:#cf222e;
+    --amber:#9a6700; --blue:#0969da; --accent:#8250df;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--bg); color:var(--text);
+    font-family:"Segoe UI",system-ui,-apple-system,sans-serif; padding:24px; max-width:1200px; margin:0 auto}
+  h1{font-size:26px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap}
+  h1 .px{color:var(--green); font-variant-numeric:tabular-nums}
+  h2{font-size:17px; margin-bottom:10px; color:var(--blue)}
+  h3{font-size:14px; color:var(--dim); font-weight:600; margin-bottom:6px}
+  .sub{color:var(--dim); font-size:13px; margin-top:4px}
+  .tabs{display:flex; gap:8px; margin-top:16px; flex-wrap:wrap}
+  .tab{padding:8px 22px; border:1px solid var(--border); border-radius:8px; background:var(--panel);
+    font-size:15px; font-weight:700; cursor:pointer; color:var(--dim)}
+  .tab:hover{border-color:var(--blue); color:var(--blue)}
+  .tab.on{background:var(--blue); border-color:var(--blue); color:#fff}
+  .tab .tp{display:block; font-size:11px; font-weight:400}
+  .panel{background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:18px; margin-top:18px; box-shadow:0 1px 3px rgba(31,35,40,.05)}
+  .warn{background:#fff8c5; border-color:#d4a72c; color:#7d4e00; font-size:13px; line-height:1.55}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+  @media(max-width:800px){.grid2{grid-template-columns:1fr}}
+  table{width:100%; border-collapse:collapse; font-size:14px}
+  th{color:var(--dim); text-align:left; font-weight:600; padding:8px 10px; border-bottom:1px solid var(--border); font-size:12px; text-transform:uppercase; letter-spacing:.04em}
+  td{padding:10px; border-bottom:1px solid #eaeef2; vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  .badge{display:inline-block; padding:3px 10px; border-radius:20px; font-weight:700; font-size:12px}
+  .bH{background:#dafbe1; color:var(--green); border:1px solid #aceebb}
+  .bL{background:#ffebe9; color:var(--red); border:1px solid #ffcecb}
+  .chip{display:inline-block; background:var(--panel2); border:1px solid var(--border);
+    border-radius:12px; padding:2px 9px; font-size:11px; color:var(--dim); margin:2px 2px 0 0}
+  .num{font-variant-numeric:tabular-nums}
+  .big{font-size:17px; font-weight:700}
+  .conf{height:7px; background:#eaeef2; border-radius:4px; overflow:hidden; margin-top:5px; width:110px}
+  .conf i{display:block; height:100%; background:var(--amber)}
+  canvas{width:100%; height:auto; display:block}
+  .rangebar{margin:14px 0}
+  .rb-track{position:relative; height:12px; background:linear-gradient(90deg,#ffd8d3,#eaeef2 50%,#c8f0d2); border-radius:6px}
+  .rb-mark{position:absolute; top:-4px; width:3px; height:20px; background:var(--blue); border-radius:2px}
+  .rb-lbl{display:flex; justify-content:space-between; font-size:12px; color:var(--dim); margin-top:5px}
+  .rb-title{display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px}
+  .good{color:var(--green)} .bad{color:var(--red)} .mid{color:var(--amber)}
+  .play li{margin:10px 0 10px 18px; line-height:1.5; font-size:14px}
+  .play b{color:var(--blue)}
+  .foot{color:var(--dim); font-size:12px; line-height:1.6; margin-top:18px}
+  .tag{font-size:11px; color:var(--dim)}
+  .verdict-good{font-weight:700; color:var(--green)}
+  .verdict-none{font-weight:700; color:var(--red)}
+  .verdict-weak{font-weight:700; color:var(--amber)}
+  .cal td{padding:6px 10px; font-size:13px}
+  .tblwrap{overflow-x:auto; -webkit-overflow-scrolling:touch}
+  .tblwrap table{min-width:560px}
+  .chartwrap{overflow-x:auto; -webkit-overflow-scrolling:touch}
+
+  /* ---------- mobile ---------- */
+  @media(max-width:640px){
+    body{padding:10px}
+    h1{font-size:21px; gap:8px}
+    .panel{padding:12px; margin-top:12px}
+    h2{font-size:15px}
+    .tabs{position:sticky; top:0; z-index:9; background:var(--bg); padding:8px 0; gap:6px}
+    .tab{padding:8px 12px; font-size:13px; flex:1; min-width:60px; text-align:center}
+    .tab .tp{font-size:10px}
+    .big{font-size:15px}
+    /* predictions table becomes stacked cards */
+    #predTable tr:first-child{display:none}
+    #predTable, #predTable tbody, #predTable tr, #predTable td{display:block; width:100%}
+    #predTable tr{border:1px solid var(--border); border-radius:10px; margin:10px 0; padding:6px 4px; background:var(--panel2)}
+    #predTable td{border:none; padding:3px 10px}
+    #predTable td[data-l]::before{content:attr(data-l) ": "; font-size:11px; color:var(--dim); text-transform:uppercase; letter-spacing:.03em}
+    #predTable td:first-child{display:none}
+    #predTable td[data-l="date"], #predTable td[data-l="target"]{display:none}
+    .mobonly{display:inline}
+    /* timing scorecard becomes stacked cards too */
+    #scoreTable{min-width:0}
+    #scoreTable tr:first-child{display:none}
+    #scoreTable, #scoreTable tbody, #scoreTable tr, #scoreTable td{display:block; width:100%}
+    #scoreTable tr{border:1px solid var(--border); border-radius:10px; margin:10px 0; padding:6px 4px; background:var(--panel2)}
+    #scoreTable td{border:none; padding:3px 10px}
+    #scoreTable td[data-l]::before{content:attr(data-l) ": "; font-size:11px; color:var(--dim); text-transform:uppercase; letter-spacing:.03em}
+    /* signal calendar fits naturally on phones */
+    #calTable{min-width:0}
+  }
+  @media(min-width:641px){ .mobonly{display:none} }
+</style>
+</head>
+<body>
+
+<h1><span id="tkr"></span> <span class="px" id="price"></span> <span class="sub" id="updated"></span></h1>
+<div class="sub">Timing dashboard — when highs &amp; lows tend to happen, with Gann, Hurst, astro &amp; Fibonacci
+  methods backtested per stock. To refresh data: double-click <b>refresh.bat</b>. To change the stock list:
+  edit <b>tickers.txt</b> (one symbol per line), then refresh.</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="panel">
+  <h2>Next 5 projected highs / lows — multi-method confluence</h2>
+  <div class="sub" id="basis"></div>
+  <table id="predTable"></table>
+  <div class="sub" style="margin-top:8px" id="hitnote"></div>
+</div>
+
+<div class="panel">
+  <h2>Support &amp; resistance — <span class="tkr2"></span></h2>
+  <div class="sub">Price levels where <span class="tkr2"></span>'s swing turns have clustered over 2 years.
+    More touches = stronger level. They're also drawn on the chart below (green = support, red = resistance).</div>
+  <div id="srBody" style="margin-top:8px"></div>
+</div>
+
+<div class="panel">
+  <h2>Price, detected swings (H/L), and projected path</h2>
+  <div class="chartwrap"><canvas id="chart" width="1140" height="360"></canvas></div>
+  <div class="tag" id="chartTag"></div>
+</div>
+
+<div class="panel">
+  <h2>Prediction track record — graded daily</h2>
+  <div class="sub" id="trSub"></div>
+  <div id="trBody" class="tblwrap" style="margin-top:8px"></div>
+</div>
+
+<div class="panel">
+  <h2>Timing-school scorecard — what actually tested out on <span class="tkr2"></span></h2>
+  <div class="sub" id="scoreSub"></div>
+  <div class="tblwrap"><table id="scoreTable" style="margin-top:8px"></table></div>
+</div>
+
+<div class="panel">
+  <h2>Vibration lab — <span class="tkr2"></span>'s own astro &amp; numerology signature</h2>
+  <div class="sub" id="vibSub"></div>
+  <div id="vibBody" style="margin-top:8px"></div>
+</div>
+
+<div class="panel">
+  <h2>Upcoming signal calendar (next ~60 days)</h2>
+  <div class="sub">Every date each school flags, merged chronologically — exact times where the method gives one.</div>
+  <div class="tblwrap"><table class="cal" id="calTable" style="margin-top:8px"></table></div>
+</div>
+
+<div class="panel">
+  <h2>Current price vs. its ranges</h2>
+  <div id="ranges"></div>
+</div>
+
+<div class="grid2">
+  <div class="panel">
+    <h2>What time of day do highs &amp; lows happen?</h2>
+    <div class="sub" id="todSub"></div>
+    <h3 style="margin-top:12px">Day's HIGH set at this time (% of days)</h3>
+    <canvas id="todHigh" width="540" height="150"></canvas>
+    <h3 style="margin-top:12px">Day's LOW set at this time (% of days)</h3>
+    <canvas id="todLow" width="540" height="150"></canvas>
+  </div>
+
+  <div class="panel">
+    <h2>Which weekday sets the week's high / low?</h2>
+    <div class="sub" id="wdSub"></div>
+    <h3 style="margin-top:12px">Week's HIGH lands on… (%)</h3>
+    <canvas id="wdHigh" width="540" height="150"></canvas>
+    <h3 style="margin-top:12px">Week's LOW lands on… (%)</h3>
+    <canvas id="wdLow" width="540" height="150"></canvas>
+  </div>
+
+  <div class="panel">
+    <h2>Where in the month do highs / lows land?</h2>
+    <div class="sub" id="domSub"></div>
+    <div id="domTable" style="margin-top:10px"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Monthly seasonality (avg return, <span id="seasYears"></span> years)</h2>
+    <canvas id="seas" width="540" height="180"></canvas>
+    <div class="tag">Green: month historically up on average. Number = average return that month.</div>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>Strategy backtests — what actually made money on <span class="tkr2"></span></h2>
+  <div class="tblwrap"><table id="btTable"></table></div>
+</div>
+
+<div class="panel">
+  <h2>How to act on this — the playbook for <span class="tkr2"></span></h2>
+  <ol class="play" id="playbook"></ol>
+</div>
+
+<div class="foot" id="foot"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const fmt$ = v => "$" + v.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+const pct = v => (v===null||v===undefined) ? "n/a" : v + "%";
+const argmax = obj => Object.keys(obj).reduce((a,b)=>obj[a]>=obj[b]?a:b);
+const TICKERS = Object.keys(DATA_ALL);
+const NICE = {"GC=F": "GOLD/oz"};
+const nice = t => NICE[t] || t;
+let CUR = localStorage.getItem("tkr");
+if(!TICKERS.includes(CUR)) CUR = TICKERS[0];
+
+/* ---------- ticker tabs ---------- */
+function renderTabs(){
+  $("tabs").innerHTML = TICKERS.map(t=>{
+    const d = DATA_ALL[t];
+    return `<button class="tab${t===CUR?' on':''}" onclick="switchTo('${t}')">${nice(t)}
+      <span class="tp num">${fmt$(d.price)}</span></button>`;
+  }).join("");
+}
+function switchTo(t){
+  CUR = t; localStorage.setItem("tkr", t);
+  renderTabs(); renderAll(DATA_ALL[t]);
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* size a canvas to its container so charts fit phone screens */
+function fit(c, maxW, ratio){
+  const w = Math.max(300, Math.min(maxW, (c.parentElement.clientWidth || maxW) - 4));
+  c.width = w;
+  c.height = Math.round(w * (w < 600 ? Math.max(ratio, 0.42) : ratio));
+}
+
+/* ---------- bar chart helper ---------- */
+function bars(id, labels, values, opts={}){
+  const c=$(id);
+  fit(c, 540, opts.tall ? 0.333 : 0.278);
+  const x=c.getContext("2d"), W=c.width, H=c.height, B=20, T=14;
+  x.clearRect(0,0,W,H);
+  const vmax = Math.max(...values.map(Math.abs))*1.15 || 1;
+  const bw = (W-10)/values.length;
+  const maxI = values.indexOf(Math.max(...values));
+  values.forEach((v,i)=>{
+    const h=(Math.abs(v)/vmax)*(H-B-T), bx=5+i*bw, by=H-B-h;
+    x.fillStyle = i===maxI ? (opts.hot||"#bf8700") : (opts.color||"#7aa7d4");
+    if(opts.signed) x.fillStyle = v>=0 ? "#2da44e" : "#cf222e";
+    x.fillRect(bx+1, by, bw-3, h);
+    if(Math.abs(v)>=vmax*0.10 || opts.allVals){
+      x.fillStyle="#1f2328"; x.font="10px Segoe UI"; x.textAlign="center";
+      x.fillText((opts.valFmt||(n=>n))(v), bx+bw/2, by-3);
+    }
+    if(labels[i]!==""){
+      x.fillStyle="#57606a"; x.font="10px Segoe UI"; x.textAlign="center";
+      x.fillText(labels[i], bx+bw/2, H-6);
+    }
+  });
+}
+
+/* ---------- main render ---------- */
+function renderAll(D){
+  const pb = D.predictionBasis;
+  $("tkr").textContent = nice(D.ticker);
+  document.querySelectorAll(".tkr2").forEach(e=>e.textContent=nice(D.ticker));
+  $("price").textContent = fmt$(D.price);
+  $("updated").textContent = "updated " + D.generated;
+
+  /* predictions */
+  $("basis").innerHTML = `Forecast = the dates where the most methods stack up (swing rhythm, Gann counts,
+   Fibonacci counts, Hurst cycle turns, lunar events), weighted by how well each tested on ${D.ticker}.
+   Anchor: last confirmed swing ${pb.lastPivot.type.toUpperCase()} on ${pb.lastPivot.date} at
+   ${fmt$(pb.lastPivot.price)}; ${D.ticker} turns ≥${D.swing.thresholdPct}% about every
+   <b>${pb.medianSpacing} trading days</b> (up ~${pb.medianUpPct}% into highs, down ~${pb.medianDownPct}% into lows).`;
+  let rows = `<tr><th>#</th><th>Type</th><th>Date</th><th>Window</th><th>Time of day</th><th>Projected price</th><th>Signals agreeing</th><th>Strength</th></tr>`;
+  for (const p of D.predictions) {
+    const strength = Math.round(p.score / p.scoreMax * 100);
+    rows += `<tr>
+      <td>${p.n}</td>
+      <td><span class="badge ${p.type==="high"?"bH":"bL"}">${p.type.toUpperCase()}</span>
+          <span class="big num mobonly" style="margin-left:6px">${p.date} — ${fmt$(p.price)}</span></td>
+      <td class="big num" data-l="date">${p.date}</td>
+      <td class="num" data-l="window">${p.dateWindow}</td>
+      <td class="num" data-l="time">${p.time} <span class="tag">(${p.timePct}%)</span>
+          ${p.altTime !== p.time ? `<br><span class="tag">2nd: ${p.altTime} (${p.altTimePct}%)</span>` : ""}
+          ${p.astroTime ? `<br><span class="tag">🌙 exact lunar time: ${p.astroTime}</span>` : ""}</td>
+      <td class="big num" data-l="target">${fmt$(p.price)}</td>
+      <td data-l="signals">${p.methods.map(m=>`<span class="chip">${m}</span>`).join("")||"<span class='tag'>—</span>"}</td>
+      <td data-l="strength"><span class="num">${strength}%</span>
+          <div class="conf"><i style="width:${strength}%"></i></div></td>
+    </tr>`;
+  }
+  $("predTable").innerHTML = rows;
+  $("hitnote").innerHTML = `<b>Honesty check:</b> on ${D.swing.tested} past ${D.ticker} swings, the rhythm method
+   landed within ±2 trading days ${pct(pb.hitRate2d)} of the time (±3 days: ${pct(pb.hitRate3d)}). Stacking methods
+   narrows attention, it doesn't create certainty. The most reliable part is time-of-day: the open
+   (9:30–10:00 AM ET) sets the day's extreme far more often than any other slot.`;
+
+  /* support & resistance */
+  (function(){
+    const Lv = D.levels;
+    if(!Lv){ $("srBody").innerHTML = "<div class='tag'>Run a data refresh to compute.</div>"; return; }
+    const row = (l, cls, name) => `<tr>
+      <td><b class="${cls}">${name}</b></td>
+      <td class="num big">${fmt$(l.price)}</td>
+      <td class="num">${l.distPct > 0 ? "+" : ""}${l.distPct}%</td>
+      <td class="num">${l.touches} touch${l.touches > 1 ? "es" : ""}</td></tr>`;
+    let h = `<table><tr><th>Level</th><th>Price</th><th>From current</th><th>Strength</th></tr>`;
+    const resis = Lv.resistance.slice().reverse();   // farthest first, R1 nearest
+    resis.forEach((l, i) => h += row(l, "bad", "R" + (resis.length - i)));
+    h += `<tr><td colspan="4" style="background:var(--panel2); text-align:center" class="num">
+      — current price <b>${fmt$(D.price)}</b> —</td></tr>`;
+    Lv.support.forEach((l, i) => h += row(l, "good", "S" + (i + 1)));
+    $("srBody").innerHTML = h + "</table>";
+  })();
+
+  /* chart */
+  (function(){
+    const c = $("chart"), x = c.getContext("2d");
+    const wrap = c.parentElement;
+    const mob = (wrap.clientWidth || 1140) < 600;
+    if (mob) {
+      // phones: draw at full width inside a swipeable strip
+      c.width = 1000; c.height = 340;
+      c.style.width = "1000px"; c.style.maxWidth = "none";
+    } else {
+      c.style.width = "100%"; c.style.maxWidth = "";
+      fit(c, 1140, 0.316);
+    }
+    x.clearRect(0,0,c.width,c.height);
+    const dates = D.chart.dates, closes = D.chart.closes, preds = D.predictions;
+    const allDates = dates.concat(preds.map(p=>p.isoDate));
+    const allPx = closes.concat(preds.map(p=>p.price));
+    const t0 = new Date(allDates[0]).getTime(), t1 = new Date(allDates[allDates.length-1]).getTime();
+    const pMin = Math.min(...allPx)*0.96, pMax = Math.max(...allPx)*1.04;
+    const W=c.width, H=c.height, L=52, R=16, T=16, B=24;
+    const X = d => L + (new Date(d).getTime()-t0)/(t1-t0)*(W-L-R);
+    const Y = p => T + (1-(p-pMin)/(pMax-pMin))*(H-T-B);
+    x.strokeStyle="#eaeef2"; x.fillStyle="#57606a"; x.font="11px Segoe UI"; x.textAlign="right";
+    for(let g=0; g<=4; g++){
+      const p = pMin + g*(pMax-pMin)/4, y = Y(p);
+      x.beginPath(); x.moveTo(L,y); x.lineTo(W-R,y); x.stroke();
+      x.fillText("$"+Math.round(p), L-4, y+4);
+    }
+    x.textAlign="center";
+    let lastM=-1;
+    for(const d of allDates){
+      const dt=new Date(d);
+      if(dt.getMonth()!==lastM){ lastM=dt.getMonth();
+        x.fillText(dt.toLocaleString("en",{month:"short"}), X(d), H-8);}
+    }
+    if(D.levels){
+      x.setLineDash([2,3]); x.lineWidth=1; x.textAlign="left"; x.font="10px Segoe UI";
+      for(const [arr,color] of [[D.levels.resistance,"#cf222e"],[D.levels.support,"#1a7f37"]]){
+        for(const l of arr){
+          if(l.price < pMin || l.price > pMax) continue;
+          x.strokeStyle=color; x.beginPath();
+          x.moveTo(L, Y(l.price)); x.lineTo(W-R, Y(l.price)); x.stroke();
+          x.fillStyle=color; x.fillText("$"+Math.round(l.price), L+4, Y(l.price)-3);
+        }
+      }
+      x.setLineDash([]); x.textAlign="center";
+    }
+    x.strokeStyle="#0969da"; x.lineWidth=1.6; x.beginPath();
+    dates.forEach((d,i)=>{ const px=X(d), py=Y(closes[i]); i?x.lineTo(px,py):x.moveTo(px,py); });
+    x.stroke();
+    for(const p of D.chart.pivots){
+      if(new Date(p.date).getTime() < t0) continue;
+      x.fillStyle = p.type==="high" ? "#1a7f37" : "#cf222e";
+      x.beginPath(); x.arc(X(p.date), Y(p.price), 4.5, 0, 7); x.fill();
+      x.fillStyle="#1f2328"; x.font="10px Segoe UI";
+      x.fillText(p.type==="high"?"H":"L", X(p.date), Y(p.price) + (p.type==="high"?-8:16));
+    }
+    x.strokeStyle="#8250df"; x.setLineDash([6,5]); x.lineWidth=1.4; x.beginPath();
+    x.moveTo(X(dates[dates.length-1]), Y(closes[closes.length-1]));
+    for(const p of preds) x.lineTo(X(p.isoDate), Y(p.price));
+    x.stroke(); x.setLineDash([]);
+    for(const p of preds){
+      const px = X(p.isoDate), py = Y(p.price);
+      x.fillStyle = p.type==="high" ? "#1a7f37" : "#cf222e";
+      x.beginPath(); x.arc(px, py, 5, 0, 7); x.fill();
+      x.strokeStyle="#8250df"; x.lineWidth=1.5; x.beginPath(); x.arc(px, py, 8, 0, 7); x.stroke();
+      x.fillStyle="#1f2328"; x.textAlign="center";
+      if(p.type==="high"){
+        x.font="bold 11px Segoe UI"; x.fillText("$"+Math.round(p.price), px, py-26);
+        x.font="10px Segoe UI";      x.fillText(p.date.split(" ")[1], px, py-14);
+      }else{
+        x.font="10px Segoe UI";      x.fillText(p.date.split(" ")[1], px, py+20);
+        x.font="bold 11px Segoe UI"; x.fillText("$"+Math.round(p.price), px, py+33);
+      }
+    }
+    if (mob) wrap.scrollLeft = wrap.scrollWidth;   // land on the newest data
+    $("chartTag").textContent = `Solid line: actual daily closes (9 months). Dots: confirmed ${D.swing.thresholdPct}% swing pivots. Dashed: the confluence forecast with date & price at each marker — an illustration of rhythm, not a promise.` + (mob ? " Swipe the chart left/right to see history; pinch to zoom." : "");
+  })();
+
+  /* track record */
+  (function(){
+    const tr = D.trackRecord;
+    if(!tr){ $("trSub").textContent = "Tracking starts with the next data refresh."; $("trBody").innerHTML=""; return; }
+    $("trSub").innerHTML = `Every refresh logs that day's 5 predictions for ${D.ticker}. Once enough time passes
+     to confirm what the market actually did, each one is graded: a <b>hit</b> means a real swing
+     ${""}turn of the predicted type happened within ±2 trading days. Methods that keep hitting earn extra weight
+     in future forecasts; methods that keep missing lose weight — the system recalibrates itself daily.
+     Logging since <b>${tr.since}</b>.`;
+    if(!tr.n){
+      $("trBody").innerHTML = `<div class="sub">No graded predictions yet — predictions need ~2–3 weeks to mature
+       before they can be scored honestly. Keep refreshing daily (or let the auto-refresh do it) and grades will
+       appear here.</div>`;
+      return;
+    }
+    let h = `<div class="kpiline" style="margin-bottom:8px"><b>${tr.n}</b> graded ·
+      <b>${pct(tr.hit2Rate)}</b> hit within ±2 days · <b>${pct(tr.hit3Rate)}</b> within ±3 days`;
+    const mf = Object.entries(tr.methodFactors||{});
+    if(mf.length) h += ` · learned weights: ` + mf.map(([f,v])=>`<span class="chip">${f} ×${v}</span>`).join(" ");
+    h += `</div><table><tr><th>Predicted on</th><th>Called for</th><th>Actual turn</th><th>Off by</th><th>Result</th></tr>`;
+    for(const r of tr.resolved.slice().reverse()){
+      h += `<tr>
+        <td class="num">${r.logged}</td>
+        <td class="num"><span class="badge ${r.type==="high"?"bH":"bL"}">${r.type.toUpperCase()}</span>
+            ${r.predDate} ${fmt$(r.predPrice)}</td>
+        <td class="num">${r.actualDate ? `${r.actualDate} ${fmt$(r.actualPrice)}` : "no turn within ±10 days"}</td>
+        <td class="num">${r.errDays===null?"—":(r.errDays>0?"+":"")+r.errDays+"d"}</td>
+        <td>${r.hit2?'<b class="good">HIT ±2d</b>':(r.hit3?'<b class="mid">near (±3d)</b>':'<b class="bad">miss</b>')}</td>
+      </tr>`;
+    }
+    $("trBody").innerHTML = h + "</table>";
+  })();
+
+  /* scorecard */
+  (function(){
+    const M = D.methods, H = M.hurst.cycles, bt = D.backtests;
+    $("scoreSub").textContent = `Every method tested against ${D.ticker}'s ${M.gann.pivots} real swing pivots
+     (5 years). "vs chance" compares to random-number controls — a method only has an edge if it beats its control.`;
+    const v = (cls,txt)=>`<span class="verdict-${cls}">${txt}</span>`;
+    const ovnEdge = bt.overnight && bt.intraday && bt.overnight.totalPct > Math.max(0, bt.intraday.totalPct);
+    const near = (a,b)=>Math.abs(a-b) <= Math.max(2, b*0.15);
+    const rows = [
+     ["<b>Statistics: overnight &amp; open effects</b>",
+      "Gains cluster overnight; the open sets the day's extreme",
+      `Overnight ${bt.overnight.totalPct>0?"+":""}${bt.overnight.totalPct}% vs day-session
+       ${bt.intraday.totalPct>0?"+":""}${bt.intraday.totalPct}% (5y)`,
+      ovnEdge ? v("good","REAL EDGE — trade this") : v("weak","MIXED on this stock")],
+     ["<b>Swing rhythm (zigzag)</b>",
+      `${D.ticker} turns ≥${D.swing.thresholdPct}% on a semi-regular beat`,
+      `Median ${pb.medianSpacing} trading days between turns; dates hit ±2d ${pct(pb.hitRate2d)} / ±3d ${pct(pb.hitRate3d)}`,
+      v("weak","MODEST — windows, not dates")],
+     ["<b>W.D. Gann time counts</b>",
+      "Turns come 30/45/60/90/144/180/270/360 days after prior turns",
+      `${M.gann.rate}% of pivot pairs matched vs ${M.gann.control}% for random control numbers`,
+      M.gann.rate > M.gann.control*1.25 ? v("weak","SLIGHT LEAN — verify before trusting") : v("none","NO EDGE on "+D.ticker)],
+     ["<b>Gann anniversary dates</b>",
+      "Markets turn near the same calendar dates each year",
+      `${M.gann.annivHits} of ${M.gann.pivots} pivots within ±3 days of a prior-year pivot — matches the pivot-density baseline`,
+      v("none","NOT DISTINGUISHABLE from chance")],
+     ["<b>Fibonacci day counts</b>",
+      "Turns come 8/13/21/34/55/89/144 bars after prior turns",
+      `${M.fib.rate}% matched vs ${M.fib.control}% for control numbers`,
+      M.fib.rate > M.fib.control*1.25 ? v("weak","SLIGHT LEAN — verify before trusting") : v("none","NO EDGE on "+D.ticker)],
+     ["<b>Hurst nominal cycles</b>",
+      "Nested 10/20/40/80-day cycles trough in sync",
+      `Lows aligned with modeled troughs: 10d ${pct(H["10"].lowsAlignedPct)} (chance ${pct(H["10"].chancePct)}),
+       20d ${pct(H["20"].lowsAlignedPct)} (${pct(H["20"].chancePct)}), 40d ${pct(H["40"].lowsAlignedPct)}
+       (${pct(H["40"].chancePct)}), 80d ${pct(H["80"].lowsAlignedPct)} (${pct(H["80"].chancePct)})`,
+      v("none","≈ CHANCE — useful only as a rhythm frame")],
+     ["<b>Lunar phases (astro)</b>",
+      "Highs/lows cluster near new &amp; full moons",
+      `Highs within ±1 day of a moon event ${pct(M.astro.moonHighPct)} vs ${pct(M.astro.moonChance)} chance; lows ${pct(M.astro.moonLowPct)}`,
+      Math.max(M.astro.moonHighPct,M.astro.moonLowPct) > M.astro.moonChance*1.4
+        ? v("weak","LEAN — small sample, be skeptical") : v("none","NO TRADABLE EDGE")],
+     ["<b>Mercury retrograde (astro)</b>",
+      "More turns during retrograde",
+      `${pct(M.astro.retroPivPct)} of pivots fell in retrograde vs ${pct(M.astro.retroChance)} of days being retrograde`,
+      near(M.astro.retroPivPct, M.astro.retroChance) ? v("none","≈ CHANCE") :
+        (M.astro.retroPivPct > M.astro.retroChance ? v("weak","LEAN — small sample") : v("none","BELOW chance"))],
+    ];
+    $("scoreTable").innerHTML = `<tr><th>Method</th><th>The claim</th><th>Test result on ${D.ticker}</th><th>Verdict</th></tr>` +
+      rows.map(r=>`<tr><td>${r[0]}</td><td data-l="claim">${r[1]}</td><td data-l="tested">${r[2]}</td><td data-l="verdict">${r[3]}</td></tr>`).join("");
+  })();
+
+  /* vibration lab */
+  (function(){
+    const V = D.vibration;
+    if(!V){ $("vibSub").textContent = "Run a data refresh to compute."; $("vibBody").innerHTML=""; return; }
+    $("vibSub").innerHTML = `Every planet pair (Sun→Pluto), every major aspect, every retrograde — tested against
+     ${D.ticker}'s actual swing highs &amp; lows (±1 day, 5 years). <b>Lift</b> = how much more often pivots fall on
+     those days than the aspect's normal frequency. <b>Honesty control:</b> random date-sets of the same size
+     typically show a best lift of <b>×${V.chanceLift}</b> just by luck across this many combinations — treat
+     anything below that as noise, and even winners as candidates to keep grading, not gospel.`;
+    const row = r => `<tr><td><b>${r.aspect}</b></td><td class="num">×${r.lift}</td>
+      <td class="num">${r.hits} of ${r.n} pivots</td><td class="num tag">${r.basePct}% of all days</td></tr>`;
+    let h = "";
+    const sec = (title, arr, empty) => {
+      h += `<h3 style="margin-top:10px">${title}</h3>`;
+      h += arr && arr.length
+        ? `<table><tr><th>Aspect</th><th>Lift</th><th>Hit rate</th><th>Baseline</th></tr>${arr.map(row).join("")}</table>`
+        : `<div class="tag">${empty}</div>`;
+    };
+    sec(`Aspects recurring at ${D.ticker} HIGHS`, V.high, "Nothing beat the ×1.5 lift bar for highs.");
+    sec(`Aspects recurring at ${D.ticker} LOWS`, V.low, "Nothing beat the ×1.5 lift bar for lows.");
+    if(V.retro && V.retro.length){
+      h += `<h3 style="margin-top:10px">Retrogrades</h3><table>` +
+        V.retro.map(r=>`<tr><td><b>${r.planet} retrograde</b></td><td class="num">×${r.lift}</td>
+        <td class="num">${r.hits} of ${r.n} pivots</td></tr>`).join("") + `</table>`;
+    }
+    const N = V.numerology;
+    if(N && N.tickerNumber){
+      h += `<h3 style="margin-top:10px">Numerology</h3>
+        <div style="font-size:13px">${D.ticker}'s Pythagorean number is <b>${N.tickerNumber}</b>. Pivots on dates whose
+        digits reduce to ${N.tickerNumber}: <b>${N.hits} of ${N.n}</b> — lift <b>×${N.lift}</b>
+        (such dates are ${N.basePct}% of all days). ${N.lift >= 1.3 ? "Above chance — feeding it into the forecast with a small weight to earn its keep." : "≈ chance on this stock — tracked but not trusted."}</div>`;
+    }
+    const S = V.sepharial;
+    if(S && S.rulingPlanet){
+      h += `<h3 style="margin-top:10px">Sepharial's techniques (Chaldean kabala, stations, Moon declination)</h3>
+        <div style="font-size:13px; margin-bottom:6px">By Sepharial's Chaldean kabala, ${D.ticker}'s name-number is
+        <b>${S.chaldeanNumber}</b>, ruled by <b>${S.rulingPlanet}</b>. His signal days, tested against ${D.ticker}'s
+        real pivots:</div>
+        <table><tr><th>Sepharial signal</th><th>Lift</th><th>Hit rate</th><th>Baseline</th></tr>` +
+        S.tests.map(t=>`<tr><td>${t.name}${t.lift>=1.3?' <b class="good">✓</b>':''}</td>
+          <td class="num">×${t.lift}</td><td class="num">${t.hits} of ${t.n}</td>
+          <td class="num tag">${t.basePct}% of days</td></tr>`).join("") + `</table>
+        <div class="tag" style="margin-top:4px">✓ = above ×1.3 lift → feeds the forecast with a small weight and
+        gets graded daily like everything else.</div>`;
+    }
+    if(V.upcoming && V.upcoming.length){
+      h += `<h3 style="margin-top:10px">Upcoming vibration dates (next 60 days)</h3><table>` +
+        V.upcoming.map(u=>{const dt=new Date(u.date+"T12:00:00");
+          return `<tr><td class="num"><b>${dt.toLocaleDateString("en-US",{weekday:"short",month:"numeric",day:"numeric"})}</b></td><td>${u.rule}</td></tr>`;}).join("") + `</table>`;
+    }
+    $("vibBody").innerHTML = h;
+  })();
+
+  /* signal calendar */
+  (function(){
+    const M = D.methods;
+    const items = [];
+    if(D.vibration && D.vibration.upcoming)
+      for(const v of D.vibration.upcoming) items.push({d:v.date, s:"Vibration", t:v.rule});
+    for(const g of M.gann.upcoming) items.push({d:g.date, s:"Gann", t:g.rule});
+    for(const f of M.fib.upcoming) items.push({d:f.date, s:"Fibonacci", t:f.rule});
+    for(const h of M.hurst.upcoming) items.push({d:h.date, s:"Hurst", t:`${h.cycle} cycle ${h.kind} (${h.kind==="trough"?"low":"high"} due)`});
+    for(const m of M.astro.moonsNext) items.push({d:m.date, s:"Astro", t:`${m.kind==="new"?"New":"Full"} moon at ${m.time}`});
+    for(const r of M.astro.retroRanges) items.push({d:r[0], s:"Astro", t:`Mercury retrograde ${r[0]} → ${r[1]} (tested: no effect)`});
+    items.sort((a,b)=>a.d.localeCompare(b.d));
+    $("calTable").innerHTML = `<tr><th>Date</th><th>School</th><th>Signal</th></tr>` +
+      items.map(i=>{
+        const dt = new Date(i.d+"T12:00:00");
+        return `<tr><td class="num"><b>${dt.toLocaleDateString("en-US",{weekday:"short",month:"numeric",day:"numeric"})}</b></td>
+          <td>${i.s}</td><td>${i.t}</td></tr>`;}).join("");
+  })();
+
+  /* ranges */
+  (function(){
+    const names = {daily:"Today", weekly:"This week", monthly:`This month (${D.monthName})`, yearly:"52 weeks"};
+    let html = "";
+    for(const k of ["daily","weekly","monthly","yearly"]){
+      const r = D.ranges[k]; if(!r) continue;
+      const pos = Math.min(99, Math.max(1, (D.price-r.low)/(r.high-r.low)*100));
+      html += `<div class="rangebar">
+        <div class="rb-title"><b>${names[k]}</b>
+          <span class="num tag">now ${fmt$(D.price)} — ${Math.round(pos)}% of range</span></div>
+        <div class="rb-track"><div class="rb-mark" style="left:${pos}%"></div></div>
+        <div class="rb-lbl"><span class="num">low ${fmt$(r.low)}</span><span class="num">high ${fmt$(r.high)}</span></div>
+      </div>`;
+    }
+    $("ranges").innerHTML = html;
+  })();
+
+  /* time-of-day */
+  (function(){
+    const buckets=[];
+    for(let h=9;h<16;h++)for(let m=0;m<60;m+=15){
+      if(h===9&&m<30)continue;
+      buckets.push(`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`);
+    }
+    const lbl = buckets.map(b=>["09:30","10:30","11:30","12:30","13:30","14:30","15:30"].includes(b)
+        ? b.replace(/^0/,"") : "");
+    bars("todHigh", lbl, buckets.map(b=>D.intraday15m.high[b]||0), {hot:"#2da44e"});
+    bars("todLow", lbl, buckets.map(b=>D.intraday15m.low[b]||0), {hot:"#cf222e"});
+    $("todSub").textContent = `Based on ${D.intraday15m.days} recent trading days of 15-minute data. Percentages = share of days whose high/low occurred in that 15-min slot.`;
+  })();
+
+  /* weekday */
+  (function(){
+    const lbl=["Mon","Tue","Wed","Thu","Fri"];
+    const days=["Monday","Tuesday","Wednesday","Thursday","Friday"];
+    bars("wdHigh", lbl, days.map(d=>D.weekday.high[d]), {hot:"#2da44e", allVals:true, valFmt:v=>v+"%"});
+    bars("wdLow", lbl, days.map(d=>D.weekday.low[d]), {hot:"#cf222e", allVals:true, valFmt:v=>v+"%"});
+    $("wdSub").textContent = `Based on ${D.weekday.weeks} weeks (5 years). Random chance would be ~20% per day.`;
+  })();
+
+  /* day of month */
+  (function(){
+    const k=Object.keys(D.dayOfMonth.high);
+    let h=`<table><tr><th></th>${k.map(x=>`<th>${x}</th>`).join("")}</tr>`;
+    h+=`<tr><td><b class="good">Month's HIGH</b></td>${k.map(x=>`<td class="num">${D.dayOfMonth.high[x]}%</td>`).join("")}</tr>`;
+    h+=`<tr><td><b class="bad">Month's LOW</b></td>${k.map(x=>`<td class="num">${D.dayOfMonth.low[x]}%</td>`).join("")}</tr></table>`;
+    $("domTable").innerHTML=h;
+    $("domSub").textContent=`Based on ${D.dayOfMonth.months} months (5 years). Random chance ≈33% per bucket.`;
+  })();
+
+  /* seasonality */
+  (function(){
+    const m=Object.keys(D.seasonality);
+    bars("seas", m, m.map(x=>D.seasonality[x].avgRet), {signed:true, allVals:true, valFmt:v=>v+"%", tall:true});
+    $("seasYears").textContent = D.seasonalityYears;
+  })();
+
+  /* backtests */
+  (function(){
+    const bt=D.backtests;
+    const ovnEdge = bt.overnight.totalPct > Math.max(0, bt.intraday.totalPct);
+    const row=(name,period,s,verdict)=>s?`<tr><td><b>${name}</b></td><td>${period}</td>
+      <td class="num">${s.n}</td><td class="num">${s.winRate}%</td>
+      <td class="num ${s.avgPct>=0?'good':'bad'}">${s.avgPct>0?'+':''}${s.avgPct}%</td>
+      <td class="num big ${s.totalPct>=0?'good':'bad'}">${s.totalPct>0?'+':''}${s.totalPct}%</td>
+      <td style="max-width:260px">${verdict}</td></tr>`:"";
+    let h=`<tr><th>Strategy</th><th>Period</th><th>Trades</th><th>Win rate</th><th>Avg/trade</th><th>Total return</th><th>Verdict</th></tr>`;
+    h+=row("Overnight hold (buy close → sell next open)","5 years",bt.overnight,
+      ovnEdge ? `<b class='good'>The strong session.</b> Most of ${D.ticker}'s gains happened while the market was closed.`
+              : `Overnight vs day split shown for comparison.`);
+    h+=row("Day hold (buy open → sell close)","5 years",bt.intraday,
+      bt.intraday.totalPct<0 ? `<b class='bad'>Money loser.</b> Holding only during market hours lost money over 5 years.`
+                             : `Regular-hours holding was ${bt.intraday.totalPct>bt.overnight.totalPct?"the stronger":"the weaker"} session for ${D.ticker}.`);
+    h+=row("Skip the first hour (buy 10:30 AM → sell close)","2 years",bt.buy1030SellClose,
+      bt.buy1030SellClose && bt.openToClose2y && bt.buy1030SellClose.totalPct>bt.openToClose2y.totalPct
+        ? `Beats buying at the open — the 9:30–10:30 chop is where day-buyers get hurt.`
+        : `Did not beat buying at the open on this stock.`);
+    h+=row("Buy at open → sell close (same 2 years)","2 years",bt.openToClose2y,
+      `Baseline for the row above.`);
+    $("btTable").innerHTML = h;
+  })();
+
+  /* playbook */
+  (function(){
+    const bt=D.backtests, wd=D.weekday, dm=D.dayOfMonth;
+    const ovnEdge = bt.overnight.totalPct > Math.max(0, bt.intraday.totalPct);
+    const loDay = argmax(wd.low), hiDay = argmax(wd.high);
+    const loBucket = argmax(dm.low), hiBucket = argmax(dm.high);
+    const items=[];
+    if(ovnEdge) items.push(
+     `<b>Buy late in the day, sell early in the day.</b> Over 5 years, ${D.ticker}'s net gains came
+      <i>overnight</i> (${bt.overnight.totalPct>0?"+":""}${bt.overnight.totalPct}% holding close→open) while
+      regular-hours holding returned ${bt.intraday.totalPct}%. Place buys near the close (3:45–4:00 PM ET);
+      take profits in the first half hour (9:30–10:00 AM ET).`);
+    else items.push(
+     `<b>Overnight vs day session.</b> On ${D.ticker} the overnight edge is ${bt.overnight.totalPct}% vs
+      ${bt.intraday.totalPct}% intraday over 5 years — check the backtest table before assuming either session is free money.`);
+    items.push(
+     `<b>The open sets the extreme.</b> The day's high or low is most often set right at 9:30–9:45 AM ET.
+      Have limit orders sitting before the open — don't chase with market orders at 9:30.`,
+     `<b>${loDay} & ${hiDay} matter.</b> The week's LOW lands on ${loDay} ${wd.low[loDay]}% of the time; the week's
+      HIGH on ${hiDay} ${wd.high[hiDay]}% (vs ~20% random).`,
+     `<b>Month rhythm.</b> Monthly lows cluster ${loBucket} (${dm.low[loBucket]}%), monthly highs ${hiBucket}
+      (${dm.high[hiBucket]}%).`,
+     `<b>Use Gann/astro/Fib dates as attention flags, not triggers.</b> Check the scorecard — where a school fails
+      its random control on ${D.ticker}, its dates only matter when they stack with the rhythm window (that's what
+      the confluence table scores). Watch the tape on those days; act on price, not the calendar.`,
+     `<b>Use windows and scale in.</b> ${D.ticker} turns roughly every ${pb.medianSpacing} trading days by
+      ~${pb.medianAmpPct}%, but dates hit ±2 days only ${pct(pb.hitRate2d)} of the time — enter in thirds across
+      the window instead of all-in on one day.`,
+     `<b>Check the calendar first.</b> Earnings, Fed meetings and product/delivery news override every pattern here.`,
+     `<b>Risk rule.</b> Median swing ~${pb.medianAmpPct}%. Decide the exit before you enter: stop below the
+      projected low, position sized so a full ${pb.medianAmpPct}% adverse swing is survivable.`);
+    $("playbook").innerHTML = items.map(i=>`<li>${i}</li>`).join("");
+  })();
+
+  $("foot").innerHTML = `Method: swing pivots via ${D.swing.thresholdPct}% zigzag on daily closes (5y, threshold
+   auto-scaled to ${D.ticker}'s volatility); Gann counts 30–360 calendar days with random-number controls; Fibonacci
+   8–144 trading-bar counts with controls; Hurst 10/20/40/80-day cycles fit by least squares; lunar/Mercury positions
+   via the <i>ephem</i> astronomy library; intraday timing from ${D.intraday15m.days} days of 15-min bars;
+   seasonality over ${D.seasonalityYears} years. Data: Yahoo Finance. Generated ${D.generated}.
+   Statistical research, not financial advice. Past patterns do not guarantee future results.`;
+}
+
+renderTabs();
+renderAll(DATA_ALL[CUR]);
+
+/* re-render on rotation / resize so charts refit the screen */
+let _rt = null;
+window.addEventListener("resize", () => {
+  clearTimeout(_rt);
+  _rt = setTimeout(() => renderAll(DATA_ALL[CUR]), 250);
+});
+</script>
+</body>
+</html>

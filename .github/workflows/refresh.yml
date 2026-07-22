@@ -1,0 +1,30 @@
+name: Refresh dashboard
+on:
+  schedule:
+    # UTC times = 9:30 AM, 12:00 PM, 4:30 PM US Eastern (summer time)
+    - cron: "30 13 * * 1-5"
+    - cron: "0 16 * * 1-5"
+    - cron: "30 20 * * 1-5"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet pandas numpy ephem
+      - run: python fetch_data.py
+      - run: python analyze.py
+      - name: Commit and push updated dashboard
+        run: |
+          git config user.name "dashboard-bot"
+          git config user.email "claude@ell.jp"
+          git add index.html dashboard_single.html data.js predictions_log.json
+          git commit -m "auto refresh (cloud)" || echo "nothing new"
+          git push
