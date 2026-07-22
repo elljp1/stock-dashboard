@@ -278,7 +278,8 @@ function renderAll(D){
       <td class="num" data-l="window">${p.dateWindow}</td>
       <td class="num" data-l="time">${p.time} <span class="tag">(${p.timePct}%)</span>
           ${p.altTime !== p.time ? `<br><span class="tag">2nd: ${p.altTime} (${p.altTimePct}%)</span>` : ""}
-          ${p.astroTime ? `<br><span class="tag">🌙 exact lunar time: ${p.astroTime}</span>` : ""}</td>
+          ${p.astroTime ? `<br><span class="tag">🌙 exact lunar time: ${p.astroTime}</span>` : ""}
+          ${p.planetHour ? `<br><span class="tag">⏱ hot planetary hours: ${p.planetHour} ET</span>` : ""}</td>
       <td class="big num" data-l="target">${fmt$(p.price)}</td>
       <td data-l="signals">${p.methods.map(m=>`<span class="chip">${m}</span>`).join("")||"<span class='tag'>—</span>"}</td>
       <td data-l="strength"><span class="num">${strength}%</span>
@@ -503,6 +504,15 @@ function renderAll(D){
         <div style="font-size:13px">${D.ticker}'s Pythagorean number is <b>${N.tickerNumber}</b>. Pivots on dates whose
         digits reduce to ${N.tickerNumber}: <b>${N.hits} of ${N.n}</b> — lift <b>×${N.lift}</b>
         (such dates are ${N.basePct}% of all days). ${N.lift >= 1.3 ? "Above chance — feeding it into the forecast with a small weight to earn its keep." : "≈ chance on this stock — tracked but not trusted."}</div>`;
+    }
+    const PH = D.planetHours;
+    if(PH && (PH.high.length || PH.low.length)){
+      h += `<h3 style="margin-top:10px">Planetary hours — which hour-ruler owns the day's turn (${PH.days} days)</h3>
+        <table><tr><th>At HIGHS</th><th>At LOWS</th></tr><tr><td>` +
+        (PH.high.map(r=>`${r.ruler} ×${r.lift} (${r.hits}/${r.n})`).join("<br>")||"—") + `</td><td>` +
+        (PH.low.map(r=>`${r.ruler} ×${r.lift} (${r.hits}/${r.n})`).join("<br>")||"—") + `</td></tr></table>
+        <div class="tag">Lift vs how much session time that planet's hours occupy. Rulers ≥×1.3 get their exact
+        clock-hours printed on matching predictions above (⏱).</div>`;
     }
     const S = V.sepharial;
     if(S && S.rulingPlanet){

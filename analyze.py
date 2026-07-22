@@ -287,6 +287,31 @@ for _ds in _FOMC:
         _fomc[VIDX[_fd]] = True
 _add_series("FOMC decision day", _fomc)
 
+# Ebertin midpoints: planet C sitting on the A/B midpoint axis
+# (8th-harmonic angles 0/45/90/135/180, tight 1° orb — Ebertin's method)
+_bodies10 = [n for n, _ in BODY_FNS]
+for _i in range(len(_bodies10)):
+    for _j in range(_i + 1, len(_bodies10)):
+        a, b = _bodies10[_i], _bodies10[_j]
+        mid = (LON[a] + ((LON[b] - LON[a]) % 360) / 2) % 360
+        for c in _bodies10:
+            if c in (a, b):
+                continue
+            orb = 2.0 if "Moon" in (a, b, c) else 1.0
+            hit = np.zeros(len(VDAYS), dtype=bool)
+            for th in (0, 45, 90, 135, 180):
+                hit |= _ang(LON[c] - mid, th) <= orb
+            _add_series(f"{c} = {a}/{b} midpoint", hit)
+
+# higher harmonics (7th/9th/11th/13th — Addey/Ebertin school)
+for _H in (7, 9, 11, 13):
+    for _i in range(len(_bodies10)):
+        for _j in range(_i + 1, len(_bodies10)):
+            a, b = _bodies10[_i], _bodies10[_j]
+            orb = 2.0 if "Moon" in (a, b) else 1.0
+            hit = _ang((LON[a] - LON[b]) * _H, 0) <= _H * orb
+            _add_series(f"{a} {_H}th-harmonic {b}", hit)
+
 SM_G = np.array([s for _, s in ASPECT_SERIES])
 BASES_G = SM_G[:, :HIST_END].mean(axis=1)
 
@@ -380,6 +405,46 @@ def sepharial_scan(tkr, pivots):
 
 def digital_root(x):
     return 1 + (x - 1) % 9 if x > 0 else 0
+
+
+# ---------------- planetary hours (classical, computed for New York) ----------------
+PH_ORDER = ["Saturn", "Jupiter", "Mars", "Sun", "Venus", "Mercury", "Moon"]
+PH_DAYRULER = {0: "Moon", 1: "Mars", 2: "Mercury", 3: "Jupiter",
+               4: "Venus", 5: "Saturn", 6: "Sun"}          # Monday=0
+_ph_cache = {}
+
+
+def planetary_hours(d):
+    """24 unequal planetary hours (day + night) for date d, ET datetimes."""
+    if d in _ph_cache:
+        return _ph_cache[d]
+    obs = ephem.Observer()
+    obs.lat, obs.lon = "40.7128", "-74.0060"
+    start = ephem.Date(datetime(d.year, d.month, d.day, 8, 0))   # ~3-4 AM ET in UTC
+    sun = ephem.Sun()
+    sr = obs.next_rising(sun, start=start)
+    ss = obs.next_setting(sun, start=sr)
+    sr2 = obs.next_rising(sun, start=ss)
+    i0 = PH_ORDER.index(PH_DAYRULER[d.weekday()])
+    hours = []
+    dl, nl = (ss - sr) / 12, (sr2 - ss) / 12
+    for k in range(12):
+        hours.append((ephem.to_timezone(ephem.Date(sr + k * dl), ET),
+                      ephem.to_timezone(ephem.Date(sr + (k + 1) * dl), ET),
+                      PH_ORDER[(i0 + k) % 7]))
+    for k in range(12):
+        hours.append((ephem.to_timezone(ephem.Date(ss + k * nl), ET),
+                      ephem.to_timezone(ephem.Date(ss + (k + 1) * nl), ET),
+                      PH_ORDER[(i0 + 12 + k) % 7]))
+    _ph_cache[d] = hours
+    return hours
+
+
+def ruler_at(hours, ts):
+    for s, e, r in hours:
+        if s <= ts < e:
+            return r
+    return None
 
 
 def vibration_scan(tkr, pivots):
@@ -485,12 +550,40 @@ def analyze(tkr):
     m15d = m15.copy()
     m15d["date"] = m15d.index.date
     hi_t, lo_t = [], []
-    for _, g in m15d.groupby("date"):
+    ph_hi, ph_lo, ph_bars = [], [], []
+    for dte, g in m15d.groupby("date"):
         if len(g) < 10:
             continue
         hi_t.append(g["High"].idxmax().strftime("%H:%M"))
         lo_t.append(g["Low"].idxmin().strftime("%H:%M"))
+        hrs = planetary_hours(dte)
+        ph_hi.append(ruler_at(hrs, g["High"].idxmax()))
+        ph_lo.append(ruler_at(hrs, g["Low"].idxmin()))
+        ph_bars.extend(ruler_at(hrs, t) for t in g.index)
     out["intraday15m"] = {"days": len(hi_t), "high": dist(hi_t), "low": dist(lo_t)}
+
+    # which planetary hour-ruler owns the day's extreme, vs time-share baseline
+    ph_base = pd.Series([r for r in ph_bars if r]).value_counts(normalize=True)
+
+    def ph_stats(events):
+        ev = [r for r in events if r]
+        rows = []
+        if not ev:
+            return rows
+        for r, c in pd.Series(ev).value_counts().items():
+            b = float(ph_base.get(r, 0))
+            if b > 0 and c >= 5:
+                rows.append({"ruler": r, "lift": round((c / len(ev)) / b, 2),
+                             "hits": int(c), "n": len(ev),
+                             "basePct": round(b * 100, 1)})
+        rows.sort(key=lambda x: -x["lift"])
+        return rows
+
+    ph_high, ph_low = ph_stats(ph_hi), ph_stats(ph_lo)
+    hot_hi = [r["ruler"] for r in ph_high if r["lift"] >= 1.3][:2]
+    hot_lo = [r["ruler"] for r in ph_low if r["lift"] >= 1.3][:2]
+    out["planetHours"] = {"high": ph_high[:4], "low": ph_low[:4],
+                          "hotHigh": hot_hi, "hotLow": hot_lo, "days": len(ph_hi)}
 
     hd = hourly.copy()
     hd["date"] = hd.index.date
@@ -966,12 +1059,28 @@ def analyze(tkr):
         tmode = hi_mode if ty == "high" else lo_mode
         alt = hi_pm if ty == "high" else lo_pm
         moon_today = next((m for m in MOONS_NEXT if m["date"] == d), None)
+        # this stock's hot hour-rulers, mapped to actual clock hours on that date
+        hot = hot_hi if ty == "high" else hot_lo
+        ph_str = None
+        if hot:
+            ses_s = datetime(d.year, d.month, d.day, 9, 30, tzinfo=ET)
+            ses_e = datetime(d.year, d.month, d.day, 16, 0, tzinfo=ET)
+            spans = []
+            for s0, e0, r in planetary_hours(d):
+                if r not in hot:
+                    continue
+                s2, e2 = max(s0, ses_s), min(e0, ses_e)
+                if s2 < e2:
+                    spans.append(f"{r} {s2.strftime('%I:%M').lstrip('0')}–"
+                                 f"{e2.strftime('%I:%M %p').lstrip('0')}")
+            ph_str = "; ".join(spans[:3]) or None
         preds.append({
             "n": k + 1, "type": ty,
             "date": d.strftime("%a %m/%d"), "isoDate": d.strftime("%Y-%m-%d"),
             "time": fmt_time(tmode[0]) + " ET", "timePct": tmode[1],
             "altTime": fmt_time(alt[0]) + " ET", "altTimePct": alt[1],
             "astroTime": moon_today["time"] if moon_today else None,
+            "planetHour": ph_str,
             "price": round(price, 2),
             "dateWindow": f"{add_trading_days(d, -2).strftime('%m/%d')}–{add_trading_days(d, 2).strftime('%m/%d')}",
             "score": round(s, 2), "scoreMax": round(smax, 2),
