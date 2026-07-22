@@ -178,27 +178,115 @@ for n, _ in BODY_FNS:
     dl = (np.diff(LON[n]) + 180) % 360 - 180
     PRETRO[n] = np.concatenate([[False], dl < 0])
 
-ASPECT_ANGLES = [(0, "conjunct"), (60, "sextile"), (90, "square"),
-                 (120, "trine"), (180, "opposite")]
+def _ang(a, b):
+    return np.abs(((a - b + 180) % 360) - 180)
+
+
+def _sm1(hit, k=1):
+    sm = hit.copy()
+    for s in range(1, k + 1):
+        sm[s:] = sm[s:] | hit[:-s]
+        sm[:-s] = sm[:-s] | hit[s:]
+    return sm
+
+
+# mean lunar node (Rahu; Ketu is the opposite point)
+_j2000 = datetime(2000, 1, 1, 12)
+_dsj = np.array([(datetime.combine(d, datetime.min.time()) - _j2000).days
+                 for d in VDAYS], dtype=float)
+LON["Node"] = (125.0445479 - 0.0529538083 * _dsj) % 360
+
+# heliocentric longitudes (Sun-centred view — classic financial-astro variant)
+HELIO_BODIES = ["Mercury", "Venus", "Mars", "Jupiter", "Saturn",
+                "Uranus", "Neptune", "Pluto"]
+_hlon = {n: [] for n in HELIO_BODIES}
+_d = datetime(2021, 7, 1)
+while _d <= _vend:
+    ed = ephem.Date(_d)
+    for n in HELIO_BODIES:
+        b = getattr(ephem, n)(ed)
+        _hlon[n].append(math.degrees(float(b.hlon)))
+    _d += timedelta(days=1)
+HLON = {n: np.array(v) for n, v in _hlon.items()}
+
+MAJOR_ANGLES = [(0, "conjunct"), (60, "sextile"), (90, "square"),
+                (120, "trine"), (180, "opposite")]
+MINOR_ANGLES = [(30, "semi-sextile"), (45, "semi-square"), (72, "quintile"),
+                (135, "sesquiquadrate"), (144, "biquintile"), (150, "quincunx")]
+
 ASPECT_SERIES = []          # (label, smeared day-flag array)
-_names = [n for n, _ in BODY_FNS]
-for _i in range(len(_names)):
-    for _j in range(_i + 1, len(_names)):
-        a, b = _names[_i], _names[_j]
-        diff = LON[a] - LON[b]
-        orb = 3.0 if "Moon" in (a, b) else 1.5
-        for ang, albl in ASPECT_ANGLES:
-            dd = np.abs(((diff - ang + 180) % 360) - 180)
-            hit = dd <= orb
-            if ang not in (0, 180):
-                dd2 = np.abs(((diff + ang + 180) % 360) - 180)
-                hit = hit | (dd2 <= orb)
-            sm = hit.copy()
-            sm[1:] = sm[1:] | hit[:-1]
-            sm[:-1] = sm[:-1] | hit[1:]
-            base = sm[:HIST_END].mean()
-            if 0.003 < base < 0.55:            # drop never-happens / always-on
-                ASPECT_SERIES.append((f"{a} {albl} {b}", sm))
+
+
+def _add_series(label, hit, smear=1):
+    sm = _sm1(hit, smear)
+    base = sm[:HIST_END].mean()
+    if 0.003 < base < 0.55:
+        ASPECT_SERIES.append((label, sm))
+
+
+def _pair_aspects(lon_map, names, angles, prefix="", orb_default=1.5,
+                  orb_minor=1.0, moon_orb=3.0, moon_orb_minor=2.0):
+    minor_set = {a for a, _ in MINOR_ANGLES}
+    for i in range(len(names)):
+        for j in range(i + 1, len(names)):
+            a, b = names[i], names[j]
+            diff = lon_map[a] - lon_map[b]
+            for ang, albl in angles:
+                if "Moon" in (a, b):
+                    orb = moon_orb_minor if ang in minor_set else moon_orb
+                else:
+                    orb = orb_minor if ang in minor_set else orb_default
+                hit = _ang(diff, ang) <= orb
+                if ang not in (0, 180):
+                    hit = hit | (_ang(diff, -ang) <= orb)
+                _add_series(f"{prefix}{a} {albl} {b}", hit)
+
+
+# geocentric: 11 points (10 bodies + Node), majors + minors
+_geo_names = [n for n, _ in BODY_FNS] + ["Node"]
+_pair_aspects(LON, _geo_names, MAJOR_ANGLES + MINOR_ANGLES)
+# heliocentric: 8 planets, major aspects
+_pair_aspects(HLON, HELIO_BODIES, MAJOR_ANGLES, prefix="Helio ")
+
+# eclipse days: new/full moon while the Sun is near the lunar node
+_newfull = (_ang(LON["Sun"] - LON["Moon"], 0) <= 7) | (_ang(LON["Sun"] - LON["Moon"], 180) <= 7)
+_sun_node = (_ang(LON["Sun"], LON["Node"]) <= 15) | (_ang(LON["Sun"], (LON["Node"] + 180) % 360) <= 15)
+_add_series("Eclipse (new/full moon near node)", _newfull & _sun_node)
+
+# real-world calendar forces, mined with the same honesty machinery
+_opex = np.zeros(len(VDAYS), dtype=bool)
+_tom = np.zeros(len(VDAYS), dtype=bool)
+_bym = {}
+for _i2, _dv in enumerate(VDAYS):
+    _bym.setdefault((_dv.year, _dv.month), []).append(_i2)
+for _idx_list in _bym.values():
+    fridays = [i for i in _idx_list if VDAYS[i].weekday() == 4]
+    if len(fridays) >= 3:
+        _opex[fridays[2]] = True
+    wk = [i for i in _idx_list if VDAYS[i].weekday() < 5]
+    for i in wk[-2:] + wk[:3]:
+        _tom[i] = True
+_add_series("Options expiration (3rd Friday)", _opex)
+_add_series("Turn of month (last 2 + first 3 trading days)", _tom, smear=0)
+
+_FOMC = ["2021-07-28", "2021-09-22", "2021-11-03", "2021-12-15",
+         "2022-01-26", "2022-03-16", "2022-05-04", "2022-06-15", "2022-07-27",
+         "2022-09-21", "2022-11-02", "2022-12-14",
+         "2023-02-01", "2023-03-22", "2023-05-03", "2023-06-14", "2023-07-26",
+         "2023-09-20", "2023-11-01", "2023-12-13",
+         "2024-01-31", "2024-03-20", "2024-05-01", "2024-06-12", "2024-07-31",
+         "2024-09-18", "2024-11-07", "2024-12-18",
+         "2025-01-29", "2025-03-19", "2025-05-07", "2025-06-18", "2025-07-30",
+         "2025-09-17", "2025-10-29", "2025-12-10",
+         "2026-01-28", "2026-03-18", "2026-04-29", "2026-06-17", "2026-07-29",
+         "2026-09-16", "2026-10-28", "2026-12-09"]
+_fomc = np.zeros(len(VDAYS), dtype=bool)
+for _ds in _FOMC:
+    _fd = datetime.strptime(_ds, "%Y-%m-%d").date()
+    if _fd in VIDX:
+        _fomc[VIDX[_fd]] = True
+_add_series("FOMC decision day", _fomc)
+
 SM_G = np.array([s for _, s in ASPECT_SERIES])
 BASES_G = SM_G[:, :HIST_END].mean(axis=1)
 
