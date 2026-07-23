@@ -6,6 +6,7 @@ random controls), and a multi-method confluence forecast of the next 5
 highs/lows. Writes data.js for the dashboard.
 """
 import json
+import time
 import bisect
 import math
 import string
@@ -540,6 +541,20 @@ def analyze(tkr):
     last_close = float(daily["Close"].iloc[-1])
     last_bar_date = daily.index[-1].date()
 
+    # use the latest pre/post-market trade as current price when fresher than
+    # the last completed bar (early-morning runs must price overnight gaps)
+    is_pm = False
+    try:
+        with open("premarket.json", encoding="utf-8") as f:
+            _pm = json.load(f)
+        if time.time() - _pm.get("asof", 0) < 6 * 3600 and tkr in _pm.get("prices", {}):
+            _pmp = float(_pm["prices"][tkr])
+            if _pmp > 0 and abs(_pmp / last_close - 1) > 0.001:
+                last_close = _pmp
+                is_pm = True
+    except Exception:
+        pass
+
     # append recent daily highs/lows to the permanent record (keep ~400 days)
     ex = EXTREMES.setdefault(tkr, {})
     for ts, row in daily.tail(90).iterrows():
@@ -548,7 +563,8 @@ def analyze(tkr):
                                        round(float(row["Close"]), 2)]
     for k in sorted(ex)[:-400]:
         del ex[k]
-    out = {"ticker": tkr, "generated": NOW.strftime("%Y-%m-%d %I:%M %p ET"),
+    out = {"ticker": tkr,
+           "generated": NOW.strftime("%Y-%m-%d %I:%M %p ET") + (" · incl. pre/post-market" if is_pm else ""),
            "price": last_close, "monthName": NOW.strftime("%B")}
 
     # ------- ranges -------
@@ -970,8 +986,13 @@ def analyze(tkr):
     last_piv = pivots[-1]
     prov_type = "high" if cur_dir >= 0 else "low"
     # the in-progress swing's running extreme — a more current price anchor
-    # than the last confirmed pivot (learned from grading the 07/09 forecasts)
+    # than the last confirmed pivot (learned from grading the 07/09 forecasts);
+    # extended by the live pre/post-market price when it runs beyond the bars
     prov_price = float(zz_df["Close"].iloc[ext_i])
+    if cur_dir >= 0:
+        prov_price = max(prov_price, last_close)
+    else:
+        prov_price = min(prov_price, last_close)
 
     def edge_weight(obs, chance):
         return max(0.15, min(1.5, obs / chance)) if chance > 0 else 0.3

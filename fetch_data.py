@@ -56,3 +56,21 @@ for tkr in TICKERS:
         print("  price:", meta["regularMarketPrice"])
     except Exception as e:
         print(f"  FAILED: {e}")
+
+# latest trade INCLUDING pre/post-market, so early-morning runs price reality
+pm = {}
+for tkr in TICKERS:
+    try:
+        url = (f"https://query1.finance.yahoo.com/v8/finance/chart/{tkr}"
+               f"?range=1d&interval=5m&includePrePost=true")
+        req = urllib.request.Request(url, headers=UA)
+        with urllib.request.urlopen(req, timeout=30) as r:
+            res = json.load(r)["chart"]["result"][0]
+        closes = [c for c in res["indicators"]["quote"][0]["close"] if c]
+        if closes:
+            pm[tkr] = round(float(closes[-1]), 4)
+    except Exception as e:
+        print(f"  pre/post {tkr} failed: {e}")
+with open("premarket.json", "w", encoding="utf-8") as f:
+    json.dump({"asof": time.time(), "prices": pm}, f)
+print("pre/post prices:", pm)
