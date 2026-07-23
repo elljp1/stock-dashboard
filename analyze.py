@@ -1115,6 +1115,10 @@ def analyze(tkr):
         # overshot badly on short horizons)
         ahead = future.index(d) + 1
         cap = 1.25 * (dvol / np.sqrt(20)) * np.sqrt(ahead)
+        # crash regime: when already deep below the 20d high, moves run further
+        # than calm-market vol implies — widen the cap with the drawdown
+        dd20 = 1 - last_close / float(daily["Close"].tail(20).max())
+        cap *= 1 + min(1.0, 2 * max(0.0, dd20))
         # a projected high can't sit below today's price (nor a low above it);
         # graded price errors feed back in as a learned calibration factor
         if ty == "high":
