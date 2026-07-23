@@ -318,7 +318,7 @@ function renderAll(D){
     const KC = {INCOME: "good", DEFINED: "mid", BOUNCE: "bad", NOTE: "tag"};
     $("trdBody").innerHTML = T.trades.map(tr => `
       <div style="border:1px solid var(--border); border-radius:10px; padding:10px 12px; margin:8px 0; background:var(--panel2)">
-        <span class="badge ${tr.kind==="INCOME"?"bH":tr.kind==="BOUNCE"?"bL":"chip"}">${tr.kind}</span>
+        <span class="badge ${tr.kind==="MODEL"?"bH":tr.kind==="INCOME"?"bH":tr.kind==="BOUNCE"?"bL":"chip"}" ${tr.kind==="MODEL"?'style="border-width:2px"':''}>${tr.kind}</span>
         <b style="margin-left:6px">${tr.label}</b>
         <div class="num" style="margin-top:4px; font-size:13px">${tr.detail}</div>
         ${tr.thesis ? `<div class="tag" style="margin-top:2px">${tr.thesis}</div>` : ""}

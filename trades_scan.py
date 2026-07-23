@@ -68,6 +68,28 @@ def build_trades(dall):
             puts1 = {p["strike"]: p for p in res1["options"][0]["puts"]}
             pstrikes = sorted(puts1)
 
+            # 0) MODEL conviction: sell the put AT the predicted low — max
+            #    premium if the forecast is right; exit at the predicted high
+            if lows:
+                lp = lows[0]
+                k0 = _nearest(pstrikes, lp["price"])
+                if k0:
+                    m0 = _mid(puts1[k0])
+                    exit_note = (f"buy-to-close at the projected {highs[0]['date']} high"
+                                 if highs else "close at 50% profit or ~1 week")
+                    if m0 > 0:
+                        trades.append({
+                            "kind": "MODEL",
+                            "label": f"Sell {e1s} ${k0:g} put AT the projected low",
+                            "detail": f"≈${m0:.2f} (${m0*100:.0f}/contract) · "
+                                      f"yield {m0/k0*100:.1f}% · breakeven ${k0-m0:.2f} · "
+                                      f"collateral ${k0*100:,.0f}",
+                            "thesis": f"full conviction play: enter at the projected "
+                                      f"{lp['date']} low (~${lp['price']}), {exit_note}. "
+                                      f"Highest premium — but assigned if the low overshoots "
+                                      f"(crashes DO overshoot; size accordingly)",
+                            "exp": e1s, "strikes": [k0], "premium": round(m0, 2)})
+
             deep = min([l["price"] for l in sup[1:2]] +
                        [p["price"] for p in lows[1:2]] + [spot * 0.9])
             k1 = _nearest(pstrikes, deep)
