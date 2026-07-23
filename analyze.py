@@ -1080,13 +1080,27 @@ def analyze(tkr):
             chosen.append((d, s, ty))
     chosen.sort(key=lambda x: x[0])
 
+    # prediction #1 is ALWAYS the completion of the swing in progress — where
+    # the CURRENT move is heading and when — before any turn the other way.
+    # (a trader must never see "HIGH on date X" while price is still falling)
+    first_d = add_trading_days(last_piv["date"].date(), med_spacing)
+    if first_d <= NOW.date():
+        first_d = add_trading_days(NOW.date(), 1)
+    seq = [(first_d, max(scoreL.get(first_d, 0), scoreH.get(first_d, 0), 0.5), prov_type)]
+    for d, s, ty in chosen:
+        if len(seq) == 5:
+            break
+        if d > first_d and (d - seq[-1][0]).days >= 3:
+            seq.append((d, s, ty))
+    chosen = seq
+
     preds = []
     # price targets measure a full swing from the previous OPPOSITE extreme:
-    # if the first event completes the in-progress swing, project from the last
-    # confirmed pivot; if it reverses the in-progress swing, project from the
-    # provisional extreme (improvement from grading the 07/14 forecasts, which
-    # double-counted the move already travelled)
-    prev_price, prev_type = prov_price, prov_type
+    # event #1 completes the in-progress swing, so it projects from the last
+    # confirmed pivot; later events chain from each projected extreme.
+    # prev_type starts at the last CONFIRMED pivot so the forced first event
+    # (same type as the provisional swing) is not flipped by alternation.
+    prev_price, prev_type = last_piv["price"], last_piv["type"]
     first_base_confirmed = last_piv["price"]
     smax = max((s for _, s, _ in combined), default=1) or 1
     for k, (d, s, ty) in enumerate(chosen):

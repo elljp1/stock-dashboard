@@ -262,7 +262,13 @@ function renderAll(D){
   $("updated").textContent = "updated " + D.generated;
 
   /* predictions */
-  $("basis").innerHTML = `Forecast = the dates where the most methods stack up (swing rhythm, Gann counts,
+  const p1 = D.predictions[0];
+  $("basis").innerHTML = `<div style="font-size:15px; margin-bottom:8px; padding:8px 12px; border-radius:8px;
+   background:${p1.type==="low" ? "#ffebe9" : "#dafbe1"}">
+   <b>Right now:</b> ${nice(D.ticker)} is in a ${p1.type==="low" ? "falling" : "rising"} swing —
+   the first call below is where this move is projected to END:
+   <b>${p1.type.toUpperCase()} ${p1.date} near ${fmt$(p1.price)}</b>. The turn the other way comes after that.</div>
+   Forecast = the dates where the most methods stack up (swing rhythm, Gann counts,
    Fibonacci counts, Hurst cycle turns, lunar events), weighted by how well each tested on ${D.ticker}.
    Anchor: last confirmed swing ${pb.lastPivot.type.toUpperCase()} on ${pb.lastPivot.date} at
    ${fmt$(pb.lastPivot.price)}; ${D.ticker} turns ≥${D.swing.thresholdPct}% about every
