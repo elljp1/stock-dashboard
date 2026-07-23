@@ -321,6 +321,8 @@ function renderAll(D){
         <span class="badge ${tr.kind==="MODEL"?"bH":tr.kind==="INCOME"?"bH":tr.kind==="BOUNCE"?"bL":"chip"}" ${tr.kind==="MODEL"?'style="border-width:2px"':''}>${tr.kind}</span>
         <b style="margin-left:6px">${tr.label}</b>
         <div class="num" style="margin-top:4px; font-size:13px">${tr.detail}</div>
+        ${tr.execute ? `<div style="margin-top:4px; font-size:13px">⏱ <b>Execute:</b> <span class="num">${tr.execute}</span></div>` : ""}
+        ${tr.exitWin ? `<div style="font-size:13px">➡ <b>Exit:</b> <span class="num">${tr.exitWin}</span></div>` : ""}
         ${tr.thesis ? `<div class="tag" style="margin-top:2px">${tr.thesis}</div>` : ""}
       </div>`).join("");
   })();

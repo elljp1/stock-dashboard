@@ -52,6 +52,16 @@ def build_trades(dall):
         highs = [p for p in preds if p["type"] == "high"]
         sup = D["levels"]["support"]
         trades = []
+        # execution windows straight from the forecast: enter at the projected
+        # low (its hot planetary hours if any, else the statistical time),
+        # exit at the projected high
+        entry_win = exit_win = None
+        if lows:
+            lp0 = lows[0]
+            entry_win = f"{lp0['date']} · " + (lp0.get("planetHour") or lp0["time"])
+        if highs:
+            hp0 = highs[0]
+            exit_win = f"{hp0['date']} · " + (hp0.get("planetHour") or hp0["time"])
         try:
             base = chain(tkr)
             exps = base["expirationDates"]
@@ -88,7 +98,7 @@ def build_trades(dall):
                                       f"{lp['date']} low (~${lp['price']}), {exit_note}. "
                                       f"Highest premium — but assigned if the low overshoots "
                                       f"(crashes DO overshoot; size accordingly)",
-                            "exp": e1s, "strikes": [k0], "premium": round(m0, 2)})
+                            "exp": e1s, "strikes": [k0], "premium": round(m0, 2), "execute": entry_win, "exitWin": exit_win})
 
             deep = min([l["price"] for l in sup[1:2]] +
                        [p["price"] for p in lows[1:2]] + [spot * 0.9])
@@ -103,7 +113,7 @@ def build_trades(dall):
                                   f"yield {m1/k1*100:.1f}% · breakeven ${k1-m1:.2f} · "
                                   f"collateral ${k1*100:,.0f}",
                         "thesis": "strike below the deep/crash target — paid to wait",
-                        "exp": e1s, "strikes": [k1], "premium": round(m1, 2)})
+                        "exp": e1s, "strikes": [k1], "premium": round(m1, 2), "execute": entry_win, "exitWin": "close at 50 percent profit or hold"})
 
             tgt = lows[0]["price"] if lows else spot * 0.95
             ks = _nearest(pstrikes, tgt)
@@ -119,7 +129,7 @@ def build_trades(dall):
                                   f"max loss ${(w-cr)*100:.0f} · "
                                   f"ROI {cr/(w-cr)*100:.0f}% if price holds ${ks:g}",
                         "thesis": "short strike at the projected low shelf, risk capped",
-                        "exp": e1s, "strikes": [ks, kl], "premium": round(cr, 2)})
+                        "exp": e1s, "strikes": [ks, kl], "premium": round(cr, 2), "execute": entry_win, "exitWin": "close at 50 percent profit or ~1 week"})
 
             if highs:
                 hp = highs[0]
@@ -144,7 +154,7 @@ def build_trades(dall):
                                       f"ROI {max(0,(w-deb))/deb*100:.0f}% if "
                                       f"${hp['price']} prints by {hp['date']}",
                             "thesis": f"targets the projected {hp['date']} rebound high",
-                            "exp": e2s, "strikes": [kb, kt], "premium": round(deb, 2)})
+                            "exp": e2s, "strikes": [kb, kt], "premium": round(deb, 2), "execute": entry_win, "exitWin": exit_win})
         except Exception as e:
             trades.append({"kind": "NOTE", "label": "No listed chain on this feed",
                            "detail": str(e)[:80], "thesis": "", "exp": "",
@@ -162,3 +172,4 @@ if __name__ == "__main__":
         print(f"\n===== {tkr}  spot {v['spot']} =====")
         for tr in v["trades"]:
             print(f" {tr['kind']:8} {tr['label']}  {tr['detail']}")
+
