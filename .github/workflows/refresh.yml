@@ -25,6 +25,6 @@ jobs:
         run: |
           git config user.name "dashboard-bot"
           git config user.email "claude@ell.jp"
-          git add index.html dashboard_single.html data.js predictions_log.json
+          git add index.html dashboard_single.html data.js predictions_log.json daily_extremes.json
           git commit -m "auto refresh (cloud)" || echo "nothing new"
           git push

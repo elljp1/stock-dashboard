@@ -405,7 +405,10 @@ function renderAll(D){
       return;
     }
     let h = `<div class="kpiline" style="margin-bottom:8px"><b>${tr.n}</b> graded ·
-      <b>${pct(tr.hit2Rate)}</b> hit within ±2 days · <b>${pct(tr.hit3Rate)}</b> within ±3 days`;
+      <b>${pct(tr.hit2Rate)}</b> hit within ±2 days · <b>${pct(tr.hit3Rate)}</b> within ±3 days` +
+      (tr.priceMedErrPct !== null && tr.priceMedErrPct !== undefined ? ` · typical price miss <b>${tr.priceMedErrPct}%</b>` : "") +
+      ((tr.priceCalibHigh && tr.priceCalibHigh !== 1) || (tr.priceCalibLow && tr.priceCalibLow !== 1)
+        ? ` · <span class="chip">learned price calibration: highs ×${tr.priceCalibHigh}, lows ×${tr.priceCalibLow}</span>` : "");
     const mf = Object.entries(tr.methodFactors||{});
     if(mf.length) h += ` · learned weights: ` + mf.map(([f,v])=>`<span class="chip">${f} ×${v}</span>`).join(" ");
     h += `</div><table><tr><th>Predicted on</th><th>Called for</th><th>Actual turn</th><th>Off by</th><th>Result</th></tr>`;

@@ -27,6 +27,15 @@ try:
 except Exception:
     PRED_LOG = {"entries": []}
 
+# permanent record of every day's high/low/close per ticker (committed to the
+# repo, so accuracy analysis never depends on refetching history)
+EXT_FILE = "daily_extremes.json"
+try:
+    with open(EXT_FILE, encoding="utf-8") as _f:
+        EXTREMES = json.load(_f)
+except Exception:
+    EXTREMES = {}
+
 
 def method_family(tag):
     t = tag.lower()
@@ -530,6 +539,15 @@ def analyze(tkr):
     daily["date"] = daily.index.date
     last_close = float(daily["Close"].iloc[-1])
     last_bar_date = daily.index[-1].date()
+
+    # append recent daily highs/lows to the permanent record (keep ~400 days)
+    ex = EXTREMES.setdefault(tkr, {})
+    for ts, row in daily.tail(90).iterrows():
+        ex[ts.strftime("%Y-%m-%d")] = [round(float(row["High"]), 2),
+                                       round(float(row["Low"]), 2),
+                                       round(float(row["Close"]), 2)]
+    for k in sorted(ex)[:-400]:
+        del ex[k]
     out = {"ticker": tkr, "generated": NOW.strftime("%Y-%m-%d %I:%M %p ET"),
            "price": last_close, "monthName": NOW.strftime("%B")}
 
@@ -905,6 +923,21 @@ def analyze(tkr):
     hit2s = sum(r["hit2"] for r in resolved_u)
     hit3s = sum(r["hit3"] for r in resolved_u)
     base_rate = (hit2s + 1) / (n_res + 2)  # smoothed
+
+    # price-accuracy grading + learned calibration of future targets:
+    # if predicted prices systematically over/undershoot, scale targets
+    perrs = [abs(r["actualPrice"] / r["predPrice"] - 1) for r in resolved_u
+             if r["actualPrice"] and r["predPrice"]]
+    price_med_err = round(float(np.median(perrs)) * 100, 1) if perrs else None
+    cal_hi = cal_lo = 1.0
+    hi_ratios = [r["actualPrice"] / r["predPrice"] for r in resolved_u
+                 if r["type"] == "high" and r["actualPrice"]]
+    lo_ratios = [r["actualPrice"] / r["predPrice"] for r in resolved_u
+                 if r["type"] == "low" and r["actualPrice"]]
+    if len(hi_ratios) >= 4:
+        cal_hi = float(np.clip(np.median(hi_ratios), 0.85, 1.15))
+    if len(lo_ratios) >= 4:
+        cal_lo = float(np.clip(np.median(lo_ratios), 0.85, 1.15))
     # learned multiplier per method family: >1 = earning trust, <1 = losing it
     MF = {}
     for fam, st in fam_stats.items():
@@ -916,6 +949,8 @@ def analyze(tkr):
         "resolved": resolved_u[-30:], "n": n_res,
         "hit2Rate": round(hit2s / n_res * 100, 0) if n_res else None,
         "hit3Rate": round(hit3s / n_res * 100, 0) if n_res else None,
+        "priceMedErrPct": price_med_err,
+        "priceCalibHigh": round(cal_hi, 3), "priceCalibLow": round(cal_lo, 3),
         "methodFactors": MF,
         "famStats": {f: s for f, s in fam_stats.items()}}
 
@@ -1045,11 +1080,12 @@ def analyze(tkr):
         # overshot badly on short horizons)
         ahead = future.index(d) + 1
         cap = 1.25 * (dvol / np.sqrt(20)) * np.sqrt(ahead)
-        # a projected high can't sit below today's price (nor a low above it)
+        # a projected high can't sit below today's price (nor a low above it);
+        # graded price errors feed back in as a learned calibration factor
         if ty == "high":
-            price = max(min(base * (1 + med_up), last_close * (1 + cap)), last_close)
+            price = max(min(base * (1 + med_up) * cal_hi, last_close * (1 + cap)), last_close)
         else:
-            price = min(max(base * (1 - med_dn), last_close * (1 - cap)), last_close)
+            price = min(max(base * (1 - med_dn) * cal_lo, last_close * (1 - cap)), last_close)
         # snap to a real support/resistance level when one sits within 3% —
         # markets turn at levels, not at abstract percentages
         lv_c = out["levels"]["resistance"] if ty == "high" else out["levels"]["support"]
@@ -1129,6 +1165,9 @@ for tkr in TICKERS:
 
 with open(LOG_FILE, "w", encoding="utf-8") as f:
     json.dump(PRED_LOG, f, indent=1)
+
+with open(EXT_FILE, "w", encoding="utf-8") as f:
+    json.dump(EXTREMES, f)
 
 with open("data.js", "w", encoding="utf-8") as f:
     f.write("const DATA_ALL = " + json.dumps(all_out) + ";\n")
