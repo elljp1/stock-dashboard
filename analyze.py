@@ -1208,15 +1208,45 @@ with open(LOG_FILE, "w", encoding="utf-8") as f:
 with open(EXT_FILE, "w", encoding="utf-8") as f:
     json.dump(EXTREMES, f)
 
+# live option-trade recommendations, shown on the dashboard and logged for
+# future grading (falls back to the previous sheet if chains are unreachable)
+TRADES = {}
+try:
+    from trades_scan import build_trades
+    TRADES = build_trades(all_out)
+    with open("trades.json", "w", encoding="utf-8") as f:
+        json.dump(TRADES, f)
+    try:
+        with open("trades_log.json", encoding="utf-8") as f:
+            TLOG = json.load(f)
+    except Exception:
+        TLOG = {"entries": []}
+    _today = NOW.strftime("%Y-%m-%d")
+    TLOG["entries"] = [e for e in TLOG["entries"] if e["logged"] != _today]
+    TLOG["entries"].append({"logged": _today, "sheet": TRADES})
+    with open("trades_log.json", "w", encoding="utf-8") as f:
+        json.dump(TLOG, f, indent=1)
+    print(f"trade sheet built for {len(TRADES)} tickers and logged")
+except Exception as e:
+    print("trade sheet build failed:", e)
+    try:
+        with open("trades.json", encoding="utf-8") as f:
+            TRADES = json.load(f)
+        print("using previous trade sheet")
+    except Exception:
+        TRADES = {}
+
 with open("data.js", "w", encoding="utf-8") as f:
-    f.write("const DATA_ALL = " + json.dumps(all_out) + ";\n")
+    f.write("const DATA_ALL = " + json.dumps(all_out) + ";\n"
+            + "const TRADES = " + json.dumps(TRADES) + ";\n")
 
 # single self-contained file (data inlined) — works on phones via OneDrive,
 # email, or a simple web upload, with no companion data.js needed
 try:
     with open("dashboard.html", encoding="utf-8") as f:
         html = f.read()
-    inline = "<script>const DATA_ALL = " + json.dumps(all_out) + ";</script>"
+    inline = ("<script>const DATA_ALL = " + json.dumps(all_out) + ";\n"
+              + "const TRADES = " + json.dumps(TRADES) + ";</script>")
     html = html.replace('<script src="data.js"></script>', inline)
     with open("dashboard_single.html", "w", encoding="utf-8") as f:
         f.write(html)

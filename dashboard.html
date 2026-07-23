@@ -111,6 +111,12 @@
 </div>
 
 <div class="panel">
+  <h2>Recommended option trades — <span class="tkr2"></span></h2>
+  <div class="sub" id="trdSub"></div>
+  <div id="trdBody" style="margin-top:8px"></div>
+</div>
+
+<div class="panel">
   <h2>Support &amp; resistance — <span class="tkr2"></span></h2>
   <div class="sub">Price levels where <span class="tkr2"></span>'s swing turns have clustered over 2 years.
     More touches = stronger level. They're also drawn on the chart below (green = support, red = resistance).</div>
@@ -297,6 +303,27 @@ function renderAll(D){
    landed within ±2 trading days ${pct(pb.hitRate2d)} of the time (±3 days: ${pct(pb.hitRate3d)}). Stacking methods
    narrows attention, it doesn't create certainty. The most reliable part is time-of-day: the open
    (9:30–10:00 AM ET) sets the day's extreme far more often than any other slot.`;
+
+  /* recommended trades */
+  (function(){
+    const T = (typeof TRADES !== "undefined" && TRADES) ? TRADES[D.ticker] : null;
+    if(!T || !T.trades || !T.trades.length){
+      $("trdSub").textContent = "No trade sheet from the latest run (option chains unreachable).";
+      $("trdBody").innerHTML = ""; return;
+    }
+    $("trdSub").innerHTML = `Built from live option chains + this page's own levels & forecasts,
+     as of <b>${T.asof}</b> (spot ${fmt$(T.spot)}). Exit discipline (backtested best): close at
+     <b>50% profit or ~1 week</b>, whichever comes first. Every sheet is logged and will be graded.
+     Research, not financial advice.`;
+    const KC = {INCOME: "good", DEFINED: "mid", BOUNCE: "bad", NOTE: "tag"};
+    $("trdBody").innerHTML = T.trades.map(tr => `
+      <div style="border:1px solid var(--border); border-radius:10px; padding:10px 12px; margin:8px 0; background:var(--panel2)">
+        <span class="badge ${tr.kind==="INCOME"?"bH":tr.kind==="BOUNCE"?"bL":"chip"}">${tr.kind}</span>
+        <b style="margin-left:6px">${tr.label}</b>
+        <div class="num" style="margin-top:4px; font-size:13px">${tr.detail}</div>
+        ${tr.thesis ? `<div class="tag" style="margin-top:2px">${tr.thesis}</div>` : ""}
+      </div>`).join("");
+  })();
 
   /* support & resistance */
   (function(){
