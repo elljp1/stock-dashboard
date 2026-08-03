@@ -61,3 +61,30 @@ strength-bar math behaved exactly as intended, and the coherence check passed. T
 renders correctly. The live dashboard files (data.js, index.html, etc.) will pick up
 real numbers automatically on the next scheduled hourly refresh, which does have data
 access and re-runs the same coherence check as a safety gate before publishing.
+
+## 2026-08-03 (Mon) - second check-in, no code change - grades logged only
+
+This session's fetch also had no path to Yahoo (blocked with a 403 at the network
+proxy this time, same practical effect as the earlier "no internet access" case).
+Since there were no cached price files to fall back on either, re-running the engine
+here would have produced an empty dashboard, so nothing was regenerated from this
+session - the coherence gate correctly caught and rejected the empty output when
+tested, confirming it's doing its job. The site's actual numbers are already current
+because the separate 3x/day cloud refresh (which does have data access) had already
+run today and re-published successfully before this check-in.
+
+**Grades reviewed (from the live, already-refreshed data):** still only 8 date
+predictions have fully matured and graded since the July 24 engine fixes went in -
+too few to judge the fixes yet. Of those 8: GOOGL is the standout at 2/4 (50%)
+hit-within-3-days, while TSLA, HOOD, and QQQ are 0% and JPM has none matured. This
+is the same picture as the last review - the graded ones are still mostly leftover
+predictions from before the July 24 fixes, so no new signal on whether those fixes
+helped. One good real-money data point: the closed QQQ put trade (sold 7/24, bought
+back 7/31) captured 89% of its credit, matching the model's playbook exactly.
+
+**No code change today** - one change already shipped earlier today (the backtest-weighted
+strength bars and "what actually works" box), and nothing new has crossed the
+3-graded-days bar for a further change. **Watch next:** whether the first wave of
+post-July-24-fix predictions (logged 7/29 onward) start maturing with a materially
+different hit rate than the 0% TSLA/HOOD/QQQ baseline - that's the real test of
+whether the fixes worked.
