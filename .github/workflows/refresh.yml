@@ -1,10 +1,8 @@
 name: Refresh dashboard
 on:
   schedule:
-    # UTC times = 9:30 AM, 12:00 PM, 4:30 PM US Eastern (summer time)
-    - cron: "30 13 * * 1-5"
-    - cron: "0 16 * * 1-5"
-    - cron: "30 20 * * 1-5"
+    # hourly during US market hours, 9:30 AM - 4:30 PM Eastern (summer time)
+    - cron: "30 13-20 * * 1-5"
   workflow_dispatch: {}
 
 permissions:

@@ -566,28 +566,45 @@ function renderAll(D){
   (function(){
     const H = D.history;
     if(!H){ $("fhSub").textContent = "Refresh to compute."; $("fhBody").innerHTML = ""; return; }
-    const done = H.preds.filter(r => ["HIT","near","miss","miss (no turn)"].includes(r.status));
-    const hits = done.filter(r => r.status === "HIT").length;
-    const nears = done.filter(r => r.status === "near").length;
+    const isFinal = s => ["HIT","near","miss","miss (no turn)"].includes(s);
+    const isLive = s => s && s.startsWith("live-");
+    const done = H.preds.filter(r => isFinal(r.status));
+    const live = H.preds.filter(r => isLive(r.status));
+    const cnt = (arr, m) => arr.filter(r => r.status.replace("live-","") === m).length;
+    const scored = done.length + live.length;
+    const okAll = cnt(done,"HIT") + cnt(done,"near") + cnt(live,"HIT") + cnt(live,"near");
     $("fhSub").innerHTML = `Every prediction ever logged for ${nice(D.ticker)} — <b>${H.preds.length} unique targets</b>
-     across <b>${H.daysLogged} logged days</b>. Graded so far: <b>${done.length}</b> →
-     <b class="good">${hits} HIT (±2d)</b> · <b class="mid">${nears} near (±3d)</b> ·
-     <b class="bad">${done.length - hits - nears} miss</b>
-     ${done.length ? `= <b>${Math.round((hits + nears) / done.length * 100)}%</b> within ±3 days` : ""}.
-     Others are still upcoming or awaiting confirmation. Nothing is hidden — every call stays here forever.`;
-    const badge = s => s === "HIT" ? '<b class="good">HIT</b>' : s === "near" ? '<b class="mid">near</b>'
-      : s.startsWith("miss") ? '<b class="bad">' + s + '</b>' : `<span class="tag">${s}</span>`;
-    $("fhBody").innerHTML = `<table><tr><th>Called for</th><th>Predicted</th><th>Actual turn</th>
-      <th>Off by</th><th>Price err</th><th>Result</th><th>Logged</th></tr>` +
-      H.preds.map(r => `<tr>
+     across <b>${H.daysLogged} logged days</b>. Because actual daily highs/lows are recorded, calls are scored
+     <b>the moment their window closes</b> (LIVE), then finalized when the swing confirms.
+     Scored so far: <b>${scored}</b> → <b class="good">${cnt(done,"HIT")+cnt(live,"HIT")} HIT</b> ·
+     <b class="mid">${cnt(done,"near")+cnt(live,"near")} near</b> ·
+     <b class="bad">${scored - okAll} miss</b>
+     ${scored ? `= <b>${Math.round(okAll / scored * 100)}%</b> within ±3 days (${live.length} of these still live)` : ""}.
+     Nothing is hidden — every call stays here forever.`;
+    const badge = s => {
+      const base = s.replace("live-","");
+      const cls = base === "HIT" ? "good" : base === "near" ? "mid" : base.startsWith("miss") ? "bad" : null;
+      if (s === "price hit early") return '<b class="mid">price hit early</b>';
+      return cls ? `<b class="${cls}">${s.startsWith("live-") ? "⏳" : ""}${base}</b>` : `<span class="tag">${s}</span>`;
+    };
+    $("fhBody").innerHTML = `<table><tr><th>Called for</th><th>Predicted</th><th>Actual (window H/L)</th>
+      <th>Price err</th><th>Turn</th><th>Result</th><th>Logged</th></tr>` +
+      H.preds.map(r => {
+        const act = r.actualDate ? `${r.actualDate} ${fmt$(r.actualPrice)}`
+          : r.winDate ? `${r.winDate} ${fmt$(r.winPrice)} <span class="tag">(recorded)</span>`
+          : r.winPrice !== undefined ? fmt$(r.winPrice) : "—";
+        const perr = r.priceErrPct !== undefined ? r.priceErrPct : r.winErrPct;
+        return `<tr>
         <td class="num"><span class="badge ${r.type === "high" ? "bH" : "bL"}">${r.type[0].toUpperCase()}</span> ${r.isoDate}</td>
         <td class="num">${fmt$(r.price)}</td>
-        <td class="num">${r.actualDate ? r.actualDate + " " + fmt$(r.actualPrice) : "—"}</td>
-        <td class="num">${r.errDays === undefined ? "—" : (r.errDays > 0 ? "+" : "") + r.errDays + "d"}</td>
-        <td class="num">${r.priceErrPct === undefined ? "—" : (r.priceErrPct > 0 ? "+" : "") + r.priceErrPct + "%"}</td>
+        <td class="num">${act}</td>
+        <td class="num">${perr === undefined ? "—" : (perr > 0 ? "+" : "") + perr + "%"}</td>
+        <td>${r.turn === "holding" ? '<span class="good">holding</span>' : r.turn === "broken" ? '<span class="bad">broken</span>' : "—"}</td>
         <td>${badge(r.status)}</td>
         <td class="tag num">${r.firstLogged.slice(5)}${r.times > 1 ? " ×" + r.times : ""}</td>
-      </tr>`).join("") + `</table>`;
+      </tr>`;}).join("") + `</table>
+      <div class="tag">⏳ = live grade (window closed, swing not yet confirmed) · "recorded" actual = the real high/low
+      printed in the ±window from the daily record · Turn "broken" = price went beyond that extreme after the window.</div>`;
   })();
 
   /* actual daily extremes */

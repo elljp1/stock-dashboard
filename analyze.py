@@ -1423,10 +1423,49 @@ def analyze(tkr):
             r["lastLogged"] = e["logged"]
             r["price"] = p["price"]
     hist_rows = []
+    _extk = {datetime.strptime(k, "%Y-%m-%d").date(): v
+             for k, v in EXTREMES.get(tkr, {}).items()}
+
+    def _win_vals(center, half_cal, ty):
+        ds = [(d, v[1] if ty == "low" else v[0]) for d, v in _extk.items()
+              if abs((d - center).days) <= half_cal]
+        if not ds:
+            return None
+        return (min(ds, key=lambda x: x[1]) if ty == "low"
+                else max(ds, key=lambda x: x[1]))
+
     for (iso, ty), r in hist_map.items():
         pdate = datetime.strptime(iso, "%Y-%m-%d").date()
+        # LIVE grading vs recorded daily extremes — available the moment the
+        # window closes (final pivot-grade upgrades it later)
+        w = _win_vals(pdate, 4, ty) if pdate <= last_bar_date else None
+        if w:
+            r["winDate"] = w[0].strftime("%Y-%m-%d")
+            r["winPrice"] = round(w[1], 2)
+            r["winErrPct"] = round((r["price"] / w[1] - 1) * 100, 1)
+            later = [(d, v[1] if ty == "low" else v[0]) for d, v in _extk.items()
+                     if d > pdate + timedelta(days=4)]
+            if later:
+                beyond = (min(x[1] for x in later) < w[1] if ty == "low"
+                          else max(x[1] for x in later) > w[1])
+                r["turn"] = "broken" if beyond else "holding"
+            else:
+                r["turn"] = "holding"
         if pdate > last_bar_date:
-            r["status"] = "upcoming"
+            # even upcoming calls get checked: did price hit the target early?
+            since = [(d, v[1] if ty == "low" else v[0]) for d, v in _extk.items()
+                     if d >= datetime.strptime(r["firstLogged"], "%Y-%m-%d").date()]
+            if since:
+                ext_now = (min(x[1] for x in since) if ty == "low"
+                           else max(x[1] for x in since))
+                if (ty == "low" and ext_now <= r["price"]) or \
+                   (ty == "high" and ext_now >= r["price"]):
+                    r["status"] = "price hit early"
+                    r["winPrice"] = round(ext_now, 2)
+                else:
+                    r["status"] = "upcoming"
+            else:
+                r["status"] = "upcoming"
         else:
             cands = [v for v in pivots if v["type"] == ty]
             best = (min(cands, key=lambda v: abs((v["date"].date() - pdate).days))
@@ -1440,9 +1479,11 @@ def analyze(tkr):
                 mature = (last_bar_date - pdate).days >= 11
                 r["status"] = (("HIT" if abs(err) <= 2 else
                                 "near" if abs(err) <= 3 else "miss")
-                               if mature else "tracking")
+                               if mature else
+                               ("live-" + ("HIT" if abs(err) <= 2 else
+                                           "near" if abs(err) <= 3 else "miss")))
             else:
-                r["status"] = ("awaiting turn" if (last_bar_date - pdate).days < 11
+                r["status"] = ("live grading" if (last_bar_date - pdate).days < 11
                                else "miss (no turn)")
         hist_rows.append(r)
     hist_rows.sort(key=lambda r: r["isoDate"], reverse=True)
