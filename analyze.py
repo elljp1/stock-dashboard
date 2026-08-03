@@ -37,6 +37,20 @@ try:
 except Exception:
     EXTREMES = {}
 
+# walk-forward backtest results per ticker (from backfill.py) - the honest
+# out-of-sample hit rate used to weight how much confidence each ticker's
+# confluence score deserves
+BF_FILE = "backfill.json"
+try:
+    with open(BF_FILE, encoding="utf-8") as _f:
+        BACKFILL = json.load(_f)
+except Exception:
+    BACKFILL = {}
+# a ticker backtesting at chance level (~20% for a 3-day window) gets no boost;
+# one that backtests well gets scaled up, capped so no ticker dominates purely
+# on its backtest sample rather than today's actual confluence
+SKILL_MAX = 1.6
+
 
 def method_family(tag):
     t = tag.lower()
@@ -971,6 +985,15 @@ def analyze(tkr):
         "famStats": {f: s for f, s in fam_stats.items()}}
 
     # ------- confluence forecast -------
+    # per-ticker skill factor: how much to trust this ticker's confluence
+    # scores, earned from the walk-forward backtest rather than assumed.
+    # ~20% is chance for a 3-day hit on a swing rhythm; a ticker backtesting
+    # well above that gets its scores scaled up, one at/below chance gets
+    # scaled toward (or below) neutral.
+    bf_stats = BACKFILL.get("perTicker", {}).get(tkr, {})
+    bf_hit3 = bf_stats.get("hit3Rate")
+    skill = float(np.clip(bf_hit3 / 20, 0.6, SKILL_MAX)) if bf_hit3 is not None else 1.0
+
     def modal(distribution, window=None):
         items = distribution.items()
         if window:
@@ -1163,7 +1186,11 @@ def analyze(tkr):
             "planetHour": ph_str,
             "price": round(price, 2),
             "dateWindow": f"{add_trading_days(d, -2).strftime('%m/%d')}â€“{add_trading_days(d, 2).strftime('%m/%d')}",
-            "score": round(s, 2), "scoreMax": round(smax, 2),
+            # score scaled by this ticker's backtested skill; scoreMax anchored
+            # to the max possible skill so the strength bar (score/scoreMax)
+            # stays within 0-100% while still separating a well-tested ticker
+            # from a chance-level one
+            "score": round(s * skill, 2), "scoreMax": round(smax * SKILL_MAX, 2),
             "methods": tags[d][:4]})
         prev_price, prev_type = price, ty
     out["predictions"] = preds
@@ -1498,7 +1525,9 @@ def analyze(tkr):
                       "price": round(last_piv["price"], 2)},
         "medianSpacing": med_spacing, "medianAmpPct": round(med_amp * 100, 1),
         "medianUpPct": round(med_up * 100, 1), "medianDownPct": round(med_dn * 100, 1),
-        "hitRate2d": out["swing"]["hitRate2d"], "hitRate3d": out["swing"]["hitRate3d"]}
+        "hitRate2d": out["swing"]["hitRate2d"], "hitRate3d": out["swing"]["hitRate3d"],
+        "backtestHit3Rate": bf_stats.get("hit3Rate"), "backtestTested": bf_stats.get("tested"),
+        "skillFactor": round(skill, 2)}
 
     # ------- chart -------
     chart_df = daily[daily.index >= NOW - timedelta(days=280)]
@@ -1561,11 +1590,6 @@ try:
         REAL_TRADES = json.load(f)
 except Exception:
     REAL_TRADES = []
-try:
-    with open("backfill.json", encoding="utf-8") as f:
-        BACKFILL = json.load(f)
-except Exception:
-    BACKFILL = {}
 try:
     with open("improvements_log.md", encoding="utf-8") as f:
         IMPROVE_TXT = f.read()[-9000:]

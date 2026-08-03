@@ -32,3 +32,32 @@ live grading before more tuning (avoid overfitting to one crash week).
 **Watch next:** Monday 7/27 is the predicted-low date for TSLA ($311), HOOD ($94),
 QQQ ($684 retest), gold ($3,975). First clean test of the fixed engine. Earnings-date
 overlay remains the top queued improvement (both crash misses were earnings gaps).
+
+## 2026-08-03 (Mon) - recalibrate: weight confluence by backtested skill + lead with proven edges
+
+**Change 1 - the "strength" bars now reflect the walk-forward backtest, not just today's
+confluence.** Each stock's plus-or-minus-3-day hit rate from the 1,558-prediction backfill
+test now scales its forecast confidence: HOOD (backtests at 36.7%, well above the ~20%
+chance level) gets its strength bars scaled up toward the top of the scale; GOOGL (14.2%,
+near/below chance) gets scaled down. Nothing about which dates or prices are predicted
+changed - only how confident the bars say to be. The prediction section also now states
+each stock's own backtested hit rate in plain text, so it's clear the confidence isn't a
+made-up number.
+
+**Change 2 - a new "What actually works" box now sits at the top of the page,** above
+the date predictions, for every stock. It shows the three best-evidenced things this
+project has actually proven: which session (overnight vs. regular hours) has the real
+edge, the nearest real support/resistance levels, and the backtested plus-or-minus-3-day
+accuracy - plus any real trades placed, when there are some. The date/time forecasts are
+still on the page, just lower down, since they're the weaker, more speculative part of
+the system.
+
+**How this was tested:** this session had no live internet access to fetch fresh stock
+prices (sandboxed environment), so the changes couldn't be run against real data here.
+Instead, the new code was smoke-tested end to end against synthetic stand-in price data
+for two stocks (one that backtests well, one at chance level) - it ran cleanly, the
+strength-bar math behaved exactly as intended, and the coherence check passed. The new
+"what works" box was also checked against the real, currently-live dashboard data and
+renders correctly. The live dashboard files (data.js, index.html, etc.) will pick up
+real numbers automatically on the next scheduled hourly refresh, which does have data
+access and re-runs the same coherence check as a safety gate before publishing.
