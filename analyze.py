@@ -161,7 +161,7 @@ for d in _upcoming:
 
 # ============================================================ VIBRATION LAB
 # Daily geocentric longitudes for all 10 bodies, every planet-pair aspect
-# series, and retrograde flags — mined per stock to find ITS OWN recurring
+# series, and retrograde flags â€” mined per stock to find ITS OWN recurring
 # astro signature at highs/lows, with an honest chance-calibration control.
 BODY_FNS = [("Sun", ephem.Sun), ("Moon", ephem.Moon), ("Mercury", ephem.Mercury),
             ("Venus", ephem.Venus), ("Mars", ephem.Mars), ("Jupiter", ephem.Jupiter),
@@ -206,7 +206,7 @@ _dsj = np.array([(datetime.combine(d, datetime.min.time()) - _j2000).days
                  for d in VDAYS], dtype=float)
 LON["Node"] = (125.0445479 - 0.0529538083 * _dsj) % 360
 
-# heliocentric longitudes (Sun-centred view — classic financial-astro variant)
+# heliocentric longitudes (Sun-centred view â€” classic financial-astro variant)
 HELIO_BODIES = ["Mercury", "Venus", "Mars", "Jupiter", "Saturn",
                 "Uranus", "Neptune", "Pluto"]
 _hlon = {n: [] for n in HELIO_BODIES}
@@ -298,7 +298,7 @@ for _ds in _FOMC:
 _add_series("FOMC decision day", _fomc)
 
 # Ebertin midpoints: planet C sitting on the A/B midpoint axis
-# (8th-harmonic angles 0/45/90/135/180, tight 1° orb — Ebertin's method)
+# (8th-harmonic angles 0/45/90/135/180, tight 1Â° orb â€” Ebertin's method)
 _bodies10 = [n for n, _ in BODY_FNS]
 for _i in range(len(_bodies10)):
     for _j in range(_i + 1, len(_bodies10)):
@@ -313,7 +313,7 @@ for _i in range(len(_bodies10)):
                 hit |= _ang(LON[c] - mid, th) <= orb
             _add_series(f"{c} = {a}/{b} midpoint", hit)
 
-# higher harmonics (7th/9th/11th/13th — Addey/Ebertin school)
+# higher harmonics (7th/9th/11th/13th â€” Addey/Ebertin school)
 for _H in (7, 9, 11, 13):
     for _i in range(len(_bodies10)):
         for _j in range(_i + 1, len(_bodies10)):
@@ -564,7 +564,7 @@ def analyze(tkr):
     for k in sorted(ex)[:-400]:
         del ex[k]
     out = {"ticker": tkr,
-           "generated": NOW.strftime("%Y-%m-%d %I:%M %p ET") + (" · incl. pre/post-market" if is_pm else ""),
+           "generated": NOW.strftime("%Y-%m-%d %I:%M %p ET") + (" Â· incl. pre/post-market" if is_pm else ""),
            "price": last_close, "monthName": NOW.strftime("%B")}
 
     # ------- ranges -------
@@ -985,7 +985,7 @@ def analyze(tkr):
 
     last_piv = pivots[-1]
     prov_type = "high" if cur_dir >= 0 else "low"
-    # the in-progress swing's running extreme — a more current price anchor
+    # the in-progress swing's running extreme â€” a more current price anchor
     # than the last confirmed pivot (learned from grading the 07/09 forecasts);
     # extended by the live pre/post-market price when it runs beyond the bars
     prov_price = float(zz_df["Close"].iloc[ext_i])
@@ -1080,8 +1080,8 @@ def analyze(tkr):
             chosen.append((d, s, ty))
     chosen.sort(key=lambda x: x[0])
 
-    # prediction #1 is ALWAYS the completion of the swing in progress — where
-    # the CURRENT move is heading and when — before any turn the other way.
+    # prediction #1 is ALWAYS the completion of the swing in progress â€” where
+    # the CURRENT move is heading and when â€” before any turn the other way.
     # (a trader must never see "HIGH on date X" while price is still falling)
     first_d = add_trading_days(last_piv["date"].date(), med_spacing)
     if first_d <= NOW.date():
@@ -1117,7 +1117,7 @@ def analyze(tkr):
         ahead = future.index(d) + 1
         cap = 1.25 * (dvol / np.sqrt(20)) * np.sqrt(ahead)
         # crash regime: when already deep below the 20d high, moves run further
-        # than calm-market vol implies — widen the cap with the drawdown
+        # than calm-market vol implies â€” widen the cap with the drawdown
         dd20 = 1 - last_close / float(daily["Close"].tail(20).max())
         cap *= 1 + min(1.0, 2 * max(0.0, dd20))
         # a projected high can't sit below today's price (nor a low above it);
@@ -1126,7 +1126,7 @@ def analyze(tkr):
             price = max(min(base * (1 + med_up) * cal_hi, last_close * (1 + cap)), last_close)
         else:
             price = min(max(base * (1 - med_dn) * cal_lo, last_close * (1 - cap)), last_close)
-        # snap to a real support/resistance level when one sits within 3% —
+        # snap to a real support/resistance level when one sits within 3% â€”
         # markets turn at levels, not at abstract percentages. Each level may
         # only be used ONCE per chain, so consecutive highs (or lows) don't
         # collapse onto the same number
@@ -1151,7 +1151,7 @@ def analyze(tkr):
                     continue
                 s2, e2 = max(s0, ses_s), min(e0, ses_e)
                 if s2 < e2:
-                    spans.append(f"{r} {s2.strftime('%I:%M').lstrip('0')}–"
+                    spans.append(f"{r} {s2.strftime('%I:%M').lstrip('0')}â€“"
                                  f"{e2.strftime('%I:%M %p').lstrip('0')}")
             ph_str = "; ".join(spans[:3]) or None
         preds.append({
@@ -1162,7 +1162,7 @@ def analyze(tkr):
             "astroTime": moon_today["time"] if moon_today else None,
             "planetHour": ph_str,
             "price": round(price, 2),
-            "dateWindow": f"{add_trading_days(d, -2).strftime('%m/%d')}–{add_trading_days(d, 2).strftime('%m/%d')}",
+            "dateWindow": f"{add_trading_days(d, -2).strftime('%m/%d')}â€“{add_trading_days(d, 2).strftime('%m/%d')}",
             "score": round(s, 2), "scoreMax": round(smax, 2),
             "methods": tags[d][:4]})
         prev_price, prev_type = price, ty
@@ -1193,7 +1193,7 @@ def analyze(tkr):
         if hot:
             for s0, e0, r in planetary_hours(dte):
                 if r == hot[0] and 9 <= s0.hour < 16:
-                    return (f"{r} hour {s0.strftime('%I:%M').lstrip('0')}–"
+                    return (f"{r} hour {s0.strftime('%I:%M').lstrip('0')}â€“"
                             f"{e0.strftime('%I:%M %p').lstrip('0')} ET")
         mode = hi_mode if kind == "high" else lo_mode
         return fmt_time(mode[0]) + f" ET ({mode[1]}% of days)"
@@ -1276,7 +1276,7 @@ def analyze(tkr):
                        wl_d.strftime("%a %m/%d"), hz_time(wl_d, "low"),
                        actual_ext(_wslice, "low"))}
 
-    # MONTHLY: rest of this month — strongest day-of-month bucket still ahead
+    # MONTHLY: rest of this month â€” strongest day-of-month bucket still ahead
     mo_end = (session.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
     mo_days = [session + timedelta(days=k) for k in range((mo_end - session).days + 1)]
     mo_days = [dd for dd in mo_days if dd.weekday() < 5] or [session]
@@ -1287,7 +1287,7 @@ def analyze(tkr):
                  if any(buckets[b][0] <= dd.day <= buckets[b][1] for dd in mo_days)}
         b = max(avail, key=avail.get) if avail else "late (21st-31st)"
         win = [dd for dd in mo_days if buckets[b][0] <= dd.day <= buckets[b][1]]
-        return (f"{win[0].strftime('%m/%d')}–{win[-1].strftime('%m/%d')}"
+        return (f"{win[0].strftime('%m/%d')}â€“{win[-1].strftime('%m/%d')}"
                 if win else mo_days[-1].strftime("%m/%d"))
     m_hi = _snap_h(last_close * (1 + proj(len(mo_days))), "high")
     m_lo = _snap_h(last_close * (1 - proj(len(mo_days))), "low")
@@ -1299,7 +1299,7 @@ def analyze(tkr):
         "low": resolve("low", session, mo_end, m_lo, best_bucket(out["dayOfMonth"]["low"]),
                        hz_time(mo_days[0], "low"), actual_ext(_mslice, "low"))}
 
-    # YEARLY: empirical forward-12-month forecast — every historical start point
+    # YEARLY: empirical forward-12-month forecast â€” every historical start point
     # says how far this stock actually travelled up/down in the next 252 sessions
     # and WHEN that extreme landed. Median = point forecast, p20-p80 = range.
     _H = daily["High"].to_numpy(float)
@@ -1332,13 +1332,13 @@ def analyze(tkr):
         nyr = len(up_r) * 3 / 252
         y_hi_cell = {"price": round(y_hi_p, 2), "date": hi_when,
                      "time": f"median of {len(up_r)} historical 12-mo windows "
-                             f"(~{nyr:.0f}y): +{(uq[1]-1)*100:.0f}% typical · "
-                             f"60% range ${hi_band[0]:,.0f}–${hi_band[1]:,.0f}",
+                             f"(~{nyr:.0f}y): +{(uq[1]-1)*100:.0f}% typical Â· "
+                             f"60% range ${hi_band[0]:,.0f}â€“${hi_band[1]:,.0f}",
                      "range": [round(hi_band[0], 2), round(hi_band[1], 2)]}
         y_lo_cell = {"price": round(y_lo_p, 2), "date": lo_when,
                      "time": f"median of {len(dn_r)} historical 12-mo windows "
-                             f"(~{nyr:.0f}y): {(dq[1]-1)*100:.0f}% typical · "
-                             f"60% range ${lo_band[0]:,.0f}–${lo_band[1]:,.0f}",
+                             f"(~{nyr:.0f}y): {(dq[1]-1)*100:.0f}% typical Â· "
+                             f"60% range ${lo_band[0]:,.0f}â€“${lo_band[1]:,.0f}",
                      "range": [round(lo_band[0], 2), round(lo_band[1], 2)]}
         horizons["yearly"] = {"high": y_hi_cell, "low": y_lo_cell}
 
@@ -1363,17 +1363,17 @@ def analyze(tkr):
                          "time": "52-week high stands unless exceeded"}
         else:
             y_hi_cell = {"price": round(y_hi, 2), "date": month_date(hi_n),
-                         "time": f"volatility-range ceiling, NOT a target — seasonal lean: {hi_mon[0]} (+{hi_mon[1]['avgRet']}% avg)"}
+                         "time": f"volatility-range ceiling, NOT a target â€” seasonal lean: {hi_mon[0]} (+{hi_mon[1]['avgRet']}% avg)"}
         if _yal and _yal[0] <= y_lo:
             y_lo_cell = {"price": round(_yal[0], 2),
                          "date": "already set " + _yal[1].strftime("%m/%d/%y"),
                          "time": "52-week low stands unless undercut"}
         else:
             y_lo_cell = {"price": round(y_lo, 2), "date": month_date(lo_n),
-                         "time": f"volatility-range floor, NOT a crash forecast — seasonal lean: {lo_mon[0]} ({lo_mon[1]['avgRet']}% avg)"}
+                         "time": f"volatility-range floor, NOT a crash forecast â€” seasonal lean: {lo_mon[0]} ({lo_mon[1]['avgRet']}% avg)"}
         horizons["yearly"] = {"high": y_hi_cell, "low": y_lo_cell}
     # nesting: a wider period can never show a smaller extreme than a narrower
-    # one — if it would, it inherits the narrower period's cell wholesale
+    # one â€” if it would, it inherits the narrower period's cell wholesale
     _ordr = [k for k in ("daily", "weekly", "monthly", "yearly") if k in horizons]
     for _a, _b in zip(_ordr, _ordr[1:]):
         if horizons[_a]["high"]["price"] > horizons[_b]["high"]["price"]:
@@ -1436,7 +1436,7 @@ def analyze(tkr):
 
     for (iso, ty), r in hist_map.items():
         pdate = datetime.strptime(iso, "%Y-%m-%d").date()
-        # LIVE grading vs recorded daily extremes — available the moment the
+        # LIVE grading vs recorded daily extremes â€” available the moment the
         # window closes (final pivot-grade upgrades it later)
         w = _win_vals(pdate, 4, ty) if pdate <= last_bar_date else None
         if w:
@@ -1516,11 +1516,11 @@ for tkr in TICKERS:
     try:
         all_out[tkr] = analyze(tkr)
         p = all_out[tkr]
-        print(f"{tkr}: OK — price {p['price']}, {p['swing']['pivotCount']} pivots "
+        print(f"{tkr}: OK â€” price {p['price']}, {p['swing']['pivotCount']} pivots "
               f"(threshold {p['swing']['thresholdPct']}%), spacing {p['swing']['medianSpacingTradingDays']}d, "
               f"first pred {p['predictions'][0]['date']} {p['predictions'][0]['type']}")
     except Exception as e:
-        print(f"{tkr}: FAILED — {e}")
+        print(f"{tkr}: FAILED â€” {e}")
 
 with open(LOG_FILE, "w", encoding="utf-8") as f:
     json.dump(PRED_LOG, f, indent=1)
@@ -1562,6 +1562,11 @@ try:
 except Exception:
     REAL_TRADES = []
 try:
+    with open("backfill.json", encoding="utf-8") as f:
+        BACKFILL = json.load(f)
+except Exception:
+    BACKFILL = {}
+try:
     with open("improvements_log.md", encoding="utf-8") as f:
         IMPROVE_TXT = f.read()[-9000:]
 except Exception:
@@ -1570,10 +1575,9 @@ except Exception:
 with open("data.js", "w", encoding="utf-8") as f:
     f.write("const DATA_ALL = " + json.dumps(all_out) + ";\n"
             + "const TRADES = " + json.dumps(TRADES) + ";\n"
-            + "const REALTRADES = " + json.dumps(REAL_TRADES) + ";\n"
-            + "const IMPROVELOG = " + json.dumps(IMPROVE_TXT) + ";\n")
+            + "const REALTRADES = " + json.dumps(REAL_TRADES) + ";\n" + "const IMPROVELOG = " + json.dumps(IMPROVE_TXT) + ";\n" + "const BACKFILL = " + json.dumps(BACKFILL) + ";\n")
 
-# single self-contained file (data inlined) — works on phones via OneDrive,
+# single self-contained file (data inlined) â€” works on phones via OneDrive,
 # email, or a simple web upload, with no companion data.js needed
 try:
     with open("dashboard.html", encoding="utf-8") as f:
@@ -1581,7 +1585,7 @@ try:
     inline = ("<script>const DATA_ALL = " + json.dumps(all_out) + ";\n"
               + "const TRADES = " + json.dumps(TRADES) + ";\n"
               + "const REALTRADES = " + json.dumps(REAL_TRADES) + ";\n"
-              + "const IMPROVELOG = " + json.dumps(IMPROVE_TXT) + ";</script>")
+              + "const IMPROVELOG = " + json.dumps(IMPROVE_TXT) + ";\n" + "const BACKFILL = " + json.dumps(BACKFILL) + ";</script>")
     html = html.replace('<script src="data.js"></script>', inline)
     with open("dashboard_single.html", "w", encoding="utf-8") as f:
         f.write(html)
@@ -1594,3 +1598,5 @@ except Exception as e:
 
 print(f"data.js written with {len(all_out)} tickers; "
       f"prediction log has {len(PRED_LOG['entries'])} daily entries")
+
+

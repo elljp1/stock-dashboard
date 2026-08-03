@@ -18,13 +18,14 @@ jobs:
           python-version: "3.12"
       - run: pip install --quiet pandas numpy ephem
       - run: python fetch_data.py
+      - run: python backfill.py
       - run: python analyze.py
       - run: python coherence_check.py
       - name: Commit and push updated dashboard
         run: |
           git config user.name "dashboard-bot"
           git config user.email "dashboard-bot@users.noreply.github.com"
-          git add index.html dashboard_single.html data.js predictions_log.json daily_extremes.json trades.json trades_log.json horizons_log.json real_trades.json improvements_log.md
+          git add index.html dashboard_single.html data.js predictions_log.json daily_extremes.json trades.json trades_log.json horizons_log.json real_trades.json improvements_log.md backfill.json
           git commit -m "auto refresh (cloud)" || echo "nothing new"
           git push
 

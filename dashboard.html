@@ -148,6 +148,12 @@
 </div>
 
 <div class="panel">
+  <h2>Backtested track record — every swing in 5 years</h2>
+  <div class="sub" id="bfSub"></div>
+  <div id="bfBody" class="tblwrap" style="margin-top:8px"></div>
+</div>
+
+<div class="panel">
   <h2>Full prediction history — <span class="tkr2"></span></h2>
   <div class="sub" id="fhSub"></div>
   <div id="fhBody" class="tblwrap" style="margin-top:8px; max-height:420px; overflow-y:auto"></div>
@@ -560,6 +566,32 @@ function renderAll(D){
     ];
     $("scoreTable").innerHTML = `<tr><th>Method</th><th>The claim</th><th>Test result on ${D.ticker}</th><th>Verdict</th></tr>` +
       rows.map(r=>`<tr><td>${r[0]}</td><td data-l="claim">${r[1]}</td><td data-l="tested">${r[2]}</td><td data-l="verdict">${r[3]}</td></tr>`).join("");
+  })();
+
+  /* backtested track record */
+  (function(){
+    const B = (typeof BACKFILL !== "undefined") ? BACKFILL : null;
+    if(!B || !B.perTicker){ $("bfSub").textContent = "Run backfill to compute."; $("bfBody").innerHTML=""; return; }
+    $("bfSub").innerHTML = `Instead of waiting weeks for live predictions to grade, the engine was replayed across
+     <b>every day of the last 5 years</b> — predicting only from past bars, then graded on what actually happened.
+     <b>${B.totalGraded.toLocaleString()} graded predictions</b> total · overall
+     <b>${B.avgHit2}%</b> within ±2 days, <b>${B.avgHit3}%</b> within ±3 days.
+     This is the honest out-of-sample skill; the live grades above are the ongoing forward test.`;
+    const rows = Object.values(B.perTicker).sort((a,b)=>b.hit3Rate-a.hit3Rate);
+    $("bfBody").innerHTML = `<table><tr><th>Stock</th><th>Graded</th><th>±2 days</th><th>±3 days</th>
+      <th>Median price error</th><th>Bias</th><th>Swing size</th></tr>` +
+      rows.map(r=>`<tr>
+        <td><b>${nice(r.ticker)}</b></td>
+        <td class="num">${r.tested}</td>
+        <td class="num ${r.hit2Rate>=20?"good":r.hit2Rate>=12?"mid":"bad"}">${r.hit2Rate}%</td>
+        <td class="num ${r.hit3Rate>=30?"good":r.hit3Rate>=18?"mid":"bad"}">${r.hit3Rate}%</td>
+        <td class="num">${r.medPriceErrPct}%</td>
+        <td class="num">${r.priceBias>0?"+":""}${r.priceBias}%</td>
+        <td class="num tag">${r.thresholdPct}% zigzag</td>
+      </tr>`).join("") + `</table>
+      <div class="tag">±2/±3 days = share of predicted turns that landed within that many trading days of the real
+      swing. Random chance for a ±2-day window on a ~10-day rhythm ≈ 20%. Bias: negative = targets run slightly
+      shallow. Gold's tiny sample (few big swings) is not meaningful yet.</div>`;
   })();
 
   /* full prediction history */
