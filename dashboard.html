@@ -167,6 +167,12 @@
 </div>
 
 <div class="panel">
+  <h2>The bar to beat — buy &amp; hold benchmarks</h2>
+  <div class="sub" id="bmSub"></div>
+  <div id="bmBody" class="tblwrap" style="margin-top:8px"></div>
+</div>
+
+<div class="panel">
   <h2>Real executed trades (your account)</h2>
   <div class="sub" id="rtSub"></div>
   <div id="rtBody" style="margin-top:8px"></div>
@@ -650,6 +656,31 @@ function renderAll(D){
         <td class="num good">${fmt$(e.h)}</td><td class="num bad">${fmt$(e.l)}</td>
         <td class="num">${fmt$(e.c)}</td></tr>`).join("") + `</table>
       <div class="tag">Recorded permanently on every refresh — this is the ground truth all grading runs against.</div>`;
+  })();
+
+  /* buy & hold benchmarks */
+  (function(){
+    const B = (typeof BENCHMARK !== "undefined") ? BENCHMARK : null;
+    if(!B || !Object.keys(B).length){ $("bmSub").textContent = "Run benchmark.py to compute."; $("bmBody").innerHTML=""; return; }
+    $("bmSub").innerHTML = `What doing NOTHING would have earned — annualized (CAGR) if you had simply bought and
+     held. <b>Any active system must beat these after taxes and effort, or holding wins.</b> The goal line
+     (30%/yr) and our realized trading pace are judged against this table.`;
+    const spans = ["1","3","5","10","20"];
+    const order = Object.keys(B).filter(k=>k!=="SPY").concat(B.SPY?["SPY"]:[]);
+    $("bmBody").innerHTML = `<table><tr><th>Held</th>${spans.map(s=>`<th>${s} yr</th>`).join("")}</tr>` +
+      order.map(t=>`<tr><td><b>${t==="SPY"?"S&P 500 (SPY)":nice(t)}</b></td>` +
+        spans.map(s=>{
+          const d = B[t][s];
+          if(!d) return `<td class="tag">—</td>`;
+          const c = d.cagrPct;
+          return `<td class="num ${c>=30?"good":c>=10?"":"tag"}">${c>0?"+":""}${c}%/yr<br>
+            <span class="tag">${d.totalPct>0?"+":""}${d.totalPct}% total</span></td>`;
+        }).join("") + `</tr>`).join("") +
+      `<tr style="border-top:2px solid var(--border)"><td><b>Your goal</b></td>` +
+      spans.map(()=>`<td class="num mid">30%/yr</td>`).join("") + `</tr></table>
+      <div class="tag">Green = beats the 30%/yr goal · grey = under 10%/yr. CAGR = compound annual growth if held
+      the entire span. Notice how few names clear 30%/yr over long periods — that's why the goal is ambitious but
+      real, and why disciplined frequency beats big swings.</div>`;
   })();
 
   /* real executed trades */
