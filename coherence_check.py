@@ -1,6 +1,8 @@
 """Assert the published forecasts are internally consistent. Exit 1 on failure.
 
 Checks per ticker:
+ 0. Every ticker in tickers.txt is present in data.js (catches a failed fetch/analyze
+    run silently publishing an empty or partial dashboard).
  1. Chain events alternate high/low and dates strictly increase.
  2. Horizon nesting: daily <= weekly <= monthly <= yearly (highs), reverse for lows.
  3. Every chain event inside a period window fits within that period's extremes.
@@ -14,7 +16,13 @@ from datetime import datetime
 raw = open("data.js", encoding="utf-8").read()
 d = json.loads(raw.replace("const DATA_ALL = ", "").split("const TRADES")[0].strip().rstrip(";"))
 
+expected = [line.strip() for line in open("tickers.txt", encoding="utf-8") if line.strip()]
+
 fails = []
+missing = [t for t in expected if t not in d]
+if missing:
+    fails.append(f"data.js is missing {len(missing)}/{len(expected)} expected tickers: {missing}")
+
 for t, D in d.items():
     preds = D.get("predictions", [])
     # 1. alternation + increasing dates
