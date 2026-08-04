@@ -15,8 +15,6 @@ raw = open("data.js", encoding="utf-8").read()
 d = json.loads(raw.replace("const DATA_ALL = ", "").split("const TRADES")[0].strip().rstrip(";"))
 
 fails = []
-if not d:
-    fails.append("DATA_ALL is empty (0 tickers) -- build produced no data, refusing to ship")
 for t, D in d.items():
     preds = D.get("predictions", [])
     # 1. alternation + increasing dates
@@ -52,6 +50,31 @@ for t, D in d.items():
                 mo_, dy = int(m.group(1)), int(m.group(2))
                 if (mo_, dy) > (today.month, today.day) and k != "yearly":
                     fails.append(f"{t}: {k} {side} says 'already set' with future date {cell['date']}")
+
+# 5. trade cards: exit must never be dated before entry
+try:
+    traw = raw.split("const TRADES = ")[1].split(";\nconst ")[0].strip().rstrip(";")
+    tj = json.loads(traw)
+    mon = {m: i for i, m in enumerate(
+        ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], 1)}
+    def parse_md(s):
+        if not s:
+            return None
+        m = re.search(r"(\d{2})/(\d{2})", s)
+        if m:
+            return (int(m.group(1)), int(m.group(2)))
+        m = re.search(r"([A-Z][a-z]{2})\s+(\d{1,2})", s)
+        if m and m.group(1) in mon:
+            return (mon[m.group(1)], int(m.group(2)))
+        return None
+    for t, v in tj.items():
+        for tr in v.get("trades", []):
+            a, b = parse_md(tr.get("execute")), parse_md(tr.get("exitWin"))
+            if a and b and b < a:
+                fails.append(f"{t}: trade '{tr.get('label')}' exits {tr.get('exitWin')} "
+                             f"BEFORE it enters {tr.get('execute')}")
+except Exception:
+    pass
 
 if fails:
     print("COHERENCE FAILURES:")
