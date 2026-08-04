@@ -104,6 +104,12 @@
 <div class="tabs" id="tabs"></div>
 
 <div class="panel">
+  <h2>Price, detected swings (H/L), and projected path</h2>
+  <div class="chartwrap"><canvas id="chart" width="1140" height="360"></canvas></div>
+  <div class="tag" id="chartTag"></div>
+</div>
+
+<div class="panel">
   <h2>Next 5 projected highs / lows — multi-method confluence</h2>
   <div class="sub" id="basis"></div>
   <table id="predTable"></table>
@@ -129,11 +135,7 @@
   <div id="srBody" style="margin-top:8px"></div>
 </div>
 
-<div class="panel">
-  <h2>Price, detected swings (H/L), and projected path</h2>
-  <div class="chartwrap"><canvas id="chart" width="1140" height="360"></canvas></div>
-  <div class="tag" id="chartTag"></div>
-</div>
+
 
 <div class="panel">
   <h2>Prediction track record — graded daily</h2>
@@ -654,9 +656,30 @@ function renderAll(D){
   (function(){
     const R = (typeof REALTRADES !== "undefined") ? REALTRADES : [];
     if(!R.length){ $("rtSub").textContent = "No real trades recorded yet — tell Claude when you execute one."; $("rtBody").innerHTML=""; return; }
-    const realized = R.filter(t => t.status === "closed").reduce((s, t) => s + (t.pnl || 0), 0);
+    const closed = R.filter(t => t.status === "closed");
+    const realized = closed.reduce((s, t) => s + (t.pnl || 0), 0);
+    // return on capital actually tied up, annualised by days held
+    let annu = null, capDays = 0, wRet = 0;
+    for (const t of closed) {
+      if (t.collateral && t.daysHeld) {
+        wRet += (t.pnl / t.collateral); capDays += t.daysHeld;
+      }
+    }
+    if (capDays > 0) annu = (wRet / capDays) * 365 * 100;
+    const monthly = annu !== null ? annu / 12 : null;
     $("rtSub").innerHTML = `Trades you actually executed, tracked against the system's playbook.
-      Realized so far: <b class="${realized >= 0 ? "good" : "bad"}">${realized >= 0 ? "+" : ""}$${realized.toLocaleString()}</b>.`;
+      Realized: <b class="${realized >= 0 ? "good" : "bad"}">${realized >= 0 ? "+" : ""}$${realized.toLocaleString()}</b>
+      across <b>${closed.length}</b> closed ${closed.length === 1 ? "trade" : "trades"}.
+      ${annu !== null ? `Return on capital deployed: <b>${monthly.toFixed(1)}%/month</b>
+        (~<b>${annu.toFixed(0)}%/yr</b> at this pace).` : ""}
+      <div style="margin-top:6px; padding:8px 12px; border-radius:8px; background:var(--panel2)">
+        <b>Goal:</b> 30%+ per year is the pass/fail line ·
+        ${annu !== null ? (annu >= 30
+          ? `<b class="good">PASSING</b> at ~${annu.toFixed(0)}%/yr on this (small, early) sample`
+          : `<b class="bad">below target</b> at ~${annu.toFixed(0)}%/yr`) : "awaiting closed trades"}
+        <div class="tag" style="margin-top:3px">Sample is tiny - two trades over ~3 weeks. Judge this after
+        20+ closed trades, not now. Annualising a short streak flatters or punishes unfairly.</div>
+      </div>`;
     $("rtBody").innerHTML = R.map(t => `
       <div style="border:1px solid var(--border); border-radius:10px; padding:10px 12px; margin:8px 0; background:var(--panel2)">
         <b>${t.ticker}</b> — ${t.structure} <span class="badge ${t.status === "open" ? "bH" : "chip"}">${t.status.toUpperCase()}</span>
