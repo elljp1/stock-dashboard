@@ -135,3 +135,33 @@ always sync to `origin/main` before editing anything, especially this file.
 mature (it's still the same handful of resolved predictions each review, not fresh data yet),
 and whether a new real trade gets opened/closed to add a third data point to the real-money
 ledger.
+
+## 2026-08-05 (Wed) — no change warranted, grades logged; confirmed yesterday's gate fix works
+
+**Fetch status:** Yahoo is still blocked from this environment on every ticker (confirmed
+this is a network policy denial at the proxy level, not a transient error). There was no
+local price cache to fall back on since the CSV files aren't committed to the repo (only
+the built dashboard is), so running the analysis engine here produced an empty `data.js`.
+That's exactly the scenario yesterday's coherence-gate fix was built for: the gate correctly
+caught it and refused to pass ("missing 6/6 expected tickers"), so I discarded that empty
+build and left the dashboard as last published by the cloud refresh job, which has real
+network access and has kept running normally (4 successful auto-refreshes since yesterday's
+review). Good confirmation the fix works as intended.
+
+**Grades reviewed (from the live, cloud-refreshed data):** Sample sizes grew a bit since
+yesterday — TSLA n=8 (0% within either window), HOOD n=7 (0%), QQQ n=8 (12% within 2 days,
+25% within 3), JPM n=7 (0%, and none of its 7 matured predictions have found a matching
+actual price yet, so its price-error stat is blank — not a bug, just a ticker where the
+timing methods haven't landed a hit yet), GOOGL n=6 (50%, still the standout), GC=F n=3
+(0%). This is the same shape as yesterday and the day before, not a new 3-day trend in
+either direction. Daily high/low range errors (the horizonGrades) stayed small and steady
+across all six tickers, mostly under 3%. Real-money ledger unchanged: still just the 2
+closed QQQ put trades from before 8/3 (+$980, +$600), nothing new opened or closed.
+
+**What changed and why:** nothing. No 3-day persistent pattern and no new bug — today's
+"empty build" situation is the known, already-handled failure mode, not a fresh one. Ledger
+and dashboard both left untouched apart from this log entry.
+
+**Watch next:** same as yesterday — whether GOOGL's 50% holds up as fresh predictions mature,
+whether JPM ever lands a matched hit as more of its predictions resolve, and whether a third
+real trade gets opened or closed.
