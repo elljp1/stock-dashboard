@@ -994,6 +994,43 @@ def analyze(tkr):
     else:
         prov_price = min(prov_price, last_close)
 
+    # ---- has the swing already TURNED? -------------------------------------
+    # ground the current swing has covered, using intraday highs/lows
+    _cs = daily[daily.index >= last_piv["date"]]
+    swing_hi = float(_cs["High"].max()) if len(_cs) else last_close
+    swing_lo = float(_cs["Low"].min()) if len(_cs) else last_close
+    _hi_dt = _cs["High"].idxmax().date() if len(_cs) else last_bar_date
+    _lo_dt = _cs["Low"].idxmin().date() if len(_cs) else last_bar_date
+    # if price has pulled back a meaningful fraction of this stock's own swing
+    # threshold, treat the extreme as FORMED and forecast the opposite leg
+    turn_note = None
+    _pb_trigger = 0.4 * THRESH
+    if prov_type == "high" and swing_hi > 0:
+        pb = (swing_hi - last_close) / swing_hi
+        if pb >= _pb_trigger:
+            turn_note = {"formed": "high", "price": round(swing_hi, 2),
+                         "date": _hi_dt.strftime("%Y-%m-%d"),
+                         "pullbackPct": round(pb * 100, 1)}
+            prov_type, prov_price = "low", swing_hi
+            last_piv = {"i": ext_i, "date": pd.Timestamp(_hi_dt, tz=ET),
+                        "type": "high", "price": swing_hi}
+    elif prov_type == "low" and swing_lo > 0:
+        pb = (last_close - swing_lo) / swing_lo
+        if pb >= _pb_trigger:
+            turn_note = {"formed": "low", "price": round(swing_lo, 2),
+                         "date": _lo_dt.strftime("%Y-%m-%d"),
+                         "pullbackPct": round(pb * 100, 1)}
+            prov_type, prov_price = "high", swing_lo
+            last_piv = {"i": ext_i, "date": pd.Timestamp(_lo_dt, tz=ET),
+                        "type": "low", "price": swing_lo}
+    # after a turn is detected the swing anchor moved - the "ground already
+    # covered" must be measured from the NEW anchor, not the old swing
+    if turn_note:
+        _cs2 = daily[daily.index >= last_piv["date"]]
+        swing_hi = float(_cs2["High"].max()) if len(_cs2) else last_close
+        swing_lo = float(_cs2["Low"].min()) if len(_cs2) else last_close
+    out["turnFormed"] = turn_note
+
     def edge_weight(obs, chance):
         return max(0.15, min(1.5, obs / chance)) if chance > 0 else 0.3
     w_gann = edge_weight(gann_rate, gann_ctrl) * MF.get("gann", 1.0)
@@ -1095,11 +1132,6 @@ def analyze(tkr):
     chosen = seq
 
     preds = []
-    # what price has ALREADY covered since the last confirmed pivot - a future
-    # extreme cannot be inside this ground (uses intraday H/L, not just closes)
-    _cs = daily[daily.index >= last_piv["date"]]
-    swing_hi = float(_cs["High"].max()) if len(_cs) else last_close
-    swing_lo = float(_cs["Low"].min()) if len(_cs) else last_close
     # price targets measure a full swing from the previous OPPOSITE extreme:
     # event #1 completes the in-progress swing, so it projects from the last
     # confirmed pivot; later events chain from each projected extreme.
@@ -1148,8 +1180,13 @@ def analyze(tkr):
         # only be used ONCE per chain, so consecutive highs (or lows) don't
         # collapse onto the same number
         lv_c = out["levels"]["resistance"] if ty == "high" else out["levels"]["support"]
+        # only snap to levels that are still inside what volatility allows in
+        # the time available - a level 15% away is not reachable in 9 sessions
+        _ceil = last_close * (1 + cap)
+        _floor = last_close * (1 - cap)
         near = [c["price"] for c in lv_c
-                if abs(c["price"] / price - 1) < 0.03 and c["price"] not in used_levels]
+                if abs(c["price"] / price - 1) < 0.03 and c["price"] not in used_levels
+                and (c["price"] <= _ceil if ty == "high" else c["price"] >= _floor)]
         if near:
             price = min(near, key=lambda v: abs(v - price))
             used_levels.add(price)
