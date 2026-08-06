@@ -323,7 +323,35 @@ function renderAll(D){
   /* predictions */
   const p1 = D.predictions[0];
   const tn = D.turnFormed;
-  $("basis").innerHTML = (tn ? `<div style="font-size:14px; margin-bottom:8px; padding:8px 12px;
+  const nr = D.nextReversal;
+  const stateCopy = {
+    "extending": ["#dafbe1", "#1a7f37", "STILL EXTENDING",
+      "price has not reached the target and the turn date is ahead - the move is intact"],
+    "target-hit-early": ["#fff8c5", "#7d4e00", "TARGET HIT EARLY - WATCHING",
+      "price reached the target ahead of its date but has not pulled back decisively. It may reverse here OR extend into the projected date - this is a re-analyse state, not a confirmed turn"],
+    "turned": ["#ffebe9", "#cf222e", "REVERSAL CONFIRMED",
+      "the extreme is in - the forecast below is for the opposite leg"]};
+  if(nr){
+    const sc = stateCopy[nr.state] || stateCopy["extending"];
+    $("basis").innerHTML = `
+      <div style="border:2px solid var(--blue); border-radius:10px; padding:12px; margin-bottom:10px; background:var(--panel)">
+        <div class="tag" style="letter-spacing:.08em">NEXT REVERSAL EXPECTED</div>
+        <div style="font-size:20px; font-weight:700; margin:2px 0">
+          <span class="badge ${nr.type==="high"?"bH":"bL"}">${nr.type.toUpperCase()}</span>
+          ${nr.date} &nbsp;<span class="num">${nr.planetHour || nr.time}</span>
+        </div>
+        <div class="num" style="font-size:14px">window ${nr.window} &nbsp;·&nbsp; price target ${fmt$(nr.price)}
+          ${nr.altTime && nr.altTime !== nr.time ? ` ·&nbsp; 2nd time ${nr.altTime}` : ""}</div>
+        <div class="tag" style="margin-top:4px">Timing is the primary call; the price target is secondary.
+          Backtested date accuracy on ${nice(D.ticker)}: ${pct(nr.hit2)} within ±2 days, ${pct(nr.hit3)} within ±3 days.</div>
+      </div>` + (tn ? `<div style="font-size:13px; margin-bottom:8px; padding:8px 12px; border-radius:8px;
+        background:${sc[0]}; border:1px solid ${sc[1]}33; color:${sc[1]}">
+        <b>Swing state: ${sc[2]}</b> - ${sc[3]}.<br>
+        <span class="num">${tn.extreme.toUpperCase()} so far ${fmt$(tn.price)} on ${tn.date} ·
+        pulled back ${tn.pullbackPct}% (a confirmed reversal needs ${tn.thresholdPct}%) ·
+        turn was due ${tn.dueDate}${tn.datePassed ? " (date passed)" : " (date still ahead)"}</span>
+      </div>` : "");
+  } else $("basis").innerHTML = (tn ? `<div style="font-size:14px; margin-bottom:8px; padding:8px 12px;
      border-radius:8px; background:#fff8c5; border:1px solid #d4a72c; color:#7d4e00">
      <b>Turn detected:</b> the ${tn.formed.toUpperCase()} formed on <b>${tn.date}</b> at
      <b>${fmt$(tn.price)}</b> - price has moved ${tn.pullbackPct}% away from it, so that swing is treated as

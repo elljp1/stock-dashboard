@@ -106,10 +106,15 @@ for t, d in D.items():
     # 3c. the turn state must agree with the first chain event's direction
     tn = d.get("turnFormed")
     if tn and preds:
-        want = "low" if tn["formed"] == "high" else "high"
-        if preds[0]["type"] != want:
-            issues.append(f"{t}: turn says {tn['formed']} formed, so next event should be a "
-                          f"{want}, but the chain predicts a {preds[0]['type']}")
+        if tn.get("state") == "turned" and tn.get("formed"):
+            want = "low" if tn["formed"] == "high" else "high"
+            if preds[0]["type"] != want:
+                issues.append(f"{t}: reversal confirmed ({tn['formed']} formed), so the next event "
+                              f"should be a {want}, but the chain predicts a {preds[0]['type']}")
+        elif tn.get("state") in ("extending", "target-hit-early"):
+            if preds[0]["type"] != tn.get("extreme"):
+                issues.append(f"{t}: swing is {tn['state']} toward a {tn.get('extreme')}, but the "
+                              f"chain's next event is a {preds[0]['type']}")
 
     # 4. trade cards line up with the chain + horizon labels
     for tr in T.get(t, {}).get("trades", []):

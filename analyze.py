@@ -1007,38 +1007,52 @@ def analyze(tkr):
     else:
         prov_price = min(prov_price, last_close)
 
-    # ---- has the swing already TURNED? -------------------------------------
-    # ground the current swing has covered, using intraday highs/lows
+    # ---- swing state: TIME is the primary signal, price is corroboration ----
+    # Hitting a price target does NOT prove a reversal. Three states:
+    #   extending        - target not yet reached, predicted turn date ahead
+    #   target-hit-early - price reached the target BEFORE its date: ambiguous,
+    #                      may reverse here or extend into the date. Re-analyse,
+    #                      do not flip direction on price alone.
+    #   turned           - reversal confirmed: the predicted date has arrived
+    #                      (with a real pullback), or the pullback is decisive
+    #                      (a full swing threshold) regardless of date.
     _cs = daily[daily.index >= last_piv["date"]]
     swing_hi = float(_cs["High"].max()) if len(_cs) else last_close
     swing_lo = float(_cs["Low"].min()) if len(_cs) else last_close
     _hi_dt = _cs["High"].idxmax().date() if len(_cs) else last_bar_date
     _lo_dt = _cs["Low"].idxmin().date() if len(_cs) else last_bar_date
-    # if price has pulled back a meaningful fraction of this stock's own swing
-    # threshold, treat the extreme as FORMED and forecast the opposite leg
-    turn_note = None
-    _pb_trigger = 0.4 * THRESH
-    if prov_type == "high" and swing_hi > 0:
-        pb = (swing_hi - last_close) / swing_hi
-        if pb >= _pb_trigger:
-            turn_note = {"formed": "high", "price": round(swing_hi, 2),
-                         "date": _hi_dt.strftime("%Y-%m-%d"),
-                         "pullbackPct": round(pb * 100, 1)}
-            prov_type, prov_price = "low", swing_hi
-            last_piv = {"i": ext_i, "date": pd.Timestamp(_hi_dt, tz=ET),
-                        "type": "high", "price": swing_hi}
-    elif prov_type == "low" and swing_lo > 0:
-        pb = (last_close - swing_lo) / swing_lo
-        if pb >= _pb_trigger:
-            turn_note = {"formed": "low", "price": round(swing_lo, 2),
-                         "date": _lo_dt.strftime("%Y-%m-%d"),
-                         "pullbackPct": round(pb * 100, 1)}
-            prov_type, prov_price = "high", swing_lo
-            last_piv = {"i": ext_i, "date": pd.Timestamp(_lo_dt, tz=ET),
-                        "type": "low", "price": swing_lo}
-    # after a turn is detected the swing anchor moved - the "ground already
-    # covered" must be measured from the NEW anchor, not the old swing
-    if turn_note:
+
+    _due = add_trading_days(last_piv["date"].date(), med_spacing)
+    _date_passed = _due <= last_bar_date
+    if prov_type == "high":
+        _pb = (swing_hi - last_close) / swing_hi if swing_hi else 0.0
+        _ext_px, _ext_dt = swing_hi, _hi_dt
+    else:
+        _pb = (last_close - swing_lo) / swing_lo if swing_lo else 0.0
+        _ext_px, _ext_dt = swing_lo, _lo_dt
+
+    _decisive = _pb >= THRESH                 # a full swing = unambiguous reversal
+    _material = _pb >= 0.4 * THRESH           # meaningful move off the extreme
+    if _decisive or (_date_passed and _material):
+        _state = "turned"
+    elif _material:
+        _state = "target-hit-early"
+    else:
+        _state = "extending"
+
+    turn_note = {"state": _state, "extreme": prov_type, "price": round(_ext_px, 2),
+                 "date": _ext_dt.strftime("%Y-%m-%d"),
+                 "pullbackPct": round(_pb * 100, 1),
+                 "dueDate": _due.strftime("%Y-%m-%d"), "datePassed": bool(_date_passed),
+                 "thresholdPct": round(THRESH * 100, 1)}
+
+    if _state == "turned":
+        # the extreme is in - forecast the opposite leg from it
+        turn_note["formed"] = prov_type
+        prov_type = "low" if prov_type == "high" else "high"
+        prov_price = _ext_px
+        last_piv = {"i": ext_i, "date": pd.Timestamp(_ext_dt, tz=ET),
+                    "type": turn_note["formed"], "price": _ext_px}
         _cs2 = daily[daily.index >= last_piv["date"]]
         swing_hi = float(_cs2["High"].max()) if len(_cs2) else last_close
         swing_lo = float(_cs2["Low"].min()) if len(_cs2) else last_close
@@ -1234,6 +1248,16 @@ def analyze(tkr):
             "methods": tags[d][:4]})
         prev_price, prev_type = price, ty
     out["predictions"] = preds
+    # THE headline: when does it reverse? (date + time first, price second)
+    if preds:
+        _p0 = preds[0]
+        out["nextReversal"] = {
+            "type": _p0["type"], "date": _p0["date"], "isoDate": _p0["isoDate"],
+            "window": _p0["dateWindow"], "time": _p0["time"],
+            "planetHour": _p0.get("planetHour"), "altTime": _p0.get("altTime"),
+            "price": _p0["price"],
+            "hit2": out["swing"].get("hitRate2d"), "hit3": out["swing"].get("hitRate3d"),
+            "state": turn_note["state"] if turn_note else None}
     out["swingExtremes"] = {"swingHi": round(swing_hi, 2), "swingLo": round(swing_lo, 2),
                             "since": last_piv["date"].strftime("%Y-%m-%d")}
 
