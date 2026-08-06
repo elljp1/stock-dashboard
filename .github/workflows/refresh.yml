@@ -8,6 +8,12 @@ on:
 permissions:
   contents: write
 
+# only one refresh at a time - overlapping runs caused racing Pages deploys
+# that cancelled each other and left the live site stale
+concurrency:
+  group: dashboard-refresh
+  cancel-in-progress: false
+
 jobs:
   refresh:
     runs-on: ubuntu-latest
