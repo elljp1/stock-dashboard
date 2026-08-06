@@ -664,6 +664,19 @@ def analyze(tkr):
     zz_df = daily[daily.index >= NOW - timedelta(days=365 * 5)]
     # volatility-scaled threshold: ~2.5x median 20d range, clamped 4..10%
     dvol = float((np.log(zz_df["Close"]).diff().rolling(20).std().median()) * np.sqrt(20))
+
+    # ===== SINGLE SOURCE OF TRUTH for how far price can travel in N sessions =====
+    # every forecast surface (chain targets, period extremes, date-picker days)
+    # calls this one function, so no two parts of the page can disagree
+    sig_d = float(np.log(daily["Close"]).diff().tail(60).std())
+    if not np.isfinite(sig_d) or sig_d <= 0:
+        sig_d = dvol / np.sqrt(20)
+    _dd20 = 1 - float(daily["Close"].iloc[-1]) / float(daily["Close"].tail(20).max())
+
+    def envelope(sessions):
+        """Max plausible % move in `sessions` trading days (widens in selloffs)."""
+        c = 1.25 * sig_d * math.sqrt(max(sessions, 0.5))
+        return c * (1 + min(1.0, 2 * max(0.0, _dd20)))
     THRESH = min(0.10, max(0.04, round(dvol * 1.3, 3)))
     pivots, cur_dir, ext_i = zigzag(zz_df, THRESH)
     if len(pivots) < 8:
@@ -1152,11 +1165,7 @@ def analyze(tkr):
         # swing (learned from grading 07/09-07/14 forecasts: dates hit, prices
         # overshot badly on short horizons)
         ahead = future.index(d) + 1
-        cap = 1.25 * (dvol / np.sqrt(20)) * np.sqrt(ahead)
-        # crash regime: when already deep below the 20d high, moves run further
-        # than calm-market vol implies - widen the cap with the drawdown
-        dd20 = 1 - last_close / float(daily["Close"].tail(20).max())
-        cap *= 1 + min(1.0, 2 * max(0.0, dd20))
+        cap = envelope(ahead)
         # a projected high can't sit below today's price (nor a low above it);
         # graded price errors feed back in as a learned calibration factor
         if ty == "high":
@@ -1239,10 +1248,6 @@ def analyze(tkr):
                    "methods": p["methods"]} for p in preds]})
 
     # ------- horizon extremes: daily / weekly / monthly / yearly -------
-    sig_d = float(np.log(daily["Close"]).diff().tail(60).std())
-    if not np.isfinite(sig_d) or sig_d <= 0:
-        sig_d = dvol / np.sqrt(20)
-
     def _snap_h(p, kind):
         lv = out["levels"]["resistance"] if kind == "high" else out["levels"]["support"]
         near = [c["price"] for c in lv if abs(c["price"] / p - 1) < 0.02]
@@ -1261,8 +1266,8 @@ def analyze(tkr):
     session = (last_bar_date if (NOW.date() == last_bar_date and NOW.hour < 16)
                else add_trading_days(last_bar_date, 1))
 
-    def proj(days, k=1.2):
-        return k * sig_d * math.sqrt(max(days, 0.5))
+    def proj(days, k=None):
+        return envelope(days)
 
     horizons = {}
     # ---- coherent extremes: one resolver, three sources, strict priority ----
@@ -1447,7 +1452,7 @@ def analyze(tkr):
     _chain_by_day = {p["isoDate"]: p for p in preds}
     for k in range(1, 91):
         fd = add_trading_days(last_bar_date, k)
-        cone = 1.15 * sig_d * math.sqrt(k)
+        cone = envelope(k)
         hi = _snap_h(last_close * (1 + cone), "high")
         lo = _snap_h(last_close * (1 - cone), "low")
         ev = _chain_by_day.get(fd.strftime("%Y-%m-%d"))
@@ -1464,6 +1469,39 @@ def analyze(tkr):
             "event": (f"{ev['type'].upper()} turn projected here" if ev else None),
             "sessions": k})
     out["dayForecasts"] = day_fc
+
+    # ---- FINAL RECONCILIATION: a period's extreme must cover every day inside
+    # it, so the date picker and the period table can never contradict --------
+    def _cover(period_key, days):
+        if period_key not in horizons or not days:
+            return
+        h_max = max(x["high"] for x in days)
+        l_min = min(x["low"] for x in days)
+        cell = horizons[period_key]
+        if h_max > cell["high"]["price"]:
+            cell["high"] = {"price": round(h_max, 2),
+                            "date": next(x["dow"] + " " + x["date"][5:] for x in days
+                                         if x["high"] == h_max) + " (statistical est.)",
+                            "time": next(x["hiTime"] for x in days if x["high"] == h_max)}
+        if l_min < cell["low"]["price"]:
+            cell["low"] = {"price": round(l_min, 2),
+                           "date": next(x["dow"] + " " + x["date"][5:] for x in days
+                                        if x["low"] == l_min) + " (statistical est.)",
+                           "time": next(x["loTime"] for x in days if x["low"] == l_min)}
+
+    _wk_end = wk_start + timedelta(days=4)
+    _cover("weekly", [x for x in day_fc
+                      if wk_start <= datetime.strptime(x["date"], "%Y-%m-%d").date() <= _wk_end])
+    _cover("monthly", [x for x in day_fc
+                       if datetime.strptime(x["date"], "%Y-%m-%d").date() <= mo_end])
+    # re-apply nesting after widening
+    _o2 = [k for k in ("daily", "weekly", "monthly", "yearly") if k in horizons]
+    for _a, _b in zip(_o2, _o2[1:]):
+        if horizons[_a]["high"]["price"] > horizons[_b]["high"]["price"]:
+            horizons[_b]["high"] = dict(horizons[_a]["high"])
+        if horizons[_a]["low"]["price"] < horizons[_b]["low"]["price"]:
+            horizons[_b]["low"] = dict(horizons[_a]["low"])
+    out["horizons"] = horizons
 
     # log horizons for future grading (replace same-day entry)
     try:

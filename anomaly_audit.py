@@ -18,6 +18,7 @@ MON = {m: i for i, m in enumerate(
     ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], 1)}
 today = date.today()
 issues = []
+notes = []
 
 
 def md(s):
@@ -80,6 +81,36 @@ for t, d in D.items():
             if lo > spot * 1.005:
                 issues.append(f"{t}: {k} projected low {lo} is above spot {spot:.2f}")
 
+    # 3b. CROSS-SURFACE SYNC: the date-picker day forecasts, the chain, and the
+    # period extremes all derive from one envelope - prove they never disagree
+    dfc = {x["date"]: x for x in d.get("dayForecasts", [])}
+    for p in preds:
+        f = dfc.get(p["isoDate"])
+        if f:
+            if p["type"] == "high" and f["high"] < p["price"] - 0.01:
+                issues.append(f"{t}: date-picker high {f['high']} on {p['isoDate']} is below the "
+                              f"chain's own high {p['price']} for that day")
+            if p["type"] == "low" and f["low"] > p["price"] + 0.01:
+                issues.append(f"{t}: date-picker low {f['low']} on {p['isoDate']} is above the "
+                              f"chain's own low {p['price']} for that day")
+    if dfc and hz.get("monthly"):
+        mo = today.strftime("%Y-%m")
+        same = [v for k2, v in dfc.items() if k2.startswith(mo)]
+        if same:
+            if max(v["high"] for v in same) > hz["monthly"]["high"]["price"] + 0.01:
+                issues.append(f"{t}: a date-picker day exceeds the monthly high "
+                              f"{hz['monthly']['high']['price']}")
+            if min(v["low"] for v in same) < hz["monthly"]["low"]["price"] - 0.01:
+                issues.append(f"{t}: a date-picker day undercuts the monthly low "
+                              f"{hz['monthly']['low']['price']}")
+    # 3c. the turn state must agree with the first chain event's direction
+    tn = d.get("turnFormed")
+    if tn and preds:
+        want = "low" if tn["formed"] == "high" else "high"
+        if preds[0]["type"] != want:
+            issues.append(f"{t}: turn says {tn['formed']} formed, so next event should be a "
+                          f"{want}, but the chain predicts a {preds[0]['type']}")
+
     # 4. trade cards line up with the chain + horizon labels
     for tr in T.get(t, {}).get("trades", []):
         a, b = md(tr.get("execute")), md(tr.get("exitWin"))
@@ -107,9 +138,9 @@ for t, d in D.items():
         if tr.get("premium", 0) <= 0 and tr.get("kind") != "NOTE":
             issues.append(f"{t}: '{tr['label'][:34]}' has no premium")
 
-    # 5. is there anything actionable now?
+    # 5. informational: no near-term setup (a market condition, not a conflict)
     if T.get(t) and not T[t].get("bestToday") and not T[t].get("bestWeek"):
-        issues.append(f"{t}: no trade actionable today or this week (all setups are far out)")
+        notes.append(f"{t}: next turn is far out - no trade today or this week")
 
 print(f"AUDIT {datetime.now():%Y-%m-%d %H:%M} - {len(D)} tickers")
 if issues:
