@@ -683,6 +683,31 @@ function renderAll(D){
       real, and why disciplined frequency beats big swings.</div>`;
   })();
 
+  /* buy & hold benchmarks — the bar any active system must beat */
+  (function(){
+    const B = (typeof BENCHMARK !== "undefined") ? BENCHMARK : null;
+    if(!B || !Object.keys(B).length){ $("bmSub").textContent = "Run benchmark to compute."; $("bmBody").innerHTML=""; return; }
+    const spans = ["1","3","5","10","20"];
+    const spy = B["SPY"] || {};
+    $("bmSub").innerHTML = `What simply <b>holding</b> would have returned (annualised, %/yr). Active trading only
+      earns its keep if it beats these — after effort and taxes. <b>${nice(D.ticker)}</b> and <b>SPY</b> (the
+      S&P 500) are the benchmarks to beat; your realized trading return is shown in the panel below.`;
+    const row = (name, v, hi) => `<tr${hi ? ' style="background:var(--panel2)"' : ''}>
+      <td><b>${nice(name)}</b></td>` + spans.map(s => {
+        const c = v[s];
+        return `<td class="num ${c ? (c.cagrPct >= 30 ? "good" : c.cagrPct >= 0 ? "" : "bad") : "tag"}">${
+          c ? (c.cagrPct > 0 ? "+" : "") + c.cagrPct + "%" : "—"}</td>`;
+      }).join("") + `</tr>`;
+    const order = Object.keys(B).filter(k => k !== "SPY");
+    $("bmBody").innerHTML = `<table><tr><th>Hold since</th>` +
+      spans.map(s => `<th>${s}y ago</th>`).join("") + `</tr>` +
+      row("SPY", spy, true) +
+      order.map(k => row(k, B[k], k === D.ticker)).join("") + `</table>
+      <div class="tag">Figures are compound annual growth rate (CAGR) — price only, dividends excluded.
+      Green = beat the 30%/yr target. Note holding is nearly effortless and tax-deferred until you sell;
+      an active system must clear these by a wide margin to be worth running.</div>`;
+  })();
+
   /* real executed trades */
   (function(){
     const R = (typeof REALTRADES !== "undefined") ? REALTRADES : [];
