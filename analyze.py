@@ -1095,6 +1095,11 @@ def analyze(tkr):
     chosen = seq
 
     preds = []
+    # what price has ALREADY covered since the last confirmed pivot - a future
+    # extreme cannot be inside this ground (uses intraday H/L, not just closes)
+    _cs = daily[daily.index >= last_piv["date"]]
+    swing_hi = float(_cs["High"].max()) if len(_cs) else last_close
+    swing_lo = float(_cs["Low"].min()) if len(_cs) else last_close
     # price targets measure a full swing from the previous OPPOSITE extreme:
     # event #1 completes the in-progress swing, so it projects from the last
     # confirmed pivot; later events chain from each projected extreme.
@@ -1126,6 +1131,18 @@ def analyze(tkr):
             price = max(min(base * (1 + med_up) * cal_hi, last_close * (1 + cap)), last_close)
         else:
             price = min(max(base * (1 - med_dn) * cal_lo, last_close * (1 - cap)), last_close)
+        # a projected extreme can NEVER sit inside ground price has already
+        # covered in the swing now under way: if QQQ already printed 728.54,
+        # a "future high" of 724 is stale. Floor/ceiling it at what really
+        # happened, and flag that the original target was already reached.
+        reached = False
+        if k == 0 and ty == prov_type:
+            if ty == "high" and swing_hi > price:
+                reached = True
+                price = swing_hi * 1.002
+            elif ty == "low" and swing_lo < price:
+                reached = True
+                price = swing_lo * 0.998
         # snap to a real support/resistance level when one sits within 3% -
         # markets turn at levels, not at abstract percentages. Each level may
         # only be used ONCE per chain, so consecutive highs (or lows) don't
@@ -1136,6 +1153,10 @@ def analyze(tkr):
         if near:
             price = min(near, key=lambda v: abs(v - price))
             used_levels.add(price)
+        # the snap must never pull a target back inside ground already covered
+        if reached:
+            price = (max(price, swing_hi * 1.002) if ty == "high"
+                     else min(price, swing_lo * 0.998))
         tmode = hi_mode if ty == "high" else lo_mode
         alt = hi_pm if ty == "high" else lo_pm
         moon_today = next((m for m in MOONS_NEXT if m["date"] == d), None)
@@ -1163,10 +1184,12 @@ def analyze(tkr):
             "planetHour": ph_str,
             "price": round(price, 2),
             "dateWindow": f"{add_trading_days(d, -2).strftime('%m/%d')}-{add_trading_days(d, 2).strftime('%m/%d')}",
-            "score": round(s, 2), "scoreMax": round(smax, 2),
+            "score": round(s, 2), "scoreMax": round(smax, 2), "reached": reached,
             "methods": tags[d][:4]})
         prev_price, prev_type = price, ty
     out["predictions"] = preds
+    out["swingExtremes"] = {"swingHi": round(swing_hi, 2), "swingLo": round(swing_lo, 2),
+                            "since": last_piv["date"].strftime("%Y-%m-%d")}
 
     # log today's predictions for future grading (re-running the same day
     # replaces that day's entry, so the latest forecast is what gets graded)
@@ -1381,6 +1404,29 @@ def analyze(tkr):
         if horizons[_a]["low"]["price"] < horizons[_b]["low"]["price"]:
             horizons[_b]["low"] = dict(horizons[_a]["low"])
     out["horizons"] = horizons
+
+    # ------- per-day forecasts for the date picker (next ~90 days) -------
+    day_fc = []
+    _chain_by_day = {p["isoDate"]: p for p in preds}
+    for k in range(1, 91):
+        fd = add_trading_days(last_bar_date, k)
+        cone = 1.15 * sig_d * math.sqrt(k)
+        hi = _snap_h(last_close * (1 + cone), "high")
+        lo = _snap_h(last_close * (1 - cone), "low")
+        ev = _chain_by_day.get(fd.strftime("%Y-%m-%d"))
+        if ev:                       # a forecast turn lands on this date
+            if ev["type"] == "high":
+                hi = max(hi, ev["price"])
+            else:
+                lo = min(lo, ev["price"])
+        day_fc.append({
+            "date": fd.strftime("%Y-%m-%d"),
+            "dow": fd.strftime("%a"),
+            "high": round(hi, 2), "low": round(lo, 2),
+            "hiTime": hz_time(fd, "high"), "loTime": hz_time(fd, "low"),
+            "event": (f"{ev['type'].upper()} turn projected here" if ev else None),
+            "sessions": k})
+    out["dayForecasts"] = day_fc
 
     # log horizons for future grading (replace same-day entry)
     try:

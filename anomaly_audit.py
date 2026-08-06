@@ -49,6 +49,19 @@ for t, d in D.items():
         if p["type"] == "low" and p["price"] > spot * 1.005:
             issues.append(f"{t}: projected LOW {p['price']} on {p['isoDate']} is ABOVE spot {spot:.2f}")
 
+    # 1b. the IN-PROGRESS event cannot sit inside ground the current swing
+    # has already covered (later chain events start from new swings, so they
+    # are legitimately free to sit anywhere)
+    sw = d.get("swingExtremes")
+    if sw and preds:
+        p0 = preds[0]
+        if p0["type"] == "high" and p0["price"] < sw["swingHi"] * 0.999:
+            issues.append(f"{t}: next HIGH {p0['price']} on {p0['isoDate']} is BELOW {sw['swingHi']} "
+                          f"already printed in this swing (since {sw['since']})")
+        if p0["type"] == "low" and p0["price"] > sw["swingLo"] * 1.001:
+            issues.append(f"{t}: next LOW {p0['price']} on {p0['isoDate']} is ABOVE {sw['swingLo']} "
+                          f"already printed in this swing (since {sw['since']})")
+
     # 2. levels sanity
     if sup and max(sup) > spot:
         issues.append(f"{t}: support {max(sup)} sits ABOVE spot {spot:.2f}")

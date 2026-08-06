@@ -117,6 +117,16 @@
 </div>
 
 <div class="panel">
+  <h2>Pick any date — projected high &amp; low for that day</h2>
+  <div class="sub">Choose a date and see the projected high and low, with the most likely time for each.</div>
+  <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+    <input type="date" id="dpInput" style="padding:8px 10px; font-size:15px; border:1px solid var(--border); border-radius:8px; background:var(--panel)">
+    <button id="dpGo" style="padding:8px 18px; font-size:15px; font-weight:700; border:1px solid var(--blue); background:var(--blue); color:#fff; border-radius:8px; cursor:pointer">Forecast</button>
+  </div>
+  <div id="dpBody" style="margin-top:10px"></div>
+</div>
+
+<div class="panel">
   <h2>Period extremes — daily / weekly / monthly / yearly</h2>
   <div class="sub" id="hzSub"></div>
   <div id="hzBody" class="tblwrap" style="margin-top:8px"></div>
@@ -336,7 +346,7 @@ function renderAll(D){
           ${p.astroTime ? `<br><span class="tag">🌙 exact lunar time: ${p.astroTime}</span>` : ""}
           ${p.planetHour ? `<br><span class="tag">⏱ hot planetary hours: ${p.planetHour} ET</span>` : ""}</td>
       <td class="big num" data-l="target">${fmt$(p.price)}</td>
-      <td data-l="signals">${p.methods.map(m=>`<span class="chip">${m}</span>`).join("")||"<span class='tag'>—</span>"}</td>
+      <td data-l="signals">${p.reached ? '<span class="badge bH" style="margin-bottom:4px; display:inline-block">already reached - target raised to what price actually printed</span><br>' : ''}${p.methods.map(m=>`<span class="chip">${m}</span>`).join("")||"<span class='tag'>—</span>"}</td>
       <td data-l="strength"><span class="num">${strength}%</span>
           <div class="conf"><i style="width:${strength}%"></i></div></td>
     </tr>`;
@@ -346,6 +356,43 @@ function renderAll(D){
    landed within ±2 trading days ${pct(pb.hitRate2d)} of the time (±3 days: ${pct(pb.hitRate3d)}). Stacking methods
    narrows attention, it doesn't create certainty. The most reliable part is time-of-day: the open
    (9:30–10:00 AM ET) sets the day's extreme far more often than any other slot.`;
+
+  /* date picker forecast */
+  (function(){
+    const F = D.dayForecasts || [];
+    const inp = $("dpInput"), body = $("dpBody");
+    if(!F.length){ body.innerHTML = "<span class='tag'>Refresh to compute.</span>"; return; }
+    inp.min = F[0].date; inp.max = F[F.length-1].date;
+    if(!inp.value) inp.value = F[0].date;
+    const show = () => {
+      const want = inp.value;
+      let r = F.find(x => x.date === want);
+      if(!r){
+        const wd = new Date(want + "T12:00:00").getDay();
+        body.innerHTML = `<div class="tag">${(wd===0||wd===6) ? "That's a weekend — markets are closed."
+          : "Outside the forecast window (next ~90 trading days)."}</div>`;
+        return;
+      }
+      const dt = new Date(r.date + "T12:00:00");
+      body.innerHTML = `
+        <div style="border:1px solid var(--border); border-radius:10px; padding:12px; background:var(--panel2)">
+          <b style="font-size:16px">${nice(D.ticker)} — ${dt.toLocaleDateString("en-US",{weekday:"long", month:"long", day:"numeric"})}</b>
+          <span class="tag">(${r.sessions} sessions out)</span>
+          ${r.event ? `<div><span class="badge ${r.event.startsWith("HIGH")?"bH":"bL"}">${r.event}</span></div>` : ""}
+          <table style="margin-top:8px"><tr><th>Projected</th><th>Price</th><th>Most likely time</th></tr>
+            <tr><td><span class="badge bH">HIGH</span></td>
+                <td class="big num">${fmt$(r.high)}</td><td class="num">${r.hiTime}</td></tr>
+            <tr><td><span class="badge bL">LOW</span></td>
+                <td class="big num">${fmt$(r.low)}</td><td class="num">${r.loTime}</td></tr>
+          </table>
+          <div class="tag" style="margin-top:6px">Range widens with distance (volatility grows with time),
+          snapped to real support/resistance where one is close. Times come from ${nice(D.ticker)}'s own
+          measured intraday pattern and hot planetary hours. Probability windows, not appointments.</div>
+        </div>`;
+    };
+    $("dpGo").onclick = show; inp.onchange = show;
+    show();
+  })();
 
   /* period extremes (horizons) */
   (function(){
