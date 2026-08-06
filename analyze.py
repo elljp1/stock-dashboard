@@ -972,6 +972,76 @@ def analyze(tkr):
     for fam, st in fam_stats.items():
         if st["n"] >= 3:
             MF[fam] = round(min(2.0, max(0.5, ((st["hits"] + 1) / (st["n"] + 2)) / base_rate)), 2)
+    # ===== EARLY / LATE / OVERSHOOT LEARNING ================================
+    # Every logged target is measured against when price ACTUALLY touched it.
+    # Hitting early, hitting late, or blowing past the level are all prediction
+    # errors - they are aggregated into two corrections applied to future calls:
+    #   timingBias    - shifts the swing rhythm (spacing) earlier or later
+    #   magnitudeBias - scales target sizes up or down
+    _ext_t = EXTREMES.get(tkr, {})
+    _ext_sorted = sorted(_ext_t.items())
+
+    def _td_signed(d0, d1):
+        sign = 1 if d1 >= d0 else -1
+        a, b = (d0, d1) if d1 >= d0 else (d1, d0)
+        n, cur = 0, a
+        while cur < b:
+            cur += timedelta(days=1)
+            if cur.weekday() < 5:
+                n += 1
+        return sign * n
+
+    early_late, over_under, touch_rows = [], [], []
+    for e in PRED_LOG["entries"]:
+        if e["ticker"] != tkr:
+            continue
+        logged = datetime.strptime(e["logged"], "%Y-%m-%d").date()
+        for p in e["preds"]:
+            pdate = datetime.strptime(p["isoDate"], "%Y-%m-%d").date()
+            tgt, ty = p["price"], p["type"]
+            # ignore trivial targets: if the level was already within 1.5% of
+            # price when logged, touching it proves nothing about timing
+            _lk = logged.strftime("%Y-%m-%d")
+            _spot_then = _ext_t.get(_lk, [None, None, None])[2]
+            if _spot_then and tgt and abs(tgt / _spot_then - 1) < 0.015:
+                continue
+            touch = None
+            for ds, v in _ext_sorted:
+                dd = datetime.strptime(ds, "%Y-%m-%d").date()
+                if dd < logged:
+                    continue
+                if (ty == "high" and v[0] >= tgt) or (ty == "low" and v[1] <= tgt):
+                    touch = dd
+                    break
+            if touch:
+                delta = _td_signed(pdate, touch)
+                early_late.append(delta)
+                touch_rows.append({"isoDate": p["isoDate"], "type": ty, "target": tgt,
+                                   "touched": touch.strftime("%Y-%m-%d"), "deltaDays": delta})
+            key = pdate.strftime("%Y-%m-%d")
+            if key in _ext_t and tgt:
+                v = _ext_t[key]
+                act = v[0] if ty == "high" else v[1]
+                over_under.append(act / tgt - 1)
+
+    # apply only HALF of the measured bias each cycle - partial adjustment keeps
+    # the model converging instead of oscillating on noisy samples
+    _raw_t = float(np.median(early_late)) if len(early_late) >= 8 else 0.0
+    timing_bias = int(round(_raw_t * 0.5))
+    timing_bias = int(np.clip(timing_bias, -int(med_spacing * 0.4), int(med_spacing * 0.4)))
+    _raw_m = float(np.median(over_under)) if len(over_under) >= 8 else 0.0
+    mag_bias = float(np.clip(_raw_m * 0.5, -0.08, 0.08))
+    med_spacing = max(2, med_spacing + timing_bias)
+    med_up = med_up * (1 + mag_bias)
+    med_dn = med_dn * (1 - mag_bias)
+    out["biasLearning"] = {
+        "samples": len(early_late), "timingBiasDays": timing_bias,
+        "rawTimingDays": round(_raw_t, 1), "rawMagnitudePct": round(_raw_m * 100, 1),
+        "medianEarlyLate": (round(float(np.median(early_late)), 1) if early_late else None),
+        "magnitudeBiasPct": round(mag_bias * 100, 1), "magSamples": len(over_under),
+        "spacingUsed": med_spacing,
+        "recent": sorted(touch_rows, key=lambda r: r["isoDate"], reverse=True)[:12]}
+
     out["trackRecord"] = {
         "since": min((e["logged"] for e in PRED_LOG["entries"] if e["ticker"] == tkr),
                      default=NOW.strftime("%Y-%m-%d")),

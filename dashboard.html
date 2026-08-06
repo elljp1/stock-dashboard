@@ -166,6 +166,12 @@
 </div>
 
 <div class="panel">
+  <h2>Self-correction — what the misses taught it</h2>
+  <div class="sub" id="blSub"></div>
+  <div id="blBody" class="tblwrap" style="margin-top:8px"></div>
+</div>
+
+<div class="panel">
   <h2>Full prediction history — <span class="tkr2"></span></h2>
   <div class="sub" id="fhSub"></div>
   <div id="fhBody" class="tblwrap" style="margin-top:8px; max-height:420px; overflow-y:auto"></div>
@@ -680,6 +686,37 @@ function renderAll(D){
       <div class="tag">±2/±3 days = share of predicted turns that landed within that many trading days of the real
       swing. Random chance for a ±2-day window on a ~10-day rhythm ≈ 20%. Bias: negative = targets run slightly
       shallow. Gold's tiny sample (few big swings) is not meaningful yet.</div>`;
+  })();
+
+  /* self-correction from early/late/overshoot errors */
+  (function(){
+    const b = D.biasLearning;
+    if(!b || !b.samples){ $("blSub").textContent =
+      "Not enough resolved targets on " + nice(D.ticker) + " yet - corrections begin once ~8 meaningful targets have been tested.";
+      $("blBody").innerHTML = ""; return; }
+    const early = b.rawTimingDays < 0;
+    $("blSub").innerHTML = `Every target is checked against the day price <b>actually</b> touched it. Hitting early,
+      late, or blowing past a level are all errors - and they feed straight back into the next forecast.
+      <div style="margin-top:6px; padding:8px 12px; border-radius:8px; background:var(--panel2)">
+        Across <b>${b.samples}</b> tested targets, ${nice(D.ticker)} reached them a median of
+        <b>${Math.abs(b.rawTimingDays)} trading days ${early ? "EARLIER" : "LATER"}</b> than predicted -
+        so the swing rhythm has been shortened by <b>${Math.abs(b.timingBiasDays)} days</b>
+        (now using <b>${b.spacingUsed}</b> days between turns).
+        Price came in <b>${Math.abs(b.rawMagnitudePct)}% ${b.rawMagnitudePct < 0 ? "short of" : "beyond"}</b> targets
+        on the predicted date, so target sizes are scaled by <b>${b.magnitudeBiasPct > 0 ? "+" : ""}${b.magnitudeBiasPct}%</b>.
+        <div class="tag" style="margin-top:3px">Only half of each measured error is applied per cycle - partial
+        adjustment converges instead of over-reacting to noise. Targets already within 1.5% of price when logged
+        are ignored (touching them proves nothing).</div>
+      </div>`;
+    if(b.recent && b.recent.length){
+      $("blBody").innerHTML = `<table><tr><th>Target</th><th>Predicted for</th><th>Actually touched</th><th>Off by</th></tr>` +
+        b.recent.map(r => `<tr>
+          <td><span class="badge ${r.type==="high"?"bH":"bL"}">${r.type[0].toUpperCase()}</span> ${fmt$(r.target)}</td>
+          <td class="num">${r.isoDate}</td><td class="num">${r.touched}</td>
+          <td class="num ${Math.abs(r.deltaDays)<=2?"good":Math.abs(r.deltaDays)<=5?"mid":"bad"}">${
+            r.deltaDays===0?"on time":(r.deltaDays<0?Math.abs(r.deltaDays)+"d early":r.deltaDays+"d late")}</td>
+        </tr>`).join("") + `</table>`;
+    }
   })();
 
   /* full prediction history */
