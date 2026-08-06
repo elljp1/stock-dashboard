@@ -100,9 +100,34 @@
 <div class="sub">Timing dashboard — when highs &amp; lows tend to happen, with Gann, Hurst, astro &amp; Fibonacci
   methods backtested per stock.</div>
 <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
-  <button id="btnUpdate" style="padding:9px 22px; font-size:15px; font-weight:700; border:1px solid var(--blue);
+  <button id="btnUpdate" style="padding:9px 20px; font-size:15px; font-weight:700; border:1px solid var(--blue);
     background:var(--blue); color:#fff; border-radius:8px; cursor:pointer">Update</button>
+  <button id="btnReanalyze" style="padding:9px 20px; font-size:15px; font-weight:700; border:1px solid var(--accent);
+    background:var(--accent); color:#fff; border-radius:8px; cursor:pointer">Reanalyze &amp; Predict</button>
   <span class="tag" id="updStatus"></span>
+</div>
+<div id="setupBox" style="display:none; margin-top:10px; padding:12px; border:1px solid var(--border);
+  border-radius:10px; background:var(--panel2); max-width:760px">
+  <b>One-time setup for live re-analysis</b>
+  <div style="font-size:13px; margin-top:6px">
+    "Reanalyze &amp; Predict" downloads fresh prices and re-runs the whole engine on GitHub's servers.
+    That needs permission, granted once per device:
+    <ol style="margin:6px 0 6px 18px; line-height:1.6">
+      <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank"><b>this token page</b></a> (you must be signed in as <b>elljp1</b>)</li>
+      <li>Repository access &rarr; <b>Only select repositories</b> &rarr; pick <b>stock-dashboard</b></li>
+      <li>Permissions &rarr; Repository permissions &rarr; <b>Actions</b> &rarr; set to <b>Read and write</b></li>
+      <li>Generate, copy it, paste below</li>
+    </ol>
+    Stored only in this browser. Never in the page, never in the repository.
+  </div>
+  <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
+    <input id="tokIn" type="password" placeholder="paste token here" style="flex:1; min-width:240px;
+      padding:8px 10px; border:1px solid var(--border); border-radius:8px">
+    <button id="tokSave" style="padding:8px 16px; font-weight:700; border:1px solid var(--green);
+      background:var(--green); color:#fff; border-radius:8px; cursor:pointer">Save</button>
+    <button id="tokCancel" style="padding:8px 16px; border:1px solid var(--border);
+      background:var(--panel); border-radius:8px; cursor:pointer">Cancel</button>
+  </div>
 </div>
 
 <div class="tabs" id="tabs"></div>
@@ -1156,6 +1181,56 @@ function renderAll(D){
       }
     }catch(e){ st.textContent = "couldn't update: " + e.message; }
     btn.disabled = false;
+  };
+
+  // full re-analysis: fresh prices + the entire engine re-run on GitHub
+  const btnRe = $("btnReanalyze"), box = $("setupBox");
+  $("tokCancel").onclick = () => { box.style.display = "none"; };
+  $("tokSave").onclick = () => {
+    const v = $("tokIn").value.trim();
+    if(!v){ st.textContent = "no token entered"; return; }
+    localStorage.setItem("ghTok", v);
+    $("tokIn").value = "";
+    box.style.display = "none";
+    st.textContent = "saved - press Reanalyze & Predict to run it";
+  };
+  btnRe.onclick = async () => {
+    const tok = localStorage.getItem("ghTok");
+    if(!tok){ box.style.display = "block"; st.textContent = "one-time setup needed for live re-analysis"; return; }
+    btnRe.disabled = true; btn.disabled = true;
+    try{
+      st.textContent = "requesting fresh prices + full re-analysis...";
+      const r = await fetch("https://api.github.com/repos/" + REPO +
+        "/actions/workflows/refresh.yml/dispatches", {
+          method:"POST",
+          headers:{Authorization:"Bearer " + tok, Accept:"application/vnd.github+json"},
+          body: JSON.stringify({ref:"main"})});
+      if(r.status === 204){
+        const before = (DATA_ALL[CUR] || {}).generated;
+        for(let i = 0; i < 48; i++){
+          await new Promise(z => setTimeout(z, 5000));
+          st.textContent = "downloading prices, re-running swings, predictions, trades... " + (i*5) + "s";
+          try{
+            const rr = await fetch(RAW + "?t=" + Date.now(), {cache:"no-store"});
+            const tx = await rr.text();
+            if(tx.indexOf('"generated": "' + before + '"') === -1){
+              swapIn(tx);
+              st.innerHTML = "re-analysed - fresh prices and new predictions as of <b>" +
+                ((DATA_ALL[CUR]||{}).generated || "") + "</b>";
+              btnRe.disabled = false; btn.disabled = false; return;
+            }
+          }catch(e){}
+        }
+        st.textContent = "still running - press Update in a minute to collect the result";
+      } else if(r.status === 401 || r.status === 403){
+        localStorage.removeItem("ghTok");
+        box.style.display = "block";
+        st.textContent = "token was rejected or expired - please create a new one";
+      } else {
+        st.textContent = "could not start re-analysis (status " + r.status + ")";
+      }
+    }catch(e){ st.textContent = "network problem: " + e.message; }
+    btnRe.disabled = false; btn.disabled = false;
   };
 
   btn.oncontextmenu = (e) => {
