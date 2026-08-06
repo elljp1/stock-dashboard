@@ -1118,12 +1118,10 @@ function renderAll(D){
   btn.oncontextmenu = (e) => {
     e.preventDefault();
     const cur = localStorage.getItem("ghTok");
-    const v = prompt(cur ? "Token saved. Paste a new one, or leave blank and press OK to remove it."
-      : "Optional: paste a GitHub fine-grained token with Actions: read+write on the dashboard repo.
-" +
-        "It is stored only in this browser, never in the page or the repo.
-" +
-        "Without it, Update simply loads the latest published data.", "");
+    const msg = cur
+      ? "Token saved. Paste a new one, or leave blank and press OK to remove it."
+      : "Optional: paste a GitHub fine-grained token (Actions: read+write) to make Update do a full data pull. Stored only in this browser - never in the page or repo. Without it, Update simply loads the latest published data.";
+    const v = prompt(msg, "");
     if(v === null) return;
     if(v.trim()){ localStorage.setItem("ghTok", v.trim()); st.innerHTML = "one-press full refresh enabled on this device"; }
     else { localStorage.removeItem("ghTok"); st.innerHTML = "token removed"; }

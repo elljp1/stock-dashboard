@@ -51,6 +51,23 @@ for t, D in d.items():
                 if (mo_, dy) > (today.month, today.day) and k != "yearly":
                     fails.append(f"{t}: {k} {side} says 'already set' with future date {cell['date']}")
 
+
+# ---- 0. the published page must actually RUN: parse every inline script -----
+# (a syntax error here renders a completely blank dashboard)
+try:
+    import esprima, re as _re
+    _html = open("index.html", encoding="utf-8").read()
+    for _i, _b in enumerate(_re.findall(r"<script>([\s\S]*?)</script>", _html)):
+        try:
+            esprima.parseScript(_b)
+        except Exception as _e:
+            fails.append(f"index.html script block {_i} is INVALID JAVASCRIPT -> {_e}. "
+                         f"The live page would render blank.")
+except ImportError:
+    print("note: esprima not installed - skipping JavaScript syntax gate")
+except FileNotFoundError:
+    pass
+
 # 5. trade cards: exit must never be dated before entry
 try:
     traw = raw.split("const TRADES = ")[1].split(";\nconst ")[0].strip().rstrip(";")
