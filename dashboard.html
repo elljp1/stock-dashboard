@@ -1081,50 +1081,93 @@ function renderAll(D){
    Statistical research, not financial advice. Past patterns do not guarantee future results.`;
 }
 
-/* ---------- Update button ---------- */
+/* ---------- Update button ----------------------------------------------
+   Pulls the newest data straight from the repository (bypasses the page cache
+   AND any publishing delay), then re-renders in place. With a saved token it
+   first triggers a full fresh-price run before fetching.                    */
 (function(){
   const btn = $("btnUpdate"), st = $("updStatus");
   const REPO = "elljp1/stock-dashboard";
-  const bust = () => location.replace(location.pathname + "?t=" + Date.now());
-  btn.onclick = async () => {
-    const tok = localStorage.getItem("ghTok");
-    if(!tok){
-      st.innerHTML = "loading the latest published data…";
-      setTimeout(bust, 400);
-      return;
+  const RAW = "https://raw.githubusercontent.com/" + REPO + "/main/data.js";
+
+  function swapIn(txt){
+    const grab = (name) => {
+      const i = txt.indexOf("const " + name + " = ");
+      if(i < 0) return null;
+      let s = txt.slice(i + ("const " + name + " = ").length);
+      s = s.split(String.fromCharCode(10) + "const ")[0].trim();
+      if(s.endsWith(";")) s = s.slice(0, -1);
+      try { return JSON.parse(s); } catch(e){ return null; }
+    };
+    const fresh = grab("DATA_ALL");
+    if(!fresh || !Object.keys(fresh).length) throw new Error("no data in response");
+    // const objects can't be rebound, but they CAN be mutated
+    Object.keys(DATA_ALL).forEach(k => delete DATA_ALL[k]);
+    Object.assign(DATA_ALL, fresh);
+    const pairs = [["TRADES", typeof TRADES !== "undefined" ? TRADES : null],
+                   ["BENCHMARK", typeof BENCHMARK !== "undefined" ? BENCHMARK : null],
+                   ["BACKFILL", typeof BACKFILL !== "undefined" ? BACKFILL : null]];
+    for(const [nm, obj] of pairs){
+      const v = grab(nm);
+      if(v && obj){ Object.keys(obj).forEach(k => delete obj[k]); Object.assign(obj, v); }
     }
-    st.innerHTML = "starting a fresh data pull…";
+    if(!DATA_ALL[CUR]) CUR = Object.keys(DATA_ALL)[0];
+    renderTabs();
+    renderAll(DATA_ALL[CUR]);
+  }
+
+  async function pullLatest(label){
+    st.textContent = label || "fetching the latest data…";
+    const r = await fetch(RAW + "?t=" + Date.now(), {cache: "no-store"});
+    if(!r.ok) throw new Error("fetch failed " + r.status);
+    swapIn(await r.text());
+    const stamp = (DATA_ALL[CUR] || {}).generated || "";
+    st.innerHTML = "updated — data as of <b>" + stamp + "</b>";
+  }
+
+  btn.onclick = async () => {
+    btn.disabled = true;
     try{
-      const r = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/refresh.yml/dispatches`, {
-        method: "POST",
-        headers: {Authorization: "Bearer " + tok, Accept: "application/vnd.github+json"},
-        body: JSON.stringify({ref: "main"})
-      });
-      if(r.status === 204){
-        let s = 100;
-        st.innerHTML = "pulling fresh prices… this takes about 90 seconds";
-        const tick = setInterval(() => {
-          s -= 5;
-          st.innerHTML = `pulling fresh prices… ~${Math.max(s,0)}s`;
-          if(s <= 0){ clearInterval(tick); bust(); }
-        }, 5000);
+      const tok = localStorage.getItem("ghTok");
+      if(tok){
+        st.textContent = "starting a fresh price pull…";
+        const r = await fetch("https://api.github.com/repos/" + REPO +
+          "/actions/workflows/refresh.yml/dispatches", {
+            method:"POST",
+            headers:{Authorization:"Bearer " + tok, Accept:"application/vnd.github+json"},
+            body: JSON.stringify({ref:"main"})});
+        if(r.status === 204){
+          const before = (DATA_ALL[CUR] || {}).generated;
+          for(let i = 0; i < 40; i++){
+            await new Promise(z => setTimeout(z, 5000));
+            st.textContent = "running fresh prices + re-analysis… " + (i*5) + "s";
+            try{
+              const rr = await fetch(RAW + "?t=" + Date.now(), {cache:"no-store"});
+              const tx = await rr.text();
+              if(tx.indexOf('"generated": "' + before + '"') === -1){ swapIn(tx);
+                st.innerHTML = "updated — fresh prices + new predictions as of <b>" +
+                  ((DATA_ALL[CUR]||{}).generated || "") + "</b>"; btn.disabled = false; return; }
+            }catch(e){}
+          }
+          st.textContent = "still running — press Update again in a minute to collect the result";
+        } else { await pullLatest("token rejected — fetching latest saved data instead"); }
       } else {
-        st.innerHTML = "couldn't start the pull (token may be expired) — loading latest published data instead";
-        setTimeout(bust, 1500);
+        await pullLatest();
       }
-    }catch(e){ st.innerHTML = "network issue — loading latest published data"; setTimeout(bust, 1200); }
+    }catch(e){ st.textContent = "couldn't update: " + e.message; }
+    btn.disabled = false;
   };
-  // long-press / right-click the button to save or clear a token for one-press full refresh
+
   btn.oncontextmenu = (e) => {
     e.preventDefault();
     const cur = localStorage.getItem("ghTok");
     const msg = cur
-      ? "Token saved. Paste a new one, or leave blank and press OK to remove it."
-      : "Optional: paste a GitHub fine-grained token (Actions: read+write) to make Update do a full data pull. Stored only in this browser - never in the page or repo. Without it, Update simply loads the latest published data.";
+      ? "Full-refresh token is saved. Paste a new one, or leave blank and press OK to remove it."
+      : "Optional: paste a GitHub fine-grained token (Actions: read+write on this repo) so Update also pulls FRESH PRICES and re-runs the analysis. Stored only in this browser. Without it, Update fetches the newest saved data.";
     const v = prompt(msg, "");
     if(v === null) return;
-    if(v.trim()){ localStorage.setItem("ghTok", v.trim()); st.innerHTML = "one-press full refresh enabled on this device"; }
-    else { localStorage.removeItem("ghTok"); st.innerHTML = "token removed"; }
+    if(v.trim()){ localStorage.setItem("ghTok", v.trim()); st.textContent = "full refresh enabled on this device"; }
+    else { localStorage.removeItem("ghTok"); st.textContent = "token removed"; }
   };
 })();
 
