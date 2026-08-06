@@ -165,3 +165,34 @@ and dashboard both left untouched apart from this log entry.
 **Watch next:** same as yesterday — whether GOOGL's 50% holds up as fresh predictions mature,
 whether JPM ever lands a matched hit as more of its predictions resolve, and whether a third
 real trade gets opened or closed.
+
+## 2026-08-06 (Thu) — no change warranted, grades logged
+
+**Fetch status:** same as the last two days — Yahoo is still blocked from this environment
+at the network-policy level (checked the proxy's own status log, which shows repeated "403
+to CONNECT" gateway rejections for query1.finance.yahoo.com, not a transient error). Running
+the analysis engine here with no cached CSVs produced an empty `data.js` as expected; the
+coherence gate rejected it correctly, so I discarded that build and left the dashboard as
+last published by the cloud refresh job. Confirmed the cloud job is healthy: `data.js` was
+generated today at 12:04 PM ET and the trade-card sheet at 3:42 PM ET, both current.
+
+**Grades reviewed (from the live, cloud-refreshed data, 10 tickers now tracked):** TSLA n=9
+(0% within either window), HOOD n=8 (0%), QQQ n=9 (22% within 2 days, 33% within 3 — its best
+showing yet), JPM n=8 (still 0%, still none of its matured predictions have found a matching
+actual swing), GOOGL n=6 (50%, holding steady), GC=F n=4 (0%). NVDA, AMZN, SPY and VOO are
+too new (added 8/5) to have any matured predictions yet. Daily high/low range errors stayed
+small across tickers with data, nothing outside the normal band. Real-money ledger unchanged:
+still just the 2 closed QQQ put trades from before 8/3 (+$980, +$600).
+
+**What changed and why:** nothing. JPM's 0-for-8 has now held for a third straight review,
+which is the discipline's normal bar for a code change — but I looked into *why* today rather
+than just re-flagging it, and it traces to genuinely low realized volatility in JPM's own
+swing pattern (checked `daily_extremes.json`: JPM's actual daily highs/lows during this
+window sit close together, so the zigzag detector — which is shared logic, not JPM-specific —
+finds few qualifying pivots to grade against). That's a property of the stock, not a bug in
+the matching code, so nothing to fix; noting it here so this doesn't get re-investigated as
+a "new" pattern next time it's still 0%.
+
+**Watch next:** whether JPM ever lands a matched hit as more predictions resolve, whether
+QQQ's improving hit rate continues, and whether the first NVDA/AMZN/SPY/VOO predictions
+mature enough by the next couple of reviews to start showing grades.
