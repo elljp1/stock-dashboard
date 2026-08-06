@@ -33,9 +33,18 @@ def _mid(o):
     return o.get("lastPrice", 0) or 0
 
 
-def _nearest(strikes, target, below=True):
+def _nearest(strikes, target, below=True, either=False):
+    if either and strikes:
+        return min(strikes, key=lambda s: abs(s - target))
     c = [s for s in strikes if (s <= target if below else s >= target)]
-    return (max(c) if below else min(c)) if c else None
+    if c:
+        best = max(c) if below else min(c)
+        # if the one-sided pick is far off but a closer strike exists, take it
+        alt = min(strikes, key=lambda s: abs(s - target))
+        if target and abs(best / target - 1) > 0.03 and abs(alt / target - 1) < abs(best / target - 1):
+            return alt
+        return best
+    return min(strikes, key=lambda s: abs(s - target)) if strikes else None
 
 
 def _when(ev):

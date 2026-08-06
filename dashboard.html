@@ -98,8 +98,12 @@
 
 <h1><span id="tkr"></span> <span class="px" id="price"></span> <span class="sub" id="updated"></span></h1>
 <div class="sub">Timing dashboard — when highs &amp; lows tend to happen, with Gann, Hurst, astro &amp; Fibonacci
-  methods backtested per stock. To refresh data: double-click <b>refresh.bat</b>. To change the stock list:
-  edit <b>tickers.txt</b> (one symbol per line), then refresh.</div>
+  methods backtested per stock.</div>
+<div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
+  <button id="btnUpdate" style="padding:9px 22px; font-size:15px; font-weight:700; border:1px solid var(--blue);
+    background:var(--blue); color:#fff; border-radius:8px; cursor:pointer">Update</button>
+  <span class="tag" id="updStatus"></span>
+</div>
 
 <div class="tabs" id="tabs"></div>
 
@@ -423,6 +427,9 @@ function renderAll(D){
                 <td class="big num">${fmt$(r.high)}</td><td class="num">${r.hiTime}</td></tr>
             <tr><td><span class="badge bL">LOW</span></td>
                 <td class="big num">${fmt$(r.low)}</td><td class="num">${r.loTime}</td></tr>
+            ${r.mid !== undefined ? `<tr><td class="tag">expected path</td>
+                <td class="num">${fmt$(r.mid)}</td>
+                <td class="tag">where the forecast has price sitting that day</td></tr>` : ""}
           </table>
           <div class="tag" style="margin-top:6px">Range widens with distance (volatility grows with time),
           snapped to real support/resistance where one is close. Times come from ${nice(D.ticker)}'s own
@@ -1073,6 +1080,55 @@ function renderAll(D){
    seasonality over ${D.seasonalityYears} years. Data: Yahoo Finance. Generated ${D.generated}.
    Statistical research, not financial advice. Past patterns do not guarantee future results.`;
 }
+
+/* ---------- Update button ---------- */
+(function(){
+  const btn = $("btnUpdate"), st = $("updStatus");
+  const REPO = "elljp1/stock-dashboard";
+  const bust = () => location.replace(location.pathname + "?t=" + Date.now());
+  btn.onclick = async () => {
+    const tok = localStorage.getItem("ghTok");
+    if(!tok){
+      st.innerHTML = "loading the latest published data…";
+      setTimeout(bust, 400);
+      return;
+    }
+    st.innerHTML = "starting a fresh data pull…";
+    try{
+      const r = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/refresh.yml/dispatches`, {
+        method: "POST",
+        headers: {Authorization: "Bearer " + tok, Accept: "application/vnd.github+json"},
+        body: JSON.stringify({ref: "main"})
+      });
+      if(r.status === 204){
+        let s = 100;
+        st.innerHTML = "pulling fresh prices… this takes about 90 seconds";
+        const tick = setInterval(() => {
+          s -= 5;
+          st.innerHTML = `pulling fresh prices… ~${Math.max(s,0)}s`;
+          if(s <= 0){ clearInterval(tick); bust(); }
+        }, 5000);
+      } else {
+        st.innerHTML = "couldn't start the pull (token may be expired) — loading latest published data instead";
+        setTimeout(bust, 1500);
+      }
+    }catch(e){ st.innerHTML = "network issue — loading latest published data"; setTimeout(bust, 1200); }
+  };
+  // long-press / right-click the button to save or clear a token for one-press full refresh
+  btn.oncontextmenu = (e) => {
+    e.preventDefault();
+    const cur = localStorage.getItem("ghTok");
+    const v = prompt(cur ? "Token saved. Paste a new one, or leave blank and press OK to remove it."
+      : "Optional: paste a GitHub fine-grained token with Actions: read+write on the dashboard repo.
+" +
+        "It is stored only in this browser, never in the page or the repo.
+" +
+        "Without it, Update simply loads the latest published data.", "");
+    if(v === null) return;
+    if(v.trim()){ localStorage.setItem("ghTok", v.trim()); st.innerHTML = "one-press full refresh enabled on this device"; }
+    else { localStorage.removeItem("ghTok"); st.innerHTML = "token removed"; }
+  };
+})();
 
 renderTabs();
 renderAll(DATA_ALL[CUR]);

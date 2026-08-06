@@ -1283,8 +1283,9 @@ def analyze(tkr):
         if near:
             price = min(near, key=lambda v: abs(v - price))
             used_levels.add(price)
-        # the snap must never pull a target back inside ground already covered
-        if reached:
+        # the snap must never pull the IN-PROGRESS target back inside ground the
+        # current swing has already covered - enforce after snapping, always
+        if k == 0 and ty == prov_type:
             price = (max(price, swing_hi * 1.002) if ty == "high"
                      else min(price, swing_lo * 0.998))
         tmode = hi_mode if ty == "high" else lo_mode
@@ -1541,24 +1542,50 @@ def analyze(tkr):
             horizons[_b]["low"] = dict(horizons[_a]["low"])
     out["horizons"] = horizons
 
-    # ------- per-day forecasts for the date picker (next ~90 days) -------
+    # ------- per-day forecasts: follow the PREDICTED PATH, not a cone -------
+    # Expected price walks from today's price through each forecast turn; each
+    # day gets a normal daily range around that path, widening modestly with
+    # distance. This makes consecutive days progress sensibly (rising into a
+    # projected high, falling into a projected low) instead of pinning to one
+    # level while the opposite side drifts forever.
+    _pts = [(last_bar_date, last_close)] + [
+        (datetime.strptime(p["isoDate"], "%Y-%m-%d").date(), p["price"]) for p in preds]
+
+    def _path(d):
+        if d <= _pts[0][0]:
+            return _pts[0][1]
+        for (d0, p0), (d1, p1) in zip(_pts, _pts[1:]):
+            if d0 <= d <= d1:
+                span = (d1 - d0).days or 1
+                return p0 + (p1 - p0) * ((d - d0).days / span)
+        return _pts[-1][1]
+
     day_fc = []
     _chain_by_day = {p["isoDate"]: p for p in preds}
     for k in range(1, 91):
         fd = add_trading_days(last_bar_date, k)
-        cone = envelope(k)
-        hi = _snap_h(last_close * (1 + cone), "high")
-        lo = _snap_h(last_close * (1 - cone), "low")
+        mid = _path(fd)
+        # a single session's expected swing, widened slowly for uncertainty
+        r = sig_d * (1.0 + 0.12 * math.sqrt(k))
+        hi, lo = mid * (1 + r), mid * (1 - r)
         ev = _chain_by_day.get(fd.strftime("%Y-%m-%d"))
-        if ev:                       # a forecast turn lands on this date
+        if ev:                      # a projected turn lands on this date
             if ev["type"] == "high":
                 hi = max(hi, ev["price"])
             else:
                 lo = min(lo, ev["price"])
+        # gentle level magnetism only when a level is genuinely close
+        for lv in out["levels"]["resistance"]:
+            if abs(lv["price"] / hi - 1) < 0.006:
+                hi = lv["price"]
+                break
+        for lv in out["levels"]["support"]:
+            if abs(lv["price"] / lo - 1) < 0.006:
+                lo = lv["price"]
+                break
         day_fc.append({
-            "date": fd.strftime("%Y-%m-%d"),
-            "dow": fd.strftime("%a"),
-            "high": round(hi, 2), "low": round(lo, 2),
+            "date": fd.strftime("%Y-%m-%d"), "dow": fd.strftime("%a"),
+            "high": round(hi, 2), "low": round(lo, 2), "mid": round(mid, 2),
             "hiTime": hz_time(fd, "high"), "loTime": hz_time(fd, "low"),
             "event": (f"{ev['type'].upper()} turn projected here" if ev else None),
             "sessions": k})
