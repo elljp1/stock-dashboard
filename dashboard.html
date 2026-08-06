@@ -322,7 +322,12 @@ function renderAll(D){
 
   /* predictions */
   const p1 = D.predictions[0];
-  $("basis").innerHTML = `<div style="font-size:15px; margin-bottom:8px; padding:8px 12px; border-radius:8px;
+  const tn = D.turnFormed;
+  $("basis").innerHTML = (tn ? `<div style="font-size:14px; margin-bottom:8px; padding:8px 12px;
+     border-radius:8px; background:#fff8c5; border:1px solid #d4a72c; color:#7d4e00">
+     <b>Turn detected:</b> the ${tn.formed.toUpperCase()} formed on <b>${tn.date}</b> at
+     <b>${fmt$(tn.price)}</b> - price has moved ${tn.pullbackPct}% away from it, so that swing is treated as
+     complete and the forecast below is for the OPPOSITE leg.</div>` : "") + `<div style="font-size:15px; margin-bottom:8px; padding:8px 12px; border-radius:8px;
    background:${p1.type==="low" ? "#ffebe9" : "#dafbe1"}">
    <b>Right now:</b> ${nice(D.ticker)} is in a ${p1.type==="low" ? "falling" : "rising"} swing —
    the first call below is where this move is projected to END:
