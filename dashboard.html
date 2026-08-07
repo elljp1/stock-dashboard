@@ -317,10 +317,18 @@ function switchTo(t){
 
 /* size a canvas to its container so charts fit phone screens */
 function fit(c, maxW, ratio){
+  const dpr = window.devicePixelRatio || 1;
   const w = Math.max(300, Math.min(maxW, (c.parentElement.clientWidth || maxW) - 4));
-  c.width = w;
-  c.height = Math.round(w * (w < 600 ? Math.max(ratio, 0.42) : ratio));
+  const hh = Math.round(w * (w < 600 ? Math.max(ratio, 0.42) : ratio));
+  c.width = Math.round(w * dpr);        // real pixels - kills the blur
+  c.height = Math.round(hh * dpr);
+  c.style.width = w + "px";             // logical size on screen
+  c.style.height = hh + "px";
+  c.getContext("2d").setTransform(dpr, 0, 0, dpr, 0, 0);
+  c.__w = w; c.__h = hh;                // drawing math stays in logical units
 }
+function cw(c){ return c.__w || c.width; }
+function ch(c){ return c.__h || c.height; }
 
 /* ---------- bar chart helper ---------- */
 function bars(id, labels, values, opts={}){
@@ -534,34 +542,57 @@ function renderAll(D){
     const wrap = c.parentElement;
     const mob = (wrap.clientWidth || 1140) < 600;
     if (mob) {
-      // phones: draw at full width inside a swipeable strip
-      c.width = 1000; c.height = 340;
-      c.style.width = "1000px"; c.style.maxWidth = "none";
+      // phones: draw at full width inside a swipeable strip, at real pixel density
+      const dpr = window.devicePixelRatio || 1;
+      c.width = Math.round(1000 * dpr); c.height = Math.round(360 * dpr);
+      c.style.width = "1000px"; c.style.height = "360px"; c.style.maxWidth = "none";
+      c.getContext("2d").setTransform(dpr, 0, 0, dpr, 0, 0);
+      c.__w = 1000; c.__h = 360;
     } else {
       c.style.width = "100%"; c.style.maxWidth = "";
       fit(c, 1140, 0.316);
     }
-    x.clearRect(0,0,c.width,c.height);
+    x.clearRect(0,0,cw(c),ch(c));
     const dates = D.chart.dates, closes = D.chart.closes, preds = D.predictions;
     const allDates = dates.concat(preds.map(p=>p.isoDate));
     const allPx = closes.concat(preds.map(p=>p.price));
     const t0 = new Date(allDates[0]).getTime(), t1 = new Date(allDates[allDates.length-1]).getTime();
     const pMin = Math.min(...allPx)*0.96, pMax = Math.max(...allPx)*1.04;
-    const W=c.width, H=c.height, L=52, R=16, T=16, B=24;
+    const W=cw(c), H=ch(c), L=64, R=62, T=18, B=34;
     const X = d => L + (new Date(d).getTime()-t0)/(t1-t0)*(W-L-R);
     const Y = p => T + (1-(p-pMin)/(pMax-pMin))*(H-T-B);
-    x.strokeStyle="#eaeef2"; x.fillStyle="#57606a"; x.font="11px Segoe UI"; x.textAlign="right";
-    for(let g=0; g<=4; g++){
-      const p = pMin + g*(pMax-pMin)/4, y = Y(p);
-      x.beginPath(); x.moveTo(L,y); x.lineTo(W-R,y); x.stroke();
-      x.fillText("$"+Math.round(p), L-4, y+4);
+    // ---- price axis: 6 levels, bold and legible
+    x.lineWidth = 1;
+    x.font = "600 13px Segoe UI"; x.textAlign = "right";
+    for(let g=0; g<=6; g++){
+      const p = pMin + g*(pMax-pMin)/6, y = Y(p);
+      x.strokeStyle = "#e6ebf0"; x.beginPath(); x.moveTo(L,y); x.lineTo(W-R,y); x.stroke();
+      const plbl = "$" + (pMax-pMin < 40 ? p.toFixed(2) : Math.round(p).toLocaleString());
+      x.fillStyle = "#3d4650";
+      x.textAlign = "right"; x.fillText(plbl, L-7, y+4);
+      // repeat on the right edge: the strip auto-scrolls right on phones,
+      // which would otherwise hide the price scale entirely
+      x.textAlign = "left"; x.fillText(plbl, W-R+4, y+4);
     }
-    x.textAlign="center";
-    let lastM=-1;
-    for(const d of allDates){
-      const dt=new Date(d);
-      if(dt.getMonth()!==lastM){ lastM=dt.getMonth();
-        x.fillText(dt.toLocaleString("en",{month:"short"}), X(d), H-8);}
+    // ---- date axis: real dates at even spacing, with tick marks
+    x.textAlign = "center"; x.font = "600 12px Segoe UI";
+    const step = Math.max(1, Math.round(allDates.length / (W < 700 ? 6 : 11)));
+    for(let i = 0; i < allDates.length; i += step){
+      const d = allDates[i], px = X(d), dt = new Date(d + "T12:00:00");
+      x.strokeStyle = "#eef2f6"; x.beginPath(); x.moveTo(px, T); x.lineTo(px, H-B); x.stroke();
+      x.strokeStyle = "#c8d1da"; x.beginPath(); x.moveTo(px, H-B); x.lineTo(px, H-B+5); x.stroke();
+      x.fillStyle = "#3d4650";
+      x.fillText(dt.toLocaleString("en", {month:"short", day:"numeric"}), px, H-B+18);
+    }
+    // today marker
+    const todayISO = new Date().toISOString().slice(0,10);
+    if(new Date(todayISO) >= new Date(allDates[0])){
+      const tx = X(todayISO);
+      x.strokeStyle = "#8250df"; x.setLineDash([3,3]); x.lineWidth = 1.5;
+      x.beginPath(); x.moveTo(tx, T); x.lineTo(tx, H-B); x.stroke();
+      x.setLineDash([]); x.lineWidth = 1;
+      x.fillStyle = "#8250df"; x.font = "700 11px Segoe UI";
+      x.fillText("today", tx, T + 11);
     }
     if(D.levels){
       x.setLineDash([2,3]); x.lineWidth=1; x.textAlign="left"; x.font="10px Segoe UI";
@@ -575,15 +606,15 @@ function renderAll(D){
       }
       x.setLineDash([]); x.textAlign="center";
     }
-    x.strokeStyle="#0969da"; x.lineWidth=1.6; x.beginPath();
+    x.strokeStyle="#0969da"; x.lineWidth=2.2; x.lineJoin="round"; x.beginPath();
     dates.forEach((d,i)=>{ const px=X(d), py=Y(closes[i]); i?x.lineTo(px,py):x.moveTo(px,py); });
     x.stroke();
     for(const p of D.chart.pivots){
       if(new Date(p.date).getTime() < t0) continue;
       x.fillStyle = p.type==="high" ? "#1a7f37" : "#cf222e";
       x.beginPath(); x.arc(X(p.date), Y(p.price), 4.5, 0, 7); x.fill();
-      x.fillStyle="#1f2328"; x.font="10px Segoe UI";
-      x.fillText(p.type==="high"?"H":"L", X(p.date), Y(p.price) + (p.type==="high"?-8:16));
+      x.fillStyle="#1f2328"; x.font="700 12px Segoe UI";
+      x.fillText(p.type==="high"?"H":"L", X(p.date), Y(p.price) + (p.type==="high"?-9:18));
     }
     x.strokeStyle="#8250df"; x.setLineDash([6,5]); x.lineWidth=1.4; x.beginPath();
     x.moveTo(X(dates[dates.length-1]), Y(closes[closes.length-1]));
@@ -595,13 +626,17 @@ function renderAll(D){
       x.beginPath(); x.arc(px, py, 5, 0, 7); x.fill();
       x.strokeStyle="#8250df"; x.lineWidth=1.5; x.beginPath(); x.arc(px, py, 8, 0, 7); x.stroke();
       x.fillStyle="#1f2328"; x.textAlign="center";
-      if(p.type==="high"){
-        x.font="bold 11px Segoe UI"; x.fillText("$"+Math.round(p.price), px, py-26);
-        x.font="10px Segoe UI";      x.fillText(p.date.split(" ")[1], px, py-14);
-      }else{
-        x.font="10px Segoe UI";      x.fillText(p.date.split(" ")[1], px, py+20);
-        x.font="bold 11px Segoe UI"; x.fillText("$"+Math.round(p.price), px, py+33);
-      }
+      const lbl = "$" + (p.price < 100 ? p.price.toFixed(2) : Math.round(p.price).toLocaleString());
+      const dlbl = p.date.split(" ")[1];
+      x.font = "700 13px Segoe UI";
+      const wLbl = Math.max(x.measureText(lbl).width, x.measureText(dlbl).width) + 10;
+      const boxY = p.type==="high" ? py-40 : py+10;
+      x.fillStyle = "rgba(255,255,255,0.88)";
+      x.fillRect(px - wLbl/2, boxY, wLbl, 30);
+      x.fillStyle = p.type==="high" ? "#1a7f37" : "#cf222e";
+      x.fillText(lbl, px, boxY + 13);
+      x.fillStyle = "#57606a"; x.font = "600 11px Segoe UI";
+      x.fillText(dlbl, px, boxY + 25);
     }
     if (mob) wrap.scrollLeft = wrap.scrollWidth;   // land on the newest data
     $("chartTag").textContent = `Solid line: actual daily closes (9 months). Dots: confirmed ${D.swing.thresholdPct}% swing pivots. Dashed: the confluence forecast with date & price at each marker — an illustration of rhythm, not a promise.` + (mob ? " Swipe the chart left/right to see history; pinch to zoom." : "");
