@@ -196,3 +196,46 @@ a "new" pattern next time it's still 0%.
 **Watch next:** whether JPM ever lands a matched hit as more predictions resolve, whether
 QQQ's improving hit rate continues, and whether the first NVDA/AMZN/SPY/VOO predictions
 mature enough by the next couple of reviews to start showing grades.
+
+## 2026-08-07 (Fri) — fixed a coherence-gate blind spot, grades logged
+
+**Fetch status:** Yahoo is still blocked from this environment (403 on every ticker, same
+gateway-level block as the last several days). `analyze.py` ran on no cached CSVs and, as
+expected, produced an empty `data.js` (0 tickers). This time, checking the gate's own
+behavior rather than trusting it, I found it was NOT actually catching this: `coherence_check.py`
+validates ticker-by-ticker, so an empty dataset makes its checking loop iterate zero times and
+it printed "coherence check PASSED for 0 tickers" with exit 0 — a silent pass on a build with
+no data at all. That's the one bug worth fixing today (see below). I discarded the empty
+`data.js`/`index.html`/`dashboard_single.html` and left the live dashboard as last published
+by the cloud refresh job, which is healthy (generated today around 9:09 PM ET).
+
+**Grades reviewed (10 tickers tracked):** TSLA n=10 (30% within 2 days, 40% within 3 — up
+from 0% yesterday) and QQQ n=10 (30%/40%, similarly improved) both jumped because the
+self-grading engine re-matches *all* past predictions against fresh actual-price data each
+run, so predictions that looked like misses can retroactively find their match once more
+price history accumulates — a good sign the grading is working as intended, not noise from
+a code change. GOOGL n=6 holds steady at 50%. JPM n=9 is still 0%, unchanged from the
+already-diagnosed cause (its own daily range is tight, so the shared zigzag detector finds
+few pivots to grade against — a property of the stock, not a bug). GC=F n=5 is 0%. NVDA,
+AMZN, SPY, VOO are still too new for matured grades. HOOD n=9 is also still 0% and has been
+0% since tracking began — but today I checked whether the same "low volatility" explanation
+that lets JPM off the hook applies here, and it doesn't: HOOD's actual daily range (5.5%
+average over the last 20 sessions) is the *highest* of all ten tracked tickers, well above
+JPM (2.2%) and even above TSLA and GOOGL, both of which do land hits. Most of HOOD's resolved
+predictions show no matched actual date/price at all, not just a timing miss. That looks like
+a real gap in the matching logic rather than a stock property, but I'd already used today's
+one code change on the coherence-gate fix, so I'm flagging it rather than touching code twice
+in one day. Real-money ledger unchanged: still the 2 closed QQQ puts (+$980, +$600). The
+option-trade sheet was refreshed again today by the cloud job; nothing in it has graded yet.
+
+**What changed and why:** added one check to `coherence_check.py` — if `data.js` parses to
+zero tickers, the build now fails the gate explicitly instead of trivially passing. Verified
+it rejects a synthetic empty `data.js` (exit 1) and still passes the real 10-ticker build
+(exit 0) without changes to any pass/fail behavior on real data. This closes a real risk: a
+failed fetch plus a silent "PASSED" could let an automated push wipe the live dashboard's
+data with nothing to catch it.
+
+**Watch next:** whether HOOD's unmatched predictions turn out to be a genuine bug in the
+swing-matching window (worth digging into the matching code directly next time this comes
+up), whether JPM ever lands a hit, whether TSLA/QQQ's newly-improved hit rates hold up, and
+whether NVDA/AMZN/SPY/VOO start showing their first grades.

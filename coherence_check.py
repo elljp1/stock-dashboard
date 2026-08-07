@@ -15,6 +15,11 @@ raw = open("data.js", encoding="utf-8").read()
 d = json.loads(raw.replace("const DATA_ALL = ", "").split("const TRADES")[0].strip().rstrip(";"))
 
 fails = []
+# 0b. an empty dataset must never pass silently - the per-ticker checks below
+# have nothing to loop over and would otherwise report a trivial PASS, letting
+# a failed fetch/analyze run wipe out the live dashboard's data.
+if not d:
+    fails.append("data.js contains 0 tickers - build produced no data, refusing to publish")
 for t, D in d.items():
     preds = D.get("predictions", [])
     # 1. alternation + increasing dates
