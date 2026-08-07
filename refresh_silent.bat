@@ -24,5 +24,6 @@ REM PUBLISH DISABLED - the cloud workflow is the single publisher
 REM git -C site -c user.name="dashboard-bot" -c user.email="dashboard-bot@users.noreply.github.com" commit -m "auto data refresh" >> refresh_log.txt 2>&1
 REM PUBLISH DISABLED - the cloud workflow is the single publisher
 REM git -C site push origin main >> refresh_log.txt 2>&1
+"C:\Users\micro\AppData\Local\Programs\Python\Python312\python.exe" publish_if_stale.py >> refresh_log.txt 2>&1
 echo ==== refresh finished %date% %time% ==== >> refresh_log.txt
 

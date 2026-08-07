@@ -1141,13 +1141,41 @@ function renderAll(D){
     renderAll(DATA_ALL[CUR]);
   }
 
+  function etNow(){
+    return new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"}));
+  }
+  function marketState(){
+    const n = etNow(), d = n.getDay(), mins = n.getHours()*60 + n.getMinutes();
+    if(d === 0 || d === 6) return {open:false, why:"weekend - markets closed"};
+    if(mins < 570) return {open:false, why:"pre-market - opens 9:30 AM ET"};
+    if(mins > 960) return {open:false, why:"after hours - closed at 4:00 PM ET"};
+    return {open:true, why:"market open"};
+  }
+  function freshness(){
+    const g = (DATA_ALL[CUR] || {}).generated || "";
+    const m = g.match(/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}) (AM|PM)/);
+    if(!m) return g;
+    let hr = parseInt(m[4],10) % 12; if(m[6] === "PM") hr += 12;
+    const dt = new Date(+m[1], +m[2]-1, +m[3], hr, +m[5]);
+    const mins = Math.max(0, Math.round((etNow() - dt)/60000));
+    const age = mins < 60 ? mins + " min old"
+              : Math.floor(mins/60) + "h " + (mins%60) + "m old";
+    const ms = marketState();
+    const label = m[4] + ":" + m[5] + " " + m[6];
+    if(!ms.open)
+      return "latest data <b>" + label + " ET</b> (" + age + ") - " + ms.why +
+             ", so prices will not change until the open. Press <b>Reanalyze &amp; Predict</b> to force a fresh pull anyway.";
+    if(mins > 75)
+      return "latest data <b>" + label + " ET</b> (" + age + ") - the scheduled refresh looks overdue. " +
+             "Press <b>Reanalyze &amp; Predict</b> for live prices now.";
+    return "up to date - data as of <b>" + label + " ET</b> (" + age + "), " + ms.why;
+  }
   async function pullLatest(label){
-    st.textContent = label || "fetching the latest data…";
+    st.textContent = label || "fetching the latest data...";
     const r = await fetch(RAW + "?t=" + Date.now(), {cache: "no-store"});
     if(!r.ok) throw new Error("fetch failed " + r.status);
     swapIn(await r.text());
-    const stamp = (DATA_ALL[CUR] || {}).generated || "";
-    st.innerHTML = "updated — data as of <b>" + stamp + "</b>";
+    st.innerHTML = freshness();
   }
 
   btn.onclick = async () => {
@@ -1170,8 +1198,7 @@ function renderAll(D){
               const rr = await fetch(RAW + "?t=" + Date.now(), {cache:"no-store"});
               const tx = await rr.text();
               if(tx.indexOf('"generated": "' + before + '"') === -1){ swapIn(tx);
-                st.innerHTML = "updated — fresh prices + new predictions as of <b>" +
-                  ((DATA_ALL[CUR]||{}).generated || "") + "</b>"; btn.disabled = false; return; }
+                st.innerHTML = freshness(); btn.disabled = false; return; }
             }catch(e){}
           }
           st.textContent = "still running — press Update again in a minute to collect the result";
@@ -1215,8 +1242,7 @@ function renderAll(D){
             const tx = await rr.text();
             if(tx.indexOf('"generated": "' + before + '"') === -1){
               swapIn(tx);
-              st.innerHTML = "re-analysed - fresh prices and new predictions as of <b>" +
-                ((DATA_ALL[CUR]||{}).generated || "") + "</b>";
+              st.innerHTML = "re-analysed with live prices - " + freshness();
               btnRe.disabled = false; btn.disabled = false; return;
             }
           }catch(e){}
@@ -1233,6 +1259,7 @@ function renderAll(D){
     btnRe.disabled = false; btn.disabled = false;
   };
 
+  window.__freshness = freshness;
   btn.oncontextmenu = (e) => {
     e.preventDefault();
     const cur = localStorage.getItem("ghTok");
@@ -1248,6 +1275,7 @@ function renderAll(D){
 
 renderTabs();
 renderAll(DATA_ALL[CUR]);
+try { document.getElementById("updStatus").innerHTML = window.__freshness ? window.__freshness() : ""; } catch(e){}
 
 /* re-render on rotation / resize so charts refit the screen */
 let _rt = null;
