@@ -239,3 +239,39 @@ data with nothing to catch it.
 swing-matching window (worth digging into the matching code directly next time this comes
 up), whether JPM ever lands a hit, whether TSLA/QQQ's newly-improved hit rates hold up, and
 whether NVDA/AMZN/SPY/VOO start showing their first grades.
+
+## 2026-08-08 (Sat) — no change; solved yesterday's HOOD mystery, it's not a bug
+
+**Fetch status:** Yahoo is still blocked from this environment (confirmed again via the
+proxy's own status log: repeated "403 to CONNECT" gateway rejections for
+query1.finance.yahoo.com, a policy denial, not a transient error). No cached CSVs to fall
+back on, so running the engine here produced an empty `data.js`; the coherence gate
+correctly rejected it, and I discarded that build and left the dashboard exactly as last
+published by Friday's cloud refresh (healthy, generated 8/7 ~5-9 PM ET). It's also Saturday,
+so there was no new trading session to grade anyway (the cloud refresh only runs Mon-Fri).
+
+**Grades reviewed (10 tickers, same figures as Friday since no new session):** TSLA 30%/40%
+(within 2/3 days), QQQ 30%/40%, GOOGL 50% (still the standout), JPM 0%, HOOD 0%, GC=F 0%.
+NVDA/AMZN/SPY/VOO still too new (added 8/5) to have matured grades. Real-money ledger
+unchanged: still just the 2 closed QQQ puts (+$980, +$600), nothing new opened or closed.
+
+**What I dug into: HOOD's 8-of-9 unmatched predictions, flagged as a possible bug yesterday.**
+Traced it using HOOD's own recorded swing pivots in `data.js`: the last *confirmed* pivot is
+a high on 7/6 at $117.55. Price then crashed hard - from a brief bounce near $116-120 in
+mid-July down to a $83.68 close on 7/31 - and, as of the newest data (8/7), still hasn't
+rallied back 10% off that low to confirm a new pivot. The grading engine only matches a
+prediction against a *confirmed* swing pivot, and there simply isn't one anywhere in the
+7/15-7/29 window for it to match against - that's the entire explanation, not a bug in the
+matching code. It's a different flavor of the same "model assumes oscillating swings"
+limitation already diagnosed for JPM, just from a real, still-unresolved crash rather than
+low volatility. These predictions should become retroactively gradable once HOOD's pending
+low pivot finally confirms (price closing back above roughly $95).
+
+**What changed and why:** nothing. The HOOD question that carried over from yesterday now
+has a verified, non-bug answer, so there's no fix to make - honesty features, ledgers, and
+the coherence gate are untouched.
+
+**Watch next:** whether HOOD's pending low pivot confirms in the coming week (would
+retroactively grade several 7/15-7/29 calls, for better or worse), whether JPM ever lands a
+hit, whether GOOGL's 50% holds as more predictions mature, and whether NVDA/AMZN/SPY/VOO
+start showing their first grades (they'll have had ~8 trading days by early next week).
