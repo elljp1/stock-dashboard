@@ -275,3 +275,35 @@ the coherence gate are untouched.
 retroactively grade several 7/15-7/29 calls, for better or worse), whether JPM ever lands a
 hit, whether GOOGL's 50% holds as more predictions mature, and whether NVDA/AMZN/SPY/VOO
 start showing their first grades (they'll have had ~8 trading days by early next week).
+
+## 2026-08-09 (Sun) — no change; same story as yesterday, nothing new to grade
+
+**Fetch status:** Yahoo is still blocking this environment (confirmed via the proxy's status
+log: repeated "403 to CONNECT" rejections for query1.finance.yahoo.com, a policy denial, same
+as the last several days). No cached CSVs on disk to fall back on, so running the engine
+produced an empty `data.js`; the coherence gate correctly caught it ("0 tickers - build
+produced no data, refusing to publish") and I discarded that build without touching the
+published files. Also caught a leftover problem from yesterday's session: Friday's real fix
+and log entry had been committed locally but never actually pushed to `origin/main` (repo was
+left on a detached HEAD). Fast-forwarded `main` to that commit and pushed it first thing today
+so the live site reflects yesterday's work. It's Sunday, so there's no new trading session to
+grade either way (cloud refresh only runs Mon-Fri).
+
+**Grades reviewed (10 tickers, all figures unchanged from Friday's 5:09 PM ET generation,
+since nothing new has run since):** TSLA 30%/40% (within 2/3 days), QQQ 30%/40%, GOOGL 50%
+(still the standout), JPM 0%, HOOD 0%, GC=F 0%. NVDA/AMZN/SPY/VOO each now show their first
+single graded prediction (from the 8/6 session) - too small a sample to mean anything yet, but
+worth noting as the first real data point for those four. Real-money ledger unchanged: still
+just the 2 closed QQQ puts (+$980, +$600). Trade sheet unchanged since Friday, nothing new to
+grade there.
+
+**What changed and why:** no code change. Today's only fix was operational (pushing
+yesterday's already-decided work to `origin/main`), not a new decision, so it doesn't count
+against the one-change-per-day budget. Honesty features, ledgers, and the coherence gate are
+untouched.
+
+**Watch next:** confirm Monday's cloud refresh actually reaches Yahoo and produces a real
+grading update (this environment's block appears environment-specific, not a Yahoo-wide
+outage, since the cloud workflow has kept publishing on weekdays); watch NVDA/AMZN/SPY/VOO's
+grades build up now that they have their first data point each; and continue watching for
+HOOD's pending low pivot and whether JPM ever lands a hit.
