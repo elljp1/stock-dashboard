@@ -307,3 +307,44 @@ grading update (this environment's block appears environment-specific, not a Yah
 outage, since the cloud workflow has kept publishing on weekdays); watch NVDA/AMZN/SPY/VOO's
 grades build up now that they have their first data point each; and continue watching for
 HOOD's pending low pivot and whether JPM ever lands a hit.
+
+## 2026-08-10 (Mon) — no change; traced GC=F's 0% streak to a real forecast miss, not a bug
+
+**Fetch status:** Yahoo is still blocking this environment (same "403 to CONNECT" tunnel
+failure as every recent day), so `fetch_data.py` failed on all 10 tickers and `analyze.py`
+correctly produced an empty `data.js`. The coherence gate caught it ("0 tickers - build
+produced no data, refusing to publish") and that build was discarded without touching any
+published file. Good news: Monday's cloud refresh (`.github/workflows/refresh.yml`) ran fine
+on its own infrastructure a few hours before this session started - the live site is showing a
+real 5:11 PM ET build from today, so today's review is against fresh data, not stale weekend
+numbers.
+
+**Grades reviewed (10 tickers):** TSLA improved to 44%/56% (hit-within-2/3-days) on 9 graded
+predictions, up from 30%/40% Friday. QQQ improved to 67%/83% on 6 graded. GOOGL held its
+50% standout. JPM: still 0 of 10 logged predictions have matched *any* confirmed swing pivot
+(unchanged, low-volatility stock rarely confirms new extremes). HOOD: only 1 of 10 has
+matched so far (0% on that one) - most remain unmatched pending its long-overdue low pivot.
+NVDA/AMZN/SPY/VOO: still 0 graded - each only has 3 logged sessions since 8/5 and needs a
+confirmed pivot before grading can start, same maturation lag as everything else that's new.
+Real-money ledger unchanged: still just the 2 closed QQQ puts (+$980, +$600).
+
+**What I dug into: GC=F's 0-of-5 hit rate, stuck for several days running.** Traced it with
+the actual pivot list in `data.js`: GC=F's last confirmed low is 7/16 at $3985.60, and the
+price has since rallied straight to $4448.60 (+11.6%) without ever pulling back enough to
+confirm a new low. Every "low" prediction logged from 7/23 onward (5 different dates) is
+being graded against that same already-passed 7/16 low, so the gap between predicted date and
+actual date only grows and every one reads as a miss. That's not a grading-code bug - it's an
+honest measurement that GC=F's low-timing methods have been wrong throughout this rally, the
+same "no fresh pivot to grade against" pattern already diagnosed for JPM (chop) and HOOD
+(unresolved crash), just from the opposite direction (a persistent rally). Loosening the match
+window to manufacture a better-looking number would be exactly the kind of honesty-feature
+weakening this project rules out, so nothing changed.
+
+**What changed and why:** nothing. Fetch was blocked (operational, not a code issue) and the
+GC=F investigation resolved to a genuine forecast-timing miss rather than a bug, so there's no
+fix to make today. Honesty features, ledgers, and the coherence gate are untouched.
+
+**Watch next:** whether GC=F ever pulls back enough to confirm a new low pivot (would let its
+backlog of "low" predictions finally grade, likely still poorly given the trend); whether
+HOOD's and JPM's pending pivots ever confirm; and whether NVDA/AMZN/SPY/VOO produce their
+first graded predictions now that they're approaching two weeks of logged sessions.
