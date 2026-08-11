@@ -2,7 +2,12 @@ name: Refresh dashboard
 on:
   schedule:
     # hourly during US market hours, 9:30 AM - 4:30 PM Eastern (summer time)
-    - cron: "30 13-20 * * 1-5"
+    - cron: "0 11 * * 1-5"      # 7:00 AM ET  pre-market
+    - cron: "0 12 * * 1-5"      # 8:00 AM ET  pre-market
+    - cron: "0 13 * * 1-5"      # 9:00 AM ET  just before the open
+    - cron: "30 13-20 * * 1-5"  # 9:30 AM - 4:30 PM ET  hourly
+    - cron: "0 21 * * 1-5"      # 5:00 PM ET  after close
+    - cron: "0 23 * * 1-5"      # 7:00 PM ET  evening
   workflow_dispatch: {}
 
 permissions:
