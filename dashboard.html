@@ -104,7 +104,18 @@
     background:var(--blue); color:#fff; border-radius:8px; cursor:pointer">Update</button>
   <button id="btnReanalyze" style="padding:9px 20px; font-size:15px; font-weight:700; border:1px solid var(--accent);
     background:var(--accent); color:#fff; border-radius:8px; cursor:pointer">Reanalyze &amp; Predict</button>
+  <a id="runLink" href="https://github.com/elljp1/stock-dashboard/actions/workflows/refresh.yml"
+     target="_blank" rel="noopener"
+     style="padding:9px 16px; font-size:14px; font-weight:600; border:1px solid var(--border);
+     background:var(--panel); color:var(--text); border-radius:8px; text-decoration:none">
+     Run fresh prices on GitHub &#8599;</a>
   <span class="tag" id="updStatus"></span>
+</div>
+<div class="tag" style="margin-top:6px; max-width:760px">
+  <b>Update</b> = load the newest finished analysis (instant, no sign-in).
+  <b>Run fresh prices on GitHub</b> = no setup needed: it opens GitHub, you tap the grey
+  <b>Run workflow</b> button, wait about 90 seconds, then press <b>Update</b> here.
+  <b>Reanalyze &amp; Predict</b> = the same thing in one press, once you have saved a token on this device.
 </div>
 <div id="setupBox" style="display:none; margin-top:10px; padding:12px; border:1px solid var(--border);
   border-radius:10px; background:var(--panel2); max-width:760px">
