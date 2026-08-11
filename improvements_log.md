@@ -348,3 +348,43 @@ fix to make today. Honesty features, ledgers, and the coherence gate are untouch
 backlog of "low" predictions finally grade, likely still poorly given the trend); whether
 HOOD's and JPM's pending pivots ever confirm; and whether NVDA/AMZN/SPY/VOO produce their
 first graded predictions now that they're approaching two weeks of logged sessions.
+
+## 2026-08-11 (Tue) — no change; explained QQQ's rate drop, same structural pattern as GC=F
+
+**Fetch status:** Yahoo is still blocking this environment (403 on every ticker, same as every
+recent day), so `fetch_data.py` failed on all 10 tickers and `analyze.py` wrote an empty
+`data.js`. The coherence gate caught it correctly ("0 tickers - refusing to publish") and I
+restored the real files from git afterward so the empty build never touched what's live.
+Good news: today's cloud refresh (`.github/workflows/refresh.yml`) ran fine on its own and
+produced a real 5:56 PM ET build today, so today's grading review is against fresh data.
+
+**Grades reviewed (10 tickers):** TSLA eased to 38%/46% (hit-within-2/3-days) on 13 graded
+predictions, down from 44%/56% Monday - four new predictions graded, mostly misses. GOOGL
+held steady at 50%/50% on 6 graded, still the standout. JPM: still 0 of 11 - every single
+logged prediction remains unmatched to any confirmed pivot, same low-volatility chop pattern
+diagnosed before. HOOD: 0%, only 1 of 11 has matched anything, still waiting on its overdue
+low pivot. GC=F: still 0 of 7, unchanged, same rally-with-no-pullback story from Monday.
+NVDA/AMZN/SPY/VOO: still 0 graded, too few sessions logged yet. Real-money ledger unchanged:
+still just the 2 closed QQQ puts (+$980, +$600). Trade sheet unchanged, nothing new to grade
+there either.
+
+**What I dug into: QQQ's rate looked alarming (67%/83% Monday to 36%/43% today) but isn't a
+regression.** Pulled QQQ's 14 resolved predictions directly from `data.js`: all 7 "high"
+predictions logged since 7/9 are still unmatched to any confirmed swing high (QQQ has kept
+climbing without a real pullback), so every one of them reads as a miss by default. Meanwhile
+the 7 "low" predictions that *did* match are excellent - 6 of 7 within 3 days of the actual
+7/29 low, most within 0-2 days. So the drop isn't new predictions going bad, it's more
+unmatched "high" predictions piling up while QQQ stays in an unconfirmed uptrend - the same
+"no fresh opposite-direction pivot to grade against" pattern already diagnosed for GC=F (there
+it was low predictions stuck against a stale rally) and JPM/HOOD (chop and an unresolved
+crash). Grading them as misses until a real pivot confirms is the honest call, not something
+to loosen.
+
+**What changed and why:** nothing. Fetch was blocked (operational) and the QQQ investigation
+resolved to the same known "unmatched during a trend" pattern rather than a new bug, so no fix
+was warranted today. Honesty features, ledgers, and the coherence gate are untouched.
+
+**Watch next:** whether QQQ ever prints a real pullback that confirms a new swing high (would
+let its backlog of "high" predictions finally grade); the same watch items as before -
+GC=F's overdue low, HOOD's and JPM's pending pivots, and NVDA/AMZN/SPY/VOO building up their
+first graded predictions.
