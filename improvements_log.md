@@ -388,3 +388,42 @@ was warranted today. Honesty features, ledgers, and the coherence gate are untou
 let its backlog of "high" predictions finally grade); the same watch items as before -
 GC=F's overdue low, HOOD's and JPM's pending pivots, and NVDA/AMZN/SPY/VOO building up their
 first graded predictions.
+
+## 2026-08-12 (Wed) — no change; nothing new, everything traces to already-diagnosed causes
+
+**Fetch status:** Yahoo is still blocking this environment (403 on every ticker, same as every
+recent day - `fetch_data.py` failed on all 10 and `analyze.py` wrote an empty `data.js` since
+there's no cached CSV to fall back on). Also found the local git checkout had drifted to a
+stale detached commit again before I even started - fetched and fast-forwarded to
+`origin/main` first, same fix as a couple of reviews back. `coherence_check.py` correctly
+passed on the real, already-published data (10 tickers) once I discarded the empty build, so
+nothing needed re-shipping. The cloud refresh (`.github/workflows/refresh.yml`) ran fine on
+its own today - live site reflects a fresh 5:54 PM ET build.
+
+**Grades reviewed (10 tickers):** TSLA n=14 (36%/50% hit-within-2/3-days, roughly flat on
+yesterday's 38%/46%). QQQ n=14 (36%/43%, also roughly flat). GOOGL n=7 (43%/43%, down slightly
+from 50% now that one more prediction has graded - still well above the other stocks, one data
+point isn't a trend). HOOD n=13 (0%, unchanged - still no confirmed low pivot since the 7/6
+high; checked again today, price is $95.07 and the last confirmed pivot in `data.js` is still
+that same 7/6 high, so the "unresolved crash" explanation from 8/8 still holds). JPM n=12 (0%,
+unchanged low-volatility chop, diagnosed 8/6). GC=F n=9 (0%, unchanged - price has actually
+pushed further away from a pullback, now $4469 vs. the still-uncompleted 7/16 low pivot at
+$3985.60, so the "rally with no pullback" explanation from 8/10 is, if anything, more true
+today than before). NVDA/AMZN/SPY/VOO: still n=0 in the track record, but this is not a mystery
+- checked their logged predictions directly and every single one has a predicted date of
+8/14 or later, so literally none of them are due to have resolved yet (first batch logged 8/5,
+soonest predicted date 8/14). Real-money ledger unchanged: still just the 2 closed QQQ puts
+(+$980, +$600), nothing new opened or closed. Today's new TSLA trade card (a same-day
+$330/$345 call spread into the projected Thu 8/13 high) hasn't had time to resolve either.
+
+**What changed and why:** nothing. No fresh 3-day pattern and no new bug - every persistently
+flat number this review (HOOD, JPM, GC=F) checks out against the same non-bug explanation
+already traced on an earlier day, and the NVDA/AMZN/SPY/VOO "zero grades" is simply because
+none of their predictions have reached their target date yet, not a matching failure. Honesty
+features, ledgers, and the coherence gate are untouched.
+
+**Watch next:** whether NVDA/AMZN/SPY/VOO's first predictions (due 8/14) actually resolve and
+grade correctly - that will be the first real test of the newer tickers' matching logic end to
+end; whether GOOGL's dip from 50% to 43% is just noise or the start of a real fade as more
+predictions mature; and the carryover items - GC=F's and HOOD's overdue pivots, and whether
+JPM ever lands a hit.
