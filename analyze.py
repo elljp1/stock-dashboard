@@ -1224,7 +1224,11 @@ def analyze(tkr):
     for d, s, ty in chosen:
         if len(seq) == 5:
             break
-        if d > first_d and (d - seq[-1][0]).days >= 3:
+        # separation measured in TRADING days - Friday to Monday is 1 session,
+        # not 3 days, and cramming a full swing into it is not plausible
+        _gap = len([1 for _k in range((d - seq[-1][0]).days)
+                    if (seq[-1][0] + timedelta(days=_k + 1)).weekday() < 5])
+        if d > first_d and _gap >= 3:
             seq.append((d, s, ty))
     chosen = seq
 
@@ -1288,6 +1292,17 @@ def analyze(tkr):
         if k == 0 and ty == prov_type:
             price = (max(price, swing_hi * 1.002) if ty == "high"
                      else min(price, swing_lo * 0.998))
+        # velocity sanity: price cannot travel further between two consecutive
+        # events than volatility allows in the sessions separating them
+        if k > 0:
+            _sess = len([1 for _k in range((d - chosen[k - 1][0]).days)
+                         if (chosen[k - 1][0] + timedelta(days=_k + 1)).weekday() < 5])
+            _lim = envelope(max(1, _sess))
+            if ty == "high":
+                price = min(price, prev_price * (1 + _lim))
+            else:
+                price = max(price, prev_price * (1 - _lim))
+            price = max(price, last_close * 0.5)
         tmode = hi_mode if ty == "high" else lo_mode
         alt = hi_pm if ty == "high" else lo_pm
         moon_today = next((m for m in MOONS_NEXT if m["date"] == d), None)
@@ -1651,20 +1666,27 @@ def analyze(tkr):
         r = sig_d * (1.0 + 0.12 * math.sqrt(k))
         hi, lo = mid * (1 + r), mid * (1 - r)
         ev = _chain_by_day.get(fd.strftime("%Y-%m-%d"))
-        if ev:                      # a projected turn lands on this date
+        if ev:
+            # a projected turn lands here: show EXACTLY the forecast number so
+            # the date picker and the chart can never disagree
             if ev["type"] == "high":
-                hi = max(hi, ev["price"])
+                hi = ev["price"]
+                lo = min(lo, hi * (1 - sig_d))
             else:
-                lo = min(lo, ev["price"])
-        # gentle level magnetism only when a level is genuinely close
-        for lv in out["levels"]["resistance"]:
-            if abs(lv["price"] / hi - 1) < 0.006:
-                hi = lv["price"]
-                break
-        for lv in out["levels"]["support"]:
-            if abs(lv["price"] / lo - 1) < 0.006:
-                lo = lv["price"]
-                break
+                lo = ev["price"]
+                hi = max(hi, lo * (1 + sig_d))
+        # gentle level magnetism - but NEVER on the side that carries a forecast
+        # turn, or it would drag the number away from the chart's own figure
+        if not (ev and ev["type"] == "high"):
+            for lv in out["levels"]["resistance"]:
+                if abs(lv["price"] / hi - 1) < 0.006:
+                    hi = lv["price"]
+                    break
+        if not (ev and ev["type"] == "low"):
+            for lv in out["levels"]["support"]:
+                if abs(lv["price"] / lo - 1) < 0.006:
+                    lo = lv["price"]
+                    break
         day_fc.append({
             "date": fd.strftime("%Y-%m-%d"), "dow": fd.strftime("%a"),
             "high": round(hi, 2), "low": round(lo, 2), "mid": round(mid, 2),

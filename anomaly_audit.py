@@ -5,7 +5,7 @@ and current price against each other. Prints every inconsistency found.
 """
 import json
 import re
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 raw = open("data.js", encoding="utf-8").read()
 D = json.loads(raw.replace("const DATA_ALL = ", "").split("const TRADES")[0].strip().rstrip(";"))
@@ -41,14 +41,15 @@ for t, d in D.items():
     res = [x["price"] for x in lv.get("resistance", [])]
 
     # 1. chain sanity vs spot
-    for p in preds:
+    for i_p, p in enumerate(preds):
         pd_ = datetime.strptime(p["isoDate"], "%Y-%m-%d").date()
         if pd_ < today:
             issues.append(f"{t}: chain still shows a PAST event {p['isoDate']} ({p['type']})")
-        if p["type"] == "high" and p["price"] < spot * 0.995:
-            issues.append(f"{t}: projected HIGH {p['price']} on {p['isoDate']} is BELOW spot {spot:.2f}")
-        if p["type"] == "low" and p["price"] > spot * 1.005:
-            issues.append(f"{t}: projected LOW {p['price']} on {p['isoDate']} is ABOVE spot {spot:.2f}")
+        if i_p == 0:   # only the in-progress event is measured against spot
+            if p["type"] == "high" and p["price"] < spot * 0.995:
+                issues.append(f"{t}: next HIGH {p['price']} on {p['isoDate']} is BELOW spot {spot:.2f}")
+            if p["type"] == "low" and p["price"] > spot * 1.005:
+                issues.append(f"{t}: next LOW {p['price']} on {p['isoDate']} is ABOVE spot {spot:.2f}")
 
     # 1b. the IN-PROGRESS event cannot sit inside ground the current swing
     # has already covered (later chain events start from new swings, so they
@@ -62,6 +63,21 @@ for t, d in D.items():
         if p0["type"] == "low" and p0["price"] > sw["swingLo"] * 1.001:
             issues.append(f"{t}: next LOW {p0['price']} on {p0['isoDate']} is ABOVE {sw['swingLo']} "
                           f"already printed in this swing (since {sw['since']})")
+
+    # 1c. velocity: the move between consecutive forecast events must be
+    # achievable in the sessions between them (caught a -19% one-day HOOD call)
+    for p1, p2 in zip(preds, preds[1:]):
+        d1 = datetime.strptime(p1["isoDate"], "%Y-%m-%d").date()
+        d2 = datetime.strptime(p2["isoDate"], "%Y-%m-%d").date()
+        sess = sum(1 for k in range((d2 - d1).days)
+                   if (d1 + timedelta(days=k + 1)).weekday() < 5)
+        if sess < 3:
+            issues.append(f"{t}: forecast events {p1['isoDate']} and {p2['isoDate']} are only "
+                          f"{sess} session(s) apart")
+        move = abs(p2["price"] / p1["price"] - 1) * 100
+        if sess and move / max(sess, 1) > 9:
+            issues.append(f"{t}: {move:.0f}% move between {p1['isoDate']} and {p2['isoDate']} "
+                          f"is {move/sess:.0f}%/session - implausible")
 
     # 2. levels sanity
     if sup and max(sup) > spot:
@@ -87,12 +103,13 @@ for t, d in D.items():
     for p in preds:
         f = dfc.get(p["isoDate"])
         if f:
-            if p["type"] == "high" and f["high"] < p["price"] - 0.01:
-                issues.append(f"{t}: date-picker high {f['high']} on {p['isoDate']} is below the "
-                              f"chain's own high {p['price']} for that day")
-            if p["type"] == "low" and f["low"] > p["price"] + 0.01:
-                issues.append(f"{t}: date-picker low {f['low']} on {p['isoDate']} is above the "
-                              f"chain's own low {p['price']} for that day")
+            # on a forecast-turn day the two surfaces must show the SAME number
+            if p["type"] == "high" and abs(f["high"] - p["price"]) > 0.011:
+                issues.append(f"{t}: date-picker high {f['high']} on {p['isoDate']} does not equal "
+                              f"the chart's high {p['price']} for that day")
+            if p["type"] == "low" and abs(f["low"] - p["price"]) > 0.011:
+                issues.append(f"{t}: date-picker low {f['low']} on {p['isoDate']} does not equal "
+                              f"the chart's low {p['price']} for that day")
     if dfc and hz.get("monthly"):
         mo = today.strftime("%Y-%m")
         same = [v for k2, v in dfc.items() if k2.startswith(mo)]
