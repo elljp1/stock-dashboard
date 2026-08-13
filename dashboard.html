@@ -212,6 +212,12 @@
 </div>
 
 <div class="panel">
+  <h2>Time-of-day accuracy — the primary goal</h2>
+  <div class="sub" id="taSub"></div>
+  <div id="taBody" class="tblwrap" style="margin-top:8px"></div>
+</div>
+
+<div class="panel">
   <h2>Forecast audit — every version ever made, graded</h2>
   <div class="sub" id="faSub"></div>
   <div id="faBody" style="margin-top:8px"></div>
@@ -801,6 +807,33 @@ function renderAll(D){
             r.deltaDays===0?"on time":(r.deltaDays<0?Math.abs(r.deltaDays)+"d early":r.deltaDays+"d late")}</td>
         </tr>`).join("") + `</table>`;
     }
+  })();
+
+  /* time-of-day accuracy */
+  (function(){
+    const A = D.timeAccuracy;
+    if(!A || !A.graded){
+      $("taSub").innerHTML = `The goal is the <b>date and time</b> of each turn, so predicted times are now
+        recorded alongside the actual intraday moment each high and low printed. Grading begins with the
+        forecasts logged from today - the earlier log kept dates and prices but not the time, so those calls
+        cannot be scored honestly and are excluded rather than guessed at.`;
+      $("taBody").innerHTML = "";
+      return;
+    }
+    $("taSub").innerHTML = `Predicted time vs the actual minute the extreme printed, for
+      <b>${A.graded}</b> graded calls on ${nice(D.ticker)}.
+      Within 30 minutes: <b class="${A.within30>A.chance30?"good":"bad"}">${A.within30}%</b>
+      (random chance ${A.chance30}%) - within an hour:
+      <b class="${A.within60>A.chance60?"good":"bad"}">${A.within60}%</b> (chance ${A.chance60}%).
+      Typical miss <b>${A.medianErrMin} minutes</b>.`;
+    $("taBody").innerHTML = `<table><tr><th>Date</th><th>Called</th><th>Predicted time</th>
+      <th>Actual time</th><th>Miss</th></tr>` +
+      A.recent.map(r => `<tr>
+        <td class="num">${r.isoDate}</td>
+        <td><span class="badge ${r.type==="high"?"bH":"bL"}">${r.type[0].toUpperCase()}</span></td>
+        <td class="num">${r.predicted}</td><td class="num">${r.actual}</td>
+        <td class="num ${Math.abs(r.errMin)<=30?"good":Math.abs(r.errMin)<=60?"mid":"bad"}">${
+          (r.errMin>0?"+":"")+r.errMin} min</td></tr>`).join("") + `</table>`;
   })();
 
   /* forecast audit: all versions graded + progress over time + revisions */

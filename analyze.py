@@ -6,6 +6,7 @@ random controls), and a multi-method confluence forecast of the next 5
 highs/lows. Writes data.js for the dashboard.
 """
 import json
+import re
 import time
 import bisect
 import math
@@ -557,10 +558,25 @@ def analyze(tkr):
 
     # append recent daily highs/lows to the permanent record (keep ~400 days)
     ex = EXTREMES.setdefault(tkr, {})
+    # intraday timestamps of each session's extreme, from the 15-minute bars -
+    # this is what makes the TIME half of the goal gradeable
+    _m15t = m15.copy()
+    _m15t["d"] = _m15t.index.date
+    _times = {}
+    for _d, _g in _m15t.groupby("d"):
+        if len(_g) >= 4:
+            _times[_d.strftime("%Y-%m-%d")] = [
+                _g["High"].idxmax().strftime("%H:%M"),
+                _g["Low"].idxmin().strftime("%H:%M")]
     for ts, row in daily.tail(90).iterrows():
-        ex[ts.strftime("%Y-%m-%d")] = [round(float(row["High"]), 2),
-                                       round(float(row["Low"]), 2),
-                                       round(float(row["Close"]), 2)]
+        k = ts.strftime("%Y-%m-%d")
+        rec = [round(float(row["High"]), 2), round(float(row["Low"]), 2),
+               round(float(row["Close"]), 2)]
+        if k in _times:
+            rec += _times[k]                      # [high, low, close, hiTime, loTime]
+        elif k in ex and len(ex[k]) >= 5:
+            rec += ex[k][3:5]                     # keep times already recorded
+        ex[k] = rec
     for k in sorted(ex)[:-400]:
         del ex[k]
     out = {"ticker": tkr,
@@ -1355,6 +1371,7 @@ def analyze(tkr):
     PRED_LOG["entries"].append({
         "ticker": tkr, "logged": today_str,
         "preds": [{"isoDate": p["isoDate"], "type": p["type"], "price": p["price"],
+                   "time": p.get("time"), "planetHour": p.get("planetHour"),
                    "methods": p["methods"]} for p in preds]})
 
     # ------- horizon extremes: daily / weekly / monthly / yearly -------
@@ -1556,6 +1573,63 @@ def analyze(tkr):
         if horizons[_a]["low"]["price"] < horizons[_b]["low"]["price"]:
             horizons[_b]["low"] = dict(horizons[_a]["low"])
     out["horizons"] = horizons
+
+    # ===== TIME-OF-DAY ACCURACY (the primary goal: date AND time) ===========
+    # Every logged prediction carries a predicted time window. Now that the
+    # actual intraday time of each session's high/low is recorded, those time
+    # calls can finally be graded rather than merely displayed.
+    def _mins(hhmm):
+        try:
+            a, b = hhmm.split(":")
+            return int(a) * 60 + int(b)
+        except Exception:
+            return None
+
+    def _pred_mins(txt):
+        if not txt:
+            return None
+        m = re.search(r"(\d{1,2}):(\d{2})\s*(AM|PM)", txt)
+        if not m:
+            return None
+        hr = int(m.group(1)) % 12 + (12 if m.group(3) == "PM" else 0)
+        return hr * 60 + int(m.group(2))
+
+    time_rows = []
+    for e in PRED_LOG["entries"]:
+        if e["ticker"] != tkr:
+            continue
+        for p in e["preds"]:
+            rec = EXTREMES.get(tkr, {}).get(p["isoDate"])
+            if not rec or len(rec) < 5:
+                continue
+            actual = rec[3] if p["type"] == "high" else rec[4]
+            am = _mins(actual)
+            pm_ = _pred_mins(p.get("planetHour") or p.get("time"))
+            if am is None or pm_ is None:
+                continue
+            time_rows.append({"logged": e["logged"], "isoDate": p["isoDate"],
+                              "type": p["type"], "predicted": (p.get("planetHour") or p.get("time"))[:22],
+                              "actual": actual, "errMin": am - pm_})
+    seen_t = set()
+    uniq_t = []
+    for r in sorted(time_rows, key=lambda r: r["logged"], reverse=True):
+        k = (r["isoDate"], r["type"])
+        if k not in seen_t:
+            seen_t.add(k)
+            uniq_t.append(r)
+    if uniq_t:
+        errs = [abs(r["errMin"]) for r in uniq_t]
+        out["timeAccuracy"] = {
+            "graded": len(uniq_t),
+            "within30": round(sum(1 for x in errs if x <= 30) / len(errs) * 100, 0),
+            "within60": round(sum(1 for x in errs if x <= 60) / len(errs) * 100, 0),
+            "within120": round(sum(1 for x in errs if x <= 120) / len(errs) * 100, 0),
+            "medianErrMin": int(np.median(errs)),
+            "chance30": round(30 * 2 / 390 * 100, 0),
+            "chance60": round(60 * 2 / 390 * 100, 0),
+            "recent": sorted(uniq_t, key=lambda r: r["isoDate"], reverse=True)[:14]}
+    else:
+        out["timeAccuracy"] = {"graded": 0}
 
     # ===== FULL FORECAST AUDIT ==============================================
     # Every VERSION of every prediction ever logged is graded - not just the
