@@ -427,3 +427,40 @@ grade correctly - that will be the first real test of the newer tickers' matchin
 end; whether GOOGL's dip from 50% to 43% is just noise or the start of a real fade as more
 predictions mature; and the carryover items - GC=F's and HOOD's overdue pivots, and whether
 JPM ever lands a hit.
+
+## 2026-08-13 (Thu) — no change; HOOD's overdue low finally confirmed, grades logged
+
+**Fetch status:** Yahoo is still blocked in this environment (403 on every ticker via the
+sandbox's egress proxy - confirmed it's a policy-level block on `query1.finance.yahoo.com`,
+not a transient network fault, so per the runbook I didn't retry or route around it).
+`fetch_data.py` failed on all 10 tickers and `analyze.py` then wrote an empty, 0-ticker
+`data.js` since there was no CSV to work from - I discarded that broken build before it could
+be committed and kept the last good one. The cloud refresh workflow ran fine on its own again
+today (fresh build at 5:54 PM ET / 21:54 UTC), and `coherence_check.py` passed cleanly on that
+real, already-published data.
+
+**Grades reviewed (10 tickers):** TSLA n=15 (33%/47% hit-within-2/3-days, roughly flat).
+QQQ n=15 (33%/40%, roughly flat, still the "unmatched during an uptrend" pattern from 8/11).
+GOOGL n=7 (43%/43%, unchanged). JPM n=13 (0%, unchanged - every one of its 13 resolved
+predictions is still unmatched, the same low-volatility chop diagnosed on 8/6). GC=F n=10
+(0%, unchanged - newer predictions still unmatched against any fresh pullback, same "rally
+with no pivot" story as 8/10). **HOOD is the real news: n=15, jumped from 0% to 33%/40%.**
+Checked it directly in `data.js` - a low pivot on 2026-07-31 ($86.56) has now confirmed, and
+5 of HOOD's backlogged "low" predictions matched against it, 4 of them hitting within 2 days.
+This is exactly the resolution the 8/8 "unresolved crash" diagnosis predicted: once price
+actually bottomed and a real pivot printed, the stuck predictions could finally grade instead
+of sitting at a default miss. NVDA/AMZN/SPY/VOO: still n=0, but confirmed (again) their first
+predicted dates are 8/14 - tomorrow - so this is expected, not a bug. Real-money ledger
+unchanged (still just the 2 closed QQQ puts, +$980/+$600). Today's trade cards (TSLA/HOOD/QQQ/
+JPM/NVDA/SPY/VOO same-day call spreads, GOOGL/AMZN multi-week plays) are too fresh to have
+resolved yet.
+
+**What changed and why:** no code change. HOOD's jump from 0% to 33%/40% is a genuine data
+resolution (a real pivot finally printed and predictions graded against it), not a bug to
+chase, and every other flat number checks out against an already-diagnosed cause. Honesty
+features, ledgers, and the coherence gate are untouched.
+
+**Watch next:** whether NVDA/AMZN/SPY/VOO's first predictions (due 8/14, tomorrow) resolve and
+grade correctly - the first real end-to-end test of the newer tickers; whether HOOD's new 33%/
+40% holds up as more of its backlog grades or was a one-pivot bump; and the carryover items -
+GC=F's overdue low, JPM's still-perfect miss streak, and GOOGL's 43% rate.
