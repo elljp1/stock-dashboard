@@ -1564,6 +1564,17 @@ def analyze(tkr):
             y_lo_cell = {"price": round(y_lo, 2), "date": month_date(lo_n),
                          "time": f"volatility-range floor, NOT a crash forecast - seasonal lean: {lo_mon[0]} ({lo_mon[1]['avgRet']}% avg)"}
         horizons["yearly"] = {"high": y_hi_cell, "low": y_lo_cell}
+    # a period extreme can never contradict the live price itself
+    for _k in list(horizons):
+        if horizons[_k]["high"]["price"] < last_close:
+            horizons[_k]["high"] = {"price": round(last_close, 2),
+                                    "date": "at the current price",
+                                    "time": "already trading here"}
+        if horizons[_k]["low"]["price"] > last_close:
+            horizons[_k]["low"] = {"price": round(last_close, 2),
+                                   "date": "at the current price",
+                                   "time": "already trading here"}
+
     # nesting: a wider period can never show a smaller extreme than a narrower
     # one - if it would, it inherits the narrower period's cell wholesale
     _ordr = [k for k in ("daily", "weekly", "monthly", "yearly") if k in horizons]
