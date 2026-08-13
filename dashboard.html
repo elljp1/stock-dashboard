@@ -212,6 +212,12 @@
 </div>
 
 <div class="panel">
+  <h2>Forecast audit — every version ever made, graded</h2>
+  <div class="sub" id="faSub"></div>
+  <div id="faBody" style="margin-top:8px"></div>
+</div>
+
+<div class="panel">
   <h2>Full prediction history — <span class="tkr2"></span></h2>
   <div class="sub" id="fhSub"></div>
   <div id="fhBody" class="tblwrap" style="margin-top:8px; max-height:420px; overflow-y:auto"></div>
@@ -795,6 +801,56 @@ function renderAll(D){
             r.deltaDays===0?"on time":(r.deltaDays<0?Math.abs(r.deltaDays)+"d early":r.deltaDays+"d late")}</td>
         </tr>`).join("") + `</table>`;
     }
+  })();
+
+  /* forecast audit: all versions graded + progress over time + revisions */
+  (function(){
+    const A = D.forecastAudit;
+    if(!A){ $("faSub").textContent = "Refresh to compute."; $("faBody").innerHTML=""; return; }
+    $("faSub").innerHTML = `Every time the forecast changes, the old version is kept and graded too - so a
+      revision can never quietly bury a bad call. For ${nice(D.ticker)}:
+      <b>${A.versionsLogged}</b> prediction versions across <b>${A.slots}</b> target dates,
+      <b>${A.graded}</b> old enough to judge -
+      <b>${pct(A.hit2Pct)}</b> landed within +/-2 days, <b>${pct(A.hit3Pct)}</b> within +/-3 days,
+      typical price miss <b>${A.medPriceErrPct}%</b>.`;
+    let h2 = "";
+    if(A.byWeek && A.byWeek.length){
+      h2 += `<h3 style="margin-top:6px">Is it getting better? (grouped by the week the forecast was made)</h3>
+        <div class="tblwrap"><table><tr><th>Week forecast made</th><th>Graded</th><th>Within 3 days</th><th>Typical price miss</th></tr>` +
+        A.byWeek.map(w => `<tr><td class="num">${w.week}</td><td class="num">${w.n}</td>
+          <td class="num ${w.hit3Pct>=40?"good":w.hit3Pct>=20?"mid":"bad"}">${pct(w.hit3Pct)}</td>
+          <td class="num ${w.medPriceErrPct<=3?"good":w.medPriceErrPct<=7?"mid":"bad"}">${w.medPriceErrPct}%</td></tr>`).join("") +
+        `</table></div><div class="tag">Small samples early on - read the trend, not any single week.</div>`;
+    }
+    if(A.revisions && A.revisions.length){
+      h2 += `<h3 style="margin-top:12px">How much each forecast moved before its date</h3>
+        <div class="tblwrap"><table><tr><th>Target</th><th>Versions</th><th>First called</th><th>Last called</th>
+        <th>Range</th><th>Actual</th></tr>` +
+        A.revisions.map(r => `<tr>
+          <td class="num"><span class="badge ${r.type==="high"?"bH":"bL"}">${r.type[0].toUpperCase()}</span> ${r.isoDate}</td>
+          <td class="num">${r.versions}</td>
+          <td class="num">${fmt$(r.first)}</td>
+          <td class="num">${fmt$(r.last)}</td>
+          <td class="num ${r.swingPct>10?"bad":r.swingPct>5?"mid":""}">${fmt$(r.lowP)}-${fmt$(r.highP)} (${r.swingPct}%)</td>
+          <td class="num">${r.actual ? fmt$(r.actual) : "-"}</td></tr>`).join("") +
+        `</table></div><div class="tag">A wide range means the forecast for that date kept changing - low
+        stability. Ideally the range narrows as the date approaches.</div>`;
+    }
+    if(A.recent && A.recent.length){
+      h2 += `<h3 style="margin-top:12px">Most recent graded versions</h3>
+        <div class="tblwrap" style="max-height:320px; overflow-y:auto"><table>
+        <tr><th>Made on</th><th>For date</th><th>Called</th><th>Actual</th><th>Price miss</th><th>Days off</th><th>Lead time</th></tr>` +
+        A.recent.map(r => `<tr>
+          <td class="num">${r.logged}</td><td class="num">${r.isoDate}</td>
+          <td class="num"><span class="badge ${r.type==="high"?"bH":"bL"}">${r.type[0].toUpperCase()}</span> ${fmt$(r.price)}</td>
+          <td class="num">${r.actual ? fmt$(r.actual) : "-"}</td>
+          <td class="num ${r.priceErrPct===null?"":Math.abs(r.priceErrPct)<=3?"good":Math.abs(r.priceErrPct)<=8?"mid":"bad"}">${
+            r.priceErrPct===null?"-":(r.priceErrPct>0?"+":"")+r.priceErrPct+"%"}</td>
+          <td class="num ${r.dayErr===null?"":Math.abs(r.dayErr)<=2?"good":Math.abs(r.dayErr)<=3?"mid":"bad"}">${
+            r.dayErr===null?"-":(r.dayErr>0?"+":"")+r.dayErr+"d"}</td>
+          <td class="num tag">${r.leadDays}d ahead</td></tr>`).join("") + `</table></div>`;
+    }
+    $("faBody").innerHTML = h2;
   })();
 
   /* full prediction history */

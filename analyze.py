@@ -1542,6 +1542,88 @@ def analyze(tkr):
             horizons[_b]["low"] = dict(horizons[_a]["low"])
     out["horizons"] = horizons
 
+    # ===== FULL FORECAST AUDIT ==============================================
+    # Every VERSION of every prediction ever logged is graded - not just the
+    # latest one - so revisions cannot quietly hide a bad early call, and so
+    # accuracy can be tracked over time to show whether the system improves.
+    _versions, _slots = [], {}
+    for e in PRED_LOG["entries"]:
+        if e["ticker"] != tkr:
+            continue
+        for p in e["preds"]:
+            _versions.append({"logged": e["logged"], "isoDate": p["isoDate"],
+                              "type": p["type"], "price": p["price"]})
+            k = (p["isoDate"], p["type"])
+            _slots.setdefault(k, []).append((e["logged"], p["price"]))
+
+    def _actual_window(dte, kind, half=3):
+        vals = []
+        for ds, v in EXTREMES.get(tkr, {}).items():
+            d2 = datetime.strptime(ds, "%Y-%m-%d").date()
+            if abs((d2 - dte).days) <= half:
+                vals.append(v[0] if kind == "high" else v[1])
+        if not vals:
+            return None
+        return max(vals) if kind == "high" else min(vals)
+
+    _piv_by_type = {"high": [p for p in pivots if p["type"] == "high"],
+                    "low": [p for p in pivots if p["type"] == "low"]}
+    graded = []
+    for v in _versions:
+        td = datetime.strptime(v["isoDate"], "%Y-%m-%d").date()
+        if (last_bar_date - td).days < 3:      # not yet judgeable
+            continue
+        act_px = _actual_window(td, v["type"])
+        cands = _piv_by_type.get(v["type"], [])
+        best = min(cands, key=lambda c: abs((c["date"].date() - td).days)) if cands else None
+        derr = (best["date"].date() - td).days if best else None
+        row = {"logged": v["logged"], "isoDate": v["isoDate"], "type": v["type"],
+               "price": v["price"],
+               "actual": round(act_px, 2) if act_px else None,
+               "priceErrPct": round((v["price"] / act_px - 1) * 100, 1) if act_px else None,
+               "dayErr": derr,
+               "leadDays": (td - datetime.strptime(v["logged"], "%Y-%m-%d").date()).days}
+        graded.append(row)
+
+    def _rate(rows, n):
+        ok = [r for r in rows if r["dayErr"] is not None and abs(r["dayErr"]) <= n]
+        return round(len(ok) / len(rows) * 100, 0) if rows else None
+
+    # accuracy grouped by the WEEK the forecast was made - the progress curve
+    byweek = {}
+    for r in graded:
+        wk = datetime.strptime(r["logged"], "%Y-%m-%d").date().isocalendar()
+        key = f"{wk[0]}-W{wk[1]:02d}"
+        byweek.setdefault(key, []).append(r)
+    week_rows = []
+    for k in sorted(byweek):
+        rows = byweek[k]
+        errs = [abs(r["priceErrPct"]) for r in rows if r["priceErrPct"] is not None]
+        week_rows.append({"week": k, "n": len(rows),
+                          "hit3Pct": _rate(rows, 3), "hit2Pct": _rate(rows, 2),
+                          "medPriceErrPct": round(float(np.median(errs)), 1) if errs else None})
+
+    # how much each target moved across its revisions (forecast stability)
+    rev_rows = []
+    for (iso, ty), lst in sorted(_slots.items(), reverse=True)[:40]:
+        prices = [p for _, p in lst]
+        rev_rows.append({"isoDate": iso, "type": ty, "versions": len(lst),
+                         "first": prices[0], "last": prices[-1],
+                         "lowP": min(prices), "highP": max(prices),
+                         "swingPct": round((max(prices) / min(prices) - 1) * 100, 1),
+                         "actual": (lambda a: round(a, 2) if a else None)(
+                             _actual_window(datetime.strptime(iso, "%Y-%m-%d").date(), ty))})
+
+    allerr = [abs(r["priceErrPct"]) for r in graded if r["priceErrPct"] is not None]
+    out["forecastAudit"] = {
+        "versionsLogged": len(_versions), "slots": len(_slots),
+        "graded": len(graded),
+        "hit2Pct": _rate(graded, 2), "hit3Pct": _rate(graded, 3),
+        "medPriceErrPct": round(float(np.median(allerr)), 1) if allerr else None,
+        "byWeek": week_rows[-10:],
+        "revisions": rev_rows[:25],
+        "recent": sorted(graded, key=lambda r: r["isoDate"], reverse=True)[:40]}
+
     # ------- per-day forecasts: follow the PREDICTED PATH, not a cone -------
     # Expected price walks from today's price through each forecast turn; each
     # day gets a normal daily range around that path, widening modestly with
