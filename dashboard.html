@@ -143,6 +143,11 @@
 
 <div class="tabs" id="tabs"></div>
 
+<div class="panel" id="outlookPanel" style="border-width:2px; border-color:var(--blue)">
+  <h2>Outlook &amp; strategy — everything on this page in one view</h2>
+  <div id="olBody"></div>
+</div>
+
 <div class="panel">
   <h2>Price, detected swings (H/L), and projected path</h2>
   <div class="chartwrap"><canvas id="chart" width="1140" height="360"></canvas></div>
@@ -557,6 +562,43 @@ function renderAll(D){
       — current price <b>${fmt$(D.price)}</b> —</td></tr>`;
     Lv.support.forEach((l, i) => h += row(l, "good", "S" + (i + 1)));
     $("srBody").innerHTML = h + "</table>";
+  })();
+
+  /* unified outlook */
+  (function(){
+    const o = D.outlook;
+    if(!o){ $("olBody").innerHTML = "<span class='tag'>Refresh to compute.</span>"; return; }
+    const up = o.direction === "rising";
+    const legs = o.legs.map((l,i) => `
+      <div style="display:flex; gap:8px; align-items:baseline; padding:4px 0">
+        <span class="badge ${l.type==="high"?"bH":"bL"}">${l.type.toUpperCase()}</span>
+        <b class="num" style="font-size:15px">${l.date}</b>
+        <span class="num big">${fmt$(l.price)}</span>
+        <span class="num ${l.movePct>=0?"good":"bad"}">${l.movePct>0?"+":""}${l.movePct}%</span>
+        <span class="tag">${l.time || ""}</span>
+      </div>`).join("");
+    $("olBody").innerHTML = `
+      <div style="padding:10px 12px; border-radius:10px; background:${up?"#dafbe1":"#ffebe9"}; margin-bottom:10px">
+        <div style="font-size:17px; font-weight:700">
+          ${nice(D.ticker)} ${fmt$(D.price)} — currently <b>${o.direction.toUpperCase()}</b>
+          <span class="tag">(${o.state})</span>
+        </div>
+        <div style="font-size:14px; margin-top:4px">${o.action}.</div>
+      </div>
+      <div><b>Projected path</b> — the same turns the chart, the date picker and the period
+        tables are all built from:</div>
+      ${legs}
+      <div style="margin-top:8px; font-size:13px">
+        <b>Nearest levels:</b> support ${o.support?fmt$(o.support):"-"} ·
+        resistance ${o.resistance?fmt$(o.resistance):"-"}
+      </div>
+      <div style="margin-top:8px; padding:8px 12px; border-radius:8px; background:var(--panel2); font-size:13px">
+        <b>How much to trust the dates:</b> on ${nice(D.ticker)} this engine backtests
+        <b>${pct(o.confidence3d)}</b> within 3 days and <b>${pct(o.confidence2d)}</b> within 2 days
+        across <b>${o.tested}</b> out-of-sample predictions.
+        ${o.warn ? `<b class="bad">${o.warn}.</b>` : "Above the ~20% you would get by chance."}
+        Price targets are secondary to the timing - treat every date as a window, not an appointment.
+      </div>`;
   })();
 
   /* chart */

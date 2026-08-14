@@ -22,6 +22,12 @@ NOW = datetime.now(ET)
 
 # rolling log of every prediction ever made, so each run can grade the old
 # ones against what actually happened and re-weight the methods accordingly
+try:
+    with open("backfill.json", encoding="utf-8") as _bf:
+        BACKFILL = json.load(_bf)
+except Exception:
+    BACKFILL = {}
+
 LOG_FILE = "predictions_log.json"
 try:
     with open(LOG_FILE, encoding="utf-8") as _f:
@@ -1931,6 +1937,41 @@ def analyze(tkr):
         "medianUpPct": round(med_up * 100, 1), "medianDownPct": round(med_dn * 100, 1),
         "hitRate2d": out["swing"]["hitRate2d"], "hitRate3d": out["swing"]["hitRate3d"]}
 
+    # ===== UNIFIED OUTLOOK: one story, one action, drawn from every surface ==
+    _bf = BACKFILL.get("perTicker", {}).get(tkr, {})
+    _nr = out.get("nextReversal")
+    if _nr and preds:
+        _legs = []
+        _prev = last_close
+        for p in preds[:3]:
+            _legs.append({"type": p["type"], "date": p["date"], "isoDate": p["isoDate"],
+                          "price": p["price"], "time": p.get("planetHour") or p.get("time"),
+                          "movePct": round((p["price"] / _prev - 1) * 100, 1)})
+            _prev = p["price"]
+        _dirn = "rising" if preds[0]["type"] == "high" else "falling"
+        _state = (turn_note or {}).get("state", "")
+        _sup = out["levels"]["support"][0]["price"] if out["levels"]["support"] else None
+        _res = out["levels"]["resistance"][0]["price"] if out["levels"]["resistance"] else None
+        # the single best action, taken from the trade sheet if one is actionable
+        _act = None
+        if _dirn == "rising":
+            _act = (f"price is projected UP into the {_legs[0]['date']} high near ${_legs[0]['price']:,.2f}"
+                    f" ({_legs[0]['movePct']:+.1f}%). Riding it (or holding) fits now; plan to take profit"
+                    f" into that date, then look to SELL PUTS at the "
+                    f"{_legs[1]['date']} low near ${_legs[1]['price']:,.2f}" if len(_legs) > 1 else "")
+        else:
+            _act = (f"price is projected DOWN into the {_legs[0]['date']} low near ${_legs[0]['price']:,.2f}"
+                    f" ({_legs[0]['movePct']:+.1f}%). Waiting suits now; the setup is to SELL PUTS at that low"
+                    + (f", exiting into the {_legs[1]['date']} high near ${_legs[1]['price']:,.2f}"
+                       if len(_legs) > 1 else ""))
+        out["outlook"] = {
+            "direction": _dirn, "state": _state, "legs": _legs, "action": _act,
+            "support": _sup, "resistance": _res,
+            "confidence3d": _bf.get("hit3Rate"), "confidence2d": _bf.get("hit2Rate"),
+            "tested": _bf.get("tested"),
+            "warn": ("timing on this name backtests at or below chance - treat dates as loose windows"
+                     if (_bf.get("hit3Rate") or 0) < 25 else None)}
+
     # ------- chart -------
     chart_df = daily[daily.index >= NOW - timedelta(days=280)]
     out["chart"] = {
@@ -1992,11 +2033,6 @@ try:
         REAL_TRADES = json.load(f)
 except Exception:
     REAL_TRADES = []
-try:
-    with open("backfill.json", encoding="utf-8") as f:
-        BACKFILL = json.load(f)
-except Exception:
-    BACKFILL = {}
 try:
     with open("benchmark.json", encoding="utf-8") as f:
         BENCHMARK = json.load(f)

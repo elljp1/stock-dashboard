@@ -133,6 +133,19 @@ for t, d in D.items():
                 issues.append(f"{t}: swing is {tn['state']} toward a {tn.get('extreme')}, but the "
                               f"chain's next event is a {preds[0]['type']}")
 
+    # 3d. the one-view outlook must match the chain it summarises
+    ol = d.get("outlook")
+    if ol and preds:
+        want = "rising" if preds[0]["type"] == "high" else "falling"
+        if ol.get("direction") != want:
+            issues.append(f"{t}: outlook says {ol.get('direction')} but the next event is a "
+                          f"{preds[0]['type']}")
+        for i_l, leg in enumerate(ol.get("legs", [])):
+            if i_l < len(preds) and (leg["isoDate"] != preds[i_l]["isoDate"]
+                                     or abs(leg["price"] - preds[i_l]["price"]) > 0.011):
+                issues.append(f"{t}: outlook leg {i_l+1} ({leg['isoDate']} {leg['price']}) does not "
+                              f"match the chain ({preds[i_l]['isoDate']} {preds[i_l]['price']})")
+
     # 4. trade cards line up with the chain + horizon labels
     for tr in T.get(t, {}).get("trades", []):
         a, b = md(tr.get("execute")), md(tr.get("exitWin"))
