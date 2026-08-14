@@ -369,7 +369,9 @@ function ch(c){ return c.__h || c.height; }
 function bars(id, labels, values, opts={}){
   const c=$(id);
   fit(c, 540, opts.tall ? 0.333 : 0.278);
-  const x=c.getContext("2d"), W=c.width, H=c.height, B=20, T=14;
+  // logical dimensions - c.width is the DPR-scaled backing store, using it
+  // here drew every bar at double size and pushed most of them off-canvas
+  const x=c.getContext("2d"), W=cw(c), H=ch(c), B=22, T=16;
   x.clearRect(0,0,W,H);
   const vmax = Math.max(...values.map(Math.abs))*1.15 || 1;
   const bw = (W-10)/values.length;
@@ -1478,6 +1480,7 @@ function buildSectionTabs(){
     document.querySelectorAll("[data-tab]").forEach(e => {
       e.style.display = (e.dataset.tab === active) ? "" : "none";
     });
+    requestAnimationFrame(() => { try { renderAll(DATA_ALL[CUR]); } catch(e){} });
     [...bar.children].forEach(btn => {
       const on = btn.dataset.g === active;
       btn.style.background = on ? "var(--blue)" : "var(--panel)";
