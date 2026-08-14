@@ -464,3 +464,37 @@ features, ledgers, and the coherence gate are untouched.
 grade correctly - the first real end-to-end test of the newer tickers; whether HOOD's new 33%/
 40% holds up as more of its backlog grades or was a one-pivot bump; and the carryover items -
 GC=F's overdue low, JPM's still-perfect miss streak, and GOOGL's 43% rate.
+
+## 2026-08-14 (Fri) — no change; grades logged, everything checks out against known causes
+
+**Fetch status:** Yahoo is still blocked in this sandbox (403 Forbidden on all 10 tickers'
+chart-data and pre/post-market calls, same tunnel-level block as recent days - not a
+transient fault). Ran `fetch_data.py` and confirmed all 10 failed the same way. Also test-ran
+`analyze.py` to double-check: as expected with no fresh CSVs, it wrote a broken 0-ticker
+`data.js`/`index.html`. I discarded that build with `git checkout` and kept the real one -
+the cloud refresh workflow already produced a good build on its own today (generated 2026-08-14
+5:31 PM ET), and `coherence_check.py` passed cleanly against it (10/10 tickers).
+
+**Grades reviewed (10 tickers):** TSLA n=16 (31%/44% hit-within-2/3-days, roughly flat vs.
+yesterday's 33%/47%). HOOD n=16 (31%/44%, similar to yesterday's 33%/40%). QQQ n=15 (33%/40%,
+unchanged). GOOGL n=8 (38%/38%, down a bit from 43% - only one more graded prediction, too
+early to call it a real fade yet). JPM n=15 (still 0% - checked the actual daily range data
+directly: JPM has ground higher in a tight ~1-2%/day band for three weeks straight, 350->366,
+with no real pullback for the zigzag to catch, exactly the low-volatility-chop diagnosis from
+8/6, still true). GC=F n=11 (still 0% - gold is still pushing to new highs with no pullback,
+same "rally with no pivot" story as 8/10). NVDA/AMZN/SPY/VOO: still n=0, but checked
+directly - their very first predicted date (8/14) is today, and confirming a prediction
+requires the actual swing pivot to print and hold, not just the calendar date to arrive
+(same lag HOOD showed before its 7/31 low finally confirmed on 8/13). Real-money ledger
+unchanged: still just the 2 closed QQQ puts (+$980, +$600), nothing new opened or closed.
+
+**What changed and why:** no code change. Every number this review - JPM and GC=F's persistent
+0%, the new tickers' persistent 0%, GOOGL's small dip - traces back to an already-diagnosed,
+non-bug cause (real market chop/rally conditions or normal grading lag), so the improvement
+discipline says grade and log only. Honesty features, ledgers, and the coherence gate are
+untouched.
+
+**Watch next:** whether NVDA/AMZN/SPY/VOO's first predictions actually start resolving now
+that 8/14 has arrived; whether GOOGL's dip to 38% continues into a real fade over the next
+couple of days; and the long-running carryover items - JPM's still-perfect miss streak and
+GC=F's overdue pullback.
