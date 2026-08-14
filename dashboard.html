@@ -143,16 +143,24 @@
 
 <div class="tabs" id="tabs"></div>
 
-<div class="panel" id="outlookPanel" style="border-width:2px; border-color:var(--blue)">
-  <h2>Outlook &amp; strategy — everything on this page in one view</h2>
-  <div id="olBody"></div>
-</div>
-
 <div class="panel">
   <h2>Price, detected swings (H/L), and projected path</h2>
   <div class="chartwrap"><canvas id="chart" width="1140" height="360"></canvas></div>
   <div class="tag" id="chartTag"></div>
 </div>
+
+<div class="panel" id="weekPanel" style="border-width:2px; border-color:var(--accent)">
+  <h2>The week ahead — what to do each session</h2>
+  <div class="sub" id="wkSub"></div>
+  <div id="wkBody" style="margin-top:8px"></div>
+</div>
+
+<div class="panel" id="outlookPanel" style="border-width:2px; border-color:var(--blue)">
+  <h2>Outlook &amp; strategy — everything on this page in one view</h2>
+  <div id="olBody"></div>
+</div>
+
+
 
 <div class="panel">
   <h2>Next 5 projected highs / lows — multi-method confluence</h2>
@@ -562,6 +570,44 @@ function renderAll(D){
       — current price <b>${fmt$(D.price)}</b> —</td></tr>`;
     Lv.support.forEach((l, i) => h += row(l, "good", "S" + (i + 1)));
     $("srBody").innerHTML = h + "</table>";
+  })();
+
+  /* the week ahead */
+  (function(){
+    const W = (typeof WEEKPLAN !== "undefined") ? WEEKPLAN : null;
+    if(!W || !W.days){ $("wkSub").textContent = "Refresh to build the plan."; $("wkBody").innerHTML=""; return; }
+    const b = W.best;
+    $("wkSub").innerHTML = (b
+      ? `<div style="padding:10px 12px; border-radius:10px; background:${W.bestIsWeak?"#fff8c5":"#dafbe1"}; margin-bottom:4px">
+           <b>Best trade this week:</b> ${nice(b.ticker)} — ${b.headline} on <b>${b.dow} ${b.date.slice(5)}</b>
+           ${b.window ? `· <span class="num">${b.window}</span>` : ""}
+           <div class="tag" style="margin-top:2px">${b.detail || ""}</div>
+           ${W.bestIsWeak ? `<div class="bad" style="margin-top:3px"><b>Caution:</b> this is the only setup on the
+             board and its timing backtests below chance — trade the price level, not the date.</div>` : ""}
+         </div>`
+      : `<div style="padding:10px 12px; border-radius:10px; background:var(--panel2)">${W.verdict || ""}</div>`) +
+      `<div class="tag" style="margin-top:4px">Capital assumed available (100 shares of anything).
+       Every plan is logged and graded. ACTION = open · MANAGE = exit/take profit · WATCH = prepare · WAIT = do nothing.</div>`;
+    $("wkBody").innerHTML = W.days.map(d => {
+      const dt = new Date(d.date + "T12:00:00");
+      const head = `<div style="font-weight:700; font-size:15px; margin-top:10px">
+        ${dt.toLocaleDateString("en-US",{weekday:"long", month:"numeric", day:"numeric"})}
+        ${d.label ? '<span class="badge bH">TODAY</span>' : ""}</div>`;
+      if(!d.items.length)
+        return head + `<div style="padding:6px 12px; color:var(--dim)">WAIT — no setup this session</div>`;
+      return head + d.items.map(it => `
+        <div style="border:1px solid var(--border); border-radius:8px; padding:8px 12px; margin:5px 0;
+             background:${it.status==="ACTION"?"#f2fbf4":it.status==="MANAGE"?"#fff8f7":"var(--panel2)"}">
+          <span class="badge ${it.status==="ACTION"?"bH":it.status==="MANAGE"?"bL":"chip"}">${it.status}</span>
+          <b style="margin-left:6px">${nice(it.ticker)}</b> — ${it.headline}
+          ${it.window ? `<div class="num" style="font-size:13px">⏱ ${it.window}</div>` : ""}
+          ${it.detail ? `<div style="font-size:13px">${it.detail}</div>` : ""}
+          ${it.exit ? `<div class="tag">➡ exit: ${it.exit}</div>` : ""}
+          <div class="tag">timing reliability on ${nice(it.ticker)}: ${pct(it.confidence)} within 3 days
+            ${it.weak ? '· <b class="bad">below chance — use the level, not the date</b>' : ""}</div>
+          ${it.note ? `<div class="tag bad">${it.note}</div>` : ""}
+        </div>`).join("");
+    }).join("");
   })();
 
   /* unified outlook */

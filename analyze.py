@@ -1994,6 +1994,94 @@ for tkr in TICKERS:
     except Exception as e:
         print(f"{tkr}: FAILED - {e}")
 
+# ===== THE WEEK AHEAD: one clear action per session, across all tickers =====
+# Capital is assumed available (100 shares of anything), so ranking is purely
+# conviction: backtested reliability on that name x size of the projected move.
+def build_week_plan(all_out, trades_by_tkr):
+    days = []
+    d0 = NOW.date()
+    while d0.weekday() >= 5:
+        d0 += timedelta(days=1)
+    cur = d0
+    for _i in range(5):
+        while cur.weekday() >= 5:
+            cur += timedelta(days=1)
+        iso = cur.strftime("%Y-%m-%d")
+        items = []
+        for tkr, q in all_out.items():
+            conf = (BACKFILL.get("perTicker", {}).get(tkr, {}) or {}).get("hit3Rate")
+            weak = (conf or 0) < 25
+            evs = [p for p in q.get("predictions", []) if p["isoDate"] == iso]
+            cards = (trades_by_tkr.get(tkr) or {}).get("trades", [])
+            for ev in evs:
+                when = ev.get("planetHour") or ev.get("time") or ""
+                if ev["type"] == "low":
+                    card = next((c for c in cards if c["kind"] == "MODEL"), None)
+                    items.append({
+                        "ticker": tkr, "status": "ACTION",
+                        "headline": f"projected LOW {fmt_money(ev['price'])} - sell puts here",
+                        "detail": (f"{card['label']} - {card['detail']}" if card else
+                                   f"sell a cash-secured put near the {fmt_money(ev['price'])} strike"),
+                        "window": when,
+                        "exit": next((f"buy to close into the {p['date']} high "
+                                      f"{fmt_money(p['price'])}"
+                                      for p in q["predictions"]
+                                      if p["type"] == "high" and p["isoDate"] > iso),
+                                     "close at 50% profit or ~1 week"),
+                        "confidence": conf, "weak": weak,
+                        "note": ("timing unreliable on this name - treat the date as loose and "
+                                 "enter on the price level, ideally after a +3% reversal confirms"
+                                 if weak else "")})
+                else:
+                    items.append({
+                        "ticker": tkr, "status": "MANAGE",
+                        "headline": f"projected HIGH {fmt_money(ev['price'])} - take profit into it",
+                        "detail": "exit longs/calls, or buy back short puts opened at the prior low",
+                        "window": when,
+                        "exit": "this is the exit - do not open new upside here",
+                        "confidence": conf, "weak": weak,
+                        "note": ("timing unreliable on this name - use the price level, not the date"
+                                 if weak else "")})
+            if not evs:
+                nxt = next((p for p in q.get("predictions", []) if p["isoDate"] > iso), None)
+                if nxt:
+                    dd = (datetime.strptime(nxt["isoDate"], "%Y-%m-%d").date() - cur).days
+                    if dd <= 2 and not weak:
+                        items.append({
+                            "ticker": tkr, "status": "WATCH",
+                            "headline": f"{nxt['type'].upper()} due {nxt['date']} "
+                                        f"({fmt_money(nxt['price'])}) - get ready",
+                            "detail": "no entry today; prepare the order for that window",
+                            "window": nxt.get("planetHour") or nxt.get("time") or "",
+                            "exit": "", "confidence": conf, "weak": weak, "note": ""})
+        rank = {"ACTION": 0, "MANAGE": 1, "WATCH": 2}
+        items.sort(key=lambda x: (rank.get(x["status"], 3), -(x["confidence"] or 0)))
+        days.append({"date": iso, "dow": cur.strftime("%a"),
+                     "label": "today" if cur == NOW.date() else "",
+                     "items": items[:4]})
+        cur += timedelta(days=1)
+    best, fallback = None, None
+    for dd in days:
+        for it in dd["items"]:
+            if it["status"] != "ACTION":
+                continue
+            cand = dict(it, date=dd["date"], dow=dd["dow"])
+            if not it["weak"]:
+                if best is None or (it["confidence"] or 0) > (best["confidence"] or 0):
+                    best = cand
+            elif fallback is None or (it["confidence"] or 0) > (fallback["confidence"] or 0):
+                fallback = cand
+    verdict = ("no high-confidence entry this week - the discipline is to wait rather than "
+               "manufacture a trade" if best is None else None)
+    return {"generated": NOW.strftime("%Y-%m-%d %I:%M %p ET"), "days": days,
+            "best": best or fallback, "bestIsWeak": best is None and fallback is not None,
+            "verdict": verdict}
+
+
+def fmt_money(v):
+    return f"${v:,.2f}"
+
+
 with open(LOG_FILE, "w", encoding="utf-8") as f:
     json.dump(PRED_LOG, f, indent=1)
 
@@ -2044,6 +2132,25 @@ try:
 except Exception:
     IMPROVE_TXT = ""
 
+try:
+    WEEKPLAN = build_week_plan(all_out, TRADES)
+    with open("week_plan.json", "w", encoding="utf-8") as f:
+        json.dump(WEEKPLAN, f, indent=1)
+    try:
+        with open("week_plan_log.json", encoding="utf-8") as f:
+            WPLOG = json.load(f)
+    except Exception:
+        WPLOG = {"entries": []}
+    _wt = NOW.strftime("%Y-%m-%d")
+    WPLOG["entries"] = [e for e in WPLOG["entries"] if e["logged"] != _wt]
+    WPLOG["entries"].append({"logged": _wt, "plan": WEEKPLAN})
+    with open("week_plan_log.json", "w", encoding="utf-8") as f:
+        json.dump(WPLOG, f)
+    print("week plan built:", sum(len(d["items"]) for d in WEEKPLAN["days"]), "items")
+except Exception as e:
+    print("week plan failed:", e)
+    WEEKPLAN = {}
+
 with open("data.js", "w", encoding="utf-8") as f:
     f.write("const DATA_ALL = " + json.dumps(all_out) + ";\n"
             + "const TRADES = " + json.dumps(TRADES) + ";\n"
@@ -2062,7 +2169,8 @@ try:
               + "const REALTRADES = " + json.dumps(REAL_TRADES) + ";\n"
               + "const IMPROVELOG = " + json.dumps(IMPROVE_TXT) + ";\n"
               + "const BACKFILL = " + json.dumps(BACKFILL) + ";\n"
-              + "const BENCHMARK = " + json.dumps(BENCHMARK) + ";</script>")
+              + "const BENCHMARK = " + json.dumps(BENCHMARK) + ";" + chr(10)
+              + "const WEEKPLAN = " + json.dumps(WEEKPLAN) + ";</script>")
     html = html.replace('<script src="data.js"></script>', inline)
     with open("dashboard_single.html", "w", encoding="utf-8") as f:
         f.write(html)
