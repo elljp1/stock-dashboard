@@ -1997,7 +1997,7 @@ for tkr in TICKERS:
 # ===== THE WEEK AHEAD: one clear action per session, across all tickers =====
 # Capital is assumed available (100 shares of anything), so ranking is purely
 # conviction: backtested reliability on that name x size of the projected move.
-def build_week_plan(all_out, trades_by_tkr):
+def build_week_plan_for(tkr, q, cards):
     days = []
     d0 = NOW.date()
     while d0.weekday() >= 5:
@@ -2008,11 +2008,10 @@ def build_week_plan(all_out, trades_by_tkr):
             cur += timedelta(days=1)
         iso = cur.strftime("%Y-%m-%d")
         items = []
-        for tkr, q in all_out.items():
+        if True:
             conf = (BACKFILL.get("perTicker", {}).get(tkr, {}) or {}).get("hit3Rate")
             weak = (conf or 0) < 25
             evs = [p for p in q.get("predictions", []) if p["isoDate"] == iso]
-            cards = (trades_by_tkr.get(tkr) or {}).get("trades", [])
             for ev in evs:
                 when = ev.get("planetHour") or ev.get("time") or ""
                 if ev["type"] == "low":
@@ -2058,7 +2057,7 @@ def build_week_plan(all_out, trades_by_tkr):
         items.sort(key=lambda x: (rank.get(x["status"], 3), -(x["confidence"] or 0)))
         days.append({"date": iso, "dow": cur.strftime("%a"),
                      "label": "today" if cur == NOW.date() else "",
-                     "items": items[:4]})
+                     "items": items[:3]})
         cur += timedelta(days=1)
     best, fallback = None, None
     for dd in days:
@@ -2133,7 +2132,8 @@ except Exception:
     IMPROVE_TXT = ""
 
 try:
-    WEEKPLAN = build_week_plan(all_out, TRADES)
+    WEEKPLAN = {t: build_week_plan_for(t, q, (TRADES.get(t) or {}).get("trades", []))
+                for t, q in all_out.items()}
     with open("week_plan.json", "w", encoding="utf-8") as f:
         json.dump(WEEKPLAN, f, indent=1)
     try:
@@ -2146,7 +2146,7 @@ try:
     WPLOG["entries"].append({"logged": _wt, "plan": WEEKPLAN})
     with open("week_plan_log.json", "w", encoding="utf-8") as f:
         json.dump(WPLOG, f)
-    print("week plan built:", sum(len(d["items"]) for d in WEEKPLAN["days"]), "items")
+    print("week plans built for", len(WEEKPLAN), "tickers")
 except Exception as e:
     print("week plan failed:", e)
     WEEKPLAN = {}

@@ -155,21 +155,20 @@
   <div id="wkBody" style="margin-top:8px"></div>
 </div>
 
-<div class="panel" id="outlookPanel" style="border-width:2px; border-color:var(--blue)">
-  <h2>Outlook &amp; strategy — everything on this page in one view</h2>
-  <div id="olBody"></div>
-</div>
 
 
 
-<div class="panel">
+
+
+<div id="sectionTabs" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:18px"></div>
+<div class="panel" data-tab="Forecast">
   <h2>Next 5 projected highs / lows — multi-method confluence</h2>
   <div class="sub" id="basis"></div>
   <table id="predTable"></table>
   <div class="sub" style="margin-top:8px" id="hitnote"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Forecast">
   <h2>Pick any date — projected high &amp; low for that day</h2>
   <div class="sub">Choose a date and see the projected high and low, with the most likely time for each.</div>
   <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
@@ -179,19 +178,19 @@
   <div id="dpBody" style="margin-top:10px"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Forecast">
   <h2>Period extremes — daily / weekly / monthly / yearly</h2>
   <div class="sub" id="hzSub"></div>
   <div id="hzBody" class="tblwrap" style="margin-top:8px"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Trades">
   <h2>Recommended option trades — <span class="tkr2"></span></h2>
   <div class="sub" id="trdSub"></div>
   <div id="trdBody" style="margin-top:8px"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Trades">
   <h2>Support &amp; resistance — <span class="tkr2"></span></h2>
   <div class="sub">Price levels where <span class="tkr2"></span>'s swing turns have clustered over 2 years.
     More touches = stronger level. They're also drawn on the chart below (green = support, red = resistance).</div>
@@ -200,90 +199,90 @@
 
 
 
-<div class="panel">
+<div class="panel" data-tab="Accuracy">
   <h2>Prediction track record — graded daily</h2>
   <div class="sub" id="trSub"></div>
   <div id="trBody" class="tblwrap" style="margin-top:8px"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Research">
   <h2>Timing-school scorecard — what actually tested out on <span class="tkr2"></span></h2>
   <div class="sub" id="scoreSub"></div>
   <div class="tblwrap"><table id="scoreTable" style="margin-top:8px"></table></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Accuracy">
   <h2>Backtested track record — every swing in 5 years</h2>
   <div class="sub" id="bfSub"></div>
   <div id="bfBody" class="tblwrap" style="margin-top:8px"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Accuracy">
   <h2>Self-correction — what the misses taught it</h2>
   <div class="sub" id="blSub"></div>
   <div id="blBody" class="tblwrap" style="margin-top:8px"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Accuracy">
   <h2>Time-of-day accuracy — the primary goal</h2>
   <div class="sub" id="taSub"></div>
   <div id="taBody" class="tblwrap" style="margin-top:8px"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Accuracy">
   <h2>Forecast audit — every version ever made, graded</h2>
   <div class="sub" id="faSub"></div>
   <div id="faBody" style="margin-top:8px"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Accuracy">
   <h2>Full prediction history — <span class="tkr2"></span></h2>
   <div class="sub" id="fhSub"></div>
   <div id="fhBody" class="tblwrap" style="margin-top:8px; max-height:420px; overflow-y:auto"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Accuracy">
   <h2>Actual daily highs &amp; lows — <span class="tkr2"></span> (recorded ground truth)</h2>
   <div id="exBody" class="tblwrap" style="margin-top:8px"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Accuracy">
   <h2>The bar to beat — buy &amp; hold benchmarks</h2>
   <div class="sub" id="bmSub"></div>
   <div id="bmBody" class="tblwrap" style="margin-top:8px"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Trades">
   <h2>Real executed trades (your account)</h2>
   <div class="sub" id="rtSub"></div>
   <div id="rtBody" style="margin-top:8px"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="System">
   <h2>System improvement diary</h2>
   <div class="sub">What the daily reviews found and changed — the machine's own logbook.</div>
   <pre id="imBody" style="white-space:pre-wrap; font-family:inherit; font-size:13px; margin-top:8px; max-height:340px; overflow-y:auto; background:var(--panel2); border-radius:8px; padding:12px"></pre>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Research">
   <h2>Vibration lab — <span class="tkr2"></span>'s own astro &amp; numerology signature</h2>
   <div class="sub" id="vibSub"></div>
   <div id="vibBody" style="margin-top:8px"></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Research">
   <h2>Upcoming signal calendar (next ~60 days)</h2>
   <div class="sub">Every date each school flags, merged chronologically — exact times where the method gives one.</div>
   <div class="tblwrap"><table class="cal" id="calTable" style="margin-top:8px"></table></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Research">
   <h2>Current price vs. its ranges</h2>
   <div id="ranges"></div>
 </div>
 
 <div class="grid2">
-  <div class="panel">
+  <div class="panel" data-tab="Research">
     <h2>What time of day do highs &amp; lows happen?</h2>
     <div class="sub" id="todSub"></div>
     <h3 style="margin-top:12px">Day's HIGH set at this time (% of days)</h3>
@@ -292,7 +291,7 @@
     <canvas id="todLow" width="540" height="150"></canvas>
   </div>
 
-  <div class="panel">
+  <div class="panel" data-tab="Research">
     <h2>Which weekday sets the week's high / low?</h2>
     <div class="sub" id="wdSub"></div>
     <h3 style="margin-top:12px">Week's HIGH lands on… (%)</h3>
@@ -301,25 +300,25 @@
     <canvas id="wdLow" width="540" height="150"></canvas>
   </div>
 
-  <div class="panel">
+  <div class="panel" data-tab="Research">
     <h2>Where in the month do highs / lows land?</h2>
     <div class="sub" id="domSub"></div>
     <div id="domTable" style="margin-top:10px"></div>
   </div>
 
-  <div class="panel">
+  <div class="panel" data-tab="Research">
     <h2>Monthly seasonality (avg return, <span id="seasYears"></span> years)</h2>
     <canvas id="seas" width="540" height="180"></canvas>
     <div class="tag">Green: month historically up on average. Number = average return that month.</div>
   </div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Research">
   <h2>Strategy backtests — what actually made money on <span class="tkr2"></span></h2>
   <div class="tblwrap"><table id="btTable"></table></div>
 </div>
 
-<div class="panel">
+<div class="panel" data-tab="Research">
   <h2>How to act on this — the playbook for <span class="tkr2"></span></h2>
   <ol class="play" id="playbook"></ol>
 </div>
@@ -574,10 +573,20 @@ function renderAll(D){
 
   /* the week ahead */
   (function(){
-    const W = (typeof WEEKPLAN !== "undefined") ? WEEKPLAN : null;
+    const W = (typeof WEEKPLAN !== "undefined" && WEEKPLAN) ? WEEKPLAN[D.ticker] : null;
     if(!W || !W.days){ $("wkSub").textContent = "Refresh to build the plan."; $("wkBody").innerHTML=""; return; }
     const b = W.best;
-    $("wkSub").innerHTML = (b
+    const o = D.outlook;
+    const dirLine = o ? `<div style="padding:9px 12px; border-radius:10px; font-size:15px;
+        background:${o.direction==="rising"?"#dafbe1":"#ffebe9"}; margin-bottom:6px">
+        <b>${nice(D.ticker)} ${fmt$(D.price)} is ${o.direction.toUpperCase()}</b> -
+        next turn <b>${o.legs[0].type.toUpperCase()} ${o.legs[0].date}</b> near
+        <b>${fmt$(o.legs[0].price)}</b> (${o.legs[0].movePct>0?"+":""}${o.legs[0].movePct}%)
+        ${o.legs[0].time ? `<span class="num">· ${o.legs[0].time}</span>` : ""}
+        <div class="tag">then ${o.legs.slice(1).map(l=>`${l.type.toUpperCase()} ${l.date} ${fmt$(l.price)}`).join(" → ")}
+        · dates backtest ${pct(o.confidence3d)} within 3 days${o.warn?" · <b class='bad'>below chance on this name</b>":""}</div>
+      </div>` : "";
+    $("wkSub").innerHTML = dirLine + (b
       ? `<div style="padding:10px 12px; border-radius:10px; background:${W.bestIsWeak?"#fff8c5":"#dafbe1"}; margin-bottom:4px">
            <b>Best trade this week:</b> ${nice(b.ticker)} — ${b.headline} on <b>${b.dow} ${b.date.slice(5)}</b>
            ${b.window ? `· <span class="num">${b.window}</span>` : ""}
@@ -608,43 +617,6 @@ function renderAll(D){
           ${it.note ? `<div class="tag bad">${it.note}</div>` : ""}
         </div>`).join("");
     }).join("");
-  })();
-
-  /* unified outlook */
-  (function(){
-    const o = D.outlook;
-    if(!o){ $("olBody").innerHTML = "<span class='tag'>Refresh to compute.</span>"; return; }
-    const up = o.direction === "rising";
-    const legs = o.legs.map((l,i) => `
-      <div style="display:flex; gap:8px; align-items:baseline; padding:4px 0">
-        <span class="badge ${l.type==="high"?"bH":"bL"}">${l.type.toUpperCase()}</span>
-        <b class="num" style="font-size:15px">${l.date}</b>
-        <span class="num big">${fmt$(l.price)}</span>
-        <span class="num ${l.movePct>=0?"good":"bad"}">${l.movePct>0?"+":""}${l.movePct}%</span>
-        <span class="tag">${l.time || ""}</span>
-      </div>`).join("");
-    $("olBody").innerHTML = `
-      <div style="padding:10px 12px; border-radius:10px; background:${up?"#dafbe1":"#ffebe9"}; margin-bottom:10px">
-        <div style="font-size:17px; font-weight:700">
-          ${nice(D.ticker)} ${fmt$(D.price)} — currently <b>${o.direction.toUpperCase()}</b>
-          <span class="tag">(${o.state})</span>
-        </div>
-        <div style="font-size:14px; margin-top:4px">${o.action}.</div>
-      </div>
-      <div><b>Projected path</b> — the same turns the chart, the date picker and the period
-        tables are all built from:</div>
-      ${legs}
-      <div style="margin-top:8px; font-size:13px">
-        <b>Nearest levels:</b> support ${o.support?fmt$(o.support):"-"} ·
-        resistance ${o.resistance?fmt$(o.resistance):"-"}
-      </div>
-      <div style="margin-top:8px; padding:8px 12px; border-radius:8px; background:var(--panel2); font-size:13px">
-        <b>How much to trust the dates:</b> on ${nice(D.ticker)} this engine backtests
-        <b>${pct(o.confidence3d)}</b> within 3 days and <b>${pct(o.confidence2d)}</b> within 2 days
-        across <b>${o.tested}</b> out-of-sample predictions.
-        ${o.warn ? `<b class="bad">${o.warn}.</b>` : "Above the ~20% you would get by chance."}
-        Price targets are secondary to the timing - treat every date as a window, not an appointment.
-      </div>`;
   })();
 
   /* chart */
@@ -1496,8 +1468,38 @@ function renderAll(D){
   };
 })();
 
+/* ---------- section tabs: show one group at a time ---------- */
+function buildSectionTabs(){
+  const bar = document.getElementById("sectionTabs");
+  const groups = [...new Set([...document.querySelectorAll("[data-tab]")].map(e => e.dataset.tab))];
+  let active = localStorage.getItem("secTab");
+  if(!groups.includes(active)) active = groups[0];
+  const paint = () => {
+    document.querySelectorAll("[data-tab]").forEach(e => {
+      e.style.display = (e.dataset.tab === active) ? "" : "none";
+    });
+    [...bar.children].forEach(btn => {
+      const on = btn.dataset.g === active;
+      btn.style.background = on ? "var(--blue)" : "var(--panel)";
+      btn.style.color = on ? "#fff" : "var(--dim)";
+      btn.style.borderColor = on ? "var(--blue)" : "var(--border)";
+    });
+  };
+  bar.innerHTML = "";
+  groups.forEach(g => {
+    const b = document.createElement("button");
+    b.textContent = g; b.dataset.g = g;
+    b.style.cssText = "padding:8px 18px; border:1px solid var(--border); border-radius:8px;" +
+      "font-size:14px; font-weight:700; cursor:pointer; background:var(--panel); color:var(--dim)";
+    b.onclick = () => { active = g; localStorage.setItem("secTab", g); paint(); };
+    bar.appendChild(b);
+  });
+  paint();
+}
+
 renderTabs();
 renderAll(DATA_ALL[CUR]);
+buildSectionTabs();
 try { document.getElementById("updStatus").innerHTML = window.__freshness ? window.__freshness() : ""; } catch(e){}
 
 /* re-render on rotation / resize so charts refit the screen */
