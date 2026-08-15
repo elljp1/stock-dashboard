@@ -498,3 +498,34 @@ untouched.
 that 8/14 has arrived; whether GOOGL's dip to 38% continues into a real fade over the next
 couple of days; and the long-running carryover items - JPM's still-perfect miss streak and
 GC=F's overdue pullback.
+
+## 2026-08-15 (Sat) — no change; weekend, nothing new to grade
+
+**Fetch status:** ran `fetch_data.py` and all 10 tickers failed with the same tunnel-level
+403 block seen on recent days (this session's environment IP, not a Yahoo-wide outage). No
+committed CSVs to fall back on, so `analyze.py` built an empty 0-ticker `data.js`; I discarded
+that broken build with `git checkout` and kept the real one already on `main`. That published
+build was generated 2026-08-14 7:25 PM ET by the cloud refresh workflow, and `coherence_check.py`
+passed cleanly against it (10/10 tickers). It's Saturday, so this is expected either way -
+markets are closed and the cloud refresh only runs weekdays (cron `1-5`), so there was never
+going to be a new session to grade today.
+
+**Grades reviewed (10 tickers, all figures unchanged from Friday's 7:25 PM ET generation,
+since nothing new has run since):** TSLA n=16 (31%/44% hit-within-2/3-days). HOOD n=16
+(31%/44%). QQQ n=15 (33%/40%). GOOGL n=8 (38%/38%, still the standout, still watching for a
+real fade). JPM n=15 (still 0% - the low-volatility-chop diagnosis from 8/6 still holds, no
+new bars to test it against over the weekend). GC=F n=11 (still 0% - same overdue-pullback
+story). NVDA/AMZN/SPY/VOO: still n=0 - their first predicted dates (8/14) have now arrived per
+the calendar, but confirming a prediction needs the actual swing pivot to print and hold, and
+no new trading session has happened since Friday to do that. Real-money ledger unchanged:
+still just the 2 closed QQQ puts (+$980, +$600), nothing new opened or closed.
+
+**What changed and why:** no code change. There is nothing new to grade - same build, same
+ledgers, same market data as yesterday's review, because no trading session occurred between
+then and now. Improvement discipline says grade and log only on a day like this. Honesty
+features, ledgers, and the coherence gate are untouched.
+
+**Watch next:** Monday's cloud refresh should bring the first genuinely new session since
+Friday - that's when to check whether NVDA/AMZN/SPY/VOO's first predictions start resolving,
+whether GOOGL's 38% holds or fades further, and whether JPM or GC=F finally break their 0%
+streaks.
