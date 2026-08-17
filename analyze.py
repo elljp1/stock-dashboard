@@ -1819,19 +1819,27 @@ def analyze(tkr):
             horizons[_b]["low"] = dict(horizons[_a]["low"])
     out["horizons"] = horizons
 
-    # log horizons for future grading (replace same-day entry)
+    # log horizons for future grading (replace same-day entry) - never let a
+    # later run on the same calendar day regress the target session backward
+    # (seen for real: a run with stale/lagging data overwrote an already-
+    # correct "predict tomorrow" entry with a same-day one, permanently
+    # orphaning that session from ever being graded)
     try:
         with open("horizons_log.json", encoding="utf-8") as f:
             HLOG = json.load(f)
     except Exception:
         HLOG = {"entries": []}
     _hz_today = NOW.strftime("%Y-%m-%d")
-    HLOG["entries"] = [e for e in HLOG["entries"]
-                       if not (e["ticker"] == tkr and e["logged"] == _hz_today)]
-    HLOG["entries"].append({"ticker": tkr, "logged": _hz_today,
-                            "session": session.strftime("%Y-%m-%d"), "h": horizons})
-    with open("horizons_log.json", "w", encoding="utf-8") as f:
-        json.dump(HLOG, f)
+    _new_session = session.strftime("%Y-%m-%d")
+    _prior = next((e for e in HLOG["entries"]
+                   if e["ticker"] == tkr and e["logged"] == _hz_today), None)
+    if _prior is None or _new_session >= _prior["session"]:
+        HLOG["entries"] = [e for e in HLOG["entries"]
+                           if not (e["ticker"] == tkr and e["logged"] == _hz_today)]
+        HLOG["entries"].append({"ticker": tkr, "logged": _hz_today,
+                                "session": _new_session, "h": horizons})
+        with open("horizons_log.json", "w", encoding="utf-8") as f:
+            json.dump(HLOG, f)
 
     # grade past DAILY horizon calls against recorded extremes
     hz_res = []

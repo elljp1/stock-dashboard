@@ -529,3 +529,51 @@ features, ledgers, and the coherence gate are untouched.
 Friday - that's when to check whether NVDA/AMZN/SPY/VOO's first predictions start resolving,
 whether GOOGL's 38% holds or fades further, and whether JPM or GC=F finally break their 0%
 streaks.
+
+## 2026-08-17 (Mon) — found and fixed a real hole in the grading ledger's record-keeping
+
+**Fetch status:** Yahoo is still blocked from this environment (403 on every ticker). No local
+price cache to fall back on, so `analyze.py` produced an empty 0-ticker build here, which I
+discarded. The cloud refresh workflow (which does have network access) had already run 12
+times today on its own and published a fresh build at 5:32 PM ET; `coherence_check.py` passed
+cleanly against that real data (10/10 tickers).
+
+**Grades reviewed (10 tickers):** TSLA n=16 (31%/44% hit-within-2/3-days). HOOD n=16 (31%/44%).
+QQQ n=16 (31%/38%). GOOGL n=10 (40%/40%, still the standout). JPM n=17 (still 0% - checked the
+swing detector directly: it hasn't confirmed a single high or low pivot for JPM since 5/19,
+over three months of a slow grind higher with no 4%+ pullback for it to catch - every
+prediction since is being tested against nothing, not against a wrong pivot). GC=F n=11 (still
+0%, same overdue-pullback story as before). SPY/VOO n=1 each (0%, too small a sample to mean
+anything yet). NVDA/AMZN still n=0 - confirmed directly in the prediction log that their
+earliest predictions won't be old enough to grade until roughly 8/26 (the rule is 8 trading
+days must pass first), so this is expected, not a bug. Real-money ledger unchanged: still just
+the 2 closed QQQ puts (+$980, +$600).
+
+**What changed and why (today's one change):** while digging into why JPM and GC=F have stayed
+stuck near 0% for weeks, I found something more concrete than "the market's been quiet" - a
+real bug in how the system keeps its own grading record honest. Each day the system logs a
+same-day forecast ("here's what I predict for tomorrow's high and low") specifically so it can
+be checked later against what actually happened. Using the site's git history, I found that on
+two occasions (around 7/27-7/29 and again 8/13-8/14) a later run on the same calendar day
+overwrote an already-correct "predict tomorrow" forecast with a broken one that just repeated
+today's date - permanently erasing that day from ever being gradeable, with no error or
+warning. I traced the exact commit where this happened (a run whose data was a day behind)
+and confirmed it precisely: the forecast for 8/14 was correctly logged as `session: 2026-08-14`
+by the evening of 8/13, then a later run silently regressed it back to `session: 2026-08-13`,
+and 8/14 was never re-logged - it simply vanished from the grading record. I added a small
+guard in `analyze.py` (in the "log horizons for future grading" step) so a same-day rewrite can
+never move the target date backward, only forward or sideways - so this exact silent data loss
+can't happen again. This only affects the internal grading ledger (`horizons_log.json`) that
+tracks day-ahead accuracy behind the scenes; it changes nothing about what predictions or
+prices are shown on the live dashboard. I verified the fix's logic against the exact historical
+scenario it's meant to prevent (using a small standalone simulation, since Yahoo access is
+blocked here) and confirmed it blocks that regression while still allowing normal day-to-day
+updates through. `coherence_check.py` still passes cleanly. Honesty features (measured hit
+rates, random-control comparisons, the grading itself) are untouched - this fix makes the
+grading record more complete and trustworthy, not less strict.
+
+**Watch next:** confirm on tomorrow's review that the fix is holding in production (no more
+silently-skipped days in `horizons_log.json`); whether NVDA/AMZN's first predictions grade
+correctly once they mature around 8/26; and JPM's three-month pivot drought, plus GC=F's
+overdue pullback, both still open questions once the market finally gives the swing detector
+something to catch.
