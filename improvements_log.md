@@ -577,3 +577,37 @@ silently-skipped days in `horizons_log.json`); whether NVDA/AMZN's first predict
 correctly once they mature around 8/26; and JPM's three-month pivot drought, plus GC=F's
 overdue pullback, both still open questions once the market finally gives the swing detector
 something to catch.
+
+## 2026-08-18 (Tue) — no change warranted, grades logged; confirmed yesterday's ledger fix is holding
+
+**Fetch status:** Yahoo is still blocked from this environment (403 on every ticker, confirmed
+directly with curl too). `fetch_data.py` left no local price files behind, so `analyze.py`
+correctly produced an empty 0-ticker build here - I discarded those file changes rather than
+publish them, since they would have wiped the live dashboard. The cloud refresh workflow (which
+does have real network access) had already published a fresh build today at 5:30 PM ET, and
+`coherence_check.py` passed cleanly against it (10/10 tickers).
+
+**Grades reviewed (10 tickers):** TSLA n=16 (31%/44% hit-within-2/3-days), HOOD n=16 (31%/44%),
+QQQ n=16 (31%/38%), GOOGL n=10 (40%/40%, still the standout) - all unchanged from yesterday, no
+new predictions matured. JPM grew to n=19 (still 0%) - checked today's actual price action
+directly: JPM pulled back from Wednesday's high of $366.50 to today's low of $359.30, only about
+2%, still short of the 4%+ move the swing detector needs to confirm a pivot, so the drought
+continues for a mechanical reason, not a bug. GC=F (n=11, still 0%) did the opposite - made a
+fresh high today ($4,493.10), extending the same overdue-pullback story rather than resolving it.
+SPY/VOO grew to n=2 each (still 0%, sample still too small to read anything into). NVDA/AMZN
+still n=0 as expected, on track to mature around 8/26. Real-money ledger unchanged: still just
+the 2 closed QQQ puts (+$980, +$600).
+
+**Ledger integrity check:** walked `horizons_log.json`'s logged/session pairs from 8/11 through
+today - all move forward or stay level, none regress backward, so the same-day-rewrite guard
+added yesterday is holding in production with no repeat of the silent data-loss bug.
+
+**What changed and why:** no code change. Nothing today crossed the 3+-day-persistence bar or
+looked like a bug - JPM and GC=F are the same known, already-diagnosed drought as the last two
+reviews, just one day further along. Improvement discipline says grade and log only on a day
+like this. Honesty features, ledgers, and the coherence gate are untouched.
+
+**Watch next:** whether JPM's pullback today (2% and counting) grows into the 4%+ move the
+swing detector needs, which would finally give it a fresh pivot to grade against; GC=F's
+pullback that still hasn't come despite a fresh high; and NVDA/AMZN's first predictions maturing
+around 8/26.
