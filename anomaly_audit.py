@@ -114,12 +114,14 @@ for t, d in D.items():
         mo = today.strftime("%Y-%m")
         same = [v for k2, v in dfc.items() if k2.startswith(mo)]
         if same:
-            if max(v["high"] for v in same) > hz["monthly"]["high"]["price"] + 0.01:
-                issues.append(f"{t}: a date-picker day exceeds the monthly high "
-                              f"{hz['monthly']['high']['price']}")
-            if min(v["low"] for v in same) < hz["monthly"]["low"]["price"] - 0.01:
-                issues.append(f"{t}: a date-picker day undercuts the monthly low "
-                              f"{hz['monthly']['low']['price']}")
+            # the headline is the projected TURN; the band edge is disclosed as
+            # 'bound'. A picker day may exceed the turn but never the bound.
+            hcap = hz["monthly"]["high"].get("bound", hz["monthly"]["high"]["price"])
+            lcap = hz["monthly"]["low"].get("bound", hz["monthly"]["low"]["price"])
+            if max(v["high"] for v in same) > hcap + 0.01:
+                issues.append(f"{t}: a date-picker day exceeds the monthly high bound {hcap}")
+            if min(v["low"] for v in same) < lcap - 0.01:
+                issues.append(f"{t}: a date-picker day undercuts the monthly low bound {lcap}")
     # 3c. the turn state must agree with the first chain event's direction
     tn = d.get("turnFormed")
     if tn and preds:
@@ -145,6 +147,38 @@ for t, d in D.items():
                                      or abs(leg["price"] - preds[i_l]["price"]) > 0.011):
                 issues.append(f"{t}: outlook leg {i_l+1} ({leg['isoDate']} {leg['price']}) does not "
                               f"match the chain ({preds[i_l]['isoDate']} {preds[i_l]['price']})")
+
+    # 3e. A dated turn inside a period window OWNS that period's headline. This
+    # is the check that was missing when the weekly HIGH showed a volatility
+    # band top on Wed while the chain, the daily row and every trade card
+    # called the turn for Tue - three surfaces agreeing, one disagreeing.
+    def _turn_in(kind, start, end):
+        evs = [p for p in preds if p["type"] == kind
+               and start <= datetime.strptime(p["isoDate"], "%Y-%m-%d").date() <= end]
+        if not evs:
+            return None
+        return max(evs, key=lambda p: p["price"]) if kind == "high" else min(evs, key=lambda p: p["price"])
+
+    _wk0 = today - timedelta(days=today.weekday())
+    _mo_end = (today.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
+    for _k, _s, _e in (("weekly", _wk0, _wk0 + timedelta(days=4)),
+                       ("monthly", today, _mo_end)):
+        if _k not in hz:
+            continue
+        for _kind in ("high", "low"):
+            ev = _turn_in(_kind, _s, _e)
+            cell = hz[_k][_kind]
+            if not ev or cell.get("src") == "actual":
+                continue
+            if cell.get("src") != "chain":
+                issues.append(f"{t}: {_k} {_kind} {cell['price']} ({cell['date']}) comes from "
+                              f"{cell.get('src')}, but the chain has a dated {_kind} of "
+                              f"{ev['price']} on {ev['isoDate']} inside that window")
+                continue
+            evd = datetime.strptime(ev["isoDate"], "%Y-%m-%d").date()
+            if md(cell["date"]) != (evd.month, evd.day):
+                issues.append(f"{t}: {_k} {_kind} is dated {cell['date']} but the chain turn it "
+                              f"reports lands {ev['isoDate']}")
 
     # 4. trade cards line up with the chain + horizon labels
     for tr in T.get(t, {}).get("trades", []):

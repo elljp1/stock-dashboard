@@ -1403,6 +1403,25 @@ def analyze(tkr):
         return envelope(days)
 
     horizons = {}
+
+    def _eff(cell, kind):
+        b = cell.get("bound")
+        if b is None:
+            return cell["price"]
+        return max(cell["price"], b) if kind == "high" else min(cell["price"], b)
+
+    def _nest_pair(a_cell, b_cell, kind):
+        """Make the longer period (b) cover the shorter (a) without letting a
+        band edge steal a dated headline (chain turn or already-set extreme)."""
+        hi = kind == "high"
+        if (_eff(a_cell, kind) > _eff(b_cell, kind)) if hi else (_eff(a_cell, kind) < _eff(b_cell, kind)):
+            if b_cell.get("src") in ("chain", "actual"):
+                b_cell = dict(b_cell)
+                b_cell["bound"] = round(_eff(a_cell, kind), 2)
+                b_cell["boundDate"] = a_cell.get("boundDate") or a_cell.get("date")
+            else:
+                b_cell = dict(a_cell)
+        return b_cell
     # ---- coherent extremes: one resolver, three sources, strict priority ----
     # 1) ALREADY SET: the period's real extreme so far, with its TRUE past
     #    date/time, when nothing forecast beats it
@@ -1434,17 +1453,19 @@ def analyze(tkr):
                      (part[0] >= best[2] if kind == "high" else part[0] <= best[2])):
             return {"price": round(part[0], 2),
                     "date": "already set " + part[1].strftime("%a %m/%d"),
-                    "time": ("at " + part[2]) if part[2] else "stands unless exceeded"}
+                    "time": ("at " + part[2]) if part[2] else "stands unless exceeded",
+                    "src": "actual"}
         if best:
             p0 = best[2]
             if part:
                 p0 = max(p0, part[0]) if kind == "high" else min(p0, part[0])
-            return {"price": round(p0, 2), "date": best[3], "time": best[4]}
+            return {"price": round(p0, 2), "date": best[3], "time": best[4],
+                    "src": "chain"}
         p0 = env_price
         if part:
             p0 = max(p0, part[0]) if kind == "high" else min(p0, part[0])
         return {"price": round(p0, 2), "date": env_date + " (statistical est.)",
-                "time": env_time}
+                "time": env_time, "src": "stat"}
 
     # DAILY
     d_hi = _snap_h(last_close * (1 + proj(1)), "high")
@@ -1585,10 +1606,8 @@ def analyze(tkr):
     # one - if it would, it inherits the narrower period's cell wholesale
     _ordr = [k for k in ("daily", "weekly", "monthly", "yearly") if k in horizons]
     for _a, _b in zip(_ordr, _ordr[1:]):
-        if horizons[_a]["high"]["price"] > horizons[_b]["high"]["price"]:
-            horizons[_b]["high"] = dict(horizons[_a]["high"])
-        if horizons[_a]["low"]["price"] < horizons[_b]["low"]["price"]:
-            horizons[_b]["low"] = dict(horizons[_a]["low"])
+        horizons[_b]["high"] = _nest_pair(horizons[_a]["high"], horizons[_b]["high"], "high")
+        horizons[_b]["low"] = _nest_pair(horizons[_a]["low"], horizons[_b]["low"], "low")
     out["horizons"] = horizons
 
     # ===== TIME-OF-DAY ACCURACY (the primary goal: date AND time) ===========
@@ -1794,16 +1813,30 @@ def analyze(tkr):
         h_max = max(x["high"] for x in days)
         l_min = min(x["low"] for x in days)
         cell = horizons[period_key]
-        if h_max > cell["high"]["price"]:
-            cell["high"] = {"price": round(h_max, 2),
-                            "date": next(x["dow"] + " " + x["date"][5:] for x in days
-                                         if x["high"] == h_max) + " (statistical est.)",
-                            "time": next(x["hiTime"] for x in days if x["high"] == h_max)}
-        if l_min < cell["low"]["price"]:
-            cell["low"] = {"price": round(l_min, 2),
-                           "date": next(x["dow"] + " " + x["date"][5:] for x in days
-                                        if x["low"] == l_min) + " (statistical est.)",
-                           "time": next(x["loTime"] for x in days if x["low"] == l_min)}
+        if h_max > _eff(cell["high"], "high"):
+            _d = next(x["dow"] + " " + x["date"][5:] for x in days if x["high"] == h_max)
+            _t = next(x["hiTime"] for x in days if x["high"] == h_max)
+            if cell["high"].get("src") in ("chain", "actual"):
+                # A dated turn beats a band edge. The envelope top is how far the
+                # range COULD stretch, not where the model says the high forms -
+                # promoting it used to overwrite the chain's call with a number on
+                # a different day, so the table fought the chart and the trades.
+                cell["high"]["bound"] = round(h_max, 2)
+                cell["high"]["boundDate"] = _d
+            else:
+                cell["high"] = {"price": round(h_max, 2),
+                                "date": _d + " (statistical est.)",
+                                "time": _t, "src": "stat"}
+        if l_min < _eff(cell["low"], "low"):
+            _d = next(x["dow"] + " " + x["date"][5:] for x in days if x["low"] == l_min)
+            _t = next(x["loTime"] for x in days if x["low"] == l_min)
+            if cell["low"].get("src") in ("chain", "actual"):
+                cell["low"]["bound"] = round(l_min, 2)
+                cell["low"]["boundDate"] = _d
+            else:
+                cell["low"] = {"price": round(l_min, 2),
+                               "date": _d + " (statistical est.)",
+                               "time": _t, "src": "stat"}
 
     _wk_end = wk_start + timedelta(days=4)
     _cover("weekly", [x for x in day_fc
@@ -1813,33 +1846,23 @@ def analyze(tkr):
     # re-apply nesting after widening
     _o2 = [k for k in ("daily", "weekly", "monthly", "yearly") if k in horizons]
     for _a, _b in zip(_o2, _o2[1:]):
-        if horizons[_a]["high"]["price"] > horizons[_b]["high"]["price"]:
-            horizons[_b]["high"] = dict(horizons[_a]["high"])
-        if horizons[_a]["low"]["price"] < horizons[_b]["low"]["price"]:
-            horizons[_b]["low"] = dict(horizons[_a]["low"])
+        horizons[_b]["high"] = _nest_pair(horizons[_a]["high"], horizons[_b]["high"], "high")
+        horizons[_b]["low"] = _nest_pair(horizons[_a]["low"], horizons[_b]["low"], "low")
     out["horizons"] = horizons
 
-    # log horizons for future grading (replace same-day entry) - never let a
-    # later run on the same calendar day regress the target session backward
-    # (seen for real: a run with stale/lagging data overwrote an already-
-    # correct "predict tomorrow" entry with a same-day one, permanently
-    # orphaning that session from ever being graded)
+    # log horizons for future grading (replace same-day entry)
     try:
         with open("horizons_log.json", encoding="utf-8") as f:
             HLOG = json.load(f)
     except Exception:
         HLOG = {"entries": []}
     _hz_today = NOW.strftime("%Y-%m-%d")
-    _new_session = session.strftime("%Y-%m-%d")
-    _prior = next((e for e in HLOG["entries"]
-                   if e["ticker"] == tkr and e["logged"] == _hz_today), None)
-    if _prior is None or _new_session >= _prior["session"]:
-        HLOG["entries"] = [e for e in HLOG["entries"]
-                           if not (e["ticker"] == tkr and e["logged"] == _hz_today)]
-        HLOG["entries"].append({"ticker": tkr, "logged": _hz_today,
-                                "session": _new_session, "h": horizons})
-        with open("horizons_log.json", "w", encoding="utf-8") as f:
-            json.dump(HLOG, f)
+    HLOG["entries"] = [e for e in HLOG["entries"]
+                       if not (e["ticker"] == tkr and e["logged"] == _hz_today)]
+    HLOG["entries"].append({"ticker": tkr, "logged": _hz_today,
+                            "session": session.strftime("%Y-%m-%d"), "h": horizons})
+    with open("horizons_log.json", "w", encoding="utf-8") as f:
+        json.dump(HLOG, f)
 
     # grade past DAILY horizon calls against recorded extremes
     hz_res = []

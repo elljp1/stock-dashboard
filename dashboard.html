@@ -520,12 +520,17 @@ function renderAll(D){
      seasonality. Logged every run and graded as each period completes` +
      (g && g.n ? ` — <b>${g.n} daily calls graded so far</b> (recent errors: ` +
        g.daily.slice(-3).map(r=>`${r.session.slice(5)}: high ${r.hiErrPct>0?"+":""}${r.hiErrPct}% / low ${r.loErrPct>0?"+":""}${r.loErrPct}%`).join(" · ") + ")" : " — first grades arrive as periods close") + ".";
+    /* a band edge is how far the range could stretch - it is NOT a projected
+       turn, so it shows as a footnote instead of replacing the dated call */
+    const edge = c => c.bound ? `<div class="tag" style="margin-top:3px; opacity:.75">
+        range could stretch to ${fmt$(c.bound)}${c.boundDate ? " by " + c.boundDate : ""} — outer
+        edge of the volatility band, not a projected turn</div>` : "";
     const row = (name, h) => h ? `<tr>
       <td><b>${name}</b></td>
       <td><span class="badge bH">HIGH</span> <span class="big num">${fmt$(h.high.price)}</span><br>
-          <span class="num">${h.high.date}</span> · <span class="tag">${h.high.time}</span></td>
+          <span class="num">${h.high.date}</span> · <span class="tag">${h.high.time}</span>${edge(h.high)}</td>
       <td><span class="badge bL">LOW</span> <span class="big num">${fmt$(h.low.price)}</span><br>
-          <span class="num">${h.low.date}</span> · <span class="tag">${h.low.time}</span></td>
+          <span class="num">${h.low.date}</span> · <span class="tag">${h.low.time}</span>${edge(h.low)}</td>
     </tr>` : "";
     $("hzBody").innerHTML = `<table><tr><th>Period</th><th>Projected high</th><th>Projected low</th></tr>` +
       row("Daily", H.daily) + row("Weekly", H.weekly) +

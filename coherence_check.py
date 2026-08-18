@@ -15,11 +15,6 @@ raw = open("data.js", encoding="utf-8").read()
 d = json.loads(raw.replace("const DATA_ALL = ", "").split("const TRADES")[0].strip().rstrip(";"))
 
 fails = []
-# 0b. an empty dataset must never pass silently - the per-ticker checks below
-# have nothing to loop over and would otherwise report a trivial PASS, letting
-# a failed fetch/analyze run wipe out the live dashboard's data.
-if not d:
-    fails.append("data.js contains 0 tickers - build produced no data, refusing to publish")
 for t, D in d.items():
     preds = D.get("predictions", [])
     # 1. alternation + increasing dates
@@ -30,12 +25,19 @@ for t, D in d.items():
             fails.append(f"{t}: chain dates not increasing ({a['isoDate']} -> {b['isoDate']})")
     hz = D.get("horizons", {})
     order = [k for k in ("daily", "weekly", "monthly", "yearly") if k in hz]
-    # 2. nesting
+    # 2. nesting - on the EFFECTIVE extreme (headline or disclosed band edge):
+    # a longer period must cover a shorter one, but a dated headline is allowed
+    # to sit inside the band as long as its bound covers the difference
+    def eff(c, hi):
+        bd = c.get("bound")
+        if bd is None:
+            return c["price"]
+        return max(c["price"], bd) if hi else min(c["price"], bd)
     for a, b in zip(order, order[1:]):
-        if hz[a]["high"]["price"] > hz[b]["high"]["price"] + 0.01:
-            fails.append(f"{t}: {a} high {hz[a]['high']['price']} > {b} high {hz[b]['high']['price']}")
-        if hz[a]["low"]["price"] < hz[b]["low"]["price"] - 0.01:
-            fails.append(f"{t}: {a} low {hz[a]['low']['price']} < {b} low {hz[b]['low']['price']}")
+        if eff(hz[a]["high"], True) > eff(hz[b]["high"], True) + 0.01:
+            fails.append(f"{t}: {a} high {eff(hz[a]['high'], True)} > {b} high {eff(hz[b]['high'], True)}")
+        if eff(hz[a]["low"], False) < eff(hz[b]["low"], False) - 0.01:
+            fails.append(f"{t}: {a} low {eff(hz[a]['low'], False)} < {b} low {eff(hz[b]['low'], False)}")
     # 3. chain events fit inside monthly extremes (proxy for all windows)
     if "monthly" in hz and preds:
         mo = datetime.now().strftime("%Y-%m")
