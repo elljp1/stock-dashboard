@@ -1138,8 +1138,8 @@ function renderAll(D){
       <div style="border:1px solid var(--border); border-radius:10px; padding:10px 12px; margin:8px 0; background:var(--panel2)">
         <b>${t.ticker}</b> — ${t.structure} <span class="badge ${t.status === "open" ? "bH" : "chip"}">${t.status.toUpperCase()}</span>
         <div class="num" style="font-size:13px; margin-top:3px">opened ${t.opened}${t.closed ? " · closed " + t.closed : ""} ·
-          credit $${t.credit.toLocaleString()}${t.closeCost !== undefined ? " · closed for $" + t.closeCost : ""}
-          ${t.pnl !== undefined ? ` · <b class="${t.pnl >= 0 ? "good" : "bad"}">P&L ${t.pnl >= 0 ? "+" : ""}$${t.pnl.toLocaleString()}</b>` : ""}</div>
+          credit $${t.credit.toLocaleString()}${t.closeCost != null ? " · closed for $" + t.closeCost : ""}
+          ${t.pnl != null ? ` · <b class="${t.pnl >= 0 ? "good" : "bad"}">P&L ${t.pnl >= 0 ? "+" : ""}$${t.pnl.toLocaleString()}</b>` : ""}</div>
         ${t.note ? `<div class="tag" style="margin-top:2px">${t.note}</div>` : ""}
       </div>`).join("");
   })();
@@ -1553,8 +1553,8 @@ function buildSectionTabs(){
 }
 
 renderTabs();
-renderAll(DATA_ALL[CUR]);
-buildSectionTabs();
+try { renderAll(DATA_ALL[CUR]); } catch(e) { console.error("renderAll:", e); }
+buildSectionTabs();   // must run even if a panel above threw
 try { document.getElementById("updStatus").innerHTML = window.__freshness ? window.__freshness() : ""; } catch(e){}
 
 /* re-render on rotation / resize so charts refit the screen */
