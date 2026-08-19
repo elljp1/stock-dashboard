@@ -95,6 +95,53 @@
 </style>
 </head>
 <body>
+<!-- PIN gate: keeps casual visitors out. The page is still a public static
+     site, so this is a privacy curtain, not bank-grade security. -->
+<div id="pinGate" style="position:fixed; inset:0; z-index:99999; background:#f7f8fa;
+     display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px">
+  <div style="font-size:22px; font-weight:700; color:#1a1a2e">Stock Timing Dashboard</div>
+  <div style="color:#667; font-size:14px">Enter PIN to continue</div>
+  <input id="pinIn" type="password" inputmode="numeric" autocomplete="off" maxlength="8"
+         style="font-size:26px; letter-spacing:10px; text-align:center; width:170px; padding:10px;
+                border:2px solid #c9d2e0; border-radius:10px" />
+  <button id="pinGo" style="font-size:16px; padding:10px 34px; border:0; border-radius:10px;
+          background:#2563eb; color:#fff; font-weight:600; cursor:pointer">Unlock</button>
+  <div id="pinMsg" style="color:#c0392b; font-size:13px; min-height:18px"></div>
+</div>
+<script>
+(function(){
+  var GATE_H = "2810766e5bc11ad77d69d4d28fe5cf6b8033c67e2e6ec2237b029f6855436885";
+  var DAYS = 30;
+  function sha256(str){
+    return crypto.subtle.digest("SHA-256", new TextEncoder().encode(str)).then(function(buf){
+      return Array.prototype.map.call(new Uint8Array(buf), function(b){
+        return ("0" + b.toString(16)).slice(-2);
+      }).join("");
+    });
+  }
+  function open_(){ var g = document.getElementById("pinGate"); if(g) g.remove(); }
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem("pinOk") || "null"); } catch(e){}
+  if (saved && saved.h === GATE_H && (Date.now() - saved.t) < DAYS*864e5){ open_(); return; }
+  function tryPin(){
+    var v = (document.getElementById("pinIn").value || "").trim();
+    sha256("stk-dash-2026|" + v).then(function(h){
+      if (h === GATE_H){
+        try { localStorage.setItem("pinOk", JSON.stringify({h: h, t: Date.now()})); } catch(e){}
+        open_();
+      } else {
+        document.getElementById("pinMsg").textContent = "Wrong PIN";
+        document.getElementById("pinIn").value = "";
+      }
+    });
+  }
+  document.getElementById("pinGo").addEventListener("click", tryPin);
+  document.getElementById("pinIn").addEventListener("keydown", function(e){
+    if (e.key === "Enter") tryPin();
+  });
+  setTimeout(function(){ var i = document.getElementById("pinIn"); if(i) i.focus(); }, 50);
+})();
+</script>
 
 <h1><span id="tkr"></span> <span class="px" id="price"></span> <span class="sub" id="updated"></span></h1>
 <div class="sub">Timing dashboard — when highs &amp; lows tend to happen, with Gann, Hurst, astro &amp; Fibonacci
