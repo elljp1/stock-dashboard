@@ -34,6 +34,11 @@ jobs:
       - run: python analyze.py
       - run: python coherence_check.py
       - run: python anomaly_audit.py
+      # runtime smoke test: load the built page in jsdom and prove it boots
+      # (esprima only catches syntax errors; this catches the runtime crashes
+      # that have twice broken the live page)
+      - run: npm install --no-save jsdom
+      - run: node smoke_test.js
       - name: Commit and push updated dashboard
         run: |
           git config user.name "dashboard-bot"
