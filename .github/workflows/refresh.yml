@@ -9,6 +9,11 @@ on:
     - cron: "0 21 * * 1-5"      # 5:00 PM ET  after close
     - cron: "0 23 * * 1-5"      # 7:00 PM ET  evening
   workflow_dispatch: {}
+  # run on manual pushes too, so a pushed fix is verified immediately instead
+  # of waiting for the next cron. The workflow's own bot commits use the
+  # default GITHUB_TOKEN, whose pushes never re-trigger workflows - no loop.
+  push:
+    branches: [main]
 
 permissions:
   contents: write
