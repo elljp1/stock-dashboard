@@ -649,3 +649,40 @@ this. Honesty features, ledgers, and the coherence gate are untouched.
 finally register a pivot; GC=F's pullback that keeps not arriving despite repeated fresh highs;
 NVDA/AMZN's first predictions maturing around 8/26; and how the new real TSLA short call performs
 against its own model's stress case (a projected $353.12 high on 8/20, still under breakeven).
+
+## 2026-08-20 (Thu) — no change warranted, grades logged
+
+**Fetch status:** Yahoo is still blocked from this review environment (403 on every ticker, now
+four days running - today it showed up as the outbound proxy itself rejecting the connection to
+query1.finance.yahoo.com rather than Yahoo's own block page, same net effect). `fetch_data.py`
+failed on all 10 tickers and, with no CSVs to work from, `analyze.py` wrote an empty 0-ticker
+`data.js` - I discarded those file changes rather than publish them. The cloud refresh workflow
+(which has real network access) had already published a fresh build today at 5:34 PM ET, and
+`coherence_check.py` passed cleanly against it (10/10 tickers).
+
+**Grades reviewed (10 tickers):** TSLA n=18 (28%/39% hit-within-2/3-days), HOOD n=19 (26%/37%),
+QQQ n=19 (26%/32%), GOOGL n=12 (33%/33%, unchanged today, no new predictions matured), JPM n=21
+(still 0%): JPM kept sliding for a sixth straight session, closing today at a new low of $351.55,
+down from Wednesday 8/12's high of $366.09 - that's now a 4.0% move, right at the edge of the
+4%+ threshold the swing detector needs, so a fresh pivot may finally register in the next day or
+two. GC=F (n=14, still 0%, but priceMedErrPct is a tiny 0.3% - the price targets are landing
+close, just early) made yet another new high today ($4,597.10, up from $4,524.10 on 8/19), the
+fourth straight session without the overdue pullback - same already-diagnosed story, one more
+day along. SPY/VOO grew to n=4 each (still 0%, sample still too small to mean anything). NVDA/AMZN
+still n=0, on track to mature around 8/26 as before. Real-money ledger: the 2 closed QQQ puts are
+unchanged (+$980, +$600); the owner's real short TSLA call (5x $345, exp 9/11) passed its first
+stress-test date today - the model's entry-day projection had TSLA testing a $353.12 high on
+8/20, but the actual high was only $347.49, well under both that projection and the $357.50
+breakeven, so the position stayed comfortably safe.
+
+**What changed and why:** no code change. JPM and GC=F are the same known, already-diagnosed
+droughts as the last several reviews, just one more day along (JPM is now close enough to the
+4% threshold to watch closely, but closeness to a threshold isn't a bug). Improvement discipline
+says grade and log only on a day like this. Honesty features, ledgers, and the coherence gate are
+untouched.
+
+**Watch next:** whether JPM's now-4.0% drift finally crosses the swing detector's threshold and
+registers a pivot; GC=F's pullback that still hasn't shown up after four straight new highs;
+NVDA/AMZN's first predictions maturing around 8/26; and the real TSLA short call's next stress
+date (the model's 8/27 low window at ~$317, and its 9/11 expiry-day projection of $365.08, which
+is above breakeven and why the plan is to close before then, not hold to expiry).
