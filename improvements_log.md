@@ -686,3 +686,42 @@ registers a pivot; GC=F's pullback that still hasn't shown up after four straigh
 NVDA/AMZN's first predictions maturing around 8/26; and the real TSLA short call's next stress
 date (the model's 8/27 low window at ~$317, and its 9/11 expiry-day projection of $365.08, which
 is above breakeven and why the plan is to close before then, not hold to expiry).
+
+## 2026-08-21 (Fri) — no code change warranted, grades logged; real-position risk note
+
+**Fetch status:** Yahoo is still blocked from this review environment (403 on every ticker,
+confirmed via the proxy's own status log as a gateway-level policy denial to
+query1.finance.yahoo.com, not a Yahoo block page). `fetch_data.py` and `analyze.py` produced an
+empty 0-ticker build here - I discarded those file changes rather than publish them. The cloud
+refresh workflow (which has real network access) had already published a fresh build today, and
+`coherence_check.py` passed cleanly against it (10/10 tickers).
+
+**Grades reviewed (10 tickers):** TSLA n=19 (26%/37% hit-within-2/3-days), HOOD n=20 (25%/35%),
+QQQ n=20 (25%/30%), GOOGL n=12 (33%/33%, still the standout). JPM n=23 (still 0%) - checked
+today's actual prices: JPM made a fresh low today at $350.37, down from 8/12's high of $366.09,
+a 4.3% move - finally past the swing detector's 4% threshold after six sessions of grinding
+lower, so a fresh pivot should register on the next refresh and start giving JPM's predictions
+something real to grade against. GC=F (n=15, still 0%) made yet another new high today
+($4,690.30, up from $4,530.00 on 8/20) - the fifth straight session without the overdue
+pullback, same already-diagnosed story. SPY/VOO grew to n=4/n=5 (still 0%, sample still too
+small to mean anything). NVDA/AMZN still n=0, on track to mature around 8/26 as before.
+
+**Real-money ledger:** the 2 closed QQQ puts are unchanged (+$980, +$600). The owner's real
+short TSLA call (5x $345, exp 9/11, breakeven $357.50) had its biggest test yet today - TSLA
+spiked to a $366.50 high and closed at $362.86, both above breakeven and above the model's own
+8/20 stress-case projection of $353.12. This is a real, current risk to an open position, not a
+backtest number, so the owner should know: the position is now trading above its breakeven for
+the first time since it was opened 8/19. The model's own plan for this trade was to close near
+the 8/27 low window (~$317) or at 50% of credit, whichever comes first - today's move is well
+outside that plan and worth the owner's attention regardless of what tomorrow's review finds.
+
+**What changed and why:** no code change. JPM crossing its 4% threshold is a mechanical
+milestone already flagged as "close" in the last two reviews, not a new bug; GC=F is the same
+overdue-pullback story one day further along. Improvement discipline says grade and log only on
+a day like this. Honesty features, ledgers, and the coherence gate are untouched.
+
+**Watch next:** whether JPM's fresh 4.3% low finally registers a pivot on the next cloud
+refresh and starts moving its grade off 0%; GC=F's pullback that still hasn't shown up after
+five straight new highs; NVDA/AMZN's first predictions maturing around 8/26; and, most
+importantly, how the real TSLA short call's mark evolves from here now that it's trading above
+breakeven - the model's plan still points to an 8/27 low window as the intended exit.
