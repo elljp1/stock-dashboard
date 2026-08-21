@@ -14747,8 +14747,8 @@
    "logged": "2026-08-21",
    "sheet": {
     "TSLA": {
-     "asof": "2026-08-21 22:14",
-     "spot": 362.86,
+     "asof": "2026-08-21 23:27",
+     "spot": 363.7,
      "trades": [
       {
        "kind": "RIDE",
@@ -14848,22 +14848,22 @@
      "bestWeek": "Buy Sep 04 $365/$380 call spread (ride to the projected high)"
     },
     "HOOD": {
-     "asof": "2026-08-21 22:14",
-     "spot": 109.16,
+     "asof": "2026-08-21 23:27",
+     "spot": 108.9,
      "trades": [
       {
        "kind": "RIDE",
        "hz": "TODAY",
        "sortd": "2026-08-21",
-       "label": "Buy Sep 04 $110/$115 call spread (ride to the projected high)",
-       "detail": "debit ~$1.73 ($172) - max value $500 - ROI 190% if $114.71 prints by Mon 08/24",
+       "label": "Buy Sep 04 $109/$115 call spread (ride to the projected high)",
+       "detail": "debit ~$2.18 ($218) - max value $600 - ROI 176% if $114.71 prints by Mon 08/24",
        "thesis": "price is projected to rise into the Mon 08/24 high - this is the actionable trade NOW, not the far-off put entry",
        "exp": "Sep 04",
        "strikes": [
-        110.0,
+        109.0,
         115.0
        ],
-       "premium": 1.73,
+       "premium": 2.18,
        "execute": "now / today - Saturn 3:12-4:00 PM",
        "exitWin": "Mon 08/24 - Saturn 3:12-4:00 PM"
       },
@@ -14945,12 +14945,12 @@
        "exitWin": "Mon 09/14 - Saturn 2:56-3:59 PM"
       }
      ],
-     "bestToday": "Buy Sep 04 $110/$115 call spread (ride to the projected high)",
-     "bestWeek": "Buy Sep 04 $110/$115 call spread (ride to the projected high)"
+     "bestToday": "Buy Sep 04 $109/$115 call spread (ride to the projected high)",
+     "bestWeek": "Buy Sep 04 $109/$115 call spread (ride to the projected high)"
     },
     "QQQ": {
-     "asof": "2026-08-21 22:14",
-     "spot": 713.44,
+     "asof": "2026-08-21 23:27",
+     "spot": 714.23,
      "trades": [
       {
        "kind": "MODEL",
@@ -15019,8 +15019,8 @@
      "bestWeek": "Sell Sep 11 $706 put AT the projected low"
     },
     "JPM": {
-     "asof": "2026-08-21 22:14",
-     "spot": 351.58,
+     "asof": "2026-08-21 23:27",
+     "spot": 351.95,
      "trades": [
       {
        "kind": "MODEL",
@@ -15089,47 +15089,78 @@
      "bestWeek": "Sell Oct 02 $345 put AT the projected low"
     },
     "GOOGL": {
-     "asof": "2026-08-21 22:14",
-     "spot": 345.6,
+     "asof": "2026-08-21 23:27",
+     "spot": 345.19,
      "trades": [
       {
-       "kind": "RIDE",
-       "hz": "TODAY",
-       "sortd": "2026-08-21",
-       "label": "Buy Sep 11 $350/$360 call spread (ride to the projected high)",
-       "detail": "debit ~$2.73 ($272) - max value $1000 - ROI 267% if $355.96 prints by Fri 09/04",
-       "thesis": "price is projected to rise into the Fri 09/04 high - this is the actionable trade NOW, not the far-off put entry",
-       "exp": "Sep 11",
-       "strikes": [
-        350.0,
-        360.0
-       ],
-       "premium": 2.73,
-       "execute": "now / today - Saturn 9:40-10:45 AM; Mars 11:49-12:54 PM",
-       "exitWin": "Fri 09/04 - Saturn 9:40-10:45 AM; Mars 11:49-12:54 PM"
-      },
-      {
-       "kind": "INCOME NOW",
-       "hz": "TODAY",
-       "sortd": "2026-08-21",
-       "label": "Sell Sep 11 $335 put at nearest support",
+       "kind": "MODEL",
+       "hz": "THIS WEEK",
+       "sortd": "2026-08-24",
+       "label": "Sell Sep 11 $335 put AT the projected low",
        "detail": "~$4.95 ($495/contract) - yield 1.5% - breakeven $330.05 - collateral $33,500",
-       "thesis": "collect premium while price is projected to rise into Fri 09/04; strike sits on the nearest tested support",
+       "thesis": "enter at the projected Mon 08/24 low (~$337.89), buy-to-close into the Mon 08/31 high (~$355.96). Highest premium - assigned if the low overshoots; size accordingly",
        "exp": "Sep 11",
        "strikes": [
         335.0
        ],
        "premium": 4.95,
-       "execute": "now / today",
-       "exitWin": "Fri 09/04 - Saturn 9:40-10:45 AM; Mars 11:49-12:54 PM (or 50% profit)"
+       "execute": "Mon 08/24 - Mercury 12:58-2:05 PM",
+       "exitWin": "Mon 08/31 - Mars 9:38-10:44 AM; Saturn 3:07-4:00 PM"
+      },
+      {
+       "kind": "INCOME",
+       "hz": "THIS WEEK",
+       "sortd": "2026-08-24",
+       "label": "Sell Sep 11 $310 put (cash-secured)",
+       "detail": "~$0.75 ($75/contract) - yield 0.2% - breakeven $309.25 - collateral $31,000",
+       "thesis": "strike below the deep/crash target - paid to wait",
+       "exp": "Sep 11",
+       "strikes": [
+        310.0
+       ],
+       "premium": 0.75,
+       "execute": "Mon 08/24 - Mercury 12:58-2:05 PM",
+       "exitWin": "50% profit or ~1 week"
+      },
+      {
+       "kind": "DEFINED",
+       "hz": "THIS WEEK",
+       "sortd": "2026-08-24",
+       "label": "Sell Sep 11 $335/$320 put spread",
+       "detail": "credit ~$3.63 ($363) - max loss $1137 - ROI 32% if price holds $335",
+       "thesis": "short strike at the projected low shelf, risk capped",
+       "exp": "Sep 11",
+       "strikes": [
+        335.0,
+        320.0
+       ],
+       "premium": 3.63,
+       "execute": "Mon 08/24 - Mercury 12:58-2:05 PM",
+       "exitWin": "50% profit or ~1 week"
+      },
+      {
+       "kind": "BOUNCE",
+       "hz": "THIS WEEK",
+       "sortd": "2026-08-24",
+       "label": "Buy Sep 11 $340/$360 call spread",
+       "detail": "debit ~$8.15 ($815) - max value $2000 - ROI 145% if $355.96 prints by Mon 08/31",
+       "thesis": "targets the Mon 08/31 rebound. DO NOT enter on the date alone - wait for the low to CONFIRM (price back +3% off the low). Bounce bets in a falling tape are lottery tickets (graded lesson 7/23-24)",
+       "exp": "Sep 11",
+       "strikes": [
+        340.0,
+        360.0
+       ],
+       "premium": 8.15,
+       "execute": "Mon 08/24 - Mercury 12:58-2:05 PM - AFTER +3% reversal confirms",
+       "exitWin": "Mon 08/31 - Mars 9:38-10:44 AM; Saturn 3:07-4:00 PM"
       }
      ],
-     "bestToday": "Buy Sep 11 $350/$360 call spread (ride to the projected high)",
-     "bestWeek": "Buy Sep 11 $350/$360 call spread (ride to the projected high)"
+     "bestToday": null,
+     "bestWeek": "Sell Sep 11 $335 put AT the projected low"
     },
     "NVDA": {
-     "asof": "2026-08-21 22:14",
-     "spot": 215.23,
+     "asof": "2026-08-21 23:27",
+     "spot": 215.35,
      "trades": [
       {
        "kind": "MODEL",
@@ -15137,7 +15168,7 @@
        "sortd": "2026-08-27",
        "label": "Sell Sep 25 $200 put AT the projected low",
        "detail": "~$4.47 ($447/contract) - yield 2.2% - breakeven $195.53 - collateral $20,000",
-       "thesis": "enter at the projected Thu 08/27 low (~$200.34), buy-to-close into the Mon 09/14 high (~$224.34). Highest premium - assigned if the low overshoots; size accordingly",
+       "thesis": "enter at the projected Thu 08/27 low (~$200.46), buy-to-close into the Mon 09/14 high (~$224.47). Highest premium - assigned if the low overshoots; size accordingly",
        "exp": "Sep 25",
        "strikes": [
         200.0
@@ -15182,7 +15213,7 @@
        "hz": "THIS WEEK",
        "sortd": "2026-08-27",
        "label": "Buy Sep 25 $205/$225 call spread",
-       "detail": "debit ~$9.88 ($988) - max value $2000 - ROI 103% if $224.34 prints by Mon 09/14",
+       "detail": "debit ~$9.88 ($988) - max value $2000 - ROI 103% if $224.47 prints by Mon 09/14",
        "thesis": "targets the Mon 09/14 rebound. DO NOT enter on the date alone - wait for the low to CONFIRM (price back +3% off the low). Bounce bets in a falling tape are lottery tickets (graded lesson 7/23-24)",
        "exp": "Sep 25",
        "strikes": [
@@ -15198,8 +15229,8 @@
      "bestWeek": "Sell Sep 25 $200 put AT the projected low"
     },
     "AMZN": {
-     "asof": "2026-08-21 22:14",
-     "spot": 259.51,
+     "asof": "2026-08-21 23:27",
+     "spot": 259.4,
      "trades": [
       {
        "kind": "RIDE",
@@ -15299,8 +15330,8 @@
      "bestWeek": "Buy Sep 11 $260/$290 call spread (ride to the projected high)"
     },
     "SPY": {
-     "asof": "2026-08-21 22:14",
-     "spot": 766.7,
+     "asof": "2026-08-21 23:27",
+     "spot": 766.76,
      "trades": [
       {
        "kind": "MODEL",
@@ -15369,8 +15400,8 @@
      "bestWeek": null
     },
     "VOO": {
-     "asof": "2026-08-21 22:14",
-     "spot": 704.55,
+     "asof": "2026-08-21 23:27",
+     "spot": 704.74,
      "trades": [
       {
        "kind": "MODEL",
@@ -15439,7 +15470,7 @@
      "bestWeek": null
     },
     "GC=F": {
-     "asof": "2026-08-21 22:14",
+     "asof": "2026-08-21 23:27",
      "spot": 4661.6,
      "trades": [
       {
