@@ -725,3 +725,35 @@ refresh and starts moving its grade off 0%; GC=F's pullback that still hasn't sh
 five straight new highs; NVDA/AMZN's first predictions maturing around 8/26; and, most
 importantly, how the real TSLA short call's mark evolves from here now that it's trading above
 breakeven - the model's plan still points to an 8/27 low window as the intended exit.
+
+## 2026-08-22 (Sat) — weekend, nothing new to grade; no change
+
+**Fetch status:** blocked again from this review environment (403 at the gateway to
+query1.finance.yahoo.com, same as yesterday) - moot today anyway, since it's Saturday and the
+cloud refresh workflow only runs on weekdays (its cron is `1-5`), so there's been no new refresh
+since Friday 7:19 PM ET. The dashboard is still serving Friday's close, unchanged, and
+`coherence_check.py` still passes cleanly against it (10/10 tickers).
+
+**Grades reviewed:** identical to yesterday's numbers since no new sessions have printed -
+TSLA n=19 (26%/37%), HOOD n=20 (25%/35%), QQQ n=20 (25%/30%), GOOGL n=12 (33%/33%). JPM n=23
+still shows 0% and every one of its 23 "resolved" entries still has a null actual price/date,
+meaning the grader has never found a matching swing to check JPM's calls against - worth a
+closer look if that's still true once JPM's newly-crossed 4% pivot (flagged Friday) has had a
+few sessions to register; if it's still 23-for-23 null next week that would point to a real
+matching bug rather than just a quiet ticker. GC=F (n=15, still 0%, medErr% a tight 0.3%)
+remains on its fifth straight new-high session without the overdue pullback. SPY/VOO (n=4/n=5)
+and NVDA/AMZN (n=0) are unchanged, still too young to mean anything.
+
+**Real-money ledger:** unchanged from Friday - the 2 closed QQQ puts stand at +$980 and +$600;
+the owner's real short TSLA call (5x $345, exp 9/11, breakeven $357.50) is still marked against
+Friday's close of $362.86, above breakeven. No new price action to reassess it against over the
+weekend.
+
+**What changed and why:** no code change. It's a non-trading day with no new data to grade -
+improvement discipline calls for grade-and-log only, and there's nothing to grade. Honesty
+features, ledgers, and the coherence gate are untouched.
+
+**Watch next:** Monday's first fresh refresh - whether JPM's pivot registered and starts
+moving its 0%/null-actual streak, whether GC=F finally shows a pullback after five (soon six)
+straight new highs, and how the real TSLA short call's mark opens the week relative to its
+$357.50 breakeven and the 8/27 low-window exit plan.
