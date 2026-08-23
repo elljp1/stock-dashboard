@@ -757,3 +757,39 @@ features, ledgers, and the coherence gate are untouched.
 moving its 0%/null-actual streak, whether GC=F finally shows a pullback after five (soon six)
 straight new highs, and how the real TSLA short call's mark opens the week relative to its
 $357.50 breakeven and the 8/27 low-window exit plan.
+
+## 2026-08-23 (Sun) — weekend, nothing new to grade; no change
+
+**Fetch status:** blocked again from this review environment (403 at the gateway to
+query1.finance.yahoo.com). Moot today anyway - it's Sunday, markets are closed, and the cloud
+refresh workflow doesn't run on weekends, so there's been no new session since Friday 8/21's
+close. `analyze.py` produced an empty 0-ticker build against no data here, so I discarded that
+output rather than publish it. `coherence_check.py` passes cleanly (10/10 tickers) against the
+last real build, Saturday's cloud refresh, which itself just re-served Friday's numbers.
+
+**Grades reviewed:** unchanged from yesterday - TSLA n=19 (26%/37% hit-within-2/3-days), HOOD
+n=20 (25%/35%), QQQ n=20 (25%/30%), GOOGL n=12 (33%/33%). JPM n=23 is still 23-for-23 with a
+null actual price/date on every entry - the grader still hasn't found a single matching swing to
+check any JPM call against, even after Friday's 4.3% move crossed the swing detector's
+threshold. That move needs at least one fresh trading session to turn into a registered pivot,
+and none has happened since Friday, so this is still an open question rather than a confirmed
+bug: if it's still 23-for-23 null after Monday and Tuesday's sessions, that would point to a
+real matching problem worth fixing, not just a quiet ticker. GC=F (n=15, still 0%, price error a
+tight 0.3%) and SPY/VOO (n=4/n=5) are unchanged. NVDA/AMZN still n=0, on track to mature this
+week.
+
+**Real-money ledger:** unchanged from Friday - the 2 closed QQQ puts stand at +$980 and +$600.
+The owner's real short TSLA call (5x $345, exp 9/11, breakeven $357.50) is still marked against
+Friday's close of $362.86, above breakeven, with no new price action over the weekend to
+reassess it against.
+
+**What changed and why:** no code change. It's a non-trading day with nothing new to grade -
+improvement discipline calls for grade-and-log only. The JPM null-actual question from
+yesterday's review still needs live Monday/Tuesday data before it's fair to call it a bug versus
+a quiet ticker, so today isn't the day to touch the grading code. Honesty features, ledgers, and
+the coherence gate are untouched.
+
+**Watch next:** Monday's first fresh session - whether it finally gives JPM's crossed-threshold
+move a pivot to register against, whether GC=F's overdue pullback shows up, and how the real
+TSLA short call's mark opens the week relative to its $357.50 breakeven and the 8/27 low-window
+exit plan.
