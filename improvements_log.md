@@ -793,3 +793,56 @@ the coherence gate are untouched.
 move a pivot to register against, whether GC=F's overdue pullback shows up, and how the real
 TSLA short call's mark opens the week relative to its $357.50 breakeven and the 8/27 low-window
 exit plan.
+
+## 2026-08-24 (Mon) — fetch blocked again; investigated the JPM issue but held off fixing it
+
+**Fetch status:** blocked from this review environment - the gateway returned 403 to every
+CONNECT attempt at query1.finance.yahoo.com, confirmed by the proxy's own status log ("gateway
+answered 403 to CONNECT (policy denial or upstream failure)"). This is a network policy block on
+this box, not a Yahoo outage or a code problem. `analyze.py` has no raw price data to work from
+here (the day's CSVs aren't committed to the repo by design), so it produced an empty, broken
+0-ticker build; that output was discarded rather than published. `coherence_check.py` passes
+cleanly (10/10 tickers) against the real build already live on the site - Friday and the
+weekend's cloud refreshes, most recently generated 08/24 5:36 PM ET, which is today's cloud
+refresh working fine on its own infrastructure.
+
+**Grades reviewed:** TSLA n=20 (36%/50% hit-within-2/3-days, median price error 8.8%), HOOD n=22
+(38%/54%, 5.2%), QQQ n=22 (50%/62%, 2.6% - still the strongest all-around), GOOGL n=13
+(33%/33%, 9.2%). GC=F n=16 is still 0% hit-within-3-days but with a tight 0.3% median price
+error - it keeps calling the right levels on the wrong days. JPM is now 24-for-24 with a null
+actual price/date on every graded entry - the swing-matching grader has never once found a
+matching real swing for any JPM call, across several days of review now.
+
+**What I looked into:** with JPM's null streak now well past the "3+ graded days" bar for asking
+whether it's a bug, I read through the grading code (analyze.py's per-ticker grading loop) rather
+than just noting the number again. The matcher picks the nearest real swing pivot to a
+prediction's target date - by date only, not by price - so it should find *some* candidate as
+long as the ticker has pivots at all; it only counts as a real match if that nearest pivot lands
+within 10 trading days. That JPM never matches, while GC=F (also a quiet, low-volatility ticker)
+matches on 5 of 16, points to JPM's swing detector itself finding pivots that are unusually
+sparse or badly timed, not a "quiet stock" excuse - GC=F is quiet too and still matches
+sometimes. My best guess is the volatility-scaled swing threshold (floored at 4%) is too coarse
+for JPM's actual daily range, spacing its detected swings so far apart that none ever lands near
+a predicted date. I did not change the code today: this needs to be checked against JPM's real
+recent price history (pivot count and spacing) to confirm before touching a threshold that every
+ticker shares, and today's fetch block means there's no live data here to verify it against.
+Making that change blind, without being able to run it and watch coherence_check and JPM's own
+grades respond, is more likely to trade one bug for another than to fix this one.
+
+**Real-money ledger:** the owner's real short TSLA call (5x $345, exp 9/11, breakeven $357.50)
+saw today's session (8/24) print an intraday high of $363.24 - briefly through breakeven - before
+closing back down at $348.95, modestly in the money against the $345 strike but back under
+breakeven. The model's own 8/27 predicted low window (~$317) is looking shaky: TSLA has stayed
+in a $335-366 band since the trade was opened 8/19 and hasn't shown the pullback that window
+calls for. The 2 closed QQQ puts are unchanged at +$980 and +$600.
+
+**What changed and why:** no code change. Fetch access was blocked all day, so there was no live
+data to safely test a fix against, and pushing an untested change to shared grading logic that
+every ticker depends on would risk breaking more than it fixes. Improvement discipline calls for
+grade-and-log on a day like this. Honesty features, ledgers, and the coherence gate are
+untouched.
+
+**Watch next:** whether tomorrow's cloud refresh (assuming it has real market access) can confirm
+or rule out the JPM swing-spacing theory - if it can, that's the fix to make; the real TSLA short
+call against the 8/27 low window and the $357.50 breakeven as expiry (9/11) gets closer; and
+GC=F's price-accurate-but-date-blind streak, still 0-for-16 on hit-within-3-days.
