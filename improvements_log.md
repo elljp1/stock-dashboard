@@ -846,3 +846,54 @@ untouched.
 or rule out the JPM swing-spacing theory - if it can, that's the fix to make; the real TSLA short
 call against the 8/27 low window and the $357.50 breakeven as expiry (9/11) gets closer; and
 GC=F's price-accurate-but-date-blind streak, still 0-for-16 on hit-within-3-days.
+
+## 2026-08-25 (Tue) — JPM mystery solved: it's not a bug, JPM just hasn't had a 4%+ pullback since May
+
+**Fetch status:** blocked again from this review environment - same 403 on every CONNECT to
+Yahoo's chart API as recent days, confirmed policy-level rather than a code problem.
+`coherence_check.py` passes cleanly (10/10 tickers) against today's site build, which the
+separate cloud refresh workflow already generated and published at 08/25 5:35 PM ET while this
+review ran, so the live dashboard reflects real market data even though this environment
+couldn't fetch its own.
+
+**Grades reviewed:** TSLA n=21 (24%/33% hit-within-2/3-days, 7.8% price error), HOOD n=23
+(22%/30%, 5.2%), QQQ n=24 (38%/46%, 2.5% - still the most reliable), GOOGL n=15 (27%/27%, 6.6%).
+JPM n=26 is still 0-for-26 with every actual price/date null. GC=F n=17 is unchanged at 0%
+hit-within-3-days despite a tight 0.3% median price error. NVDA (n=1) and AMZN (n=0) are still
+too new to grade; SPY (n=5) and VOO (n=6) both 0% on small samples.
+
+**What I found:** the JPM null streak has now been open for a week of daily reviews, well past
+the "3+ days" bar, so today I settled it for good instead of noting the number again. I pulled
+JPM's actual daily closes from `daily_extremes.json` since 05/19/2026 (the last confirmed swing
+pivot) and ran the exact same zigzag function from `analyze.py` against them by hand, in a
+throwaway script, not by editing the real grading code. Result: zero pivots trigger, at any
+point between 05/19 and today - JPM has been in a genuine, uninterrupted rally from $295.70 to
+$356.69 without a single close-to-close pullback of 4% or more from its running peak. The
+closest it ever came was late June (~1.6% short) and late August (~0.3% short). Every
+prediction logged in that window necessarily has no real swing to check it against, because no
+qualifying swing has happened yet - the grader is correctly reporting "no match" rather than
+manufacturing a fake one. This is the honesty/coherence design working exactly as intended, not
+the bug I was starting to suspect on Monday. The `pivots < 8` auto-relax that halves the
+threshold never fires for JPM because it looks at total pivot count over 5 years (64, plenty),
+not "time since the most recent one" - that's a real gap in principle, but touching threshold
+logic that every ticker's live chain and period-extremes depend on, to fix a one-ticker
+statistics-display quirk that isn't actually wrong, is a worse trade than leaving it alone.
+
+**Real-money ledger:** the owner's real short TSLA call (5x $345, exp 9/11, breakeven $357.50) is
+marked against today's close of $350.82, still comfortably under breakeven. The model's 8/27
+predicted low window (~$317) is 2 sessions away and still hasn't been approached - TSLA has held
+a $335-366 band since the trade opened 8/19. The 2 closed QQQ puts are unchanged at +$980 and
++$600.
+
+**What changed and why:** no code change. The JPM investigation concluded with a clean answer -
+real market behavior, not a defect - so there is nothing to fix; changing the swing/grading logic
+today would be solving a problem that doesn't exist. Honesty features (measured hit rates,
+random-control comparisons, self-grading, the coherence gate) and ledgers are untouched, and
+`tickers.txt` wasn't touched.
+
+**Watch next:** whether JPM finally prints a pivot (it's within ~2.3% of triggering a high off
+the 08/12 peak of $365.18 if it rallies, or needs to break back below ~$350.6 to confirm one the
+other way) - once it does, the grading numbers should start moving off 0% for the first time in
+weeks. Also watching the 8/27 low window for the real TSLA short call, and whether GC=F's
+own extended pivot drought (last confirmed 07/16) turns out to be the same "quiet trend, not a
+bug" story once it breaks.
