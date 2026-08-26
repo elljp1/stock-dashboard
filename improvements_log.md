@@ -897,3 +897,42 @@ other way) - once it does, the grading numbers should start moving off 0% for th
 weeks. Also watching the 8/27 low window for the real TSLA short call, and whether GC=F's
 own extended pivot drought (last confirmed 07/16) turns out to be the same "quiet trend, not a
 bug" story once it breaks.
+
+## 2026-08-26 (Wed) — no change warranted, grades logged
+
+**Fetch status:** blocked again from this review environment - same 403-at-the-gateway block on
+every CONNECT to Yahoo's chart API (confirmed via the proxy's own status log: "gateway answered
+403 to CONNECT" for query1.finance.yahoo.com, a policy denial, not a Yahoo outage). With no CSVs
+cached locally, running `analyze.py` here wrote an empty 0-ticker `data.js`/`index.html` - caught
+that immediately (before committing anything) and reverted those files, keeping the real,
+already-published build. That real build was generated today by the separate cloud refresh
+workflow (which does have market access) at 04:29 PM ET, and `coherence_check.py` passes cleanly
+against it (10/10 tickers).
+
+**Grades reviewed:** TSLA n=23 (22%/30% hit-within-2/3-days, 7.8% price error), HOOD n=25
+(20%/28%, 5.2%), QQQ n=26 (38%/46%, 2.0% - still the most reliable), GOOGL n=15 (27%/27%, 6.6%,
+unchanged since yesterday - no new predictions matured). JPM n=28 is still 0-for-28 with every
+actual price/date null, same drought fully diagnosed yesterday (a genuine, uninterrupted rally
+since 05/19 with no 4%+ pullback for the grader to catch, not a bug) - worth noting JPM rallied to
+$357.00 today, closing the gap toward the 08/12 peak of $365.18 a bit further, but still short of
+confirming a fresh pivot either direction. GC=F n=19 is unchanged at 0% despite a tight 0.3% price
+error, same overdue-pullback story. NVDA (n=2) and AMZN (n=0) are still too new to read anything
+into; SPY (n=7) and VOO (n=8) both still 0% on small samples. Today's trade-sheet cards (all dated
+09/08 entries) are too fresh to have resolved.
+
+**Real-money ledger:** the owner's real short TSLA call (5x $345, exp 9/11, breakeven $357.50) is
+marked against today's close-area price of $345.82, comfortably under breakeven. Tomorrow (8/27)
+is the model's own predicted low window (~$317) - the exit point the original plan called for
+(buy back at that low or at 50% of credit, whichever comes first). Worth checking tomorrow's
+review specifically against that window. The 2 closed QQQ puts are unchanged at +$980 and +$600.
+
+**What changed and why:** no code change. Nothing today crossed the 3+-day-persistence bar with a
+new, undiagnosed pattern - JPM and GC=F are the same known droughts settled yesterday, just one
+more day along, and every other number moved in line with recent trend. Improvement discipline
+calls for grade-and-log only on a day like this. Honesty features, ledgers, and the coherence gate
+are untouched, and `tickers.txt` wasn't touched.
+
+**Watch next:** tomorrow's 8/27 low window (~$317) against the real TSLA short call's planned
+exit - the single most concrete near-term test this system has open right now; whether JPM's
+rally toward $365.18 keeps going far enough to finally confirm a pivot; and GC=F's still-overdue
+pullback from its extended run of highs.
