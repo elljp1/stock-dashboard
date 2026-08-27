@@ -252,6 +252,12 @@
   <div id="trBody" class="tblwrap" style="margin-top:8px"></div>
 </div>
 
+<div class="panel" data-tab="Accuracy">
+  <h2>Call revisions — every time a published date/time moved</h2>
+  <div class="sub" id="rvSub"></div>
+  <div id="rvBody" class="tblwrap" style="margin-top:8px"></div>
+</div>
+
 <div class="panel" data-tab="Research">
   <h2>Timing-school scorecard — what actually tested out on <span class="tkr2"></span></h2>
   <div class="sub" id="scoreSub"></div>
@@ -469,8 +475,18 @@ function renderAll(D){
         </div>
         <div class="num" style="font-size:14px">window ${nr.window} &nbsp;·&nbsp; price target ${fmt$(nr.price)}
           ${nr.altTime && nr.altTime !== nr.time ? ` ·&nbsp; 2nd time ${nr.altTime}` : ""}</div>
+        ${(function(){
+          const st = D.stability;
+          if(!st || !st.call || st.call.isoDate !== nr.isoDate) return "";
+          if(st.stoodDays >= 1) return `<div style="margin-top:5px"><span class="badge" style="background:#dafbe1; color:#1a7f37; border-color:#1a7f3733">CALL UNCHANGED ${st.stoodDays === 1 ? "since yesterday" : "for " + st.stoodDays + " days"}</span></div>`;
+          const rv = (st.recentRevisions || [])[st.recentRevisions.length - 1];
+          return rv && rv.when === new Date().toISOString().slice(0,10)
+            ? `<div style="margin-top:5px"><span class="badge" style="background:#fff8c5; color:#7d4e00; border-color:#7d4e0033">REVISED TODAY</span> <span class="tag">was ${rv.from.isoDate.slice(5)} ${rv.from.time || ""} → now ${rv.to.isoDate.slice(5)} · ${rv.reason}</span></div>`
+            : `<div style="margin-top:5px"><span class="badge chip">NEW CALL</span> <span class="tag">first published today</span></div>`;
+        })()}
         <div class="tag" style="margin-top:4px">Timing is the primary call; the price target is secondary.
-          Backtested date accuracy on ${nice(D.ticker)}: ${pct(nr.hit2)} within ±2 days, ${pct(nr.hit3)} within ±3 days.</div>
+          Backtested date accuracy on ${nice(D.ticker)}: ${pct(nr.hit2)} within ±2 days, ${pct(nr.hit3)} within ±3 days.
+          A call only moves when the model decisively disagrees (>1 session or >1.5% price) - small wobble keeps the published date.</div>
       </div>` + (tn ? `<div style="font-size:13px; margin-bottom:8px; padding:8px 12px; border-radius:8px;
         background:${sc[0]}; border:1px solid ${sc[1]}33; color:${sc[1]}">
         <b>Swing state: ${sc[2]}</b> - ${sc[3]}.<br>
@@ -555,6 +571,30 @@ function renderAll(D){
     };
     $("dpGo").onclick = show; inp.onchange = show;
     show();
+  })();
+
+  /* call revisions */
+  (function(){
+    const st = D.stability;
+    if(!$("rvBody")) return;
+    $("rvSub").innerHTML = `A published call is a commitment: it only moves when the model decisively
+      disagrees (date off by more than 1 session, or price re-marked over 1.5%). Small wobble keeps the
+      published date. Every move is logged here with before → after, so revisions are visible, graded,
+      and learnable — never silent.`;
+    const rv = (st && st.recentRevisions) || [];
+    if(!rv.length){
+      $("rvBody").innerHTML = `<div class="tag" style="padding:8px 4px">No revisions recorded for ${nice(D.ticker)}
+        since tracking began — the current call has stood ${st && st.stoodDays ? st.stoodDays + " day(s)" : "since it was first published"}.</div>`;
+      return;
+    }
+    $("rvBody").innerHTML = `<table><tr><th>When</th><th>Call</th><th>Was</th><th>Now</th><th>Why</th></tr>` +
+      rv.slice().reverse().map(r => `<tr>
+        <td class="num">${r.when}</td>
+        <td><span class="badge ${r.type==="high"?"bH":"bL"}">${r.type.toUpperCase()}</span></td>
+        <td class="num">${r.from.isoDate.slice(5)} ${r.from.time || ""} ${r.from.price ? fmt$(r.from.price) : ""}</td>
+        <td class="num">${r.to.isoDate.slice(5)} ${r.to.time || ""} ${fmt$(r.to.price)}</td>
+        <td class="tag">${r.reason}</td>
+      </tr>`).join("") + `</table>`;
   })();
 
   /* period extremes (horizons) */

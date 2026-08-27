@@ -1,13 +1,13 @@
 name: Refresh dashboard
 on:
   schedule:
-    # hourly during US market hours, 9:30 AM - 4:30 PM Eastern (summer time)
-    - cron: "0 11 * * 1-5"      # 7:00 AM ET  pre-market
-    - cron: "0 12 * * 1-5"      # 8:00 AM ET  pre-market
-    - cron: "0 13 * * 1-5"      # 9:00 AM ET  just before the open
-    - cron: "30 13-20 * * 1-5"  # 9:30 AM - 4:30 PM ET  hourly
-    - cron: "0 21 * * 1-5"      # 5:00 PM ET  after close
-    - cron: "0 23 * * 1-5"      # 7:00 PM ET  evening
+    # GitHub's scheduler is best-effort and drops on-the-hour/half-hour slots
+    # most (they are the most congested) - on 8/27 all three pre-market runs
+    # were silently skipped. Odd minutes + double density = a miss costs 30
+    # minutes of staleness instead of a whole morning.
+    - cron: "17 10-21 * * 1-5"  # 6:17 AM - 5:17 PM ET, hourly
+    - cron: "47 11-20 * * 1-5"  # 7:47 AM - 4:47 PM ET, half-hour offsets
+    - cron: "17 23 * * 1-5"     # 7:17 PM ET  evening
   workflow_dispatch: {}
   # run on manual pushes too, so a pushed fix is verified immediately instead
   # of waiting for the next cron. The workflow's own bot commits use the
@@ -48,7 +48,7 @@ jobs:
         run: |
           git config user.name "dashboard-bot"
           git config user.email "dashboard-bot@users.noreply.github.com"
-          git add index.html dashboard_single.html data.js predictions_log.json daily_extremes.json trades.json trades_log.json horizons_log.json real_trades.json improvements_log.md backfill.json benchmark.json week_plan.json week_plan_log.json
+          git add index.html dashboard_single.html data.js predictions_log.json daily_extremes.json trades.json trades_log.json horizons_log.json real_trades.json improvements_log.md backfill.json benchmark.json week_plan.json week_plan_log.json revisions_log.json
           git commit -m "auto refresh (cloud)" || echo "nothing new"
           git push
 

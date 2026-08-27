@@ -35,6 +35,16 @@ try:
 except Exception:
     PRED_LOG = {"entries": []}
 
+# every change to a PUBLISHED call (date/time/price of an upcoming turn) is
+# recorded here with before/after - the user trades on these dates, so a
+# revision is an event worth explaining, never a silent overwrite
+REV_FILE = "revisions_log.json"
+try:
+    with open(REV_FILE, encoding="utf-8") as _f:
+        REV_LOG = json.load(_f)
+except Exception:
+    REV_LOG = {"entries": []}
+
 # permanent record of every day's high/low/close per ticker (committed to the
 # repo, so accuracy analysis never depends on refetching history)
 EXT_FILE = "daily_extremes.json"
@@ -1355,6 +1365,95 @@ def analyze(tkr):
             "score": round(s, 2), "scoreMax": round(smax, 2), "reached": reached,
             "methods": tags[d][:4]})
         prev_price, prev_type = price, ty
+    # ---- TIMING STABILITY: a published call is a commitment -----------------
+    # The model recomputes from scratch every run, so tiny data changes used
+    # to wobble the published date/time between runs - churn that makes the
+    # calls untradeable. Rule: when the new computation lands on the SAME turn
+    # within noise (same type, within 1 trading day, price within 1.5%), the
+    # previously published date/time stands verbatim. A call only moves when
+    # the model decisively disagrees, and every move is written to
+    # revisions_log.json with before/after.
+    _prev_entry = max((e for e in PRED_LOG["entries"]
+                       if e["ticker"] == tkr and e["logged"] < NOW.strftime("%Y-%m-%d")),
+                      key=lambda e: e["logged"], default=None)
+    _prev_preds = (_prev_entry or {}).get("preds", [])
+
+    def _tdiff(a, b):
+        d0 = datetime.strptime(a, "%Y-%m-%d").date()
+        d1 = datetime.strptime(b, "%Y-%m-%d").date()
+        lo2, hi2 = min(d0, d1), max(d0, d1)
+        return sum(1 for k2 in range((hi2 - lo2).days)
+                   if (lo2 + timedelta(days=k2 + 1)).weekday() < 5)
+
+    _kept_prev_date = None
+    for _np in preds[:3]:
+        _cand = [pp for pp in _prev_preds if pp["type"] == _np["type"]
+                 and pp["isoDate"] >= NOW.strftime("%Y-%m-%d")
+                 and _tdiff(pp["isoDate"], _np["isoDate"]) <= 3]
+        if not _cand:
+            continue
+        _pp = min(_cand, key=lambda x: _tdiff(x["isoDate"], _np["isoDate"]))
+        _dd = _tdiff(_pp["isoDate"], _np["isoDate"])
+        _pmove = abs(_np["price"] / _pp["price"] - 1) if _pp.get("price") else 9
+        if _dd <= 1 and _pmove <= 0.015:
+            # same turn within noise: yesterday's published call stands
+            _pd = datetime.strptime(_pp["isoDate"], "%Y-%m-%d").date()
+            # keep spacing >= 3 sessions from the previously kept event so the
+            # anomaly gate's velocity check still holds
+            if _kept_prev_date is None or _tdiff(_kept_prev_date.strftime("%Y-%m-%d"),
+                                                 _pp["isoDate"]) >= 3:
+                _np["isoDate"] = _pp["isoDate"]
+                _np["date"] = _pd.strftime("%a %m/%d")
+                _np["dateWindow"] = (f"{add_trading_days(_pd, -2).strftime('%m/%d')}-"
+                                     f"{add_trading_days(_pd, 2).strftime('%m/%d')}")
+                if _pp.get("time"):
+                    _np["time"] = _pp["time"]
+                if _pp.get("planetHour"):
+                    _np["planetHour"] = _pp["planetHour"]
+                # price re-validates every run: keep the old number only when
+                # it also respects today's spot/swing floors and ceilings
+                _op = _pp.get("price")
+                if _op and ((_np["type"] == "high" and _op >= max(last_close, swing_hi) * 0.999)
+                            or (_np["type"] == "low" and _op <= min(last_close, swing_lo) * 1.001)):
+                    _np["price"] = _op
+                _np["stoodSince"] = _pp.get("stoodSince") or (_prev_entry or {}).get("logged")
+                _kept_prev_date = _pd
+        else:
+            # hourly reruns re-detect the same day-over-day change - keep one
+            # entry per ticker/type/day, updated to the latest numbers
+            REV_LOG["entries"] = [r for r in REV_LOG["entries"]
+                                  if not (r["ticker"] == tkr and r["type"] == _np["type"]
+                                          and r["when"] == NOW.strftime("%Y-%m-%d"))]
+            REV_LOG["entries"].append({
+                "ticker": tkr, "when": NOW.strftime("%Y-%m-%d"),
+                "type": _np["type"],
+                "from": {"isoDate": _pp["isoDate"], "time": _pp.get("time"),
+                         "price": _pp.get("price")},
+                "to": {"isoDate": _np["isoDate"], "time": _np.get("time"),
+                       "price": _np["price"]},
+                "driftDays": _dd, "priceMovePct": round(_pmove * 100, 1),
+                "reason": (f"date moved {_dd} sessions" if _dd > 1
+                           else f"price re-marked {_pmove*100:.1f}%")})
+            _kept_prev_date = datetime.strptime(_np["isoDate"], "%Y-%m-%d").date()
+
+    # how long has the current #1 call stood, and what changed lately?
+    if preds:
+        _p0 = preds[0]
+        _stood = 0
+        for _e in sorted((e for e in PRED_LOG["entries"] if e["ticker"] == tkr),
+                         key=lambda e: e["logged"], reverse=True):
+            if _e["logged"] >= NOW.strftime("%Y-%m-%d"):
+                continue
+            if any(pp["type"] == _p0["type"] and pp["isoDate"] == _p0["isoDate"]
+                   for pp in _e["preds"][:3]):
+                _stood += 1
+            else:
+                break
+        _recent_rev = [r for r in REV_LOG["entries"] if r["ticker"] == tkr][-3:]
+        out["stability"] = {"stoodDays": _stood,
+                            "call": {"type": _p0["type"], "isoDate": _p0["isoDate"]},
+                            "recentRevisions": _recent_rev}
+
     out["predictions"] = preds
     # THE headline: when does it reverse? (date + time first, price second)
     if preds:
@@ -2114,6 +2213,8 @@ def fmt_money(v):
 
 with open(LOG_FILE, "w", encoding="utf-8") as f:
     json.dump(PRED_LOG, f, indent=1)
+with open(REV_FILE, "w", encoding="utf-8") as f:
+    json.dump(REV_LOG, f, indent=1)
 
 with open(EXT_FILE, "w", encoding="utf-8") as f:
     json.dump(EXTREMES, f)
