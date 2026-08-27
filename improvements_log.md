@@ -936,3 +936,50 @@ are untouched, and `tickers.txt` wasn't touched.
 exit - the single most concrete near-term test this system has open right now; whether JPM's
 rally toward $365.18 keeps going far enough to finally confirm a pivot; and GC=F's still-overdue
 pullback from its extended run of highs.
+
+## 2026-08-27 (Thu) — fixed the coherence gate's blind spot, grades logged
+
+**Fetch status:** blocked again - same 403-at-the-gateway policy denial on every CONNECT to
+Yahoo's chart API (confirmed in the proxy's own log). With no CSVs to work from, `analyze.py`
+wrote an empty 0-ticker `data.js`/`index.html` here; caught it before committing anything and
+reverted those files. The real build is the one the separate cloud refresh workflow published
+today at 10:45 AM ET (it has market access this repo's review environment doesn't), and that's
+what's still live.
+
+**Today's fix - the coherence gate itself had a hole:** this same "fetch blocked, empty build
+discarded" situation has now happened on close to a dozen review days in this log, and every one
+of those entries says `coherence_check.py` "passed cleanly" - but checking it against the actual
+0-ticker file just now, it passes an EMPTY build too. It has no check that the tickers in
+`tickers.txt` actually made it into `data.js`, so a broken 0-ticker (or partially-empty) build
+would sail through the one gate that's supposed to stop a bad build from publishing. Added one
+check: the gate now reads `tickers.txt` and fails loudly, listing exactly which tickers are
+missing, if any of them aren't in `data.js`. Verified it two ways - it now correctly FAILS against
+a synthetic empty build, and still PASSES cleanly against today's real 10-ticker build. This makes
+the gate stronger, not weaker: it can only newly catch broken builds, never wave through more.
+
+**Grades reviewed (unchanged from yesterday - no new sessions matured):** QQQ remains the most
+reliable at n=27, 37%/48% hit-within-2/3-days, 1.6% price error. TSLA n=24 (21%/29%, 7.8%), HOOD
+n=25 (20%/28%, 5.2%), GOOGL n=15 (27%/27%, 6.6%). JPM (n=30) and GC=F (n=20) are still stuck at
+0% despite tight price accuracy (GC=F's median error is just 0.3%) - both are the same
+long-diagnosed "no qualifying pullback yet" drought from prior days, not new. SPY/VOO (n=8/9) are
+still 0% on small samples; NVDA (n=3) and AMZN (n=0) remain too new to read.
+
+**Real-money ledger - worth the owner's attention:** the open TSLA short call (5x $345 strike,
+exp 9/11, breakeven $357.50) was planned around an 8/27 (today) low window near $317 as the exit
+trigger. That low never happened - TSLA has instead run up to $351.99 today, close enough to the
+$357.50 breakeven to be a real concern, and the model's own current chain now projects a HIGH of
+$367.23 tomorrow (8/28), which is above breakeven. The original ~$317 low window has dropped out
+of the current chain entirely (next low call is now 9/11 near $311). This is exactly the situation
+the plan's other trigger exists for - "50% of credit, whichever comes first" - since the date-based
+trigger did not fire the way expected.
+
+**What changed and why:** one code change - the coherence gate fix above, justified by a bug
+that's been silently letting empty builds "pass" for many consecutive review days. No other
+changes; grades moved in line with trend and nothing else crossed the persistence bar. Honesty
+features (measured hit rates, random-control comparisons, self-grading) and ledgers are untouched,
+`tickers.txt` wasn't touched, and the coherence gate is now stricter, never weaker.
+
+**Watch next:** the TSLA short call is the most urgent item - it's now trading close to its
+breakeven with the model itself projecting more upside tomorrow, so the credit-based exit trigger
+deserves attention regardless of price/date windows; also whether JPM or GC=F finally produce the
+pullback the grader has been waiting on.

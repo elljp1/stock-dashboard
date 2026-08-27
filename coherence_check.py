@@ -15,6 +15,18 @@ raw = open("data.js", encoding="utf-8").read()
 d = json.loads(raw.replace("const DATA_ALL = ", "").split("const TRADES")[0].strip().rstrip(";"))
 
 fails = []
+
+# -1. the build must actually contain every ticker we track - a failed/partial
+# fetch or analyze run can silently write an empty (or short) DATA_ALL, and
+# every other check below trivially "passes" over zero tickers.
+try:
+    expected = [ln.strip() for ln in open("tickers.txt", encoding="utf-8") if ln.strip()]
+    missing = [t for t in expected if t not in d]
+    if missing:
+        fails.append(f"data.js is missing {len(missing)} of {len(expected)} tracked tickers: {missing} "
+                     f"(likely a failed fetch/analyze run wrote an empty or partial build)")
+except FileNotFoundError:
+    pass
 for t, D in d.items():
     preds = D.get("predictions", [])
     # 1. alternation + increasing dates
