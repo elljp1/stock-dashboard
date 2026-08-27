@@ -159,6 +159,30 @@ for t, d in D.items():
             return None
         return max(evs, key=lambda p: p["price"]) if kind == "high" else min(evs, key=lambda p: p["price"])
 
+    # yearly: flag only when a chain call BEATS the cell (the cone median can
+    # legitimately exceed the chain, which only sees ~2 months ahead)
+    if "yearly" in hz:
+        for _kind, _pick in (("high", max), ("low", min)):
+            _evs = [p for p in preds if p["type"] == _kind]
+            if not _evs:
+                continue
+            _ev = _pick(_evs, key=lambda p: p["price"])
+            cell = hz["yearly"][_kind]
+            eff = cell.get("bound", cell["price"])
+            if (_kind == "high" and _ev["price"] > max(cell["price"], eff) + 0.01) or                (_kind == "low" and _ev["price"] < min(cell["price"], eff) - 0.01):
+                issues.append(f"{t}: chain {_kind} {_ev['price']} on {_ev['isoDate']} beats the "
+                              f"yearly {_kind} {cell['price']} ({cell['date']}) - two {_kind}s on one page")
+        # no date-picker day may escape the yearly effective bounds
+        dfa = d.get("dayForecasts", [])
+        if dfa:
+            yh = hz["yearly"]["high"]; yl = hz["yearly"]["low"]
+            hcap = max(yh["price"], yh.get("bound", yh["price"]))
+            lcap = min(yl["price"], yl.get("bound", yl["price"]))
+            if max(x["high"] for x in dfa) > hcap + 0.01:
+                issues.append(f"{t}: a date-picker day exceeds the yearly high bound {hcap}")
+            if min(x["low"] for x in dfa) < lcap - 0.01:
+                issues.append(f"{t}: a date-picker day undercuts the yearly low bound {lcap}")
+
     _wk0 = today - timedelta(days=today.weekday())
     _mo_end = (today.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
     for _k, _s, _e in (("weekly", _wk0, _wk0 + timedelta(days=4)),

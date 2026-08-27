@@ -1690,6 +1690,27 @@ def analyze(tkr):
             y_lo_cell = {"price": round(y_lo, 2), "date": month_date(lo_n),
                          "time": f"volatility-range floor, NOT a crash forecast - seasonal lean: {lo_mon[0]} ({lo_mon[1]['avgRet']}% avg)"}
         horizons["yearly"] = {"high": y_hi_cell, "low": y_lo_cell}
+    # yearly must obey the same law as every other period: a DATED chain call
+    # inside the next 12 months owns the headline; the statistical cone stays
+    # as context. (Caught live: chain low $294.43 on 10/27 vs yearly cell
+    # showing a $308.48 "Oct 2026" median - two October lows on one page.)
+    if "yearly" in horizons and preds:
+        _yr_end = session + timedelta(days=365)
+        for _kind, _pick in (("high", max), ("low", min)):
+            _evs = [p for p in preds if p["type"] == _kind
+                    and session <= datetime.strptime(p["isoDate"], "%Y-%m-%d").date() <= _yr_end]
+            if not _evs:
+                continue
+            _ev = _pick(_evs, key=lambda p: p["price"])
+            _cell = horizons["yearly"][_kind]
+            _beats = (_ev["price"] > _cell["price"] if _kind == "high"
+                      else _ev["price"] < _cell["price"])
+            if _beats:
+                horizons["yearly"][_kind] = {
+                    "price": _ev["price"], "date": _ev["date"],
+                    "time": _ev.get("planetHour") or _ev["time"], "src": "chain",
+                    "note": "12-mo cone context: " + _cell["time"]}
+
     # a period extreme can never contradict the live price itself
     for _k in list(horizons):
         if horizons[_k]["high"]["price"] < last_close:
@@ -1942,6 +1963,7 @@ def analyze(tkr):
                       if wk_start <= datetime.strptime(x["date"], "%Y-%m-%d").date() <= _wk_end])
     _cover("monthly", [x for x in day_fc
                        if datetime.strptime(x["date"], "%Y-%m-%d").date() <= mo_end])
+    _cover("yearly", day_fc)
     # re-apply nesting after widening
     _o2 = [k for k in ("daily", "weekly", "monthly", "yearly") if k in horizons]
     for _a, _b in zip(_o2, _o2[1:]):

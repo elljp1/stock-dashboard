@@ -554,7 +554,18 @@ function renderAll(D){
         <div style="border:1px solid var(--border); border-radius:10px; padding:12px; background:var(--panel2)">
           <b style="font-size:16px">${nice(D.ticker)} — ${dt.toLocaleDateString("en-US",{weekday:"long", month:"long", day:"numeric"})}</b>
           <span class="tag">(${r.sessions} sessions out)</span>
-          ${r.event ? `<div><span class="badge ${r.event.startsWith("HIGH")?"bH":"bL"}">${r.event}</span></div>` : ""}
+          ${r.event ? `<div><span class="badge ${r.event.startsWith("HIGH")?"bH":"bL"}">${r.event}</span></div>` : (function(){
+            const ps = (D.predictions||[]).slice().sort((a,b)=>a.isoDate<b.isoDate?-1:1);
+            const prev = ps.filter(p=>p.isoDate<want).pop(), next = ps.find(p=>p.isoDate>want);
+            if(prev && next) return `<div class="tag" style="margin-top:4px">This day sits mid-leg:
+              <b>${prev.type==="high"?"falling":"rising"}</b> from the projected ${prev.type.toUpperCase()}
+              ${fmt$(prev.price)} (${prev.date}) toward the ${next.type.toUpperCase()} ${fmt$(next.price)}
+              (${next.date}) — so even this day's HIGH can sit ${prev.type==="high"?"below":"above"} today's price.
+              The numbers below are that day's own expected range.</div>`;
+            if(next) return `<div class="tag" style="margin-top:4px">Heading toward the projected
+              ${next.type.toUpperCase()} ${fmt$(next.price)} on ${next.date}.</div>`;
+            return "";
+          })()}
           <table style="margin-top:8px"><tr><th>Projected</th><th>Price</th><th>Most likely time</th></tr>
             <tr><td><span class="badge bH">HIGH</span></td>
                 <td class="big num">${fmt$(r.high)}</td><td class="num">${r.hiTime}</td></tr>
@@ -609,9 +620,10 @@ function renderAll(D){
        g.daily.slice(-3).map(r=>`${r.session.slice(5)}: high ${r.hiErrPct>0?"+":""}${r.hiErrPct}% / low ${r.loErrPct>0?"+":""}${r.loErrPct}%`).join(" · ") + ")" : " — first grades arrive as periods close") + ".";
     /* a band edge is how far the range could stretch - it is NOT a projected
        turn, so it shows as a footnote instead of replacing the dated call */
-    const edge = c => c.bound ? `<div class="tag" style="margin-top:3px; opacity:.75">
+    const edge = c => (c.bound ? `<div class="tag" style="margin-top:3px; opacity:.75">
         range could stretch to ${fmt$(c.bound)}${c.boundDate ? " by " + c.boundDate : ""} — outer
-        edge of the volatility band, not a projected turn</div>` : "";
+        edge of the volatility band, not a projected turn</div>` : "") +
+      (c.note ? `<div class="tag" style="margin-top:3px; opacity:.75">${c.note}</div>` : "");
     const row = (name, h) => h ? `<tr>
       <td><b>${name}</b></td>
       <td><span class="badge bH">HIGH</span> <span class="big num">${fmt$(h.high.price)}</span><br>
