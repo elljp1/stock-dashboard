@@ -29,14 +29,14 @@
   "opened": "2026-08-19",
   "closed": null,
   "ticker": "TSLA",
-  "structure": "Sold 5x $345 call, exp 9/11",
-  "credit": 6250,
+  "structure": "Sold 3x $345 call, exp 9/11 (covered by 300 shares @ $263.33)",
+  "credit": 3750,
   "closeCost": null,
   "pnl": null,
-  "collateral": 172500,
+  "collateral": 103500,
   "daysHeld": null,
   "status": "open",
-  "note": "Short call opened 8/19 ~9:35 AM ET near the open, spot ~$338.5, breakeven $357.50. Model context at entry (8/19 chain): HIGH $353.12 on 8/20, LOW $317.07 on 8/27, then HIGH $365.08 projected ON the 9/11 expiry - above breakeven, so the model itself says do not hold to expiry. Plan: buy back into the 8/27 low window (~$317) or at 50% of credit ($6.25/sh), whichever comes first; stress case is the $353 high window 8/20.",
+  "note": "CORRECTED from broker records: 3 contracts (not 5), $12.50/sh = $3,750 credit, opened 8/19 9:35 AM ET. Covered: the 300 TSLA shares (basis $263.33) back these calls - if assigned at expiry with TSLA >= $345, ALL 300 low-basis shares are called away (~$24.5k realized gains, the HOOD 8/2026 tax event repeated). RULE: never let these expire in-the-money - buy back before 9/11 if TSLA > $345. User has a GTC buy-to-close at $6.00 open since 8/24 (the 50%-profit exit). Model path: high ~$367 on 8/28, then low ~$314.62 ON expiry day 9/11.",
   "openedTime": "~9:35 AM ET"
  }
 ]
