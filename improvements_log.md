@@ -983,3 +983,47 @@ features (measured hit rates, random-control comparisons, self-grading) and ledg
 breakeven with the model itself projecting more upside tomorrow, so the credit-based exit trigger
 deserves attention regardless of price/date windows; also whether JPM or GC=F finally produce the
 pullback the grader has been waiting on.
+
+## 2026-08-28 (Fri) — no change warranted, grades logged
+
+**Fetch status:** blocked again on all 10 tickers - same 403 Forbidden at the proxy gateway seen
+on prior review days. `fetch_data.py` had no CSVs to work from, so `analyze.py` wrote an empty
+0-ticker `data.js`/`index.html`. The rebuilt coherence gate (added yesterday) caught it correctly
+and failed loudly; reverted those files before anything was committed. The real, live build is the
+one the separate cloud refresh workflow published today at 5:32 PM ET (10/10 tickers), and that's
+what's still live and what today's grades below are read from.
+
+**Grades reviewed:** QQQ still the standout at n=27, 37%/48% hit-within-2/3-days, 1.6% price
+error. TSLA n=24 (21%/29%, 7.8%), HOOD n=25 (20%/28%, 5.2%). GOOGL grew to n=16 (25%/25%, 6.6%) -
+one more prediction matured and missed, a small dip from yesterday's 27%/27%, not a new pattern.
+JPM (n=31) and GC=F (n=20) remain stuck at 0% hit rate despite tight price accuracy - the
+long-diagnosed "no qualifying pullback yet" drought, now well past the 3-day persistence bar but
+already root-caused on 8/25 as normal market behavior, not a bug. SPY/VOO (n=8/9) still 0% on thin
+samples; NVDA grew to n=4, AMZN still n=0 - both too new to read.
+
+**Possible first crack in the GC=F drought:** today's actual gold session (from `daily_extremes.json`)
+swung from a $4688.00 high down to a $4495.50 low - a real ~4.1% intraday reversal, the sharpest
+single-day range gold has printed in this log's history so far, after a week of drifting sideways
+in a tight $4600-4680 band. This could be the pullback the grader has been waiting on, but it's one
+day - not yet a confirmed pattern, so no action today. Worth checking tomorrow whether it holds or
+was just noise.
+
+**Real-money ledger - good news for the owner:** the open TSLA short call (5x $345 strike, exp
+9/11, breakeven $357.50) touched an intraday high of $358.80 today (briefly above breakeven) but
+closed at $348.75, well underneath it. More importantly, the model's own current prediction chain
+no longer shows a high above breakeven before the 9/11 expiry - the next projected high is now
+9/23 at $351.85 (still under $357.50), with the next low projected 9/8 near $302.37. That's a
+meaningful de-escalation from yesterday's entry, which had the chain projecting a $367.23 high for
+today; that projection did not happen (today's real high was $358.80).
+
+**What changed and why:** no code change. Nothing crossed the 3+-day-persistence bar with a new,
+undiagnosed pattern today - GC=F's sharp reversal is interesting but only one day old, and
+JPM/GC=F's 0% hit rates are the same already-explained drought from 8/25. Improvement discipline
+calls for grade-and-log only on a day like this. Honesty features (measured hit rates,
+random-control comparisons, self-grading) and the coherence gate are untouched, and `tickers.txt`
+wasn't touched.
+
+**Watch next:** whether GC=F's reversal today turns into a real multi-day pullback (would finally
+start moving its grade off 0%); whether JPM ever produces the pullback the grader is waiting on;
+and the TSLA short call heading into its 9/11 expiry, now on firmer footing than yesterday but
+still worth a daily check against the live chain.
