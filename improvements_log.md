@@ -1023,6 +1023,59 @@ calls for grade-and-log only on a day like this. Honesty features (measured hit 
 random-control comparisons, self-grading) and the coherence gate are untouched, and `tickers.txt`
 wasn't touched.
 
+## 2026-08-29 (Sat) — fetch blocked again; grade-and-log only, no fresh session data
+
+**Fetch status:** blocked on all 10 tickers - same 403 Forbidden at the proxy gateway seen on
+several prior review days, confirmed by the proxy's own status log ("gateway answered 403 to
+CONNECT (policy denial or upstream failure)" against `query1.finance.yahoo.com`). This is a
+network policy block on this review box, not a Yahoo outage or a bug in `fetch_data.py`. With no
+CSVs to work from (they're gitignored by design, never committed), `analyze.py` wrote an empty
+0-ticker `data.js`/`index.html`/`dashboard_single.html`; that broken output was discarded before
+anything was staged. `coherence_check.py` passes cleanly (10/10 tickers) against the real build
+still live on the site - the separate cloud refresh workflow (which runs on its own
+infrastructure, unaffected by this box's network policy) last published successfully today at
+12:10 AM ET, so the site is current as of this morning's pre-market and no data is stale.
+
+**Grades reviewed (from today's live build):** QQQ still the standout at n=27, 37%/48%
+hit-within-2/3-days, 1.6% price error. TSLA n=24 (21%/29%, 7.8%), HOOD n=25 (20%/28%, 5.2%). JPM
+(n=30) and GC=F (n=20) remain stuck at 0% hit rate despite GC=F's tight 0.3% price accuracy -
+the same already-diagnosed "no qualifying pullback yet" drought from 8/25, not a new problem.
+SPY/VOO (n=8/9) still 0% on thin samples. One thing worth a note, not an alarm: GOOGL (n=15),
+JPM (n=30), and NVDA (n=3) each show one fewer resolved prediction than yesterday's entry
+recorded (16, 31, 4). That's most likely normal ledger housekeeping (a rolling window or a
+re-grade reshuffling which entries currently qualify as resolved) rather than lost data, but it's
+three tickers moving the same direction on the same day, so it's worth a second look once fetch
+access returns and a fresh run can be compared against today's for what specifically dropped off.
+
+**GC=F reversal follow-up:** no new session data available today (fetch blocked), so it's not yet
+possible to confirm whether Friday's sharp $4688 -> $4495.50 reversal held or was one-day noise.
+Carrying this watch item forward again.
+
+**Real-money ledger:** the open TSLA short call (5x $345 strike, exp 9/11, breakeven $357.50) -
+last real print was Friday's close at $348.75, still comfortably under breakeven. The model's own
+prediction chain (from today's live build) has shifted further in the position's favor: it now
+shows no high above breakeven before expiry at all - the next projected high is 9/11 itself at
+just $326.07, well under both breakeven and even today's spot price of $348.19, with the next low
+projected 9/8 near $302.73. That a "high" target sits below current spot is a little unusual on
+its face, but the calibration factors are neutral (priceCalibHigh 1.0) so it's not a calibration
+artifact - it looks like the underlying Fibonacci projection itself just reads as a soft target
+this early in its date window (09/09-09/15), which is legitimate but worth sanity-checking once
+live data confirms it isn't a mismatched swing reference. Nothing here changes the picture from
+yesterday: still no rally-through-breakeven signal from the model itself.
+
+**What changed and why:** no code change. Today's anomalies (the three tickers' n dropping by
+one, the below-spot high target) are each one day old and neither meets the 3+-day persistence
+bar nor looks like a clear, provable bug from this vantage point - and with fetch blocked, there's
+no live data here to safely test a fix against even if one were obvious. Improvement discipline
+calls for grade-and-log only on a day like this. Honesty features (measured hit rates,
+random-control comparisons, self-grading) and the coherence gate are untouched, and `tickers.txt`
+wasn't touched.
+
+**Watch next:** whether the three tickers' dropped resolved-count is a one-day blip or repeats
+tomorrow (if it repeats, that's the 3-day bar starting); whether GC=F's Friday reversal turns into
+a real pullback; and the TSLA short call's 9/11 expiry, now looking safer than at any point since
+the position was opened, but still worth a daily check against the live chain.
+
 **Watch next:** whether GC=F's reversal today turns into a real multi-day pullback (would finally
 start moving its grade off 0%); whether JPM ever produces the pullback the grader is waiting on;
 and the TSLA short call heading into its 9/11 expiry, now on firmer footing than yesterday but
