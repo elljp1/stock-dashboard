@@ -1080,3 +1080,47 @@ the position was opened, but still worth a daily check against the live chain.
 start moving its grade off 0%); whether JPM ever produces the pullback the grader is waiting on;
 and the TSLA short call heading into its 9/11 expiry, now on firmer footing than yesterday but
 still worth a daily check against the live chain.
+
+## 2026-08-30 (Sun) — weekend, fetch blocked again; grade-and-log only, no fresh session data
+
+**Fetch status:** blocked on all 10 tickers - same 403 Forbidden at the proxy gateway seen on
+recent prior review days, confirmed by the proxy's own status log ("gateway answered 403 to
+CONNECT (policy denial or upstream failure)" against `query1.finance.yahoo.com`). Still a network
+policy block on this review box, not a Yahoo outage or a bug in `fetch_data.py`. With no CSVs to
+work from (gitignored by design, never committed), `analyze.py` again wrote an empty 0-ticker
+`data.js`/`index.html`/`dashboard_single.html`; that broken build was caught immediately by
+`coherence_check.py`'s ticker-count gate ("data.js is missing 10 of 10 tracked tickers") and
+discarded via `git checkout --` before anything was staged. `coherence_check.py` then passes
+cleanly (10/10 tickers) against the real build still live on the site.
+
+**No new session data either way:** today is Sunday and markets were last open Friday 8/28 -
+`daily_extremes.json`'s newest entries across every ticker are still 8/28, so even a working
+fetch here would have added nothing to grade. The live site's last cloud refresh was Friday
+6:15 PM ET (the separate `.github/workflows/refresh.yml` job, which runs on its own
+infrastructure unaffected by this box's network policy, does not run on weekends) - so the site
+is exactly as current as it should be, not stale.
+
+**Grades reviewed (unchanged from the live build):** QQQ still the standout at n=27, 37%/48%
+hit-within-2/3-days, 2.7% avg price error. TSLA n=24 (21%/29%, 9.4%), HOOD n=25 (20%/28%, 7.3%),
+GOOGL n=16 (25%/25%, 7.5%). JPM (n=30) and GC=F (n=20) remain at 0% hit rate - the
+already-diagnosed "no qualifying pullback yet" drought (JPM traced to a real forecast miss back
+on 8/25, not a bug). SPY/VOO (n=8/9) and NVDA (n=4) still 0% on thin samples. Nothing here moved
+since Friday's build because no new trading day has printed.
+
+**Real-money ledger:** the open TSLA short call (5x $345 strike, exp 9/11, breakeven $357.50) -
+last real print is still Friday's close, $348.75, comfortably under breakeven. The model's own
+current chain shows next low 9/8 near $302.73 and next high 9/23 near $352.28 - still under
+breakeven and no rally-through-breakeven signal before the 9/11 expiry. Same picture as the last
+two entries; nothing new to act on until Monday's session.
+
+**What changed and why:** no code change. There's no new market data today to test any fix
+against even if a clear bug had turned up, and none did - today is a pure repeat of Friday's
+already-graded state plus a network block outside this repo's control. Improvement discipline
+calls for grade-and-log only on a day like this. Honesty features (measured hit rates,
+random-control comparisons, self-grading) and the coherence gate are untouched, and `tickers.txt`
+wasn't touched.
+
+**Watch next:** whether GC=F's pullback (first seen Friday 8/28) turns into a real multi-day move
+once fresh data resumes; whether JPM ever produces the pullback the grader is waiting on; and the
+TSLA short call heading into its 9/11 expiry, still on the safe side of breakeven as of Friday's
+close.
