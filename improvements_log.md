@@ -1124,3 +1124,43 @@ wasn't touched.
 once fresh data resumes; whether JPM ever produces the pullback the grader is waiting on; and the
 TSLA short call heading into its 9/11 expiry, still on the safe side of breakeven as of Friday's
 close.
+
+## 2026-08-31 (Mon) — fetch blocked again; TSLA's rally pushed the real short call above breakeven; grade-and-log only
+
+**Fetch status:** blocked on all 10 tickers - same 403 Forbidden at the proxy gateway as every
+recent review day, confirmed again by the proxy's own status log ("gateway answered 403 to
+CONNECT (policy denial or upstream failure)" against `query1.finance.yahoo.com`). With no CSVs
+committed to the repo (gitignored by design), `analyze.py` wrote the expected empty 0-ticker
+`data.js`/`index.html`/`dashboard_single.html`/`week_plan.json`; `coherence_check.py` caught it
+immediately ("data.js is missing 10 of 10 tracked tickers") and the broken build was discarded via
+`git checkout --` before anything was staged. `coherence_check.py` then passes cleanly (10/10
+tickers) against the real build the separate cloud refresh workflow already published today at
+2:10 PM ET.
+
+**Grades reviewed (from today's live build):** QQQ remains the standout at n=27, 37%/48%
+hit-within-2/3-days, 1.6% avg price error. TSLA n=25 (20%/28%, 7.8%), HOOD n=25 (20%/28%, 5.2%),
+GOOGL n=17 (24%/24%, 6.6%). JPM (n=31) and GC=F (n=21) are still stuck at 0% hit rate - both
+already traced on 8/10 and 8/25 to genuine "no qualifying swing yet" market conditions rather than
+a bug, and neither ticker has broken its range since (JPM still boxed roughly $350-366; GC=F still
+chopping in the mid-$4400s-4600s). SPY (n=9), VOO (n=10), and NVDA (n=4) remain 0% on thin,
+still-too-new samples. None of these numbers moved from Friday's already-graded state.
+
+**Real-money ledger - this is the one thing that changed today:** TSLA rallied hard, closing at
+$367.40 (intraday high $368.54) versus Friday's $348.75. That puts it above both the $345 strike
+on the owner's real short call (5x, exp 9/11, breakeven $357.50) and the breakeven itself, for the
+first time since the position was opened on 8/19. Per the owner's own plan noted in
+`real_trades.json` (selling these TSLA shares by/in October anyway), assignment at $345 - an
+effective $357.50/share exit - stays an acceptable-to-favorable outcome, not a problem to react to.
+Worth a clear flag anyway since it's a real change in the position's standing, not routine noise.
+
+**What changed and why:** no code change. Today's fetch block is the same network-policy issue
+as every recent day, not a code defect, and the JPM/GC=F 0%-rate situations are already-diagnosed
+market behavior with no new evidence today to reopen either investigation. Improvement discipline
+calls for grade-and-log only when nothing meets the 3+-day pattern-plus-clear-bug bar, which is
+where today lands. Honesty features (measured hit rates, random-control comparisons, self-grading)
+and the coherence gate are untouched, and `tickers.txt` wasn't touched.
+
+**Watch next:** whether TSLA holds above $357.50 into the 9/11 expiry (favoring assignment) or
+fades back under the $345 strike (favoring keeping the shares plus full premium); whether JPM or
+GC=F finally break their multi-week ranges and start moving the grader off 0%; and whether
+tomorrow's fetch succeeds now that a new review day is starting.
