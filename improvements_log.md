@@ -1164,3 +1164,48 @@ and the coherence gate are untouched, and `tickers.txt` wasn't touched.
 fades back under the $345 strike (favoring keeping the shares plus full premium); whether JPM or
 GC=F finally break their multi-week ranges and start moving the grader off 0%; and whether
 tomorrow's fetch succeeds now that a new review day is starting.
+
+## 2026-09-01 (Tue) — fetch blocked again; GC=F finally broke its 0% streak; TSLA pulled back below breakeven; grade-and-log only
+
+**Fetch status:** blocked on all 10 tickers - same 403 Forbidden at the proxy gateway seen on
+every recent review day, confirmed again by the proxy's own status log against
+`query1.finance.yahoo.com`. With no CSVs committed to the repo (gitignored by design),
+`analyze.py` wrote the expected empty 0-ticker `data.js`/`index.html`/`dashboard_single.html`;
+`coherence_check.py` caught it immediately ("data.js is missing 10 of 10 tracked tickers") and the
+broken build was discarded via `git checkout --` before anything was staged. `coherence_check.py`
+then passes cleanly (10/10 tickers) against the real build the separate cloud refresh workflow
+already published today at 6:07 PM ET.
+
+**Grades reviewed (from today's live build) - one real move:** GC=F (n=22) finally broke its
+multi-week 0% hit-rate streak: two predictions logged back on 8/19 and 8/20 (a high near
+$4,579-$4,606) both graded as hits (within 2 and 3 days) once the 8/24 high print ($4,640.80)
+had enough trailing data to confirm it as real. Hit rate moved to 9%/9%, median price error 2.3%.
+This is the self-grading system working as designed, catching up on a real result - not a bug and
+not something to react to; JPM (n=31) is still stuck at 0% with no qualifying swing yet, the
+already-diagnosed range-bound condition from 8/10 and 8/25. QQQ remains the standout at n=27
+(37%/48%, 1.6% avg price error). TSLA n=26 (19%/27%, 7.8%), HOOD n=27 (19%/26%, 5.2%), GOOGL n=18
+(22%/22%, 6.6%) - all essentially flat from yesterday. SPY (n=9), VOO (n=10), and NVDA (n=4)
+remain 0% on thin, still-too-new samples; AMZN (n=0) has no resolved predictions yet. Sanity-
+checked every ticker's learned calibration factors and method-family weights for NaN/Inf/garbage
+values - all clean, all near 1.0, nothing broken in the self-grading math itself.
+
+**Real-money ledger:** TSLA pulled back from Monday's $367.40 rally to close today at $356.09
+(range $352.96-$362.70). That's back under the $357.50 breakeven on the owner's real short call
+(5x $345 strike, exp 9/11) but still above the $345 strike itself - so yesterday's above-breakeven
+flag was a one-day blip, not a trend yet. Per the owner's own plan (selling these TSLA shares
+by/in October anyway), assignment at $345 stays an acceptable outcome either way; nothing here
+needs action before expiry.
+
+**What changed and why:** no code change. Today's fetch block is the same network-policy issue as
+every recent day, not a code defect. GC=F's grade movement is a genuine, correctly-computed result
+maturing through the grader, not evidence of a bug, and JPM's continued 0% rate is the
+already-diagnosed "no qualifying pullback yet" market condition with no new evidence today to
+reopen that investigation. Improvement discipline calls for grade-and-log only when nothing meets
+the 3+-day pattern-plus-clear-bug bar, which is where today lands. Honesty features (measured hit
+rates, random-control comparisons, self-grading) and the coherence gate are untouched, and
+`tickers.txt` wasn't touched.
+
+**Watch next:** whether GC=F's newly-resolved hits are the start of a real recovery off 0% or a
+one-off; whether JPM ever produces the pullback the grader is waiting on; the TSLA short call
+heading into its 9/11 expiry, now back on the safer side of breakeven; and whether tomorrow's
+fetch finally succeeds after this long a blocked streak.
