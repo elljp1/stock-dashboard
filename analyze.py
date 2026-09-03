@@ -38,6 +38,12 @@ except Exception:
 # every change to a PUBLISHED call (date/time/price of an upcoming turn) is
 # recorded here with before/after - the user trades on these dates, so a
 # revision is an event worth explaining, never a silent overwrite
+try:
+    with open("astro_lab.json", encoding="utf-8") as _f:
+        ASTRO_LAB = json.load(_f)
+except Exception:
+    ASTRO_LAB = {"perTicker": {}}
+
 REV_FILE = "revisions_log.json"
 try:
     with open(REV_FILE, encoding="utf-8") as _f:
@@ -1235,6 +1241,21 @@ def analyze(tkr):
             if i is not None and i < len(sm) and sm[i]:
                 bump(fd, w * fam_f, tag, which)
 
+    # 7) astro-lab factors that survived split-sample replication for THIS
+    # stock: modest weight scaled by measured lift, forward-graded like every
+    # other method family. Unreplicated factors never touch the score.
+    _lab = ASTRO_LAB.get("perTicker", {}).get(tkr, {})
+    for _ue in _lab.get("upcoming", []):
+        _ud = datetime.strptime(_ue["date"], "%Y-%m-%d").date()
+        while _ud.weekday() >= 5:
+            _ud += timedelta(days=1)
+        _w = min(1.0, 0.4 * (_ue["lift"] - 1.0)) * MF.get("astro", 1.0)
+        _which = {"high": "H", "low": "L"}.get(_ue["type"], "B")
+        for _off in (-1, 0, 1):
+            _dd = add_trading_days(_ud, _off) if _off else _ud
+            bump(_dd, _w * (1.0 if _off == 0 else 0.6),
+                 f"AstroLab: {_ue['factor']}" if _off == 0 else None, _which)
+
     combined = [(d, max(scoreL[d], scoreH[d]), "low" if scoreL[d] >= scoreH[d] else "high")
                 for d in future]
     combined.sort(key=lambda x: -x[1])
@@ -1477,6 +1498,9 @@ def analyze(tkr):
             "price": _p0["price"],
             "hit2": out["swing"].get("hitRate2d"), "hit3": out["swing"].get("hitRate3d"),
             "state": turn_note["state"] if turn_note else None}
+    out["astroLab"] = ASTRO_LAB.get("perTicker", {}).get(tkr)
+    if out["astroLab"] is not None:
+        out["astroLab"] = dict(out["astroLab"], computed=ASTRO_LAB.get("computed"))
     out["swingExtremes"] = {"swingHi": round(swing_hi, 2), "swingLo": round(swing_lo, 2),
                             "since": last_piv["date"].strftime("%Y-%m-%d")}
 

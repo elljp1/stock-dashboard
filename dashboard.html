@@ -1227,6 +1227,45 @@ function renderAll(D){
         V.retro.map(r=>`<tr><td><b>${r.planet} retrograde</b></td><td class="num">×${r.lift}</td>
         <td class="num">${r.hits} of ${r.n} pivots</td></tr>`).join("") + `</table>`;
     }
+    /* astro correlation lab: the comprehensive factor scan */
+    const AL = D.astroLab;
+    if(AL){
+      h += `<h3 style="margin-top:14px">Astro correlation lab — ${AL.tested} factor tests, recomputed weekly (${AL.computed || ""})</h3>
+        <div class="tag" style="margin-bottom:6px">Every geo &amp; helio planet-pair aspect (11 angles), stations, ingresses,
+        lunar apogee/perigee/declination, out-of-bounds, declination parallels, Bradley siderograph turns, first-trade natal
+        transits and pivot anniversaries — each tested against ${nice(D.ticker)}'s own ${AL.turns} swing turns.
+        A factor must stay significant on BOTH the first 60% of history and the 40% it never saw (split-sample replication).
+        Expected false replications at this bar: ~${AL.expectedFalse} — so even survivors stay on probation and are
+        forward-graded before their weight can grow.</div>`;
+      if(AL.validated && AL.validated.length){
+        h += `<table><tr><th>Factor</th><th>For</th><th>Hit rate</th><th>Chance</th><th>Lift</th><th>Verdict</th></tr>` +
+          AL.validated.map(r=>`<tr><td><b>${r.factor}</b></td>
+            <td>${r.type==="any"?"turns":r.type.toUpperCase()+"s"}</td>
+            <td class="num">${r.hitPct}% (${r.hits}/${r.n})</td><td class="num tag">${r.chancePct}%</td>
+            <td class="num">×${r.lift}</td><td><span class="badge bH">${r.verdict}</span></td></tr>`).join("") + `</table>`;
+        const up = AL.upcoming || [];
+        if(up.length) h += `<div style="margin-top:6px; font-size:13px"><b>Upcoming dates from replicated factors:</b> ` +
+          up.slice(0,6).map(u=>`${u.date} (${u.factor}, ${u.type==="any"?"turn":u.type})`).join(" · ") + `</div>`;
+      } else {
+        h += `<div class="tag">VERDICT: none of the ${AL.tested} factor tests survived replication for ${nice(D.ticker)}
+          — at this stock's turn density, every astro factor tested performs at chance. The strongest raw
+          candidates below are shown for transparency; they are exactly what luck produces across this many tests
+          and do NOT feed the forecast.</div>`;
+      }
+      if(AL.candidates && AL.candidates.length){
+        h += `<h3 style="margin-top:8px">Strongest raw candidates (not above multiple-testing chance)</h3>
+          <table><tr><th>Factor</th><th>For</th><th>Hit rate</th><th>Chance</th><th>Lift</th></tr>` +
+          AL.candidates.slice(0,6).map(r=>`<tr><td>${r.factor}</td>
+            <td>${r.type==="any"?"turns":r.type.toUpperCase()+"s"}</td>
+            <td class="num">${r.hitPct}% (${r.hits}/${r.n})</td><td class="num tag">${r.chancePct}%</td>
+            <td class="num">×${r.lift}</td></tr>`).join("") + `</table>`;
+      }
+      if(AL.overrides && AL.overrides.length){
+        h += `<h3 style="margin-top:8px">Overrides — when factors collide</h3>` +
+          AL.overrides.slice(0,5).map(o=>`<div class="tag">${o.highFactor} (highs) vs ${o.lowFactor} (lows), ${o.n} collisions:
+            <b>${o.winner==="tie"?"no clear winner":o.winner.toUpperCase()+" side won "+(o.winner==="high"?o.highWon:o.lowWon)+" of "+o.n}</b></div>`).join("");
+      }
+    }
     const N = V.numerology;
     if(N && N.tickerNumber){
       h += `<h3 style="margin-top:10px">Numerology</h3>

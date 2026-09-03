@@ -36,6 +36,7 @@ jobs:
       - run: python fetch_data.py
       - run: python backfill.py
       - run: python benchmark.py
+      - run: python astro_lab.py
       - run: python analyze.py
       - run: python coherence_check.py
       - run: python anomaly_audit.py
@@ -48,7 +49,7 @@ jobs:
         run: |
           git config user.name "dashboard-bot"
           git config user.email "dashboard-bot@users.noreply.github.com"
-          git add index.html dashboard_single.html data.js predictions_log.json daily_extremes.json trades.json trades_log.json horizons_log.json real_trades.json improvements_log.md backfill.json benchmark.json week_plan.json week_plan_log.json revisions_log.json
+          git add index.html dashboard_single.html data.js predictions_log.json daily_extremes.json trades.json trades_log.json horizons_log.json real_trades.json improvements_log.md backfill.json benchmark.json week_plan.json week_plan_log.json revisions_log.json astro_lab.json
           git commit -m "auto refresh (cloud)" || echo "nothing new"
           git push
 
