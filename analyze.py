@@ -1373,8 +1373,11 @@ def analyze(tkr):
     # previously published date/time stands verbatim. A call only moves when
     # the model decisively disagrees, and every move is written to
     # revisions_log.json with before/after.
+    # "<=" is deliberate: today's earlier run counts as the published call, so
+    # an hourly refresh cannot flip a date the user saw this morning (intraday
+    # lock) - only a decisive disagreement can
     _prev_entry = max((e for e in PRED_LOG["entries"]
-                       if e["ticker"] == tkr and e["logged"] < NOW.strftime("%Y-%m-%d")),
+                       if e["ticker"] == tkr and e["logged"] <= NOW.strftime("%Y-%m-%d")),
                       key=lambda e: e["logged"], default=None)
     _prev_preds = (_prev_entry or {}).get("preds", [])
 
@@ -1395,8 +1398,27 @@ def analyze(tkr):
         _pp = min(_cand, key=lambda x: _tdiff(x["isoDate"], _np["isoDate"]))
         _dd = _tdiff(_pp["isoDate"], _np["isoDate"])
         _pmove = abs(_np["price"] / _pp["price"] - 1) if _pp.get("price") else 9
-        if _dd <= 1 and _pmove <= 0.015:
-            # same turn within noise: yesterday's published call stands
+
+        def _log_rev(reason):
+            # hourly reruns re-detect the same change - one entry per
+            # ticker/type/day, updated to the latest numbers
+            REV_LOG["entries"] = [r for r in REV_LOG["entries"]
+                                  if not (r["ticker"] == tkr and r["type"] == _np["type"]
+                                          and r["when"] == NOW.strftime("%Y-%m-%d"))]
+            REV_LOG["entries"].append({
+                "ticker": tkr, "when": NOW.strftime("%Y-%m-%d"),
+                "type": _np["type"],
+                "from": {"isoDate": _pp["isoDate"], "time": _pp.get("time"),
+                         "price": _pp.get("price")},
+                "to": {"isoDate": _np["isoDate"], "time": _np.get("time"),
+                       "price": _np["price"]},
+                "driftDays": _dd, "priceMovePct": round(_pmove * 100, 1),
+                "reason": reason})
+
+        # TIMING FIRST: the date/time call sticks on its own merits. A price
+        # re-mark must never move a date the user is trading on - price is the
+        # secondary call and re-validates freely each run.
+        if _dd <= 1:
             _pd = datetime.strptime(_pp["isoDate"], "%Y-%m-%d").date()
             # keep spacing >= 3 sessions from the previously kept event so the
             # anomaly gate's velocity check still holds
@@ -1410,30 +1432,20 @@ def analyze(tkr):
                     _np["time"] = _pp["time"]
                 if _pp.get("planetHour"):
                     _np["planetHour"] = _pp["planetHour"]
-                # price re-validates every run: keep the old number only when
-                # it also respects today's spot/swing floors and ceilings
+                # price: keep the published number when it is within noise AND
+                # still respects today's spot/swing floors and ceilings
                 _op = _pp.get("price")
-                if _op and ((_np["type"] == "high" and _op >= max(last_close, swing_hi) * 0.999)
-                            or (_np["type"] == "low" and _op <= min(last_close, swing_lo) * 1.001)):
+                if (_op and _pmove <= 0.015
+                        and ((_np["type"] == "high" and _op >= max(last_close, swing_hi) * 0.999)
+                             or (_np["type"] == "low" and _op <= min(last_close, swing_lo) * 1.001))):
                     _np["price"] = _op
+                elif _pmove > 0.015:
+                    # date held, price re-marked - log it as a price event only
+                    _log_rev(f"price re-marked {_pmove*100:.1f}% (date held)")
                 _np["stoodSince"] = _pp.get("stoodSince") or (_prev_entry or {}).get("logged")
                 _kept_prev_date = _pd
         else:
-            # hourly reruns re-detect the same day-over-day change - keep one
-            # entry per ticker/type/day, updated to the latest numbers
-            REV_LOG["entries"] = [r for r in REV_LOG["entries"]
-                                  if not (r["ticker"] == tkr and r["type"] == _np["type"]
-                                          and r["when"] == NOW.strftime("%Y-%m-%d"))]
-            REV_LOG["entries"].append({
-                "ticker": tkr, "when": NOW.strftime("%Y-%m-%d"),
-                "type": _np["type"],
-                "from": {"isoDate": _pp["isoDate"], "time": _pp.get("time"),
-                         "price": _pp.get("price")},
-                "to": {"isoDate": _np["isoDate"], "time": _np.get("time"),
-                       "price": _np["price"]},
-                "driftDays": _dd, "priceMovePct": round(_pmove * 100, 1),
-                "reason": (f"date moved {_dd} sessions" if _dd > 1
-                           else f"price re-marked {_pmove*100:.1f}%")})
+            _log_rev(f"date moved {_dd} sessions")
             _kept_prev_date = datetime.strptime(_np["isoDate"], "%Y-%m-%d").date()
 
     # how long has the current #1 call stood, and what changed lately?
