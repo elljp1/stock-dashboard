@@ -1299,3 +1299,49 @@ coherence gate are untouched, and `tickers.txt` wasn't touched.
 finally breaks now that today closed near its top; the TSLA short call heading into its 9/11
 expiry, now clearly above breakeven after today's rally; and whether tomorrow's fetch finally
 succeeds after this long a blocked streak.
+
+## 2026-09-04 (Fri) — fetch blocked again; found the specific reason JPM stays at 0%; grade-and-log only
+
+**Fetch status:** blocked on all 10 tickers - the same 403 Forbidden at the proxy gateway seen on
+every recent review day. With no CSVs committed to the repo (gitignored by design), running
+`analyze.py` here would have produced the usual empty 0-ticker build, so per the standing practice
+the committed data was left alone rather than overwritten with a broken build. The separate cloud
+refresh workflow had already published a good build today at 2:34 PM ET (committed 18:35 UTC).
+`coherence_check.py` passes cleanly against that build (10/10 tickers), and a full NaN/Inf sanity
+sweep across every ticker's data came back clean.
+
+**Grades reviewed (from today's live build):** GC=F's recovery made it a fourth straight up day -
+n=26 (up from 25), 19%/19% hit-within-2/3-days (up from 16%/16%), continuing the trend flagged
+these past few days. QQQ remains the strongest performer at n=31 (32%/42%, essentially flat vs
+yesterday's 33%/43% - normal sample noise). TSLA n=29 (17%/24%, unchanged - no new resolutions
+today), HOOD n=31 (16%/23%, unchanged), GOOGL n=20 (20%/20%, down slightly from 21%/21% at n=19 -
+one new resolution, normal noise). JPM (n=34, up from 32) is still stuck at 0%, but today's review
+found the specific reason rather than just re-confirming the pattern: JPM's own swing detector
+hasn't confirmed a single new high or low pivot (a real >=4% zigzag turn) since May 19 - over three
+months of a low-volatility grind higher with no qualifying pullback or reversal. Every prediction
+logged since then has nothing nearby to grade against, so it's marked a miss by the honest "did a
+real turn happen when we said it would" rule, dragging the rate to 0%. That's not a code bug - the
+same swing method's full-history backtest on JPM shows a normal ~14%/22% hit rate, so the method
+itself works on this ticker over time; it's just that this particular stretch has produced nothing
+to confirm. SPY (n=11), VOO (n=12), and NVDA (n=5) remain 0% on thin, still-too-new samples; AMZN
+(n=0) has no resolved predictions yet.
+
+**Real-money ledger:** TSLA pulled back to $353.47 (range $351.32-$364.69) as of 2:34 PM ET, back
+below the $357.50 breakeven on the owner's real short call (5x, exp 9/11) after Thursday's rally
+had pushed it above - a normal swing, not a trend change. Per the owner's own plan (selling these
+TSLA shares by/in October anyway), the outcome at expiry stays acceptable either way; nothing here
+needs action before then.
+
+**What changed and why:** no code change. Today's fetch block is the same network-policy issue as
+every recent day, not a code defect. JPM's 0% rate got a more specific diagnosis today (no
+confirmed swing since May 19) rather than a code fix, because the underlying method isn't broken -
+the market simply hasn't produced a qualifying move to grade. GC=F's fourth straight day of
+recovery is the self-grading system correctly catching up on real, matured results. Improvement
+discipline calls for grade-and-log only when nothing meets the 3+-day pattern-plus-clear-bug bar,
+which is where today lands even with the added detail. Honesty features (measured hit rates,
+random-control comparisons, self-grading) and the coherence gate are untouched, and `tickers.txt`
+wasn't touched.
+
+**Watch next:** whether JPM ever gets a confirmed pivot to end its three-month dry spell; whether
+GC=F's four-day recovery keeps building; the TSLA short call heading into its 9/11 expiry, now back
+below breakeven; and whether tomorrow's fetch finally succeeds after this long a blocked streak.
