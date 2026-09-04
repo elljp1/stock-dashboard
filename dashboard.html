@@ -514,6 +514,10 @@ function renderAll(D){
     rows += `<tr>
       <td>${p.n}</td>
       <td><span class="badge ${p.type==="high"?"bH":"bL"}">${p.type.toUpperCase()}</span>
+          ${p.conf ? `<br><span class="badge" style="${p.conf==="ACTIONABLE"
+            ? "background:#dafbe1; color:#1a7f37; border-color:#1a7f3733"
+            : p.conf==="WATCH" ? "background:#fff8c5; color:#7d4e00; border-color:#7d4e0033"
+            : "background:#eee; color:#777; border-color:#ccc"}">${p.conf}</span>` : ""}
           <span class="big num mobonly" style="margin-left:6px">${p.date} — ${fmt$(p.price)}</span></td>
       <td class="big num" data-l="date">${p.date}</td>
       <td class="num" data-l="window">${p.dateWindow}</td>
@@ -528,7 +532,12 @@ function renderAll(D){
     </tr>`;
   }
   $("predTable").innerHTML = rows;
-  $("hitnote").innerHTML = `<b>Honesty check:</b> on ${D.swing.tested} past ${D.ticker} swings, the rhythm method
+  const LE = D.leadEdge || {};
+  const leRow = (k,name) => LE[k] ? `${name}: model ${LE[k].model}% vs chance ${LE[k].chance}% (${LE[k].edge>0?"+":""}${LE[k].edge} pts, n=${LE[k].n})` : null;
+  const leTxt = [leRow("a","≤3 sessions"), leRow("w","4–7"), leRow("s","8+")].filter(Boolean).join(" · ");
+  $("hitnote").innerHTML = (leTxt ? `<b>What the labels mean (measured on our own graded calls, ±2 days):</b> ${leTxt}.
+   <b>ACTIONABLE</b> is the only band with a proven edge — trade those; <b>WATCH</b> means prepare;
+   <b>SKETCH</b> dates WILL move and should never be traded directly.<br>` : "") + `<b>Honesty check:</b> on ${D.swing.tested} past ${D.ticker} swings, the rhythm method
    landed within ±2 trading days ${pct(pb.hitRate2d)} of the time (±3 days: ${pct(pb.hitRate3d)}). Stacking methods
    narrows attention, it doesn't create certainty. The most reliable part is time-of-day: the open
    (9:30–10:00 AM ET) sets the day's extreme far more often than any other slot.`;

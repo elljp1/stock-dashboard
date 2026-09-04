@@ -44,6 +44,70 @@ try:
 except Exception:
     ASTRO_LAB = {"perTicker": {}}
 
+# ---- measured edge by lead time: how good are calls made N days ahead? ----
+# Graded fresh every run from the full prediction log vs realized turns.
+# This is what powers the ACTIONABLE / WATCH / SKETCH labels - the label is
+# a measurement, not an opinion.
+def _measure_lead_edge():
+    try:
+        from datetime import date as _date
+
+        def _td(a, b):
+            d0 = datetime.strptime(a, "%Y-%m-%d").date()
+            d1 = datetime.strptime(b, "%Y-%m-%d").date()
+            lo, hi = min(d0, d1), max(d0, d1)
+            return sum(1 for k in range((hi - lo).days)
+                       if (lo + timedelta(days=k + 1)).weekday() < 5)
+        turns, base = {}, {}
+        for tk, days in EXTREMES.items():
+            ks = sorted(days)
+            if len(ks) < 30:
+                continue
+            hi = [days[k][0] for k in ks]
+            lo = [days[k][1] for k in ks]
+            t = {"high": set(), "low": set()}
+            for i in range(2, len(ks) - 2):
+                if hi[i] == max(hi[i - 2:i + 3]):
+                    t["high"].add(ks[i])
+                if lo[i] == min(lo[i - 2:i + 3]):
+                    t["low"].add(ks[i])
+            turns[tk] = t
+            for ty in ("high", "low"):
+                nn = hh = 0
+                for k in ks[-120:]:
+                    d0 = datetime.strptime(k, "%Y-%m-%d").date()
+                    nn += 1
+                    hh += any((d0 + timedelta(days=o)).strftime("%Y-%m-%d") in t[ty]
+                              for o in range(-2, 3))
+                base[(tk, ty)] = hh / nn if nn else 0.5
+        B = {}
+        for e in PRED_LOG.get("entries", []):
+            tk = e["ticker"]
+            if tk not in turns:
+                continue
+            last_ok = sorted(EXTREMES[tk])[-3]
+            for p2 in e["preds"]:
+                if p2["isoDate"] > last_ok or p2["isoDate"] <= e["logged"]:
+                    continue
+                lead = _td(e["logged"], p2["isoDate"])
+                bk = "a" if lead <= 3 else ("w" if lead <= 7 else "s")
+                pd2 = datetime.strptime(p2["isoDate"], "%Y-%m-%d").date()
+                hit = any((pd2 + timedelta(days=o)).strftime("%Y-%m-%d")
+                          in turns[tk][p2["type"]] for o in range(-2, 3))
+                r = B.setdefault(bk, [0, 0, 0.0])
+                r[0] += 1
+                r[1] += hit
+                r[2] += base[(tk, p2["type"])]
+        out2 = {}
+        for bk, (n, h, bs) in B.items():
+            if n >= 30:
+                out2[bk] = {"n": n, "model": round(100 * h / n, 1),
+                            "chance": round(100 * bs / n, 1),
+                            "edge": round(100 * (h / n - bs / n), 1)}
+        return out2
+    except Exception:
+        return {}
+
 REV_FILE = "revisions_log.json"
 try:
     with open(REV_FILE, encoding="utf-8") as _f:
@@ -59,6 +123,8 @@ try:
         EXTREMES = json.load(_f)
 except Exception:
     EXTREMES = {}
+
+LEAD_EDGE = _measure_lead_edge()   # needs EXTREMES + PRED_LOG loaded above
 
 
 def method_family(tag):
@@ -889,6 +955,49 @@ def analyze(tkr):
                                      "cycle": f"{P}-day", "kind": kind})
     hurst_events.sort(key=lambda x: x["date"])
 
+    # ------- Goertzel cycle scan: find THIS stock's actual periods -------
+    # The Hurst grid forces 10/20/40/80-day cycles onto every stock. This
+    # scans every period 8-120 bars and keeps only spectral peaks that beat
+    # a red-noise (AR1) background at the 95% level - a cycle must prove it
+    # is not just autocorrelated drift before it can touch a forecast.
+    cyc_events, cyc_found = [], []
+    _x = np.log(zz_df["Close"].values)[-756:]
+    if len(_x) >= 250:
+        _n = np.arange(len(_x), dtype=float)
+        _xd = _x - np.polyval(np.polyfit(_n, _x, 2), _n)
+        _N = len(_xd)
+        _rho = float(np.clip(np.corrcoef(_xd[:-1], _xd[1:])[0, 1], 0, 0.999))
+        _s2 = float(np.var(_xd))
+        _periods = np.arange(8.0, 121.0)
+        _pw = np.empty(len(_periods))
+        for _i, _P in enumerate(_periods):
+            _w = 2 * np.pi / _P
+            _a = 2 / _N * float(np.sum(_xd * np.cos(_w * _n)))
+            _b = 2 / _N * float(np.sum(_xd * np.sin(_w * _n)))
+            _pw[_i] = (_a * _a + _b * _b) * _N / 4
+        _red = _s2 * (1 - _rho ** 2) / (1 - 2 * _rho * np.cos(2 * np.pi / _periods) + _rho ** 2)
+        _ratio = _pw / (_red * 2.995)      # >1 = beats red noise at ~95%
+        _peaks = [i for i in range(1, len(_periods) - 1)
+                  if _ratio[i] > 1.0 and _pw[i] >= _pw[i - 1] and _pw[i] >= _pw[i + 1]]
+        for _i in sorted(_peaks, key=lambda i: -_ratio[i])[:3]:
+            _P = float(_periods[_i])
+            _w = 2 * np.pi / _P
+            _A = np.column_stack([np.ones(_N), np.cos(_w * _n), np.sin(_w * _n)])
+            _cf = np.linalg.lstsq(_A, _xd, rcond=None)[0]
+            _th = math.atan2(_cf[2], _cf[1])
+            _t0 = _N - 1
+            _k_crest = ((_th - _w * _t0) % (2 * np.pi)) / _w or _P
+            _k_trough = ((_th + np.pi - _w * _t0) % (2 * np.pi)) / _w or _P
+            cyc_found.append({"period": int(_P), "ratio": round(float(_ratio[_i]), 2),
+                              "ampPct": round(float(np.hypot(_cf[1], _cf[2])) * 100, 2)})
+            for _k, _kind in ((_k_crest, "crest"), (_k_trough, "trough")):
+                _d = add_trading_days(last_bar_date, int(round(_k)))
+                if _d <= NOW.date() + timedelta(days=60):
+                    cyc_events.append({"date": _d.strftime("%Y-%m-%d"),
+                                       "period": int(_P), "kind": _kind,
+                                       "ratio": round(float(_ratio[_i]), 2)})
+    cyc_events.sort(key=lambda x: x["date"])
+
     # ------- lunar/retro alignment for this ticker's pivots -------
     def moon_align(ptype):
         ds = [p["date"].date() for p in pivots if p["type"] == ptype]
@@ -906,6 +1015,7 @@ def analyze(tkr):
                  "annivHits": anniv_hits, "pivots": len(cal_dates), "upcoming": gann_up[:10]},
         "fib": {"rate": fib_rate, "control": fib_ctrl, "counts": FIB, "upcoming": fib_up[:10]},
         "hurst": {"cycles": hurst, "upcoming": hurst_events},
+        "cycleScan": {"found": cyc_found, "upcoming": cyc_events},
         "astro": {"moonLowPct": moon_low, "moonHighPct": moon_high, "moonChance": moon_chance,
                   "retroPivPct": retro_piv, "retroChance": round(RETRO_SHARE * 100, 0),
                   "moonsNext": [{"date": m["date"].strftime("%Y-%m-%d"), "time": m["time"],
@@ -1241,6 +1351,17 @@ def analyze(tkr):
             if i is not None and i < len(sm) and sm[i]:
                 bump(fd, w * fam_f, tag, which)
 
+    # 6b) Goertzel-significant cycles (weight scales with how far the peak
+    # clears the red-noise bar; forward-graded via the 'cycle' family)
+    for _ce in cyc_events:
+        _cd = datetime.strptime(_ce["date"], "%Y-%m-%d").date()
+        _wc = min(1.0, 0.35 * _ce["ratio"]) * MF.get("cycle", 1.0)
+        for _off in range(-1, 2):
+            _dd = add_trading_days(_cd, _off) if _off else _cd
+            bump(_dd, _wc * (1.0 if _off == 0 else 0.6),
+                 f"Cycle {_ce['period']}d {_ce['kind']} (Goertzel)" if _off == 0 else None,
+                 "H" if _ce["kind"] == "crest" else "L")
+
     # 7) astro-lab factors that survived split-sample replication for THIS
     # stock: modest weight scaled by measured lift, forward-graded like every
     # other method family. Unreplicated factors never touch the score.
@@ -1384,7 +1505,11 @@ def analyze(tkr):
             "price": round(price, 2),
             "dateWindow": f"{add_trading_days(d, -2).strftime('%m/%d')}-{add_trading_days(d, 2).strftime('%m/%d')}",
             "score": round(s, 2), "scoreMax": round(smax, 2), "reached": reached,
+            "lead": (lambda _l: _l)(sum(1 for _k in range((d - NOW.date()).days)
+                                        if (NOW.date() + timedelta(days=_k + 1)).weekday() < 5)),
             "methods": tags[d][:4]})
+        preds[-1]["conf"] = ("ACTIONABLE" if preds[-1]["lead"] <= 3
+                             else "WATCH" if preds[-1]["lead"] <= 7 else "SKETCH")
         prev_price, prev_type = price, ty
     # ---- TIMING STABILITY: a published call is a commitment -----------------
     # The model recomputes from scratch every run, so tiny data changes used
@@ -1415,6 +1540,25 @@ def analyze(tkr):
                  and pp["isoDate"] >= NOW.strftime("%Y-%m-%d")
                  and _tdiff(pp["isoDate"], _np["isoDate"]) <= 3]
         if not _cand:
+            if _np is preds[0] and _prev_preds:
+                _pf = next((pp for pp in _prev_preds
+                            if pp["isoDate"] >= NOW.strftime("%Y-%m-%d")), None)
+                if _pf:
+                    REV_LOG["entries"] = [r for r in REV_LOG["entries"]
+                                          if not (r["ticker"] == tkr and r["type"] == _np["type"]
+                                                  and r["when"] == NOW.strftime("%Y-%m-%d"))]
+                    REV_LOG["entries"].append({
+                        "ticker": tkr, "when": NOW.strftime("%Y-%m-%d"),
+                        "type": _np["type"],
+                        "from": {"isoDate": _pf["isoDate"], "time": _pf.get("time"),
+                                 "price": _pf.get("price")},
+                        "to": {"isoDate": _np["isoDate"], "time": _np.get("time"),
+                               "price": _np["price"]},
+                        "driftDays": _tdiff(_pf["isoDate"], _np["isoDate"]),
+                        "priceMovePct": (round(abs(_np["price"] / _pf["price"] - 1) * 100, 1)
+                                          if _pf.get("price") else None),
+                        "reason": "chain redrawn (no matching turn within 3 sessions "
+                                  f"- was {_pf['type']} {_pf['isoDate']})"})
             continue
         _pp = min(_cand, key=lambda x: _tdiff(x["isoDate"], _np["isoDate"]))
         _dd = _tdiff(_pp["isoDate"], _np["isoDate"])
@@ -1498,6 +1642,7 @@ def analyze(tkr):
             "price": _p0["price"],
             "hit2": out["swing"].get("hitRate2d"), "hit3": out["swing"].get("hitRate3d"),
             "state": turn_note["state"] if turn_note else None}
+    out["leadEdge"] = LEAD_EDGE
     out["astroLab"] = ASTRO_LAB.get("perTicker", {}).get(tkr)
     if out["astroLab"] is not None:
         out["astroLab"] = dict(out["astroLab"], computed=ASTRO_LAB.get("computed"))
