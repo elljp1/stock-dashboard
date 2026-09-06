@@ -1385,3 +1385,44 @@ untouched, and `tickers.txt` wasn't touched.
 session - worth checking whether JPM ever gets a confirmed pivot, whether GC=F's recovery keeps
 building, and whether the TSLA short call (still below breakeven heading into its 9/11 expiry)
 moves either way. Also still watching whether fetch access to Yahoo recovers for this environment.
+
+## 2026-09-06 (Sun) — weekend, no new session; fetch blocked again; grade-and-log only
+
+**Fetch status:** blocked on all 10 tickers - the same 403 Forbidden at the proxy gateway seen on
+every recent review day. Markets are closed Sunday anyway, so there is no new session to fetch
+regardless. With no CSVs committed to the repo (gitignored by design), running `analyze.py` here
+produced the usual empty 0-ticker build (confirmed, then discarded without committing) rather than
+overwrite the good data with a broken one. The repo already carries Friday 9/4's closing data,
+re-run through the separate cloud refresh workflow Saturday evening (which revises/matures a few
+more predictions without changing prices, since no new session has traded). `coherence_check.py`
+passes cleanly against that build (10/10 tickers), a full cross-check with `anomaly_audit.py`
+found no chain/level/trade-card inconsistencies, and a NaN/Inf sweep across every ticker's
+calibration factors and grading data came back clean.
+
+**Grades reviewed (from Saturday evening's re-run of Friday's closing build):** QQQ remains the
+strongest performer (n=31, up from 30, 32%/42% within +/-2/3 days - one new resolution, essentially
+flat vs Saturday's 33%/43%, normal sample noise). GOOGL sits at n=20 (up from 19, 20%/20%, flat vs
+21%/21%). TSLA n=29 (17%/24%, 7.8%) and HOOD n=31 (16%/23%, 5.2%) are unchanged - no new
+resolutions. JPM (n=34, up from 32) is still stuck at 0% - the already-diagnosed three-month dry
+spell (no confirmed swing pivot since May 19) picked up two more resolved-but-unconfirmed entries
+overnight, same condition, nothing new to add. GC=F's recovery streak holds flat at n=26 (19%/19%,
+2.4%) since no new session has traded since Friday. SPY (n=11), VOO (n=12), and NVDA (n=5) remain
+on thin samples; AMZN (n=0) still has no resolved predictions.
+
+**Real-money ledger:** No change since Friday - TSLA still at $352.89, below the $357.50 breakeven
+on the owner's real short call (5x, exp 9/11) but above the $345 strike. Per the owner's own plan
+to sell these TSLA shares by/in October anyway, the outcome at expiry stays acceptable either way;
+5 days remain to expiry with no weekend data to change that read.
+
+**What changed and why:** no code change. There is no new market session to grade over the weekend,
+fetch access is blocked by the same standing network-policy issue as every recent day, and nothing
+today rises to the 3+-day-pattern-plus-clear-bug bar for a change - JPM's dry spell and GC=F's flat
+recovery are both already-diagnosed, ongoing conditions, not new findings. Honesty features
+(measured hit rates, random-control comparisons, self-grading) and the coherence gate are
+untouched, and `tickers.txt` wasn't touched.
+
+**Watch next:** Monday 9/7 is Labor Day (US markets closed), so Tuesday 9/8 is the next new
+trading session - worth checking whether JPM ever gets a confirmed pivot, whether GC=F's recovery
+resumes climbing once real data starts flowing again, and whether the TSLA short call (still below
+breakeven, now inside its final week before 9/11 expiry) moves either way. Also still watching
+whether fetch access to Yahoo recovers for this environment.
