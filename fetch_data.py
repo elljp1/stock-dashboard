@@ -2,6 +2,8 @@
 import urllib.request
 import json
 import time
+import sys
+from pathlib import Path
 import pandas as pd
 from zoneinfo import ZoneInfo
 
@@ -43,6 +45,7 @@ def fetch(ticker, rng, interval, tries=3):
     return df, res["meta"]
 
 
+failures = []
 for tkr in TICKERS:
     print(f"--- {tkr} ---")
     try:
@@ -50,12 +53,18 @@ for tkr in TICKERS:
                                     ("730d", "1h", "hourly"),
                                     ("60d", "15m", "15m")]:
             df, meta = fetch(tkr, rng, interval)
-            df.to_csv(f"{tkr}_{name}.csv")
+            if df.empty:
+                raise ValueError("empty price response")
+            target = Path(f"{tkr}_{name}.csv")
+            temp = target.with_suffix(".csv.tmp")
+            df.to_csv(temp)
+            temp.replace(target)
             print(f"  {name}: {len(df)} rows, {df.index[0].date()} -> {df.index[-1].date()}")
             time.sleep(0.5)  # be polite to Yahoo
         print("  price:", meta["regularMarketPrice"])
     except Exception as e:
         print(f"  FAILED: {e}")
+        failures.append(tkr)
 
 # latest trade INCLUDING pre/post-market, so early-morning runs price reality
 pm = {}
@@ -74,3 +83,6 @@ for tkr in TICKERS:
 with open("premarket.json", "w", encoding="utf-8") as f:
     json.dump({"asof": time.time(), "prices": pm}, f)
 print("pre/post prices:", pm)
+
+if failures:
+    sys.exit("Incomplete data download: " + ", ".join(failures))

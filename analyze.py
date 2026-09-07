@@ -1080,11 +1080,6 @@ def analyze(tkr):
                    "hit3": bool(found and abs(err) <= 3),
                    "methods": p.get("methods", [])}
             resolved.append(rec)
-            for tag in rec["methods"]:
-                fam = method_family(tag)
-                st = fam_stats.setdefault(fam, {"n": 0, "hits": 0})
-                st["n"] += 1
-                st["hits"] += rec["hit2"]
 
     # dedupe (same prediction re-logged on consecutive days)
     seen = set()
@@ -1095,6 +1090,12 @@ def analyze(tkr):
             seen.add(key)
             resolved_u.append(r)
     resolved_u.sort(key=lambda r: r["predDate"])
+
+    for rec in resolved_u:
+        for fam in set(method_family(tag) for tag in rec["methods"]):
+            st = fam_stats.setdefault(fam, {"n": 0, "hits": 0})
+            st["n"] += 1
+            st["hits"] += rec["hit2"]
 
     n_res = len(resolved_u)
     hit2s = sum(r["hit2"] for r in resolved_u)
@@ -2326,6 +2327,9 @@ for tkr in TICKERS:
               f"first pred {p['predictions'][0]['date']} {p['predictions'][0]['type']}")
     except Exception as e:
         print(f"{tkr}: FAILED - {e}")
+
+if set(all_out) != set(TICKERS):
+    raise RuntimeError("Incomplete analysis; retaining last published dashboard")
 
 # ===== THE WEEK AHEAD: one clear action per session, across all tickers =====
 # Capital is assumed available (100 shares of anything), so ranking is purely
