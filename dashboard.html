@@ -121,13 +121,13 @@
   }
   function open_(){ var g = document.getElementById("pinGate"); if(g) g.remove(); }
   var saved = null;
-  try { saved = JSON.parse(localStorage.getItem("pinOk") || "null"); } catch(e){}
+  try { saved = JSON.parse(safeStorage.getItem("pinOk") || "null"); } catch(e){}
   if (saved && saved.h === GATE_H && (Date.now() - saved.t) < DAYS*864e5){ open_(); return; }
   function tryPin(){
     var v = (document.getElementById("pinIn").value || "").trim();
     sha256("stk-dash-2026|" + v).then(function(h){
       if (h === GATE_H){
-        try { localStorage.setItem("pinOk", JSON.stringify({h: h, t: Date.now()})); } catch(e){}
+        try { safeStorage.setItem("pinOk", JSON.stringify({h: h, t: Date.now()})); } catch(e){}
         open_();
       } else {
         document.getElementById("pinMsg").textContent = "Wrong PIN";
@@ -194,6 +194,7 @@
   <h2>Price, detected swings (H/L), and projected path</h2>
   <div class="chartwrap"><canvas id="chart" width="1140" height="360"></canvas></div>
   <div class="tag" id="chartTag"></div>
+  <div class="tag" id="reviewStatus" style="margin-top:8px"></div>
 </div>
 
 <div class="panel" id="weekPanel" style="border-width:2px; border-color:var(--accent)">
@@ -379,6 +380,11 @@
 <div class="foot" id="foot"></div>
 
 <script>
+const safeStorage = {
+  getItem(k){try{return localStorage.getItem(k);}catch(e){return null;}},
+  setItem(k,v){try{localStorage.setItem(k,v);}catch(e){throw new Error("Browser storage is unavailable; scheduled refresh still works.");}},
+  removeItem(k){try{localStorage.removeItem(k);}catch(e){}}
+};
 const $ = id => document.getElementById(id);
 const fmt$ = v => "$" + v.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
 const pct = v => (v===null||v===undefined) ? "n/a" : v + "%";
@@ -386,7 +392,7 @@ const argmax = obj => Object.keys(obj).reduce((a,b)=>obj[a]>=obj[b]?a:b);
 const TICKERS = Object.keys(DATA_ALL);
 const NICE = {"GC=F": "GOLD/oz"};
 const nice = t => NICE[t] || t;
-let CUR = localStorage.getItem("tkr");
+let CUR = safeStorage.getItem("tkr");
 if(!TICKERS.includes(CUR)) CUR = TICKERS[0];
 
 /* ---------- ticker tabs ---------- */
@@ -398,7 +404,7 @@ function renderTabs(){
   }).join("");
 }
 function switchTo(t){
-  CUR = t; localStorage.setItem("tkr", t);
+  CUR = t; safeStorage.setItem("tkr", t);
   renderTabs(); renderAll(DATA_ALL[t]);
   window.scrollTo({top:0, behavior:"smooth"});
 }
@@ -453,6 +459,8 @@ function renderAll(D){
   $("price").textContent = fmt$(D.price);
   $("updated").textContent = "updated " + D.generated;
 
+  const review=D.dailyReview;
+  $("reviewStatus").textContent=review ? "Automatic review: " + new Date(review.reviewedAt).toLocaleString("en-US",{timeZone:"America/New_York"}) + " ET · " + review.snapshotCount + " saved forecast snapshots · " + review.scoredOriginals + " original targets scored. Learning adjusts estimates; improvement is not guaranteed." : "Automatic review will appear after the next scheduled run.";
   /* predictions */
   const p1 = D.predictions[0];
   const tn = D.turnFormed;
@@ -836,8 +844,53 @@ function renderAll(D){
       x.fillStyle = "#57606a"; x.font = "600 11px Segoe UI";
       x.fillText(dlbl, px, boxY + 25);
     }
+    // Rebind on every render so ticker switches and resize never retain stale points.
+    const points = dates.map((date, i) => ({date, price: closes[i], kind: "Actual daily close"}))
+      .concat(preds.map(p => ({date: p.isoDate, price: p.price, time: p.planetHour || p.time,
+                              kind: "Predicted " + p.type})))
+      .concat(D.chart.pivots.filter(p => new Date(p.date).getTime() >= t0)
+        .map(p => ({date:p.date, price:p.price, kind:"Confirmed historical " + p.type})));
+    const base = document.createElement("canvas");
+    base.width = c.width; base.height = c.height;
+    base.getContext("2d").drawImage(c, 0, 0);
+    let tip = document.getElementById("chartTooltip");
+    if (!tip) {
+      tip = document.createElement("div"); tip.id = "chartTooltip";
+      tip.setAttribute("role", "status");
+      tip.style.cssText = "position:fixed;z-index:1000;pointer-events:none;white-space:pre-line;background:#14233b;color:white;padding:10px 14px;border-radius:8px;font:14px/1.5 Segoe UI;box-shadow:0 4px 18px #0003;max-width:270px;display:none";
+      document.body.appendChild(tip);
+    }
+    tip.style.display = "none";
+    const restore = () => { x.save(); x.setTransform(1,0,0,1,0,0); x.clearRect(0,0,c.width,c.height); x.drawImage(base,0,0); x.restore(); };
+    const inspect = (point, clientX, clientY) => {
+      restore(); const px=X(point.date), py=Y(point.price);
+      x.save(); x.strokeStyle="#425a78"; x.lineWidth=1; x.setLineDash([3,3]);
+      x.beginPath(); x.moveTo(px,T); x.lineTo(px,H-B); x.moveTo(L,py); x.lineTo(W-R,py); x.stroke();
+      x.setLineDash([]); x.fillStyle="#0969da"; x.beginPath(); x.arc(px,py,5,0,Math.PI*2); x.fill(); x.restore();
+      tip.textContent = point.kind + "\n" + point.date + (point.time ? " · " + point.time + " ET (forecast)" : "") + "\n" + fmt$(point.price);
+      tip.style.display="block";
+      tip.style.left=Math.max(8,Math.min(clientX+14,window.innerWidth-tip.offsetWidth-8))+"px";
+      tip.style.top=Math.max(8,Math.min(clientY+14,window.innerHeight-tip.offsetHeight-8))+"px";
+    };
+    const move = e => {
+      const rect=c.getBoundingClientRect();
+      const px=(e.clientX-rect.left)*W/rect.width, py=(e.clientY-rect.top)*H/rect.height;
+      if(px<L || px>W-R || py<T || py>H-B){ restore(); tip.style.display="none"; return; }
+      const nearest=points.reduce((a,b) => Math.hypot(X(b.date)-px,Y(b.price)-py)<Math.hypot(X(a.date)-px,Y(a.price)-py)?b:a);
+      inspect(nearest,e.clientX,e.clientY);
+    };
+    c.onpointermove=move; c.onpointerdown=move;
+    c.onpointerleave=() => { restore(); tip.style.display="none"; };
+    c.tabIndex=0; c.setAttribute("aria-label","Price chart. Hover or tap to inspect; use left and right arrow keys for daily closes.");
+    let keyIndex=dates.length-1;
+    c.onkeydown=e => {
+      if(e.key==="Escape"){restore();tip.style.display="none";return;}
+      if(!["ArrowLeft","ArrowRight"].includes(e.key))return;
+      e.preventDefault();keyIndex=Math.max(0,Math.min(dates.length-1,keyIndex+(e.key==="ArrowLeft"?-1:1)));
+      const r=c.getBoundingClientRect();inspect(points[keyIndex],r.left+X(points[keyIndex].date)*r.width/W,r.top+Y(points[keyIndex].price)*r.height/H);
+    };
     if (mob) wrap.scrollLeft = wrap.scrollWidth;   // land on the newest data
-    $("chartTag").textContent = `Solid line: actual daily closes (9 months). Dots: confirmed ${D.swing.thresholdPct}% swing pivots. Dashed: the confluence forecast with date & price at each marker — an illustration of rhythm, not a promise.` + (mob ? " Swipe the chart left/right to see history; pinch to zoom." : "");
+    $("chartTag").textContent = `Hover or tap a point for date and price. Solid line: actual daily closes (9 months). Dots: confirmed ${D.swing.thresholdPct}% swing pivots. Dashed: the confluence forecast with date & price at each marker — an illustration of rhythm, not a promise.` + (mob ? " Swipe the chart left/right to see history; pinch to zoom." : "");
   })();
 
   /* track record */
@@ -1475,65 +1528,71 @@ function renderAll(D){
     };
     const fresh = grab("DATA_ALL");
     if(!fresh || !Object.keys(fresh).length) throw new Error("no data in response");
-    // const objects can't be rebound, but they CAN be mutated
-    Object.keys(DATA_ALL).forEach(k => delete DATA_ALL[k]);
-    Object.assign(DATA_ALL, fresh);
-    const pairs = [["TRADES", typeof TRADES !== "undefined" ? TRADES : null],
-                   ["BENCHMARK", typeof BENCHMARK !== "undefined" ? BENCHMARK : null],
-                   ["BACKFILL", typeof BACKFILL !== "undefined" ? BACKFILL : null]];
-    for(const [nm, obj] of pairs){
-      const v = grab(nm);
-      if(v && obj){ Object.keys(obj).forEach(k => delete obj[k]); Object.assign(obj, v); }
+    for(const [ticker,d] of Object.entries(fresh)){
+      if(!d || !Number.isFinite(d.price) || d.price<=0 || !d.generated ||
+         !Array.isArray(d.predictions) || !d.predictions.length ||
+         !d.chart || !Array.isArray(d.chart.dates) || !d.chart.dates.length ||
+         d.chart.dates.length!==(d.chart.closes || []).length ||
+         !d.chart.closes.every(v=>Number.isFinite(v)&&v>0)) throw new Error("invalid data for " + ticker);
     }
-    if(!DATA_ALL[CUR]) CUR = Object.keys(DATA_ALL)[0];
-    renderTabs();
-    renderAll(DATA_ALL[CUR]);
+    if(Object.keys(DATA_ALL).some(t=>!fresh[t]))throw new Error("incomplete refresh; keeping previous data");
+    const stamp=g=>{
+      const m=g.match(/(\d{4}-\d{2}-\d{2}) (\d{2}):(\d{2}) (AM|PM)/);
+      return m ? m[1]+" "+String((Number(m[2])%12)+(m[4]==="PM"?12:0)).padStart(2,"0")+":"+m[3] : "";
+    };
+    if(Object.keys(DATA_ALL).some(t=>stamp(fresh[t].generated)<stamp(DATA_ALL[t].generated)))throw new Error("older snapshot rejected");
+    const pairs=[[DATA_ALL,fresh],[TRADES,grab("TRADES")],[BENCHMARK,grab("BENCHMARK")],
+      [BACKFILL,grab("BACKFILL")],[REALTRADES,grab("REALTRADES")],[WEEKPLAN,grab("WEEKPLAN")]];
+    const backups=pairs.map(([obj])=>JSON.parse(JSON.stringify(obj)));
+    const assign=(obj,value)=>{Object.keys(obj).forEach(k=>delete obj[k]);if(Array.isArray(obj))obj.length=0;Object.assign(obj,value);};
+    try {
+      pairs.forEach(([obj,value])=>{if(value)assign(obj,value);});
+      renderTabs(); renderAll(DATA_ALL[CUR]);
+    } catch(e) {
+      pairs.forEach(([obj],i)=>assign(obj,backups[i]));
+      renderTabs(); renderAll(DATA_ALL[CUR]); throw e;
+    }
+  }
+
+  async function request(url, options={}) {
+    const controller=new AbortController();
+    const timer=setTimeout(()=>controller.abort(),20000);
+    try {
+      const r=await fetch(url,Object.assign({},options,{signal:controller.signal}));
+      const body=await r.text();
+      return {ok:r.ok,status:r.status,text:async()=>body};
+    }
+    finally {clearTimeout(timer);}
   }
 
   function etNow(){
     return new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"}));
   }
-  function marketState(){
-    const n = etNow(), d = n.getDay(), mins = n.getHours()*60 + n.getMinutes();
-    if(d === 0 || d === 6) return {open:false, why:"weekend - markets closed"};
-    if(mins < 570) return {open:false, why:"pre-market - opens 9:30 AM ET"};
-    if(mins > 960) return {open:false, why:"after hours - closed at 4:00 PM ET"};
-    return {open:true, why:"market open"};
-  }
   function freshness(){
-    const g = (DATA_ALL[CUR] || {}).generated || "";
-    const m = g.match(/(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}) (AM|PM)/);
-    if(!m) return g;
-    let hr = parseInt(m[4],10) % 12; if(m[6] === "PM") hr += 12;
-    const dt = new Date(+m[1], +m[2]-1, +m[3], hr, +m[5]);
-    const mins = Math.max(0, Math.round((etNow() - dt)/60000));
-    const age = mins < 60 ? mins + " min old"
-              : Math.floor(mins/60) + "h " + (mins%60) + "m old";
-    const ms = marketState();
-    const label = m[4] + ":" + m[5] + " " + m[6];
-    if(!ms.open)
-      return "latest data <b>" + label + " ET</b> (" + age + ") - " + ms.why +
-             ", so prices will not change until the open. Press <b>Reanalyze &amp; Predict</b> to force a fresh pull anyway.";
-    if(mins > 75)
-      return "latest data <b>" + label + " ET</b> (" + age + ") - the scheduled refresh looks overdue. " +
-             "Press <b>Reanalyze &amp; Predict</b> for live prices now.";
-    return "up to date - data as of <b>" + label + " ET</b> (" + age + "), " + ms.why;
+    const g=(DATA_ALL[CUR] || {}).generated || "unknown";
+    return "Analysis generated " + g + ". Snapshot prices may be delayed. Checks for updates every 5 minutes; daily review runs automatically.";
   }
   async function pullLatest(label){
     st.textContent = label || "fetching the latest data...";
-    const r = await fetch(RAW + "?t=" + Date.now(), {cache: "no-store"});
-    if(!r.ok) throw new Error("fetch failed " + r.status);
-    swapIn(await r.text());
-    st.innerHTML = freshness();
+    let lastError;
+    for(let attempt=0;attempt<3;attempt++){
+      try {
+        const url=attempt===1 ? new URL("data.js",location.href).href : RAW;
+        const r=await request(url+"?t="+Date.now(),{cache:"no-store"});
+        if(!r.ok)throw new Error("fetch failed " + r.status);
+        swapIn(await r.text()); st.innerHTML=freshness(); return;
+      } catch(e){lastError=e;}
+    }
+    throw lastError;
   }
 
   btn.onclick = async () => {
     btn.disabled = true;
     try{
-      const tok = localStorage.getItem("ghTok");
+      const tok = safeStorage.getItem("ghTok");
       if(tok){
         st.textContent = "starting a fresh price pull…";
-        const r = await fetch("https://api.github.com/repos/" + REPO +
+        const r = await request("https://api.github.com/repos/" + REPO +
           "/actions/workflows/refresh.yml/dispatches", {
             method:"POST",
             headers:{Authorization:"Bearer " + tok, Accept:"application/vnd.github+json"},
@@ -1544,7 +1603,7 @@ function renderAll(D){
             await new Promise(z => setTimeout(z, 5000));
             st.textContent = "running fresh prices + re-analysis… " + (i*5) + "s";
             try{
-              const rr = await fetch(RAW + "?t=" + Date.now(), {cache:"no-store"});
+              const rr = await request(RAW + "?t=" + Date.now(), {cache:"no-store"});
               const tx = await rr.text();
               if(tx.indexOf('"generated": "' + before + '"') === -1){ swapIn(tx);
                 st.innerHTML = freshness(); btn.disabled = false; return; }
@@ -1555,7 +1614,7 @@ function renderAll(D){
       } else {
         await pullLatest();
       }
-    }catch(e){ st.textContent = "couldn't update: " + e.message; }
+    }catch(e){ st.textContent = "Update unavailable; previous data retained. Automatic retry will follow. " + e.message; }
     btn.disabled = false;
   };
 
@@ -1565,18 +1624,18 @@ function renderAll(D){
   $("tokSave").onclick = () => {
     const v = $("tokIn").value.trim();
     if(!v){ st.textContent = "no token entered"; return; }
-    localStorage.setItem("ghTok", v);
+    safeStorage.setItem("ghTok", v);
     $("tokIn").value = "";
     box.style.display = "none";
     st.textContent = "saved - press Reanalyze & Predict to run it";
   };
   btnRe.onclick = async () => {
-    const tok = localStorage.getItem("ghTok");
+    const tok = safeStorage.getItem("ghTok");
     if(!tok){ box.style.display = "block"; st.textContent = "one-time setup needed for live re-analysis"; return; }
     btnRe.disabled = true; btn.disabled = true;
     try{
       st.textContent = "requesting fresh prices + full re-analysis...";
-      const r = await fetch("https://api.github.com/repos/" + REPO +
+      const r = await request("https://api.github.com/repos/" + REPO +
         "/actions/workflows/refresh.yml/dispatches", {
           method:"POST",
           headers:{Authorization:"Bearer " + tok, Accept:"application/vnd.github+json"},
@@ -1587,18 +1646,18 @@ function renderAll(D){
           await new Promise(z => setTimeout(z, 5000));
           st.textContent = "downloading prices, re-running swings, predictions, trades... " + (i*5) + "s";
           try{
-            const rr = await fetch(RAW + "?t=" + Date.now(), {cache:"no-store"});
+            const rr = await request(RAW + "?t=" + Date.now(), {cache:"no-store"});
             const tx = await rr.text();
             if(tx.indexOf('"generated": "' + before + '"') === -1){
               swapIn(tx);
-              st.innerHTML = "re-analysed with live prices - " + freshness();
+              st.innerHTML = "analysis refreshed - " + freshness();
               btnRe.disabled = false; btn.disabled = false; return;
             }
           }catch(e){}
         }
         st.textContent = "still running - press Update in a minute to collect the result";
       } else if(r.status === 401 || r.status === 403){
-        localStorage.removeItem("ghTok");
+        safeStorage.removeItem("ghTok");
         box.style.display = "block";
         st.textContent = "token was rejected or expired - please create a new one";
       } else {
@@ -1608,17 +1667,28 @@ function renderAll(D){
     btnRe.disabled = false; btn.disabled = false;
   };
 
+  let autoBusy=false;
+  async function autoPull(){
+    if(document.hidden || autoBusy || btn.disabled || btnRe.disabled)return;
+    autoBusy=true;
+    try{await pullLatest("Checking for updated analysis…");}
+    catch(e){st.textContent="Update unavailable; previous data retained. Retrying automatically.";}
+    finally{autoBusy=false;}
+  }
+  setInterval(autoPull,5*60*1000);
+  window.addEventListener("online",autoPull);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)autoPull();});
   window.__freshness = freshness;
   btn.oncontextmenu = (e) => {
     e.preventDefault();
-    const cur = localStorage.getItem("ghTok");
+    const cur = safeStorage.getItem("ghTok");
     const msg = cur
       ? "Full-refresh token is saved. Paste a new one, or leave blank and press OK to remove it."
       : "Optional: paste a GitHub fine-grained token (Actions: read+write on this repo) so Update also pulls FRESH PRICES and re-runs the analysis. Stored only in this browser. Without it, Update fetches the newest saved data.";
     const v = prompt(msg, "");
     if(v === null) return;
-    if(v.trim()){ localStorage.setItem("ghTok", v.trim()); st.textContent = "full refresh enabled on this device"; }
-    else { localStorage.removeItem("ghTok"); st.textContent = "token removed"; }
+    if(v.trim()){ safeStorage.setItem("ghTok", v.trim()); st.textContent = "full refresh enabled on this device"; }
+    else { safeStorage.removeItem("ghTok"); st.textContent = "token removed"; }
   };
 })();
 
@@ -1626,7 +1696,7 @@ function renderAll(D){
 function buildSectionTabs(){
   const bar = document.getElementById("sectionTabs");
   const groups = [...new Set([...document.querySelectorAll("[data-tab]")].map(e => e.dataset.tab))];
-  let active = localStorage.getItem("secTab");
+  let active = safeStorage.getItem("secTab");
   if(!groups.includes(active)) active = groups[0];
   const paint = () => {
     document.querySelectorAll("[data-tab]").forEach(e => {
@@ -1646,7 +1716,7 @@ function buildSectionTabs(){
     b.textContent = g; b.dataset.g = g;
     b.style.cssText = "padding:8px 18px; border:1px solid var(--border); border-radius:8px;" +
       "font-size:14px; font-weight:700; cursor:pointer; background:var(--panel); color:var(--dim)";
-    b.onclick = () => { active = g; localStorage.setItem("secTab", g); paint(); };
+    b.onclick = () => { active = g; safeStorage.setItem("secTab", g); paint(); };
     bar.appendChild(b);
   });
   paint();
