@@ -1,63 +1,80 @@
 name: Refresh dashboard
 on:
   schedule:
-    # GitHub's scheduler is best-effort and drops on-the-hour/half-hour slots
-    # most (they are the most congested) - on 8/27 all three pre-market runs
-    # were silently skipped. Odd minutes + double density = a miss costs 30
-    # minutes of staleness instead of a whole morning.
-    - cron: "17 10-21 * * 1-5"  # 6:17 AM - 5:17 PM ET, hourly
-    - cron: "47 11-20 * * 1-5"  # 7:47 AM - 4:47 PM ET, half-hour offsets
-    - cron: "17 23 * * 1-5"     # 7:17 PM ET  evening
+    - cron: "17 10-22 * * 1-5"
+    - cron: "47 11-21 * * 1-5"
+    - cron: "17 23 * * *" # daily review, including weekends; UTC schedule
   workflow_dispatch: {}
-  # run on manual pushes too, so a pushed fix is verified immediately instead
-  # of waiting for the next cron. The workflow's own bot commits use the
-  # default GITHUB_TOKEN, whose pushes never re-trigger workflows - no loop.
   push:
     branches: [main]
-
 permissions:
   contents: write
-
-# only one refresh at a time - overlapping runs caused racing Pages deploys
-# that cancelled each other and left the live site stale
+  pages: write
+  id-token: write
 concurrency:
   group: dashboard-refresh
   cancel-in-progress: false
-
 jobs:
   refresh:
     runs-on: ubuntu-latest
+    timeout-minutes: 40
+    environment:
+      name: github-pages
+      url: https://elljp1.github.io/stock-dashboard/
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
       - run: pip install --quiet pandas numpy ephem esprima
-      - run: python fetch_data.py
+      - name: Download complete data with retry
+        run: |
+          for attempt in 1 2 3; do
+            if python fetch_data.py; then exit 0; fi
+            if [ "$attempt" -lt 3 ]; then sleep 10; fi
+          done
+          exit 1
       - run: python backfill.py
       - run: python benchmark.py
-      # the lab is a weekly enrichment - a recompute failure must never block
-      # the price refresh (the committed astro_lab.json keeps serving)
-      - run: python astro_lab.py || echo "astro lab recompute failed - keeping committed astro_lab.json"
+      - run: python astro_lab.py || echo "::warning::Astro enrichment unavailable; retaining previous lab"
       - run: python analyze.py
+      - run: python reliability.py
       - run: python coherence_check.py
       - run: python anomaly_audit.py
-      # runtime smoke test: load the built page in jsdom and prove it boots
-      # (esprima only catches syntax errors; this catches the runtime crashes
-      # that have twice broken the live page)
-      - run: npm install --no-save jsdom
+      - run: npm ci --ignore-scripts
       - run: node smoke_test.js
-      - name: Commit and push updated dashboard
+      - run: node reliability_test.js
+      - run: python -m unittest test_reliability.py
+      - name: Publish only validated artifacts
         run: |
           git config user.name "dashboard-bot"
           git config user.email "dashboard-bot@users.noreply.github.com"
-          git add index.html dashboard_single.html data.js predictions_log.json daily_extremes.json trades.json trades_log.json horizons_log.json real_trades.json improvements_log.md backfill.json benchmark.json week_plan.json week_plan_log.json revisions_log.json astro_lab.json
-          git commit -m "auto refresh (cloud)" || echo "nothing new"
-          # a laptop backup publish can race this push; freshly-built artifacts
-          # win any conflict (-X theirs keeps OUR versions when replaying)
-          for i in 1 2 3; do
-            git push && break
-            git fetch origin
-            git rebase -X theirs origin/main || { git rebase --abort; git reset --hard origin/main; break; }
+          git add index.html dashboard_single.html data.js predictions_log.json daily_extremes.json trades.json trades_log.json horizons_log.json real_trades.json improvements_log.md backfill.json benchmark.json week_plan.json week_plan_log.json revisions_log.json astro_lab.json forecast_ledger.json daily_review.json
+          if ! git diff --cached --quiet; then git commit -m "auto refresh and review (cloud)"; fi
+          # Never resolve code/data races by discarding another writer's work.
+          # A conflicting update fails visibly; the next scheduled run rebuilds.
+          for attempt in 1 2 3; do
+            if git push; then exit 0; fi
+            git fetch origin main
+            if [ "$(git rev-parse origin/main)" != "$(git rev-parse HEAD^)" ]; then
+              echo "::error::Repository changed during analysis; next scheduled run must rebuild"
+              exit 1
+            fi
           done
-
+          exit 1
+      - name: Package last validated site
+        run: |
+          mkdir -p public-site
+          cp index.html dashboard_single.html data.js daily_review.json public-site/
+          touch public-site/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public-site
+      - uses: actions/deploy-pages@v4
+      - name: Report failure
+        if: failure()
+        run: echo "::error::Refresh or deployment failed. Previous publication remains available; next scheduled run retries. Inspect this run before treating data as current."
