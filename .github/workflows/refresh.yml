@@ -1,9 +1,18 @@
 name: Refresh dashboard
 on:
   schedule:
-    - cron: "17 10-22 * * 1-5"
-    - cron: "47 11-21 * * 1-5"
-    - cron: "17 23 * * *" # daily review, including weekends; UTC schedule
+    # Exact Eastern cadence. GitHub cron is UTC, so both daylight and standard
+    # time schedules are registered; the gate below runs only the active one.
+    # Weekdays ET: 06:00, 07:00, 08:00, 09:00, 09:15, 09:20, 09:25,
+    # 09:30, 09:35, 09:45, 10:00, then every 30 minutes through 17:00.
+    - cron: "0 10-21 * * 1-5"          # EDT whole hours, 06:00-17:00 ET
+    - cron: "30 13-20 * * 1-5"         # EDT 09:30, then :30 through 16:30 ET
+    - cron: "15,20,25,35,45 13 * * 1-5" # EDT market-open sequence
+    - cron: "0 11-22 * * 1-5"          # EST whole hours, 06:00-17:00 ET
+    - cron: "30 14-21 * * 1-5"         # EST 09:30, then :30 through 16:30 ET
+    - cron: "15,20,25,35,45 14 * * 1-5" # EST market-open sequence
+    - cron: "0 22 * * *"               # EDT daily review, 18:00 ET
+    - cron: "0 23 * * *"               # EST daily review, 18:00 ET
   workflow_dispatch: {}
   push:
     branches: [main]
@@ -15,7 +24,36 @@ concurrency:
   group: dashboard-refresh
   cancel-in-progress: false
 jobs:
+  schedule-gate:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+    steps:
+      - id: gate
+        name: Select the active Eastern-time schedule
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+        run: |
+          if [ "$EVENT_NAME" != "schedule" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          case "$SCHEDULE" in
+            "0 10-21 * * 1-5"|"30 13-20 * * 1-5"|"15,20,25,35,45 13 * * 1-5"|"0 22 * * *") expected="-0400" ;;
+            "0 11-22 * * 1-5"|"30 14-21 * * 1-5"|"15,20,25,35,45 14 * * 1-5"|"0 23 * * *") expected="-0500" ;;
+            *) expected="invalid" ;;
+          esac
+          actual="$(TZ=America/New_York date +%z)"
+          if [ "$actual" = "$expected" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "Inactive DST twin skipped ($SCHEDULE; Eastern offset $actual)."
+          fi
   refresh:
+    needs: schedule-gate
+    if: needs.schedule-gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 40
     environment:
