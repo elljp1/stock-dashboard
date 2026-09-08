@@ -48,7 +48,7 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: node smoke_test.js
       - run: node reliability_test.js
-      - run: python -m unittest test_reliability.py
+      - run: python -m unittest test_reliability.py test_scoring.py
       - name: Publish only validated artifacts
         run: |
           git config user.name "dashboard-bot"

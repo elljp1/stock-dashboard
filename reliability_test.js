@@ -28,6 +28,7 @@ const delay=()=>new Promise(r=>setTimeout(r,30));
     c.onkeydown({key:'ArrowLeft',preventDefault(){}});
     assert.match(d.getElementById('chartTooltip').textContent,/Actual daily close/);
   }
+  assert.match(d.getElementById('updated').textContent,/price as of|exact quote time unavailable/);
   const before=w.eval('JSON.stringify(DATA_ALL)');
   response='const DATA_ALL = {"TSLA":{"price":1}};';
   await d.getElementById('btnUpdate').onclick();
