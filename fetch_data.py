@@ -68,6 +68,7 @@ for tkr in TICKERS:
 
 # latest trade INCLUDING pre/post-market, so early-morning runs price reality
 pm = {}
+quotes = {}
 for tkr in TICKERS:
     try:
         url = (f"https://query1.finance.yahoo.com/v8/finance/chart/{tkr}"
@@ -75,13 +76,23 @@ for tkr in TICKERS:
         req = urllib.request.Request(url, headers=UA)
         with urllib.request.urlopen(req, timeout=30) as r:
             res = json.load(r)["chart"]["result"][0]
-        closes = [c for c in res["indicators"]["quote"][0]["close"] if c]
-        if closes:
-            pm[tkr] = round(float(closes[-1]), 4)
+        closes = res["indicators"]["quote"][0]["close"]
+        trades = [(ts, close) for ts, close in zip(res.get("timestamp", []), closes)
+                  if close is not None]
+        if trades:
+            quote_ts, quote_price = trades[-1]
+            pm[tkr] = round(float(quote_price), 4)
+            quotes[tkr] = {
+                "price": pm[tkr],
+                "quoteTime": pd.Timestamp(quote_ts, unit="s", tz="UTC").tz_convert(ET).isoformat(),
+                "regularMarketTime": pd.Timestamp(
+                    res["meta"]["regularMarketTime"], unit="s", tz="UTC"
+                ).tz_convert(ET).isoformat(),
+            }
     except Exception as e:
         print(f"  pre/post {tkr} failed: {e}")
 with open("premarket.json", "w", encoding="utf-8") as f:
-    json.dump({"asof": time.time(), "prices": pm}, f)
+    json.dump({"asof": time.time(), "prices": pm, "quotes": quotes}, f)
 print("pre/post prices:", pm)
 
 if failures:

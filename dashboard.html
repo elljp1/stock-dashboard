@@ -457,7 +457,13 @@ function renderAll(D){
   $("tkr").textContent = nice(D.ticker);
   document.querySelectorAll(".tkr2").forEach(e=>e.textContent=nice(D.ticker));
   $("price").textContent = fmt$(D.price);
-  $("updated").textContent = "updated " + D.generated;
+  const quoteStamp=D.priceAsOf ? new Date(D.priceAsOf).toLocaleString("en-US",{
+    timeZone:"America/New_York",month:"short",day:"numeric",year:"numeric",
+    hour:"numeric",minute:"2-digit",second:"2-digit",timeZoneName:"short"
+  }) : null;
+  $("updated").textContent = quoteStamp
+    ? "price as of " + quoteStamp + " · " + (D.priceSource || "latest available quote")
+    : "analysis generated " + D.generated + " · exact quote time unavailable";
 
   const review=D.dailyReview;
   $("reviewStatus").textContent=review ? "Automatic review: " + new Date(review.reviewedAt).toLocaleString("en-US",{timeZone:"America/New_York"}) + " ET · " + review.snapshotCount + " saved forecast snapshots · " + review.scoredOriginals + " original targets scored. Learning adjusts estimates; improvement is not guaranteed." : "Automatic review will appear after the next scheduled run.";
@@ -1569,8 +1575,15 @@ function renderAll(D){
     return new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"}));
   }
   function freshness(){
-    const g=(DATA_ALL[CUR] || {}).generated || "unknown";
-    return "Analysis generated " + g + ". Snapshot prices may be delayed. Checks for updates every 5 minutes; daily review runs automatically.";
+    const d=DATA_ALL[CUR] || {}, g=d.generated || "unknown";
+    let q="Exact quote time unavailable";
+    if(d.priceAsOf){
+      q="Price timestamp " + new Date(d.priceAsOf).toLocaleString("en-US",{
+        timeZone:"America/New_York",month:"short",day:"numeric",year:"numeric",
+        hour:"numeric",minute:"2-digit",second:"2-digit",timeZoneName:"short"
+      });
+    }
+    return "Analysis generated " + g + ". " + q + ". Checks for updates every 5 minutes; daily review runs automatically.";
   }
   async function pullLatest(label){
     st.textContent = label || "fetching the latest data...";

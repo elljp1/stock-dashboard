@@ -16,6 +16,7 @@ import numpy as np
 import ephem
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
+from scoring import nearest_prospective_pivot
 
 ET = ZoneInfo("America/New_York")
 NOW = datetime.now(ET)
@@ -92,8 +93,11 @@ def _measure_lead_edge():
                 lead = _td(e["logged"], p2["isoDate"])
                 bk = "a" if lead <= 3 else ("w" if lead <= 7 else "s")
                 pd2 = datetime.strptime(p2["isoDate"], "%Y-%m-%d").date()
-                hit = any((pd2 + timedelta(days=o)).strftime("%Y-%m-%d")
-                          in turns[tk][p2["type"]] for o in range(-2, 3))
+                hit = any(
+                    (pd2 + timedelta(days=o)).strftime("%Y-%m-%d") > e["logged"] and
+                    (pd2 + timedelta(days=o)).strftime("%Y-%m-%d") in turns[tk][p2["type"]]
+                    for o in range(-2, 3)
+                )
                 r = B.setdefault(bk, [0, 0, 0.0])
                 r[0] += 1
                 r[1] += hit
@@ -633,11 +637,17 @@ def analyze(tkr):
     # use the latest pre/post-market trade as current price when fresher than
     # the last completed bar (early-morning runs must price overnight gaps)
     is_pm = False
+    price_as_of = daily.index[-1].isoformat()
+    price_source = "daily close"
     try:
         with open("premarket.json", encoding="utf-8") as f:
             _pm = json.load(f)
+        _quote = _pm.get("quotes", {}).get(tkr, {})
         if time.time() - _pm.get("asof", 0) < 6 * 3600 and tkr in _pm.get("prices", {}):
             _pmp = float(_pm["prices"][tkr])
+            if _quote.get("quoteTime"):
+                price_as_of = _quote["quoteTime"]
+                price_source = "latest available trade, including extended hours"
             if _pmp > 0 and abs(_pmp / last_close - 1) > 0.001:
                 last_close = _pmp
                 is_pm = True
@@ -669,7 +679,10 @@ def analyze(tkr):
         del ex[k]
     out = {"ticker": tkr,
            "generated": NOW.strftime("%Y-%m-%d %I:%M %p ET") + (" - incl. pre/post-market" if is_pm else ""),
-           "price": last_close, "monthName": NOW.strftime("%B")}
+           "price": last_close, "priceAsOf": price_as_of,
+           "priceSource": price_source,
+           "lastDailyBar": last_bar_date.strftime("%Y-%m-%d"),
+           "monthName": NOW.strftime("%B")}
 
     # ------- ranges -------
     def rng(sl):
@@ -1059,16 +1072,18 @@ def analyze(tkr):
     for e in PRED_LOG["entries"]:
         if e["ticker"] != tkr:
             continue
+        logged = datetime.strptime(e["logged"], "%Y-%m-%d").date()
         for p in e["preds"]:
             pdate = datetime.strptime(p["isoDate"], "%Y-%m-%d").date()
+            if pdate <= logged:
+                continue
             # only grade once enough data exists past the predicted date for a
             # swing to be confirmed (8 trading days)
             if td_pos(pdate) > len(trading_dates) - 8:
                 continue
-            cands = [v for v in pivots if v["type"] == p["type"]]
-            if not cands:
+            best = nearest_prospective_pivot(pivots, p["type"], pdate, logged, td_pos)
+            if best is None:
                 continue
-            best = min(cands, key=lambda v: abs(td_pos(v["date"].date()) - td_pos(pdate)))
             err = td_pos(best["date"].date()) - td_pos(pdate)
             found = abs(err) <= 10
             rec = {"logged": e["logged"], "predDate": p["isoDate"], "type": p["type"],
@@ -1937,6 +1952,8 @@ def analyze(tkr):
         if e["ticker"] != tkr:
             continue
         for p in e["preds"]:
+            if p["isoDate"] <= e["logged"]:
+                continue
             rec = EXTREMES.get(tkr, {}).get(p["isoDate"])
             if not rec or len(rec) < 5:
                 continue
@@ -1983,11 +2000,11 @@ def analyze(tkr):
             k = (p["isoDate"], p["type"])
             _slots.setdefault(k, []).append((e["logged"], p["price"]))
 
-    def _actual_window(dte, kind, half=3):
+    def _actual_window(dte, kind, logged, half=3):
         vals = []
         for ds, v in EXTREMES.get(tkr, {}).items():
             d2 = datetime.strptime(ds, "%Y-%m-%d").date()
-            if abs((d2 - dte).days) <= half:
+            if d2 > logged and abs((d2 - dte).days) <= half:
                 vals.append(v[0] if kind == "high" else v[1])
         if not vals:
             return None
@@ -1998,18 +2015,21 @@ def analyze(tkr):
     graded = []
     for v in _versions:
         td = datetime.strptime(v["isoDate"], "%Y-%m-%d").date()
+        logged = datetime.strptime(v["logged"], "%Y-%m-%d").date()
+        if td <= logged:
+            continue
         if (last_bar_date - td).days < 3:      # not yet judgeable
             continue
-        act_px = _actual_window(td, v["type"])
-        cands = _piv_by_type.get(v["type"], [])
-        best = min(cands, key=lambda c: abs((c["date"].date() - td).days)) if cands else None
+        act_px = _actual_window(td, v["type"], logged)
+        best = nearest_prospective_pivot(pivots, v["type"], td, logged,
+                                         lambda value: value.toordinal())
         derr = (best["date"].date() - td).days if best else None
         row = {"logged": v["logged"], "isoDate": v["isoDate"], "type": v["type"],
                "price": v["price"],
                "actual": round(act_px, 2) if act_px else None,
                "priceErrPct": round((v["price"] / act_px - 1) * 100, 1) if act_px else None,
                "dayErr": derr,
-               "leadDays": (td - datetime.strptime(v["logged"], "%Y-%m-%d").date()).days}
+               "leadDays": (td - logged).days}
         graded.append(row)
 
     def _rate(rows, n):
@@ -2039,7 +2059,10 @@ def analyze(tkr):
                          "lowP": min(prices), "highP": max(prices),
                          "swingPct": round((max(prices) / min(prices) - 1) * 100, 1),
                          "actual": (lambda a: round(a, 2) if a else None)(
-                             _actual_window(datetime.strptime(iso, "%Y-%m-%d").date(), ty))})
+                             _actual_window(
+                                 datetime.strptime(iso, "%Y-%m-%d").date(), ty,
+                                 datetime.strptime(min(x[0] for x in lst), "%Y-%m-%d").date()
+                             ))})
 
     allerr = [abs(r["priceErrPct"]) for r in graded if r["priceErrPct"] is not None]
     out["forecastAudit"] = {
@@ -2197,9 +2220,9 @@ def analyze(tkr):
     _extk = {datetime.strptime(k, "%Y-%m-%d").date(): v
              for k, v in EXTREMES.get(tkr, {}).items()}
 
-    def _win_vals(center, half_cal, ty):
+    def _win_vals(center, half_cal, ty, logged):
         ds = [(d, v[1] if ty == "low" else v[0]) for d, v in _extk.items()
-              if abs((d - center).days) <= half_cal]
+              if d > logged and abs((d - center).days) <= half_cal]
         if not ds:
             return None
         return (min(ds, key=lambda x: x[1]) if ty == "low"
@@ -2207,9 +2230,10 @@ def analyze(tkr):
 
     for (iso, ty), r in hist_map.items():
         pdate = datetime.strptime(iso, "%Y-%m-%d").date()
+        first_logged = datetime.strptime(r["firstLogged"], "%Y-%m-%d").date()
         # LIVE grading vs recorded daily extremes - available the moment the
         # window closes (final pivot-grade upgrades it later)
-        w = _win_vals(pdate, 4, ty) if pdate <= last_bar_date else None
+        w = _win_vals(pdate, 4, ty, first_logged) if pdate > first_logged and pdate <= last_bar_date else None
         if w:
             r["winDate"] = w[0].strftime("%Y-%m-%d")
             r["winPrice"] = round(w[1], 2)
@@ -2238,9 +2262,9 @@ def analyze(tkr):
             else:
                 r["status"] = "upcoming"
         else:
-            cands = [v for v in pivots if v["type"] == ty]
-            best = (min(cands, key=lambda v: abs((v["date"].date() - pdate).days))
-                    if cands else None)
+            best = nearest_prospective_pivot(
+                pivots, ty, pdate, first_logged, lambda value: value.toordinal()
+            ) if pdate > first_logged else None
             if best and abs((best["date"].date() - pdate).days) <= 10:
                 err = (best["date"].date() - pdate).days
                 r["actualDate"] = best["date"].strftime("%Y-%m-%d")
@@ -2522,5 +2546,3 @@ except Exception as e:
 
 print(f"data.js written with {len(all_out)} tickers; "
       f"prediction log has {len(PRED_LOG['entries'])} daily entries")
-
-
