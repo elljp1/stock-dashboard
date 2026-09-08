@@ -101,7 +101,7 @@
      display:flex; align-items:center; justify-content:center; flex-direction:column; gap:14px">
   <div style="font-size:22px; font-weight:700; color:#1a1a2e">Stock Timing Dashboard</div>
   <div style="color:#667; font-size:14px">Enter PIN to continue</div>
-  <input id="pinIn" type="password" inputmode="numeric" autocomplete="off" maxlength="8"
+  <input id="pinIn" type="password" inputmode="numeric" autocomplete="off" maxlength="8" autofocus aria-label="PIN"
          style="font-size:26px; letter-spacing:10px; text-align:center; width:170px; padding:10px;
                 border:2px solid #c9d2e0; border-radius:10px" />
   <button id="pinGo" style="font-size:16px; padding:10px 34px; border:0; border-radius:10px;
@@ -139,7 +139,23 @@
   document.getElementById("pinIn").addEventListener("keydown", function(e){
     if (e.key === "Enter") tryPin();
   });
-  setTimeout(function(){ var i = document.getElementById("pinIn"); if(i) i.focus(); }, 50);
+  function focusPin(){
+    var i = document.getElementById("pinIn");
+    if(i && document.activeElement !== document.getElementById("pinGo"))
+      i.focus({preventScroll:true});
+  }
+  focusPin();
+  window.addEventListener("load", focusPin, {once:true});
+  window.addEventListener("pageshow", focusPin);
+  window.addEventListener("focus", focusPin);
+  document.addEventListener("visibilitychange", function(){
+    if(!document.hidden) focusPin();
+  });
+  // Mobile browsers may require a gesture to open the keyboard. Tapping the
+  // gate background also focuses the field, without targeting the small box.
+  document.getElementById("pinGate").addEventListener("click", function(e){
+    if(e.target !== document.getElementById("pinGo")) focusPin();
+  });
 })();
 </script>
 
@@ -1583,7 +1599,10 @@ function renderAll(D){
         hour:"numeric",minute:"2-digit",second:"2-digit",timeZoneName:"short"
       });
     }
-    return "Analysis generated " + g + ". " + q + ". Checks for updates every 5 minutes; daily review runs automatically.";
+    const reviewed=d.dailyReview && Date.parse(d.dailyReview.reviewedAt);
+    const late=reviewed && Date.now()-reviewed>45*60000;
+    return (late ? "OLDER ANALYSIS — last completed refresh more than 45 minutes ago. " : "") +
+      "Analysis generated " + g + ". " + q + ". Checks for updates every 5 minutes; daily review runs automatically.";
   }
   async function pullLatest(label){
     st.textContent = label || "fetching the latest data...";
