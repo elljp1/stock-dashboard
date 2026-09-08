@@ -1464,3 +1464,59 @@ are untouched, and `tickers.txt` wasn't touched.
 gets a confirmed pivot, whether GC=F's recovery keeps building now that real data resumes, and
 whether the TSLA short call (below breakeven, 3 trading days from its 9/11 expiry) moves either
 way. Also still watching whether fetch access to Yahoo recovers for this environment.
+
+## 2026-09-08 (Tue) — new session; fetch still blocked; important grading-accuracy fix found and verified (already applied, not by me)
+
+**Fetch status:** blocked on all 10 tickers again - the same 403 Forbidden at the proxy tunnel.
+No CSVs are cached locally, so I left `analyze.py` un-run here and reviewed the already-committed
+build instead, which the separate cloud refresh workflow produced today (last run 5:18 PM ET) from
+real market data. `coherence_check.py` passes cleanly (10/10 tickers) and `anomaly_audit.py` found
+no chain/level/trade-card inconsistencies.
+
+**Big item today - a real bug got fixed, and it explains a big number swing:** Comparing today's
+grading numbers against Monday's, TSLA's sample size for the "did the predicted turn actually
+happen" grade dropped from 29 to 10, and similar drops hit HOOD (31 to 14), QQQ, GOOGL, and GC=F.
+That is NOT a data-loss problem - I traced it to a code fix that was merged into the site (by the
+owner, via a pull request on GitHub Sunday evening) shortly before today's numbers were generated.
+The old grading code was comparing a prediction against ANY matching swing turn in the ticker's
+history, including ones that had already happened *before* the prediction was even made - which
+means the system could accidentally give itself credit for "calling" a turn it could already see
+in the past data. The fix (in `scoring.py`) now only allows a prediction to be graded against a
+turn that happens strictly *after* the prediction was logged, which is the only fair test of a
+forecast. I read the diff and confirmed this is exactly what changed; I also confirmed pivots
+themselves (the actual chart turns) are unchanged - only which turns are allowed to count for
+scoring changed. This means the old, higher hit-rate numbers shown on past days were partly
+inflated by unfair "hindsight" credit, and today's lower numbers are the honest ones. This is
+exactly the kind of fix the honesty rules exist to protect, so I made no code change of my own -
+just verified it, and I'm logging it clearly here since the visible numbers moved a lot without
+any code change from me today.
+
+**What this means for specific tickers:** TSLA and HOOD now show ZERO resolved "high" (top of
+swing) predictions, only "lows" - not because the code is broken, but because TSLA and HOOD
+genuinely haven't had a confirmed high pivot (a 10%+ pullback from a peak) since July 1st; both
+have been in a long, uninterrupted climb since their July lows, so there's nothing yet to grade a
+"high" call against. GC=F is the mirror image (highs only, no low pivot recently). QQQ and GOOGL
+still have a healthy mix of both. TSLA n=10 (40%/50% within +/-2/3 days, 11.9% median price
+error), HOOD n=14 (29%/36%, 7.6%), QQQ n=25 (36%/44%, 2.0% - QQQ's number barely moved, it was
+already being graded mostly fairly), GOOGL n=13 (31%/31%, 7.9%), GC=F n=13 (31%/31%, 2.4%). JPM
+stays at n=0 (still no confirmed pivot since May 19 - unchanged, unrelated to this fix). NVDA,
+AMZN, SPY, VOO remain on n=0 (still too new/thin to grade). None of these are worse forecasting -
+they're the same forecasts being graded more strictly and fairly than before.
+
+**Real-money ledger:** TSLA closed today at $366.90, now comfortably above both the $345 strike
+and the $357.50 breakeven on the owner's real short call (5x, exp 9/11, 3 trading days away). Per
+the owner's own plan to sell these TSLA shares by/in October anyway, this is now a favorable
+outcome if it holds into expiry - the shares would get called away at the better, effective
+$357.50/sh price. Nothing needs action before expiry.
+
+**What changed and why:** no code change from me today - the meaningful fix (prospective-only
+grading in `scoring.py`) was already made and merged by the owner directly on GitHub, and today's
+job was to verify it's sound, understand why the numbers moved, and make sure nothing else broke
+(coherence and anomaly checks both pass). Honesty features (measured hit rates, random-control
+comparisons, self-grading, and now a stricter no-hindsight grading rule) and the coherence gate
+are untouched or strengthened, and `tickers.txt` wasn't touched.
+
+**Watch next:** now that grading is prospective-only, watch whether TSLA and HOOD's "high"
+sample sizes ever grow (they need a genuine 10%+ pullback first) versus staying stuck at zero for
+weeks, which would itself be worth flagging. Also watch the TSLA short call into its 9/11 expiry
+now that it's back in the money, and whether fetch access to Yahoo recovers for this environment.
