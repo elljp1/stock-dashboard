@@ -13,6 +13,7 @@ on:
     - cron: "15,20,25,35,45 14 * * 1-5" # EST market-open sequence
     - cron: "0 22 * * *"               # EDT daily review, 18:00 ET
     - cron: "0 23 * * *"               # EST daily review, 18:00 ET
+    - cron: "7,22,37,52 10-23 * * *"    # missed-refresh watchdog, away from hour boundaries
   workflow_dispatch: {}
   push:
     branches: [main]
@@ -37,6 +38,35 @@ jobs:
         run: |
           if [ "$EVENT_NAME" != "schedule" ]; then
             echo "should_run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if [ "$SCHEDULE" = "7,22,37,52 10-23 * * *" ]; then
+            python - <<'PY'
+          import json, os, urllib.request
+          from datetime import datetime, timedelta
+          from zoneinfo import ZoneInfo
+          now = datetime.now(ZoneInfo('America/New_York'))
+          slots = [18*60]
+          if now.weekday() < 5:
+              slots += [360,420,480,540,555,560,565,570,575,585]
+              slots += list(range(600,1021,30))
+          due = [now.replace(hour=m//60, minute=m%60, second=0, microsecond=0)
+                 for m in slots if m <= now.hour*60+now.minute-10]
+          should_run = False
+          if due and 6 <= now.hour <= 18:
+              try:
+                  url = 'https://raw.githubusercontent.com/elljp1/stock-dashboard/main/daily_review.json'
+                  req = urllib.request.Request(url, headers={'Cache-Control':'no-cache'})
+                  with urllib.request.urlopen(req, timeout=20) as response:
+                      reviewed = datetime.fromisoformat(json.load(response)['reviewedAt'])
+                  should_run = reviewed < max(due)
+              except Exception as error:
+                  print('Freshness check unavailable; attempting recovery:', error)
+                  should_run = True
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('should_run=' + str(should_run).lower() + '\n')
+          print('Missed-refresh recovery needed:', should_run)
+          PY
             exit 0
           fi
           case "$SCHEDULE" in
