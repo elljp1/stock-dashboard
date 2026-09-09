@@ -120,24 +120,49 @@
     });
   }
   function open_(){ var g = document.getElementById("pinGate"); if(g) g.remove(); }
-  var saved = null;
-  try { saved = JSON.parse(safeStorage.getItem("pinOk") || "null"); } catch(e){}
-  if (saved && saved.h === GATE_H && (Date.now() - saved.t) < DAYS*864e5){ open_(); return; }
-  function tryPin(){
-    var v = (document.getElementById("pinIn").value || "").trim();
+  // This script runs before the dashboard's storage helper is initialized.
+  // Read both stores directly so reloads restore a successful unlock.
+  var stores = ["localStorage", "sessionStorage"];
+  var remembered = stores.some(function(name){
+    try {
+      var saved = JSON.parse(window[name].getItem("pinOk") || "null");
+      var age = saved && Date.now() - saved.t;
+      return saved && saved.h === GATE_H && Number.isFinite(saved.t) &&
+        age >= 0 && age < DAYS*864e5;
+    } catch(e){ return false; }
+  });
+  if(remembered){ open_(); return; }
+  var attempt = 0;
+  function tryPin(explicit){
+    var field = document.getElementById("pinIn");
+    if(!field) return;
+    var v = (field.value || "").trim(), current = ++attempt;
+    if(!v) return;
     sha256("stk-dash-2026|" + v).then(function(h){
+      // An earlier hash must not clear or unlock a newer input.
+      if(current !== attempt || !field.isConnected || field.value.trim() !== v) return;
       if (h === GATE_H){
-        try { safeStorage.setItem("pinOk", JSON.stringify({h: h, t: Date.now()})); } catch(e){}
+        stores.forEach(function(name){
+          try { window[name].setItem("pinOk", JSON.stringify({h:h, t:Date.now()})); } catch(e){}
+        });
         open_();
-      } else {
+      } else if(explicit) {
         document.getElementById("pinMsg").textContent = "Wrong PIN";
-        document.getElementById("pinIn").value = "";
+        field.value = "";
+        field.focus({preventScroll:true});
       }
+    }).catch(function(){
+      if(current === attempt && field.isConnected)
+        document.getElementById("pinMsg").textContent = "PIN verification unavailable. Please reload and try again.";
     });
   }
-  document.getElementById("pinGo").addEventListener("click", tryPin);
+  document.getElementById("pinGo").addEventListener("click", function(){tryPin(true);});
+  document.getElementById("pinIn").addEventListener("input", function(){
+    document.getElementById("pinMsg").textContent = "";
+    tryPin(false);
+  });
   document.getElementById("pinIn").addEventListener("keydown", function(e){
-    if (e.key === "Enter") tryPin();
+    if (e.key === "Enter") { e.preventDefault(); tryPin(true); }
   });
   function focusPin(){
     var i = document.getElementById("pinIn");
@@ -145,11 +170,25 @@
       i.focus({preventScroll:true});
   }
   focusPin();
+  document.addEventListener("DOMContentLoaded", focusPin, {once:true});
+  requestAnimationFrame(focusPin);
   window.addEventListener("load", focusPin, {once:true});
   window.addEventListener("pageshow", focusPin);
   window.addEventListener("focus", focusPin);
   document.addEventListener("visibilitychange", function(){
     if(!document.hidden) focusPin();
+  });
+  // If browser focus lands on the page, typing digits still enters the PIN.
+  document.addEventListener("keydown", function(e){
+    var field = document.getElementById("pinIn");
+    if(!field || e.target === field || e.ctrlKey || e.metaKey || e.altKey ||
+       e.isComposing || !/^[0-9]$/.test(e.key)) return;
+    e.preventDefault();
+    field.focus({preventScroll:true});
+    if(field.value.length < field.maxLength){
+      field.setRangeText(e.key, field.selectionStart, field.selectionEnd, "end");
+      field.dispatchEvent(new Event("input", {bubbles:true}));
+    }
   });
   // Mobile browsers may require a gesture to open the keyboard. Tapping the
   // gate background also focuses the field, without targeting the small box.
