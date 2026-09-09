@@ -1520,3 +1520,54 @@ are untouched or strengthened, and `tickers.txt` wasn't touched.
 sample sizes ever grow (they need a genuine 10%+ pullback first) versus staying stuck at zero for
 weeks, which would itself be worth flagging. Also watch the TSLA short call into its 9/11 expiry
 now that it's back in the money, and whether fetch access to Yahoo recovers for this environment.
+
+## 2026-09-09 (Wed) — fetch still blocked; found a real, measurable pattern in the daily high/low
+range forecast, but held off fixing it because I can't test a fix today
+
+**Fetch status:** blocked on all 10 tickers again - same 403 Forbidden at the proxy tunnel to
+`query1.finance.yahoo.com`, confirmed via the proxy's own status log (a policy denial, not a
+site-side block). No CSVs are cached locally (gitignored by design), so I left `analyze.py`
+un-run here and reviewed the build the separate cloud refresh workflow already produced today
+from real data (its own self-review ran at 3:58 PM ET). `coherence_check.py` passed cleanly
+(10/10 tickers) and `anomaly_audit.py` found no chain/level/trade-card inconsistencies.
+
+**Grades reviewed:** the swing-prediction track record is essentially unchanged from Monday -
+TSLA n=10 (40%/50% within 2/3 days), HOOD n=15 (27%/33%), QQQ n=26 (35%/42%), GOOGL n=14
+(29%/29%), GC=F n=13 (31%/31%); JPM, NVDA, AMZN, SPY, VOO still n=0 (no confirmed pivot yet to
+grade against). Nothing here crosses the 3-day-pattern bar for a change.
+
+**What I found instead:** the *other* forecast the dashboard grades - the day-ahead high/low
+range shown in the daily table (`horizonGrades`) - has a real, persistent bias. I pulled the
+last 10 graded sessions for all 10 tickers (100 data points total, spanning about 2.5 weeks) and
+the predicted high came in ABOVE the actual high on 84 of those 100 days (average +2.1%), while
+the predicted low came in BELOW the actual low on 82 of the 100 days (average -1.5%). That's not
+one noisy ticker - it's nearly every ticker, nearly every day: the day-ahead range the dashboard
+shows is systematically wider than the range that actually prints. I traced the code
+(`analyze.py`, the `day_fc` loop around line 2101): that band's width comes straight from a
+60-day volatility measure with a small widening factor, and unlike the swing-target predictions
+(which already get a self-correcting `priceCalibHigh`/`priceCalibLow` adjustment from their own
+grading history), this daily-range band has no such correction - it's raw, uncalibrated output,
+even though there's now ~37-40 graded sessions per ticker to calibrate it from.
+
+**Why I didn't fix it today:** the instructions are clear that any code change has to be
+re-verified by re-running `analyze.py` and `coherence_check.py` before it ships, and I have no
+way to run `analyze.py` in this sandbox at all today (no market data reachable, no cached CSVs).
+Shipping a calibration change I could not test against real data risked exactly the kind of
+mistake the honesty/coherence rules are there to prevent. So this is a specific, numbers-backed
+recommendation for a day when fetch access works (here or read by the owner directly): add a
+calibration factor to the daily-range band, the same self-correcting idea already used for the
+swing-target prices, sized from the measured +2.1%/-1.5% bias. No code touched today.
+
+**Real-money ledger:** TSLA closed today at $368.14, still comfortably above both the $345 strike
+and the $357.50 breakeven on the owner's real short call (5x), now 2 trading days from its 9/11
+expiry. Nothing has changed since Monday and nothing needs action before expiry.
+
+**What changed and why:** no code change - found a real pattern in the daily-range forecast but
+couldn't safely test a fix in today's blocked environment, so I logged it precisely instead of
+guessing. Honesty features (measured hit rates, random-control comparisons, self-grading, the
+coherence gate) are untouched. `tickers.txt` wasn't touched.
+
+**Watch next:** whether the daily-range over-width bias (84%/82% of days, ~2% average) holds up
+as more sessions grade, and whether it's still there once a session can actually run `analyze.py`
+and test the calibration fix described above. Also watch the TSLA short call into Thursday/Friday
+expiry, and whether fetch access to Yahoo recovers for this environment.
