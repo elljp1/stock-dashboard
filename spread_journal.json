@@ -1,0 +1,65 @@
+{
+  "account": {
+    "nickname": "Agentic",
+    "last4": "2831",
+    "type": "limited_margin",
+    "optionLevel": 3,
+    "valueAtStart": 1000,
+    "valueAsOf": "2026-09-09",
+    "plannedDeposit": 10000
+  },
+  "rules": {
+    "riskPerTradePct": [5, 8],
+    "shortDeltaRange": [0.15, 0.28],
+    "dteRange": [28, 50],
+    "minCreditToWidth": 0.20,
+    "profitTargetPctOfCredit": 50,
+    "lossRule": "close if spread debit reaches 2x the credit received or short strike is breached",
+    "earningsRule": "expiry must be before the next earnings date",
+    "entryOnly": "limit orders; never market",
+    "goalStated": "33% per month (user)",
+    "goalRealistic": "2-5% per month at 5-8% risk per trade; see journal notes"
+  },
+  "monthly": [
+    {"month": "2026-09", "startValue": 1000, "deposits": 0, "realizedPnl": 0, "fees": 0, "growthPct": 0, "trades": 0, "wins": 0, "losses": 0}
+  ],
+  "trades": [
+    {
+      "id": 1,
+      "status": "planned",
+      "ticker": "GOOGL",
+      "strategy": "put credit spread",
+      "legs": [
+        {"side": "sell", "type": "put", "strike": 305, "optionId": "3996ae20-e37b-4167-bc29-f158ab60392c"},
+        {"side": "buy", "type": "put", "strike": 300, "optionId": "996ab851-4905-4c24-9856-bbb4a2ac30b3"}
+      ],
+      "expiry": "2026-10-23",
+      "dteAtPlan": 44,
+      "width": 5,
+      "quantity": 1,
+      "entryLimitCredit": 1.20,
+      "timeInForce": "gtc",
+      "exitTargetDebit": 0.60,
+      "spotAtPlan": 331.23,
+      "spreadMidAtPlan": 0.93,
+      "shortDeltaAtPlan": -0.196,
+      "ivAtPlan": 0.31,
+      "breakeven": 303.80,
+      "maxProfit": 120,
+      "maxLoss": 380,
+      "collateral": 500,
+      "probabilityOfProfit": 0.81,
+      "roiOnRiskAtExpiry": 0.316,
+      "roiOnRiskAtTarget": 0.158,
+      "pctAccountAtRisk": {"on1000": 0.38, "on11000": 0.035},
+      "earningsDate": "2026-10-28",
+      "fillCredit": null,
+      "opened": null,
+      "closed": null,
+      "closeCost": null,
+      "pnl": null,
+      "fees": 0.08,
+      "notes": "Screenshot at 12:06 ET showed mid 1.13 with spot 329.34. Spot bounced to 331.23 by 13:19 ET, mid fell to 0.93. Plan: rest a 1.20 GTC limit; fills only if GOOGL slips back toward 324-325. Do not chase below 1.10. At 1000 account this exceeds the 5-8% rule; sized correctly only after the 10k deposit."
+    }
+  ]
+}
