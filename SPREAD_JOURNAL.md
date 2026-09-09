@@ -19,9 +19,9 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 ## Trades
 | # | Opened | Ticker | Structure | Credit | Max loss | BE | POP | % acct | Exit target | Closed | P&L |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | planned | GOOGL | 10/23 $305/$300 put credit spread x1 | $1.20 limit (mid $0.93) | $380 | $303.80 | 81% | 38% of $1k / 3.5% of $11k | $0.60 | | |
+| 1 | planned | GOOGL | 10/23 $305/$300 put credit spread x1 | $1.20 limit (mid $0.93) | $380 | $303.80 | 81% | 3.5% | $0.60 | | |
 
 ## Monthly results
 | Month | Start | Deposits | Realized P&L | Growth | Trades | W/L |
 |---|---|---|---|---|---|---|
-| 2026-09 | $1,000 | $0 | $0 | 0% | 0 | 0/0 |
+| 2026-09 | $11,000 (incl. $10k deposit 9/9) | $10,000 | $0 | 0% | 0 | 0/0 |
