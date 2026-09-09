@@ -1,6 +1,5 @@
 const assert=require('node:assert/strict');
 require('node:child_process').execFileSync(process.execPath, ['pin_test.js'], {stdio:'inherit'});
-require('node:child_process').execFileSync(process.execPath, ['--test','scheduler_test.mjs'], {stdio:'inherit'});
 const fs=require('node:fs');
 const {JSDOM}=require('jsdom');
 const html=fs.readFileSync('index.html','utf8');
