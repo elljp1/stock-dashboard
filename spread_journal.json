@@ -49,7 +49,7 @@
   "trades": [
     {
       "id": 1,
-      "status": "blocked_manual_entry",
+      "status": "working",
       "ticker": "GOOGL",
       "strategy": "put credit spread",
       "legs": [
@@ -94,8 +94,11 @@
       "closeCost": null,
       "pnl": null,
       "fees": 0.08,
-      "notes": "Screenshot at 12:06 ET showed mid 1.13 with spot 329.34. Spot bounced to 331.23 by 13:19 ET, mid fell to 0.93. Plan: rest a 1.20 GTC limit; fills only if GOOGL slips back toward 324-325. Do not chase below 1.10. At 1000 account this exceeds the 5-8% rule; sized correctly only after the 10k deposit. Deposit landed 2026-09-09: 380 max loss is 3.5% of 11,000. Rule allows up to 2 contracts (760 = 6.9%). 2026-09-09 14:44 ET: place_option_order at 1.20 GTC rejected: 'Multi-leg options orders aren't supported in Robinhood agentic accounts yet.' No order created. User to enter by hand.",
-      "accountValueAtPlan": 11000
+      "notes": "Screenshot at 12:06 ET showed mid 1.13 with spot 329.34. Spot bounced to 331.23 by 13:19 ET, mid fell to 0.93. Plan: rest a 1.20 GTC limit; fills only if GOOGL slips back toward 324-325. Do not chase below 1.10. At 1000 account this exceeds the 5-8% rule; sized correctly only after the 10k deposit. Deposit landed 2026-09-09: 380 max loss is 3.5% of 11,000. Rule allows up to 2 contracts (760 = 6.9%). 2026-09-09 14:44 ET: place_option_order at 1.20 GTC rejected: 'Multi-leg options orders aren't supported in Robinhood agentic accounts yet.' No order created. User to enter by hand. 14:51 ET: user submitted in app. GTC limit 1.20 confirmed, working. Spread bid/ask 0.80/1.20 at submission, spot 330.27.",
+      "accountValueAtPlan": 11000,
+      "orderId": "6aa1aaa0-6c1c-4602-b409-d99c12eb6b01",
+      "orderPlaced": "2026-09-09T14:51 ET",
+      "placedBy": "user (app)"
     }
   ]
 }
