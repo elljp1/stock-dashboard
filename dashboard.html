@@ -282,7 +282,7 @@
 </div>
 
 <div class="panel" data-tab="Forecast">
-  <h2>Period extremes — daily / weekly / monthly / yearly</h2>
+  <h2>Chart targets and period ranges</h2>
   <div class="sub" id="hzSub"></div>
   <div id="hzBody" class="tblwrap" style="margin-top:8px"></div>
 </div>
@@ -644,16 +644,17 @@ function renderAll(D){
               ${next.type.toUpperCase()} ${fmt$(next.price)} on ${next.date}.</div>`;
             return "";
           })()}
-          <table style="margin-top:8px"><tr><th>Projected</th><th>Price</th><th>Most likely time</th></tr>
-            <tr><td><span class="badge bH">HIGH</span></td>
+          <table style="margin-top:8px"><tr><th>Daily range estimate</th><th>Price</th><th>Timing context</th></tr>
+            <tr><td><span class="badge bH">UPPER</span></td>
                 <td class="big num">${fmt$(r.high)}</td><td class="num">${r.hiTime}</td></tr>
-            <tr><td><span class="badge bL">LOW</span></td>
+            <tr><td><span class="badge bL">LOWER</span></td>
                 <td class="big num">${fmt$(r.low)}</td><td class="num">${r.loTime}</td></tr>
             ${r.mid !== undefined ? `<tr><td class="tag">expected path</td>
                 <td class="num">${fmt$(r.mid)}</td>
                 <td class="tag">where the forecast has price sitting that day</td></tr>` : ""}
           </table>
-          <div class="tag" style="margin-top:6px">Range widens with distance (volatility grows with time),
+          <div class="tag" style="margin-top:6px">Range edges can extend beyond the chart's turning-point
+          targets. They do not predict a reversal at that price or time. Range widens with distance (volatility grows with time),
           snapped to real support/resistance where one is close. Times come from ${nice(D.ticker)}'s own
           measured intraday pattern and hot planetary hours. Probability windows, not appointments.</div>
         </div>`;
@@ -691,27 +692,45 @@ function renderAll(D){
     const H = D.horizons;
     if(!H){ $("hzSub").textContent = "Run a refresh to compute."; $("hzBody").innerHTML = ""; return; }
     const g = D.horizonGrades;
-    $("hzSub").innerHTML = `Projected FINAL high & low for each period — price, date, and time — combining the
-     already-set range, volatility projection, level-snapping, weekday/day-of-month stats, planetary hours and
-     seasonality. Logged every run and graded as each period completes` +
+    $("hzSub").innerHTML = `Chart targets below match the plotted turning points exactly. Period rows may also
+     contain already-observed prices or statistical range estimates. Range edges are uncertainty estimates,
+     not additional turning-point predictions; longer-range estimates can extend beyond the chart.
+     Period estimates are logged and graded as each period completes` +
      (g && g.n ? ` — <b>${g.n} daily calls graded so far</b> (recent errors: ` +
        g.daily.slice(-3).map(r=>`${r.session.slice(5)}: high ${r.hiErrPct>0?"+":""}${r.hiErrPct}% / low ${r.loErrPct>0?"+":""}${r.loErrPct}%`).join(" · ") + ")" : " — first grades arrive as periods close") + ".";
     /* a band edge is how far the range could stretch - it is NOT a projected
        turn, so it shows as a footnote instead of replacing the dated call */
-    const edge = c => (c.bound ? `<div class="tag" style="margin-top:3px; opacity:.75">
-        range could stretch to ${fmt$(c.bound)}${c.boundDate ? " by " + c.boundDate : ""} — outer
-        edge of the volatility band, not a projected turn</div>` : "") +
-      (c.note ? `<div class="tag" style="margin-top:3px; opacity:.75">${c.note}</div>` : "");
-    const row = (name, h) => h ? `<tr>
+    const edge = c => (c.bound ? `<div class="tag" style="margin-top:3px; color:#4b5563">
+        Range edge: ${fmt$(c.bound)}${c.boundDate ? " (band evaluated for " + c.boundDate + ")" : ""}.
+        This is not a turning-point target or date.</div>` : "") +
+      (c.note ? `<div class="tag" style="margin-top:3px; color:#4b5563">${c.note}</div>` : "");
+    const cell = (c, side) => {
+      const range = c.src === "stat" || (!c.src && c.range);
+      const label = c.src === "chain" ? "CHART TARGET" : c.src === "actual" ? "ALREADY OBSERVED" : range ? "RANGE ESTIMATE" : "CONTEXT ESTIMATE";
+      const when = range ? `Estimate context: ${c.date.replace(" (statistical est.)", "")} — not a turn date` : c.date;
+      // A band calculation's day/time is not evidence of a predicted reversal.
+      const timing = c.src === "stat" ? "" : c.time;
+      return `<td data-forecast-kind="${range ? "range" : c.src || "context"}">
+        <span class="badge ${side === "high" ? "bH" : "bL"}">${label}</span>
+        <span class="big num">${fmt$(c.price)}</span><br><span class="num">${when}</span>
+        ${timing ? ` · <span class="tag">${timing}</span>` : ""}${edge(c)}</td>`;
+    };
+    const row = (name, h, attrs="") => h ? `<tr ${attrs}>
       <td><b>${name}</b></td>
-      <td><span class="badge bH">HIGH</span> <span class="big num">${fmt$(h.high.price)}</span><br>
-          <span class="num">${h.high.date}</span> · <span class="tag">${h.high.time}</span>${edge(h.high)}</td>
-      <td><span class="badge bL">LOW</span> <span class="big num">${fmt$(h.low.price)}</span><br>
-          <span class="num">${h.low.date}</span> · <span class="tag">${h.low.time}</span>${edge(h.low)}</td>
+      ${cell(h.high,"high")}${cell(h.low,"low")}
     </tr>` : "";
-    $("hzBody").innerHTML = `<table><tr><th>Period</th><th>Projected high</th><th>Projected low</th></tr>` +
+    const preds = D.predictions || [];
+    const chart = {};
+    for(const side of ["high","low"]){
+      const candidates = preds.filter(p=>p.type === side);
+      const p = candidates.sort((a,b)=>side === "high" ? b.price-a.price : a.price-b.price)[0];
+      if(p) chart[side] = {price:p.price, date:p.isoDate, time:p.time, src:"chain"};
+    }
+    const through = preds.map(p=>p.isoDate).sort().pop();
+    $("hzBody").innerHTML = `<table><tr><th>Scope</th><th>High / upper estimate</th><th>Low / lower estimate</th></tr>` +
+      (chart.high && chart.low ? row(`Chart targets — through ${through}`,chart,'data-chart-targets="true"') : "") +
       row("Daily", H.daily) + row("Weekly", H.weekly) +
-      row("Monthly", H.monthly) + row("Yearly — 12-mo volatility cone: range boundaries, NOT price targets", H.yearly) + `</table>`;
+      row("Monthly", H.monthly) + row("Longer-range context — up to 12 months", H.yearly) + `</table>`;
   })();
 
   /* recommended trades */

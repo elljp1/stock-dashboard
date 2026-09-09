@@ -1,5 +1,6 @@
 const assert=require('node:assert/strict');
 require('node:child_process').execFileSync(process.execPath, ['pin_test.js'], {stdio:'inherit'});
+require('node:child_process').execFileSync(process.execPath, ['--test','scheduler_test.mjs'], {stdio:'inherit'});
 const fs=require('node:fs');
 const {JSDOM}=require('jsdom');
 const html=fs.readFileSync('index.html','utf8');
@@ -18,6 +19,19 @@ const delay=()=>new Promise(r=>setTimeout(r,30));
   await delay();
   for(const ticker of w.eval('Object.keys(DATA_ALL)')){
     w.eval(`CUR=${JSON.stringify(ticker)};renderAll(DATA_ALL[CUR]);`);
+    const forecasts=w.eval('DATA_ALL[CUR].predictions');
+    const chartRow=d.querySelector('[data-chart-targets]');
+    for(const side of ['high','low']){
+      const p=forecasts.filter(p=>p.type===side).sort((a,b)=>side==='high'?b.price-a.price:a.price-b.price)[0];
+      const cell=chartRow.children[side==='high'?1:2];
+      assert.ok(cell.textContent.includes(p.isoDate),'table date must match chart target for '+ticker);
+      assert.equal(Number(cell.querySelector('.big').textContent.replace(/[$,]/g,'')),p.price,'table price must match chart for '+ticker);
+    }
+    for(const cell of d.querySelectorAll('[data-forecast-kind="range"]')){
+      assert.ok(cell.textContent.includes('RANGE ESTIMATE'));
+      assert.ok(cell.textContent.includes('not a turn date'));
+      assert.ok(!cell.textContent.includes(' hour '),'range must not claim a turning time');
+    }
     const c=d.getElementById('chart');
     c.getBoundingClientRect=()=>({left:0,top:0,width:c.__w,height:c.__h});
     assert.equal(typeof c.onpointermove,'function');
