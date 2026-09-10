@@ -1694,6 +1694,7 @@ def analyze(tkr):
 
     session = (last_bar_date if (NOW.date() == last_bar_date and NOW.hour < 16)
                else add_trading_days(last_bar_date, 1))
+    out["horizonSession"] = session.isoformat()
 
     def proj(days, k=None):
         return envelope(days)

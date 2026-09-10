@@ -8,6 +8,7 @@ import json
 import math
 from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 
 def read_constants(path='data.js'):
@@ -41,6 +42,7 @@ def atomic_json(path, value):
 
 def review(data, now=None):
     now = now or datetime.now(timezone.utc).isoformat()
+    review_day = datetime.fromisoformat(now).astimezone(ZoneInfo('America/New_York')).date().isoformat()
     ledger_path = Path('forecast_ledger.json')
     ledger = json.loads(ledger_path.read_text()) if ledger_path.exists() else {'version': 1, 'snapshots': []}
     known = {r['id'] for r in ledger['snapshots']}
@@ -61,7 +63,7 @@ def review(data, now=None):
     results = []
     for (ticker, target, kind), (row, pred) in original.items():
         d = data[ticker]
-        observed_day = datetime.fromisoformat(row['recordedAt']).date().isoformat()
+        observed_day = datetime.fromisoformat(row['recordedAt']).astimezone(ZoneInfo('America/New_York')).date().isoformat()
         if target <= observed_day:
             continue  # timing cannot be evaluated prospectively on same-day daily bars
         dates, closes = d['chart']['dates'], d['chart']['closes']
@@ -69,13 +71,20 @@ def review(data, now=None):
         if not eligible:
             continue
         i = eligible[0]
+        # Daily API bars can be partial during their session. Without a provider
+        # finalization flag, conservatively wait until the next Eastern date.
+        # Never skip an unfinished target-day bar and grade a later day instead.
+        # A later review timestamp alone must not finalize an old intraday build.
+        generated_day = datetime.strptime(d['generated'][:19], '%Y-%m-%d %I:%M %p').date().isoformat()
+        if dates[i] >= min(review_day, generated_day):
+            continue
         actual = closes[i]
         results.append({'snapshotId': row['id'], 'ticker': ticker, 'targetDate': target,
                         'observedDate': dates[i], 'type': kind, 'predictedPrice': pred['price'],
                         'actualClose': actual, 'absolutePriceErrorPct': round(abs(actual / pred['price'] - 1) * 100, 2)})
     report = {'reviewedAt': now, 'snapshotCount': len(ledger['snapshots']),
               'scoredOriginals': len(results), 'results': results,
-              'method': 'Original future-date targets versus first available daily close on/after target; price error only, not reversal accuracy or trading profit.',
+              'method': 'Original future-date targets versus first available daily close on/after target, scored no earlier than the following Eastern date; price error only, not reversal accuracy or trading profit.',
               'learning': {t: {'bias': d.get('biasLearning'), 'trackRecord': d.get('trackRecord')}
                            for t, d in data.items()},
               'promotionPolicy': 'Daily scoring and existing bounded calibration run automatically. New strategies require unseen-data validation; no guaranteed improvement or return.'}
