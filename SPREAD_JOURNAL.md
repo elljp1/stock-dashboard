@@ -23,7 +23,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | # | Opened | Ticker | Structure | Credit | Max loss | BE | POP | % acct | Exit target | Closed | P&L |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | cancelled 9/10 2:13pm, never filled | GOOGL | 10/23 $305/$300 put credit spread x1 | $1.20 limit (mid $0.93) | $380 | $303.80 | 81% | 3.5% | $0.60 | | |
-| 2 | planned, manual entry | GOOGL | 10/23 $310/$305 put credit spread x1 | $1.20 limit (mid $1.03) | $380 | $308.80 | 79% | 3.5% | $0.60 | | |
+| 2 | working (GTC, placed 9/10 2:19pm) | GOOGL | 10/23 $310/$305 put credit spread x1 | $1.20 limit (mid $1.03) | $380 | $308.80 | 79% | 3.5% | $0.60 | | |
 
 ## Monthly results
 | Month | Start | Deposits | Realized P&L | Growth | Trades | W/L |
