@@ -10,6 +10,7 @@ import json
 import re
 import sys
 from datetime import datetime
+from scoring import monthly_chain_failures
 
 raw = open("data.js", encoding="utf-8").read()
 d = json.loads(raw.replace("const DATA_ALL = ", "").split("const TRADES")[0].strip().rstrip(";"))
@@ -50,15 +51,8 @@ for t, D in d.items():
             fails.append(f"{t}: {a} high {eff(hz[a]['high'], True)} > {b} high {eff(hz[b]['high'], True)}")
         if eff(hz[a]["low"], False) < eff(hz[b]["low"], False) - 0.01:
             fails.append(f"{t}: {a} low {eff(hz[a]['low'], False)} < {b} low {eff(hz[b]['low'], False)}")
-    # 3. chain events fit inside monthly extremes (proxy for all windows)
-    if "monthly" in hz and preds:
-        mo = datetime.now().strftime("%Y-%m")
-        for p in preds:
-            if p["isoDate"].startswith(mo):
-                if p["type"] == "high" and p["price"] > hz["monthly"]["high"]["price"] + 0.01:
-                    fails.append(f"{t}: chain high {p['price']} on {p['isoDate']} exceeds monthly high {hz['monthly']['high']['price']}")
-                if p["type"] == "low" and p["price"] < hz["monthly"]["low"]["price"] - 0.01:
-                    fails.append(f"{t}: chain low {p['price']} on {p['isoDate']} undercuts monthly low {hz['monthly']['low']['price']}")
+    # 3. Only active calls belong to the resolver's remaining-session window.
+    fails.extend(monthly_chain_failures(t, D))
     # 4. 'already set' labels must reference past dates
     today = datetime.now().date()
     for k in order:
