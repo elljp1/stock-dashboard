@@ -29,3 +29,9 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | Month | Start | Deposits | Realized P&L | Growth | Trades | W/L |
 |---|---|---|---|---|---|---|
 | 2026-09 | $11,000 (incl. $10k deposit 9/9) | $10,000 | $0 | 0% | 0 | 0/0 |
+
+## Other-account orders (read-only, not part of the spread P&L)
+| Account | Order | Limit | Status | Collateral | Placed |
+|---|---|---|---|---|---|
+| Individual | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | working | $32,500 | 9/10 2:27pm |
+| Joint | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | working | $32,500 | 9/10 2:26pm |
