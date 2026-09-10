@@ -1571,3 +1571,64 @@ coherence gate) are untouched. `tickers.txt` wasn't touched.
 as more sessions grade, and whether it's still there once a session can actually run `analyze.py`
 and test the calibration fix described above. Also watch the TSLA short call into Thursday/Friday
 expiry, and whether fetch access to Yahoo recovers for this environment.
+
+## 2026-09-10 (Thu) — fetch still blocked; found a distinct duplicate-grading bug behind the ledgers; range-calibration bias confirmed a second day; no code shipped, can't test today
+
+**Fetch status:** blocked on all 10 tickers again - same 403 Forbidden at the proxy tunnel to
+Yahoo. No CSVs are cached locally (gitignored by design), so `analyze.py` won't even start today
+(it fails immediately on the missing per-ticker CSV files) - I reviewed the build the separate
+cloud refresh workflow already produced today from real data instead. `coherence_check.py` passed
+cleanly (10/10 tickers) and `anomaly_audit.py` found no chain/level/trade-card inconsistencies.
+
+**Grades reviewed:** the swing-prediction track record moved a little in both directions, nothing
+crossing the 3-day-pattern bar - TSLA n=11 (36%/45% within 2/3 days, was 40%/50% at n=10), HOOD
+n=15 (27%/33%, unchanged), QQQ n=28 (32%/39%, was 35%/42% at n=26), GOOGL n=15 (27%/27%, was
+29%/29% at n=14), GC=F n=14 (29%/29%, was 31%/31% at n=13). JPM, NVDA, AMZN, SPY, VOO still n=0
+(no confirmed pivot yet to grade against).
+
+**New finding - a real duplicate-logging bug in the day-ahead range ledger:** while re-checking
+yesterday's day-ahead high/low range bias, I found the underlying log (`horizons_log.json`) logs
+the exact same forecast more than once for a lot of sessions. Example: TSLA's forecast for Monday
+8/31 (predicted high $362.89, low $329.78) was logged three separate times - on Fri 8/28, Sat
+8/29, and Sun 8/30 - because the "next trading session" doesn't change over a weekend, but the
+daily logging step doesn't check whether it already logged a forecast for that exact session
+before appending a new row. Across the full history this isn't a one-off: 119 of the 394 rows
+ever logged (30%) are exact duplicates of an already-logged ticker+session pair, concentrated
+around weekends and the Labor Day holiday. Because the grading step grades every logged row, this
+means some sessions get counted 2-3x in the rolling "last 10 days" window shown on the dashboard
+and in the cumulative sample-size counters (the `n` next to the day-ahead grades), which both
+inflates those sample sizes and duplicate-weights whichever bias a triple-logged day happened to
+have. I re-ran yesterday's bias check with duplicates removed (62 unique ticker+session pairs
+instead of 100 raw rows) and the pattern held up almost exactly the same (93.5% of sessions predict
+a high above the actual, 87.1% predict a low below the actual, averaging +2.5%/-1.6%) - so
+yesterday's finding wasn't an artifact of this bug, but the bug is still a real integrity problem
+worth fixing on its own, separate from the calibration question.
+
+**Why I didn't fix either issue today:** both fixes live inside `analyze.py` (the log-append step
+and the day-range calibration), and `analyze.py` cannot run at all in this sandbox right now - it
+errors out before reaching either piece of logic because none of the 10 tickers' CSVs are
+reachable (fetch blocked, nothing cached). Shipping either change without being able to re-run
+`analyze.py` and `coherence_check.py` against it, as the process requires, would be exactly the
+kind of untested change the honesty/coherence rules exist to prevent. Both are now written up
+precisely enough that a session with working fetch access can implement and verify them directly:
+(1) skip logging a new `horizons_log.json` row when one already exists for that exact
+ticker+session, and (2) add a calibration factor to the daily-range band using the measured
++2.5%/-1.6% bias, the same self-correcting approach already used for the swing-target prices via
+`priceCalibHigh`/`priceCalibLow`.
+
+**Real-money ledger:** TSLA closed today at $363.56, still comfortably above both the $345 strike
+and the $357.50 breakeven on the owner's real short call (5x), with the 9/11 expiry now tomorrow.
+This is proceeding exactly per the owner's own stated plan (selling these shares by/in October
+anyway, so assignment at the effective $357.50 is an acceptable-to-favorable outcome) and there's
+already a GTC buy-to-close order in place - nothing needs action tonight.
+
+**What changed and why:** no code change - found and precisely documented two separate real
+issues (a duplicate-logging bug that inflates grading sample sizes, and a persisting day-range
+calibration bias) but couldn't safely test a fix for either in today's fetch-blocked environment,
+so I logged both instead of guessing. Honesty features (measured hit rates, random-control
+comparisons, self-grading, the coherence gate) are untouched. `tickers.txt` wasn't touched.
+
+**Watch next:** whether the TSLA short call gets assigned or expires worthless tomorrow (either
+is fine per the owner's plan); whether fetch access to Yahoo recovers so both the duplicate-log
+bug and the day-range calibration bias can actually be fixed and verified; and whether the
+duplicate-logging bug, once fixed, moves the reported sample sizes or hit rates meaningfully.
