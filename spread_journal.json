@@ -49,7 +49,7 @@
   "trades": [
     {
       "id": 1,
-      "status": "working",
+      "status": "cancelled_unfilled",
       "ticker": "GOOGL",
       "strategy": "put credit spread",
       "legs": [
@@ -94,11 +94,62 @@
       "closeCost": null,
       "pnl": null,
       "fees": 0.08,
-      "notes": "Screenshot at 12:06 ET showed mid 1.13 with spot 329.34. Spot bounced to 331.23 by 13:19 ET, mid fell to 0.93. Plan: rest a 1.20 GTC limit; fills only if GOOGL slips back toward 324-325. Do not chase below 1.10. At 1000 account this exceeds the 5-8% rule; sized correctly only after the 10k deposit. Deposit landed 2026-09-09: 380 max loss is 3.5% of 11,000. Rule allows up to 2 contracts (760 = 6.9%). 2026-09-09 14:44 ET: place_option_order at 1.20 GTC rejected: 'Multi-leg options orders aren't supported in Robinhood agentic accounts yet.' No order created. User to enter by hand. 14:51 ET: user submitted in app. GTC limit 1.20 confirmed, working. Spread bid/ask 0.80/1.20 at submission, spot 330.27.",
+      "notes": "Screenshot at 12:06 ET showed mid 1.13 with spot 329.34. Spot bounced to 331.23 by 13:19 ET, mid fell to 0.93. Plan: rest a 1.20 GTC limit; fills only if GOOGL slips back toward 324-325. Do not chase below 1.10. At 1000 account this exceeds the 5-8% rule; sized correctly only after the 10k deposit. Deposit landed 2026-09-09: 380 max loss is 3.5% of 11,000. Rule allows up to 2 contracts (760 = 6.9%). 2026-09-09 14:44 ET: place_option_order at 1.20 GTC rejected: 'Multi-leg options orders aren't supported in Robinhood agentic accounts yet.' No order created. User to enter by hand. 14:51 ET: user submitted in app. GTC limit 1.20 confirmed, working. Spread bid/ask 0.80/1.20 at submission, spot 330.27. 2026-09-10 14:13 ET: cancelled unfilled by agent at user request (never got closer than 0.20 to mid); replaced by trade 2 (310/305) which conflicted on the 305 leg.",
       "accountValueAtPlan": 11000,
       "orderId": "6aa1aaa0-6c1c-4602-b409-d99c12eb6b01",
       "orderPlaced": "2026-09-09T14:51 ET",
-      "placedBy": "user (app)"
+      "placedBy": "user (app)",
+      "cancelled": "2026-09-10T14:13 ET"
+    },
+    {
+      "id": 2,
+      "status": "planned",
+      "ticker": "GOOGL",
+      "strategy": "put credit spread",
+      "legs": [
+        {
+          "side": "sell",
+          "type": "put",
+          "strike": 310,
+          "optionId": "3e30035b-d04d-41e2-9fd3-0f783e4ba125"
+        },
+        {
+          "side": "buy",
+          "type": "put",
+          "strike": 305,
+          "optionId": "3996ae20-e37b-4167-bc29-f158ab60392c"
+        }
+      ],
+      "expiry": "2026-10-23",
+      "dteAtPlan": 43,
+      "width": 5,
+      "quantity": 1,
+      "entryLimitCredit": 1.1,
+      "timeInForce": "gtc",
+      "exitTargetDebit": 0.55,
+      "spotAtPlan": 332.11,
+      "spreadMidAtPlan": 1.08,
+      "shortDeltaAtPlan": -0.228,
+      "ivAtPlan": 0.31,
+      "breakeven": 308.9,
+      "maxProfit": 110,
+      "maxLoss": 390,
+      "collateral": 500,
+      "probabilityOfProfit": 0.79,
+      "roiOnRiskAtExpiry": 0.282,
+      "roiOnRiskAtTarget": 0.141,
+      "pctAccountAtRisk": {
+        "on11000": 0.035
+      },
+      "accountValueAtPlan": 11000,
+      "earningsDate": "2026-10-28",
+      "fillCredit": null,
+      "opened": null,
+      "closed": null,
+      "closeCost": null,
+      "pnl": null,
+      "fees": 0.08,
+      "notes": "Scan alert 2026-09-10 09:35 ET (mid 1.28 at open, RSI 39). Mid faded to 1.08 by 14:06 as GOOGL rallied to 332. Passes all rules: credit/width 22%, delta -0.23, expiry before 10/28 earnings, OI 531. User to enter by hand at 1.10 GTC."
     }
   ]
 }
