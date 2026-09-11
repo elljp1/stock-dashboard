@@ -1632,3 +1632,52 @@ comparisons, self-grading, the coherence gate) are untouched. `tickers.txt` wasn
 is fine per the owner's plan); whether fetch access to Yahoo recovers so both the duplicate-log
 bug and the day-range calibration bias can actually be fixed and verified; and whether the
 duplicate-logging bug, once fixed, moves the reported sample sizes or hit rates meaningfully.
+
+## 2026-09-11 (Fri) — fixed the duplicate-logging bug found the last two days; grades steady; TSLA call expired ITM per plan
+
+**Fetch status:** blocked again in this sandbox - all 10 tickers 403'd at the proxy, third
+straight day. As before, no CSVs are cached locally so `analyze.py` can't run here. I reviewed
+the build the separate cloud refresh workflow already produced today from real data (last run
+20:04 UTC) - `coherence_check.py` passed cleanly (10/10 tickers) and the two `anomaly_audit.py`
+notices (JPM and AMZN weekly-low estimates disagreeing with a dated chain low inside the same
+window) are pre-existing, unrelated to anything below, and unchanged from before my change.
+
+**What changed and why:** fixed the duplicate-forecast bug flagged the last two days. The
+day-ahead range log (`horizons_log.json`) was keying its "already logged today?" check on
+today's date instead of the target session's date, so a forecast for a session that doesn't
+change over a weekend (or holiday) got appended again on every subsequent day, inflating the
+sample sizes (`n`) behind the day-ahead high/low grades shown on the dashboard and duplicate-
+weighting whichever bias that session happened to have. Fixed both ends: (1) `analyze.py` now
+replaces any existing log row for the same ticker+session, not just same-day rows, so it can't
+recur, and as a defense in depth the grading step also de-duplicates by ticker+session before
+counting, keeping the most-recently-logged forecast; (2) did a one-time cleanup of the existing
+ledger, removing the 119 stale duplicate rows accumulated since July (404 -> 285 entries, verified
+zero rows lost that weren't exact re-logs of an already-present forecast). Couldn't run
+`analyze.py` end-to-end today (fetch blocked), so I verified the fix a different way: extracted
+the exact before/after dedup logic and ran it standalone against the real ledger data, confirming
+sample sizes drop to the correct de-duplicated counts (e.g. TSLA 40->29, AMZN 31->22) with zero
+value changes on any row that survives - the duplicates were always identical copies of the same
+forecast, never conflicting data. `coherence_check.py` still passes against the current live
+build. The actual grading numbers on the dashboard will refresh correctly the next time the cloud
+workflow runs `analyze.py` with working fetch access, which will also be the first real end-to-end
+test of this code path - I'll check the result at tomorrow's review. Honesty features (measured
+hit rates, random-control comparisons, self-grading, the coherence gate) are untouched, made more
+accurate if anything. `tickers.txt` wasn't touched.
+
+**Grades reviewed (pre-refresh numbers, before dedup takes effect):** swing-prediction track
+record essentially flat - TSLA n=11 (36%/45%), HOOD n=15 (27%/33%), QQQ n=28 (32%/39%), GOOGL
+n=15 (27%/27%), GC=F n=14 (29%/29%), all unchanged from yesterday. JPM, NVDA, AMZN, SPY, VOO
+still n=0 (no confirmed pivot yet). `daily_review.json`'s price-error samples from the last two
+sessions ranged roughly 0.4%-9.3%, in line with recent norms - nothing there crosses the 3-day
+bar for a change either.
+
+**Real-money ledger:** TSLA closed today (Fri 9/11, the option's expiry date) at $365.44, well
+above the $345 strike on the owner's 5x short call - this is the exact scenario the owner already
+planned for and is fine with (assignment at the effective $357.50/sh, in line with the plan to
+sell these shares by/in October anyway). Nothing needs action; noting it here for the record.
+
+**Watch next:** whether tomorrow's ledgers (populated by the cloud workflow with working fetch
+access) show the day-ahead sample sizes shrink to the deduplicated counts with no crash or
+coherence failure along the way - that's the real test of today's fix; whether the TSLA call
+assignment posts as expected; and whether fetch access to Yahoo recovers in this sandbox, which
+has now been blocked three days running.

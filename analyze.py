@@ -2177,25 +2177,39 @@ def analyze(tkr):
         horizons[_b]["low"] = _nest_pair(horizons[_a]["low"], horizons[_b]["low"], "low")
     out["horizons"] = horizons
 
-    # log horizons for future grading (replace same-day entry)
+    # log horizons for future grading (replace any existing entry for the
+    # same ticker+session, not just same-day runs - the target session can
+    # stay the same across a weekend/holiday while "today" advances, and
+    # keying only on "today" let duplicate forecasts for one session pile up)
     try:
         with open("horizons_log.json", encoding="utf-8") as f:
             HLOG = json.load(f)
     except Exception:
         HLOG = {"entries": []}
     _hz_today = NOW.strftime("%Y-%m-%d")
+    _hz_session = session.strftime("%Y-%m-%d")
     HLOG["entries"] = [e for e in HLOG["entries"]
-                       if not (e["ticker"] == tkr and e["logged"] == _hz_today)]
+                       if not (e["ticker"] == tkr and e["session"] == _hz_session)]
     HLOG["entries"].append({"ticker": tkr, "logged": _hz_today,
-                            "session": session.strftime("%Y-%m-%d"), "h": horizons})
+                            "session": _hz_session, "h": horizons})
     with open("horizons_log.json", "w", encoding="utf-8") as f:
         json.dump(HLOG, f)
 
-    # grade past DAILY horizon calls against recorded extremes
-    hz_res = []
+    # grade past DAILY horizon calls against recorded extremes. De-duplicated
+    # by ticker+session (keeping the most-recently-logged forecast) so that
+    # rows logged more than once for the same session before the append-time
+    # fix above existed don't get graded and counted more than once.
     ext_t = EXTREMES.get(tkr, {})
+    _by_session = {}
     for e in HLOG["entries"]:
-        if e["ticker"] != tkr or e["session"] >= last_bar_date.strftime("%Y-%m-%d"):
+        if e["ticker"] != tkr:
+            continue
+        _cur = _by_session.get(e["session"])
+        if _cur is None or e["logged"] > _cur["logged"]:
+            _by_session[e["session"]] = e
+    hz_res = []
+    for e in sorted(_by_session.values(), key=lambda e: e["session"]):
+        if e["session"] >= last_bar_date.strftime("%Y-%m-%d"):
             continue
         act = ext_t.get(e["session"])
         if not act:
