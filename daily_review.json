@@ -1,8 +1,38 @@
 {
-  "reviewedAt": "2026-09-10T22:19:22.554310+00:00",
-  "snapshotCount": 310,
-  "scoredOriginals": 8,
+  "reviewedAt": "2026-09-11T14:04:29.906841+00:00",
+  "snapshotCount": 320,
+  "scoredOriginals": 14,
   "results": [
+    {
+      "snapshotId": "af969a12621e9480701cb9151790bc2d19725b5ea3221cd6b4e5c2e1aea60c26",
+      "ticker": "JPM",
+      "targetDate": "2026-09-10",
+      "observedDate": "2026-09-10",
+      "type": "high",
+      "predictedPrice": 359.66,
+      "actualClose": 353.56,
+      "absolutePriceErrorPct": 1.7
+    },
+    {
+      "snapshotId": "40030db79d6d1841624c4969e9998cbc505ad7950d2ab3213ef6ce9370955167",
+      "ticker": "GOOGL",
+      "targetDate": "2026-09-10",
+      "observedDate": "2026-09-10",
+      "type": "high",
+      "predictedPrice": 345.76,
+      "actualClose": 332.6,
+      "absolutePriceErrorPct": 3.81
+    },
+    {
+      "snapshotId": "9b87f27e97f3e0f96138df3257896afa85f49dd248db64305309f57109e25ad8",
+      "ticker": "NVDA",
+      "targetDate": "2026-09-10",
+      "observedDate": "2026-09-10",
+      "type": "low",
+      "predictedPrice": 222.7,
+      "actualClose": 218.36,
+      "absolutePriceErrorPct": 1.95
+    },
     {
       "snapshotId": "b4faae8fc9e37025add5c49fac16a93cc13de0f66ab60d5c17f4c3e982b7e85e",
       "ticker": "HOOD",
@@ -82,6 +112,36 @@
       "predictedPrice": 717.82,
       "actualClose": 700.87,
       "absolutePriceErrorPct": 2.36
+    },
+    {
+      "snapshotId": "7fae58f41c00915d84ac4bcdd88d6bb86d692d13d31fe0b4c5c04d47fe9fcbfc",
+      "ticker": "SPY",
+      "targetDate": "2026-09-10",
+      "observedDate": "2026-09-10",
+      "type": "low",
+      "predictedPrice": 756.45,
+      "actualClose": 757.83,
+      "absolutePriceErrorPct": 0.18
+    },
+    {
+      "snapshotId": "453616c8d93945dd6463fb7106e65d39a99b6b0ec550404394d32c8357c81a5f",
+      "ticker": "VOO",
+      "targetDate": "2026-09-10",
+      "observedDate": "2026-09-10",
+      "type": "low",
+      "predictedPrice": 695.32,
+      "actualClose": 696.65,
+      "absolutePriceErrorPct": 0.19
+    },
+    {
+      "snapshotId": "8718b3fab7ec06a34c4efb8b351658ca6af35e3af10c5fb461090ab1f5af2d92",
+      "ticker": "TSLA",
+      "targetDate": "2026-09-10",
+      "observedDate": "2026-09-10",
+      "type": "high",
+      "predictedPrice": 384.81,
+      "actualClose": 363.56,
+      "absolutePriceErrorPct": 5.52
     }
   ],
   "method": "Original future-date targets versus first available daily close on/after target, scored no earlier than the following Eastern date; price error only, not reversal accuracy or trading profit.",
@@ -94,7 +154,7 @@
         "rawMagnitudePct": -2.9,
         "medianEarlyLate": -6.0,
         "magnitudeBiasPct": -1.4,
-        "magSamples": 147,
+        "magSamples": 157,
         "spacingUsed": 11,
         "recent": [
           {
@@ -361,6 +421,10 @@
           "gann": 0.97
         },
         "famStats": {
+          "hurst": {
+            "n": 2,
+            "hits": 0
+          },
           "fib": {
             "n": 4,
             "hits": 2
@@ -368,10 +432,6 @@
           "rhythm": {
             "n": 6,
             "hits": 2
-          },
-          "hurst": {
-            "n": 2,
-            "hits": 0
           },
           "gann": {
             "n": 6,
@@ -386,13 +446,13 @@
     },
     "HOOD": {
       "bias": {
-        "samples": 154,
+        "samples": 155,
         "timingBiasDays": -3,
         "rawTimingDays": -6.0,
-        "rawMagnitudePct": -1.9,
+        "rawMagnitudePct": -1.6,
         "medianEarlyLate": -6.0,
-        "magnitudeBiasPct": -1.0,
-        "magSamples": 152,
+        "magnitudeBiasPct": -0.8,
+        "magSamples": 157,
         "spacingUsed": 8,
         "recent": [
           {
@@ -722,6 +782,10 @@
           "vibration": 1.94
         },
         "famStats": {
+          "hurst": {
+            "n": 1,
+            "hits": 0
+          },
           "fib": {
             "n": 5,
             "hits": 0
@@ -729,10 +793,6 @@
           "rhythm": {
             "n": 7,
             "hits": 3
-          },
-          "hurst": {
-            "n": 1,
-            "hits": 0
           },
           "gann": {
             "n": 5,
@@ -757,7 +817,7 @@
         "rawMagnitudePct": 0.2,
         "medianEarlyLate": -8.0,
         "magnitudeBiasPct": 0.1,
-        "magSamples": 109,
+        "magSamples": 110,
         "spacingUsed": 6,
         "recent": [
           {
@@ -1283,21 +1343,21 @@
         "priceCalibHigh": 0.989,
         "priceCalibLow": 0.962,
         "methodFactors": {
-          "fib": 1.0,
           "hurst": 1.2,
+          "fib": 1.0,
           "rhythm": 1.64,
           "gann": 0.8,
-          "vibration": 2.0,
-          "moon": 1.8
+          "moon": 1.8,
+          "vibration": 2.0
         },
         "famStats": {
-          "fib": {
-            "n": 10,
-            "hits": 3
-          },
           "hurst": {
             "n": 13,
             "hits": 5
+          },
+          "fib": {
+            "n": 10,
+            "hits": 3
           },
           "rhythm": {
             "n": 9,
@@ -1307,26 +1367,26 @@
             "n": 13,
             "hits": 3
           },
-          "vibration": {
-            "n": 5,
-            "hits": 4
-          },
           "moon": {
             "n": 3,
             "hits": 2
+          },
+          "vibration": {
+            "n": 5,
+            "hits": 4
           }
         }
       }
     },
     "JPM": {
       "bias": {
-        "samples": 73,
+        "samples": 76,
         "timingBiasDays": -5,
-        "rawTimingDays": -12.0,
-        "rawMagnitudePct": 1.5,
-        "medianEarlyLate": -12.0,
-        "magnitudeBiasPct": 0.8,
-        "magSamples": 136,
+        "rawTimingDays": -11.5,
+        "rawMagnitudePct": 1.8,
+        "medianEarlyLate": -11.5,
+        "magnitudeBiasPct": 0.9,
+        "magSamples": 140,
         "spacingUsed": 8,
         "recent": [
           {
@@ -1400,18 +1460,18 @@
             "deltaDays": -27
           },
           {
+            "isoDate": "2026-10-12",
+            "type": "high",
+            "target": 358.9,
+            "touched": "2026-09-11",
+            "deltaDays": -21
+          },
+          {
             "isoDate": "2026-10-08",
             "type": "low",
             "target": 351.14,
             "touched": "2026-09-09",
             "deltaDays": -21
-          },
-          {
-            "isoDate": "2026-10-08",
-            "type": "high",
-            "target": 354.93,
-            "touched": "2026-09-08",
-            "deltaDays": -22
           }
         ]
       },
@@ -1430,13 +1490,13 @@
     },
     "GOOGL": {
       "bias": {
-        "samples": 87,
+        "samples": 88,
         "timingBiasDays": -4,
         "rawTimingDays": -7.0,
-        "rawMagnitudePct": -4.9,
+        "rawMagnitudePct": -5.1,
         "medianEarlyLate": -7.0,
-        "magnitudeBiasPct": -2.4,
-        "magSamples": 107,
+        "magnitudeBiasPct": -2.6,
+        "magSamples": 110,
         "spacingUsed": 11,
         "recent": [
           {
@@ -1459,6 +1519,13 @@
             "target": 321.28,
             "touched": "2026-09-08",
             "deltaDays": -34
+          },
+          {
+            "isoDate": "2026-10-21",
+            "type": "high",
+            "target": 338.2,
+            "touched": "2026-09-11",
+            "deltaDays": -28
           },
           {
             "isoDate": "2026-10-05",
@@ -1515,13 +1582,6 @@
             "target": 349.89,
             "touched": "2026-08-24",
             "deltaDays": -18
-          },
-          {
-            "isoDate": "2026-09-17",
-            "type": "low",
-            "target": 333.8,
-            "touched": "2026-09-01",
-            "deltaDays": -12
           }
         ]
       },
@@ -1755,8 +1815,8 @@
         "priceCalibLow": 0.899,
         "methodFactors": {
           "gann": 1.13,
-          "fib": 1.13,
           "hurst": 1.36,
+          "fib": 1.13,
           "rhythm": 0.68
         },
         "famStats": {
@@ -1764,13 +1824,13 @@
             "n": 7,
             "hits": 2
           },
-          "fib": {
-            "n": 7,
-            "hits": 2
-          },
           "hurst": {
             "n": 3,
             "hits": 1
+          },
+          "fib": {
+            "n": 7,
+            "hits": 2
           },
           "rhythm": {
             "n": 3,
@@ -1905,7 +1965,7 @@
         "rawMagnitudePct": -11.1,
         "medianEarlyLate": -9.0,
         "magnitudeBiasPct": -5.6,
-        "magSamples": 27,
+        "magSamples": 28,
         "spacingUsed": 20,
         "recent": [
           {
