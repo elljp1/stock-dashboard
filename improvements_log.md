@@ -1681,3 +1681,56 @@ access) show the day-ahead sample sizes shrink to the deduplicated counts with n
 coherence failure along the way - that's the real test of today's fix; whether the TSLA call
 assignment posts as expected; and whether fetch access to Yahoo recovers in this sandbox, which
 has now been blocked three days running.
+
+## 2026-09-12 (Sat) — weekend, no new session; fetch blocked again; dedup fix from Friday confirmed holding; grade-and-log only
+
+**Fetch status:** blocked on all 10 tickers - the same 403 Forbidden at the proxy gateway seen on
+every recent review day (fourth day running now). Markets are closed Saturday anyway, so there is
+no new session to fetch regardless. With no CSVs cached in the repo (gitignored by design),
+`analyze.py` was not run here. The repo already carries Friday 9/11's closing build, produced by
+the separate cloud refresh workflow at 10:17 PM ET. `coherence_check.py` passes cleanly against it
+(10/10 tickers, all checks including chain nesting and trade-card date ordering), and a full
+NaN/Inf sweep across every ticker's stats and calibration data came back clean.
+
+**Confirming yesterday's fix:** Friday's fix for the duplicate day-ahead forecast bug (in
+`horizons_log.json`) went through its first real end-to-end test when the cloud workflow ran
+`analyze.py` with working fetch access Friday evening. Checked the result: 285 entries, zero
+duplicate ticker+session pairs - the fix held. The swing-prediction track record on today's build
+(TSLA n=11 36%/45%, HOOD n=15 27%/33%, QQQ n=28 32%/39%, GOOGL n=15 27%/27%, GC=F n=14 29%/29%)
+matches the corrected counts verified standalone yesterday, confirming the numbers on the live
+dashboard are the accurate, de-duplicated ones. JPM, NVDA, AMZN, SPY, VOO remain at n=0 (no
+confirmed pivot yet) - JPM's already-diagnosed three-month dry spell continues.
+
+**New (day-one) observation - not acted on:** `anomaly_audit.py` flagged two new items today
+beyond the usual pre-existing JPM/AMZN weekly-low mismatches: for both JPM and AMZN, the
+"right now" forecast card's headline date (Fri 9/11) is now in the past, even though its stated
+date window (09/09-09/15) hasn't closed and no new session has traded to resolve it either way.
+This looks like the flip side of the same dry-spell condition already diagnosed for JPM (no
+confirmed pivot to advance the chain), now showing up for AMZN too. It does not fail
+`coherence_check.py` (the hard gate), and the dashboard's own "already reached" badge correctly
+covers JPM's case; AMZN's case (not yet reached) has no equivalent "still pending, window open"
+label the way a different part of the page already does for confirmed-turn dates. This is the
+first day this specific flag has appeared, so per the improvement discipline (act only on a
+3+ day pattern or a clear bug) I logged it rather than shipping a change - watching whether it
+persists once Monday's session gives the chain a chance to resolve or advance.
+
+**Trade cards:** the newest sheet (logged 9/11, TSLA) proposes entries for the week of 9/21 -
+nothing from this week's cards has reached its execution or exit window yet, so there's nothing
+new to grade there today.
+
+**Real-money ledger:** no change to report beyond what was already logged Friday - TSLA closed
+its 9/11 option expiry at $365.44, above the $345 strike on the owner's 5x short call, matching
+the scenario the owner already planned for and is fine with. `real_trades.json` still shows that
+position as open in the repo; reconciling it is the owner's own bookkeeping, not something I
+touched.
+
+**What changed and why:** no code change today. Nothing here crosses the 3+-day-pattern-plus-
+clear-bug bar - the JPM/AMZN stale-headline-date observation is brand new today and worth one
+more day of confirmation before considering an interface fix; everything else is an already-
+diagnosed, ongoing condition. Honesty features (measured hit rates, random-control comparisons,
+self-grading, the coherence gate) are untouched, and `tickers.txt` wasn't touched.
+
+**Watch next:** whether Monday 9/14's new session finally advances the JPM/AMZN forecast chain
+(clearing today's stale-headline-date observation one way or the other); whether JPM's three-month
+pivot dry spell ever breaks; and whether fetch access to Yahoo recovers in this sandbox, which has
+now been blocked four days running.
