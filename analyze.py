@@ -1765,8 +1765,45 @@ def analyze(tkr):
                 "time": env_time, "src": "stat"}
 
     # DAILY
-    d_hi = _snap_h(last_close * (1 + proj(1)), "high")
-    d_lo = _snap_h(last_close * (1 - proj(1)), "low")
+    # self-correcting calibration for the day-ahead band, learned the same way
+    # as priceCalibHigh/Low: the graded horizonGrades history shows the raw
+    # envelope() width is systematically too wide (predicted high above the
+    # actual high, predicted low below the actual low, on ~85% of sessions
+    # across every ticker) - so shrink/grow the band toward the measured
+    # actual/predicted ratio, never letting it cross the close it's cast from.
+    cal_dhi = cal_dlo = 1.0
+    try:
+        with open("horizons_log.json", encoding="utf-8") as _hcf:
+            _hcal_log = json.load(_hcf)
+    except Exception:
+        _hcal_log = {"entries": []}
+    _hcal_ext = EXTREMES.get(tkr, {})
+    _hcal_by_session = {}
+    for e in _hcal_log["entries"]:
+        if e["ticker"] != tkr:
+            continue
+        _cur = _hcal_by_session.get(e["session"])
+        if _cur is None or e["logged"] > _cur["logged"]:
+            _hcal_by_session[e["session"]] = e
+    _hcal_hi_ratios, _hcal_lo_ratios = [], []
+    for e in _hcal_by_session.values():
+        if e["session"] >= last_bar_date.strftime("%Y-%m-%d"):
+            continue
+        act = _hcal_ext.get(e["session"])
+        if not act:
+            continue
+        ph_, pl_ = e["h"]["daily"]["high"]["price"], e["h"]["daily"]["low"]["price"]
+        if ph_:
+            _hcal_hi_ratios.append(act[0] / ph_)
+        if pl_:
+            _hcal_lo_ratios.append(act[1] / pl_)
+    if len(_hcal_hi_ratios) >= 8:
+        cal_dhi = float(np.clip(np.median(_hcal_hi_ratios), 0.85, 1.15))
+    if len(_hcal_lo_ratios) >= 8:
+        cal_dlo = float(np.clip(np.median(_hcal_lo_ratios), 0.85, 1.15))
+
+    d_hi = _snap_h(max(last_close * (1 + proj(1)) * cal_dhi, last_close), "high")
+    d_lo = _snap_h(min(last_close * (1 - proj(1)) * cal_dlo, last_close), "low")
     _dslice = _recent[_recent["date"] == last_bar_date] if session == last_bar_date else _recent.iloc[0:0]
     horizons["daily"] = {
         "high": resolve("high", session, session, d_hi, session.strftime("%a %m/%d"),
@@ -2218,7 +2255,8 @@ def analyze(tkr):
         hz_res.append({"session": e["session"],
                        "hiErrPct": round((ph_ / act[0] - 1) * 100, 1),
                        "loErrPct": round((pl_ / act[1] - 1) * 100, 1)})
-    out["horizonGrades"] = {"daily": hz_res[-10:], "n": len(hz_res)}
+    out["horizonGrades"] = {"daily": hz_res[-10:], "n": len(hz_res),
+                            "calibHigh": round(cal_dhi, 3), "calibLow": round(cal_dlo, 3)}
 
     # ------- FULL transparent history: every prediction ever logged -------
     hist_map = {}
