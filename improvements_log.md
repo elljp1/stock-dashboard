@@ -1803,3 +1803,56 @@ test of today's fix; whether the measured bias shrinks toward zero over the foll
 calibration takes hold; whether Monday 9/14's new session advances the JPM/AMZN chain past
 tomorrow's projected date; whether JPM's three-month pivot dry spell ever breaks; and whether fetch
 access to Yahoo recovers in this sandbox, now blocked five days running.
+
+## 2026-09-14 (Mon) — fetch blocked a sixth day; JPM's dry spell finally broke; found and fixed a
+name accidentally baked into the public site
+
+**Data freshness:** my own sandbox still can't reach Yahoo (403 on every ticker, sixth day
+running, no cached CSVs since they're gitignored), so I couldn't run `fetch_data.py`/`analyze.py`
+end-to-end myself today. But the separate cloud refresh workflow (real network access) is healthy
+and ran repeatedly today - `data.js` is stamped generated 5:39 PM ET, and the ledgers
+(`horizons_log.json`, `daily_extremes.json`, `predictions_log.json`) all carry fresh 9/14 entries.
+So today's review is against a genuinely current build, not a stale one.
+
+**Grades reviewed:** JPM's three-month pivot dry spell (flagged repeatedly since late August) has
+finally broken - its swing track record went from n=0 to n=21 (19%/29% hit rate), with all 21
+resolved predictions confirming against a single high pivot on 2026-08-12 at $365.18; JPM's now
+4.1% below that high, past the 4%-pullback confirmation threshold I'd been watching for. GOOGL also
+picked up new confirmations (n=15 to n=25) against a 2026-09-09 low at $330.65, though its hit rate
+came down to 16%/16% as a result - worth watching whether that settles or keeps drifting.
+TSLA (n=11, 36%/45%), HOOD (n=15, 27%/33%), QQQ (n=28, 32%/39%) and GC=F (n=14, 29%/29%) are
+unchanged; NVDA, AMZN, SPY, VOO are still n=0. On the day-range calibration fix shipped 9/13: the
+`calibHigh`/`calibLow` multipliers are live and present for all 10 tickers, but the day-ahead
+forecast they were actually applied to (generated 9/13, for session 9/14) still hasn't been graded
+into `horizonGrades` yet - the last graded session there is still 9/11, a pre-fix forecast. So the
+real first-time test of the fix is still one day out, same as it's been since Saturday.
+
+**What changed and why - redacted a name that had leaked onto the public site:** while reading
+`real_trades.json`'s note on the TSLA 9/11 assignment (closed out and fully confirmed as of this
+morning per the entry itself), I found the sentence read "...all 5 calls exercised against
+Stuart..." - a first name, almost certainly the account owner's, sitting in a plain-text field.
+Because `analyze.py` copies this file's notes verbatim into `data.js`, `index.html`, and
+`dashboard_single.html`, that name wasn't just in the ledger - it was live on the public GitHub
+Pages site (elljp1.github.io/stock-dashboard) in all three places. This is exactly the kind of
+thing the daily-review rules say never to let into a committed file, so I treated it as a clear bug
+regardless of today's usual "one change only if a pattern repeats 3+ days" bar and fixed it
+immediately rather than waiting: replaced "exercised against Stuart" with "exercised (assigned)" -
+same factual meaning (the short calls were assigned), no name - in `real_trades.json` and in the
+three files that embed its content. Re-ran `coherence_check.py` after the edit (still passes) and
+confirmed with a repo-wide search that no other file contains the name. I did not touch any pricing
+data, any grading logic, or any honesty feature - this was a pure data-privacy redaction, four
+files, one string, nothing else changed. Also ran the full Python test suite (25 tests across
+`test_data_freshness.py`, `test_reliability.py`, `test_schedule_gate.py`, `test_scoring.py`) - all
+still pass.
+
+**Real-money ledger:** no new trades since 9/13 - the TSLA 9/11 assignment stays fully logged and
+closed (the note I redacted today), and the new TSLA trade-card sheet logged 9/14 still targets the
+week of 9/21 with nothing executable yet.
+
+**Watch next:** whether tomorrow's grading run finally scores the first day-ahead forecast made
+under the new calibration (session 9/14's); whether JPM's newly-confirmed 19%/29% hit rate holds up
+as more of its predictions resolve, or was a one-time batch effect from a single pivot; whether
+GOOGL's dropping hit rate keeps drifting down or stabilizes; and whether fetch access to Yahoo
+recovers in this sandbox, now blocked six days running. I'll also do a quick scan for any other
+personal details that might have slipped into a note field the next few days, just in case this
+wasn't a one-off.
