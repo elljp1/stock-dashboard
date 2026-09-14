@@ -39,3 +39,20 @@ exact starts or publications. The app's five-minute browser check only reads
 finished analysis; it does not start server analysis.
 
 Reference: https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule
+
+## Sept 14, 2026 update: GitHub cron is not delivering the schedule
+
+Measured from the Actions run history (Aug 25 to Sep 14): the `*/5 6-19` cron
+fired only 4 to 7 times per weekday, at irregular times two to three hours
+apart, and zero times on Mon Sep 14 before 10:00 ET. GitHub queues and drops
+high-frequency schedule events under load, so the gate only ever saw a handful
+of the 30 requested weekday slots. Push and manual dispatch runs were fine.
+
+Interim fix: Claude Code routines now call `workflow_dispatch` on refresh.yml
+at every requested slot (6:00 to 17:00 on the hour and half hour, 9:15, 9:20,
+9:25, 9:35, 9:45 weekdays, and 18:00 daily). Dispatch bypasses the gate and
+always rebuilds. The GitHub cron stays in place as a fallback. Those routines
+run on UTC cron and need a one-hour shift at each DST change; the Nov 1 DST
+reminder covers them. The Cloudflare worker (`scheduler-worker.mjs`, currently
+`ENABLED=false`) remains the better long-term clock if a Cloudflare account
+and a GitHub token with `actions:write` are provisioned.
