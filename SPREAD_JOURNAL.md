@@ -14,6 +14,8 @@ Robinhood rejects multi-leg orders placed through the agent in agentic accounts 
 - Exit: buy back at 50% of credit received (GTC order placed right after fill)
 - Loss rule: close if the spread costs 2x the credit to buy back, or short strike is breached
 
+- **TSLA bias (9/14):** Stuart expects a TSLA drop in October. No TSLA put credit spreads. Call credit spreads only, sold into a bounce (up ≥1.5% or RSI ≥60), $10 wide, expiring before the Oct 21 earnings. The 9/14 TSLA 335/325 put spread alert ($2.33 mid) was declined for this reason.
+
 ## Pre-trade card (shown before every order)
 Ticker, structure, expiry and DTE, spot, spread mid vs. limit, short delta and IV,
 breakeven, max profit, max loss, collateral held, probability of profit,
