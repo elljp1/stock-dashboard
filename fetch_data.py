@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 import pandas as pd
 from zoneinfo import ZoneInfo
+from datetime import datetime
+from data_freshness import reconcile_daily
 
 ET = ZoneInfo("America/New_York")
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
@@ -49,18 +51,24 @@ failures = []
 for tkr in TICKERS:
     print(f"--- {tkr} ---")
     try:
+        frames = {}
         for rng, interval, name in [("max", "1d", "daily"),
                                     ("730d", "1h", "hourly"),
                                     ("60d", "15m", "15m")]:
             df, meta = fetch(tkr, rng, interval)
             if df.empty:
                 raise ValueError("empty price response")
+            frames[name] = df
+            time.sleep(0.5)  # be polite to Yahoo
+        frames['daily'] = reconcile_daily(
+            frames['daily'], frames['hourly'], tkr, datetime.now(ET),
+            lambda: fetch(tkr, '1mo', '1d')[0])
+        for name, df in frames.items():
             target = Path(f"{tkr}_{name}.csv")
             temp = target.with_suffix(".csv.tmp")
             df.to_csv(temp)
             temp.replace(target)
             print(f"  {name}: {len(df)} rows, {df.index[0].date()} -> {df.index[-1].date()}")
-            time.sleep(0.5)  # be polite to Yahoo
         print("  price:", meta["regularMarketPrice"])
     except Exception as e:
         print(f"  FAILED: {e}")

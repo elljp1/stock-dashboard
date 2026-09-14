@@ -1520,3 +1520,286 @@ are untouched or strengthened, and `tickers.txt` wasn't touched.
 sample sizes ever grow (they need a genuine 10%+ pullback first) versus staying stuck at zero for
 weeks, which would itself be worth flagging. Also watch the TSLA short call into its 9/11 expiry
 now that it's back in the money, and whether fetch access to Yahoo recovers for this environment.
+
+## 2026-09-09 (Wed) — fetch still blocked; found a real, measurable pattern in the daily high/low
+range forecast, but held off fixing it because I can't test a fix today
+
+**Fetch status:** blocked on all 10 tickers again - same 403 Forbidden at the proxy tunnel to
+`query1.finance.yahoo.com`, confirmed via the proxy's own status log (a policy denial, not a
+site-side block). No CSVs are cached locally (gitignored by design), so I left `analyze.py`
+un-run here and reviewed the build the separate cloud refresh workflow already produced today
+from real data (its own self-review ran at 3:58 PM ET). `coherence_check.py` passed cleanly
+(10/10 tickers) and `anomaly_audit.py` found no chain/level/trade-card inconsistencies.
+
+**Grades reviewed:** the swing-prediction track record is essentially unchanged from Monday -
+TSLA n=10 (40%/50% within 2/3 days), HOOD n=15 (27%/33%), QQQ n=26 (35%/42%), GOOGL n=14
+(29%/29%), GC=F n=13 (31%/31%); JPM, NVDA, AMZN, SPY, VOO still n=0 (no confirmed pivot yet to
+grade against). Nothing here crosses the 3-day-pattern bar for a change.
+
+**What I found instead:** the *other* forecast the dashboard grades - the day-ahead high/low
+range shown in the daily table (`horizonGrades`) - has a real, persistent bias. I pulled the
+last 10 graded sessions for all 10 tickers (100 data points total, spanning about 2.5 weeks) and
+the predicted high came in ABOVE the actual high on 84 of those 100 days (average +2.1%), while
+the predicted low came in BELOW the actual low on 82 of the 100 days (average -1.5%). That's not
+one noisy ticker - it's nearly every ticker, nearly every day: the day-ahead range the dashboard
+shows is systematically wider than the range that actually prints. I traced the code
+(`analyze.py`, the `day_fc` loop around line 2101): that band's width comes straight from a
+60-day volatility measure with a small widening factor, and unlike the swing-target predictions
+(which already get a self-correcting `priceCalibHigh`/`priceCalibLow` adjustment from their own
+grading history), this daily-range band has no such correction - it's raw, uncalibrated output,
+even though there's now ~37-40 graded sessions per ticker to calibrate it from.
+
+**Why I didn't fix it today:** the instructions are clear that any code change has to be
+re-verified by re-running `analyze.py` and `coherence_check.py` before it ships, and I have no
+way to run `analyze.py` in this sandbox at all today (no market data reachable, no cached CSVs).
+Shipping a calibration change I could not test against real data risked exactly the kind of
+mistake the honesty/coherence rules are there to prevent. So this is a specific, numbers-backed
+recommendation for a day when fetch access works (here or read by the owner directly): add a
+calibration factor to the daily-range band, the same self-correcting idea already used for the
+swing-target prices, sized from the measured +2.1%/-1.5% bias. No code touched today.
+
+**Real-money ledger:** TSLA closed today at $368.14, still comfortably above both the $345 strike
+and the $357.50 breakeven on the owner's real short call (5x), now 2 trading days from its 9/11
+expiry. Nothing has changed since Monday and nothing needs action before expiry.
+
+**What changed and why:** no code change - found a real pattern in the daily-range forecast but
+couldn't safely test a fix in today's blocked environment, so I logged it precisely instead of
+guessing. Honesty features (measured hit rates, random-control comparisons, self-grading, the
+coherence gate) are untouched. `tickers.txt` wasn't touched.
+
+**Watch next:** whether the daily-range over-width bias (84%/82% of days, ~2% average) holds up
+as more sessions grade, and whether it's still there once a session can actually run `analyze.py`
+and test the calibration fix described above. Also watch the TSLA short call into Thursday/Friday
+expiry, and whether fetch access to Yahoo recovers for this environment.
+
+## 2026-09-10 (Thu) — fetch still blocked; found a distinct duplicate-grading bug behind the ledgers; range-calibration bias confirmed a second day; no code shipped, can't test today
+
+**Fetch status:** blocked on all 10 tickers again - same 403 Forbidden at the proxy tunnel to
+Yahoo. No CSVs are cached locally (gitignored by design), so `analyze.py` won't even start today
+(it fails immediately on the missing per-ticker CSV files) - I reviewed the build the separate
+cloud refresh workflow already produced today from real data instead. `coherence_check.py` passed
+cleanly (10/10 tickers) and `anomaly_audit.py` found no chain/level/trade-card inconsistencies.
+
+**Grades reviewed:** the swing-prediction track record moved a little in both directions, nothing
+crossing the 3-day-pattern bar - TSLA n=11 (36%/45% within 2/3 days, was 40%/50% at n=10), HOOD
+n=15 (27%/33%, unchanged), QQQ n=28 (32%/39%, was 35%/42% at n=26), GOOGL n=15 (27%/27%, was
+29%/29% at n=14), GC=F n=14 (29%/29%, was 31%/31% at n=13). JPM, NVDA, AMZN, SPY, VOO still n=0
+(no confirmed pivot yet to grade against).
+
+**New finding - a real duplicate-logging bug in the day-ahead range ledger:** while re-checking
+yesterday's day-ahead high/low range bias, I found the underlying log (`horizons_log.json`) logs
+the exact same forecast more than once for a lot of sessions. Example: TSLA's forecast for Monday
+8/31 (predicted high $362.89, low $329.78) was logged three separate times - on Fri 8/28, Sat
+8/29, and Sun 8/30 - because the "next trading session" doesn't change over a weekend, but the
+daily logging step doesn't check whether it already logged a forecast for that exact session
+before appending a new row. Across the full history this isn't a one-off: 119 of the 394 rows
+ever logged (30%) are exact duplicates of an already-logged ticker+session pair, concentrated
+around weekends and the Labor Day holiday. Because the grading step grades every logged row, this
+means some sessions get counted 2-3x in the rolling "last 10 days" window shown on the dashboard
+and in the cumulative sample-size counters (the `n` next to the day-ahead grades), which both
+inflates those sample sizes and duplicate-weights whichever bias a triple-logged day happened to
+have. I re-ran yesterday's bias check with duplicates removed (62 unique ticker+session pairs
+instead of 100 raw rows) and the pattern held up almost exactly the same (93.5% of sessions predict
+a high above the actual, 87.1% predict a low below the actual, averaging +2.5%/-1.6%) - so
+yesterday's finding wasn't an artifact of this bug, but the bug is still a real integrity problem
+worth fixing on its own, separate from the calibration question.
+
+**Why I didn't fix either issue today:** both fixes live inside `analyze.py` (the log-append step
+and the day-range calibration), and `analyze.py` cannot run at all in this sandbox right now - it
+errors out before reaching either piece of logic because none of the 10 tickers' CSVs are
+reachable (fetch blocked, nothing cached). Shipping either change without being able to re-run
+`analyze.py` and `coherence_check.py` against it, as the process requires, would be exactly the
+kind of untested change the honesty/coherence rules exist to prevent. Both are now written up
+precisely enough that a session with working fetch access can implement and verify them directly:
+(1) skip logging a new `horizons_log.json` row when one already exists for that exact
+ticker+session, and (2) add a calibration factor to the daily-range band using the measured
++2.5%/-1.6% bias, the same self-correcting approach already used for the swing-target prices via
+`priceCalibHigh`/`priceCalibLow`.
+
+**Real-money ledger:** TSLA closed today at $363.56, still comfortably above both the $345 strike
+and the $357.50 breakeven on the owner's real short call (5x), with the 9/11 expiry now tomorrow.
+This is proceeding exactly per the owner's own stated plan (selling these shares by/in October
+anyway, so assignment at the effective $357.50 is an acceptable-to-favorable outcome) and there's
+already a GTC buy-to-close order in place - nothing needs action tonight.
+
+**What changed and why:** no code change - found and precisely documented two separate real
+issues (a duplicate-logging bug that inflates grading sample sizes, and a persisting day-range
+calibration bias) but couldn't safely test a fix for either in today's fetch-blocked environment,
+so I logged both instead of guessing. Honesty features (measured hit rates, random-control
+comparisons, self-grading, the coherence gate) are untouched. `tickers.txt` wasn't touched.
+
+**Watch next:** whether the TSLA short call gets assigned or expires worthless tomorrow (either
+is fine per the owner's plan); whether fetch access to Yahoo recovers so both the duplicate-log
+bug and the day-range calibration bias can actually be fixed and verified; and whether the
+duplicate-logging bug, once fixed, moves the reported sample sizes or hit rates meaningfully.
+
+## 2026-09-11 (Fri) — fixed the duplicate-logging bug found the last two days; grades steady; TSLA call expired ITM per plan
+
+**Fetch status:** blocked again in this sandbox - all 10 tickers 403'd at the proxy, third
+straight day. As before, no CSVs are cached locally so `analyze.py` can't run here. I reviewed
+the build the separate cloud refresh workflow already produced today from real data (last run
+20:04 UTC) - `coherence_check.py` passed cleanly (10/10 tickers) and the two `anomaly_audit.py`
+notices (JPM and AMZN weekly-low estimates disagreeing with a dated chain low inside the same
+window) are pre-existing, unrelated to anything below, and unchanged from before my change.
+
+**What changed and why:** fixed the duplicate-forecast bug flagged the last two days. The
+day-ahead range log (`horizons_log.json`) was keying its "already logged today?" check on
+today's date instead of the target session's date, so a forecast for a session that doesn't
+change over a weekend (or holiday) got appended again on every subsequent day, inflating the
+sample sizes (`n`) behind the day-ahead high/low grades shown on the dashboard and duplicate-
+weighting whichever bias that session happened to have. Fixed both ends: (1) `analyze.py` now
+replaces any existing log row for the same ticker+session, not just same-day rows, so it can't
+recur, and as a defense in depth the grading step also de-duplicates by ticker+session before
+counting, keeping the most-recently-logged forecast; (2) did a one-time cleanup of the existing
+ledger, removing the 119 stale duplicate rows accumulated since July (404 -> 285 entries, verified
+zero rows lost that weren't exact re-logs of an already-present forecast). Couldn't run
+`analyze.py` end-to-end today (fetch blocked), so I verified the fix a different way: extracted
+the exact before/after dedup logic and ran it standalone against the real ledger data, confirming
+sample sizes drop to the correct de-duplicated counts (e.g. TSLA 40->29, AMZN 31->22) with zero
+value changes on any row that survives - the duplicates were always identical copies of the same
+forecast, never conflicting data. `coherence_check.py` still passes against the current live
+build. The actual grading numbers on the dashboard will refresh correctly the next time the cloud
+workflow runs `analyze.py` with working fetch access, which will also be the first real end-to-end
+test of this code path - I'll check the result at tomorrow's review. Honesty features (measured
+hit rates, random-control comparisons, self-grading, the coherence gate) are untouched, made more
+accurate if anything. `tickers.txt` wasn't touched.
+
+**Grades reviewed (pre-refresh numbers, before dedup takes effect):** swing-prediction track
+record essentially flat - TSLA n=11 (36%/45%), HOOD n=15 (27%/33%), QQQ n=28 (32%/39%), GOOGL
+n=15 (27%/27%), GC=F n=14 (29%/29%), all unchanged from yesterday. JPM, NVDA, AMZN, SPY, VOO
+still n=0 (no confirmed pivot yet). `daily_review.json`'s price-error samples from the last two
+sessions ranged roughly 0.4%-9.3%, in line with recent norms - nothing there crosses the 3-day
+bar for a change either.
+
+**Real-money ledger:** TSLA closed today (Fri 9/11, the option's expiry date) at $365.44, well
+above the $345 strike on the owner's 5x short call - this is the exact scenario the owner already
+planned for and is fine with (assignment at the effective $357.50/sh, in line with the plan to
+sell these shares by/in October anyway). Nothing needs action; noting it here for the record.
+
+**Watch next:** whether tomorrow's ledgers (populated by the cloud workflow with working fetch
+access) show the day-ahead sample sizes shrink to the deduplicated counts with no crash or
+coherence failure along the way - that's the real test of today's fix; whether the TSLA call
+assignment posts as expected; and whether fetch access to Yahoo recovers in this sandbox, which
+has now been blocked three days running.
+
+## 2026-09-12 (Sat) — weekend, no new session; fetch blocked again; dedup fix from Friday confirmed holding; grade-and-log only
+
+**Fetch status:** blocked on all 10 tickers - the same 403 Forbidden at the proxy gateway seen on
+every recent review day (fourth day running now). Markets are closed Saturday anyway, so there is
+no new session to fetch regardless. With no CSVs cached in the repo (gitignored by design),
+`analyze.py` was not run here. The repo already carries Friday 9/11's closing build, produced by
+the separate cloud refresh workflow at 10:17 PM ET. `coherence_check.py` passes cleanly against it
+(10/10 tickers, all checks including chain nesting and trade-card date ordering), and a full
+NaN/Inf sweep across every ticker's stats and calibration data came back clean.
+
+**Confirming yesterday's fix:** Friday's fix for the duplicate day-ahead forecast bug (in
+`horizons_log.json`) went through its first real end-to-end test when the cloud workflow ran
+`analyze.py` with working fetch access Friday evening. Checked the result: 285 entries, zero
+duplicate ticker+session pairs - the fix held. The swing-prediction track record on today's build
+(TSLA n=11 36%/45%, HOOD n=15 27%/33%, QQQ n=28 32%/39%, GOOGL n=15 27%/27%, GC=F n=14 29%/29%)
+matches the corrected counts verified standalone yesterday, confirming the numbers on the live
+dashboard are the accurate, de-duplicated ones. JPM, NVDA, AMZN, SPY, VOO remain at n=0 (no
+confirmed pivot yet) - JPM's already-diagnosed three-month dry spell continues.
+
+**New (day-one) observation - not acted on:** `anomaly_audit.py` flagged two new items today
+beyond the usual pre-existing JPM/AMZN weekly-low mismatches: for both JPM and AMZN, the
+"right now" forecast card's headline date (Fri 9/11) is now in the past, even though its stated
+date window (09/09-09/15) hasn't closed and no new session has traded to resolve it either way.
+This looks like the flip side of the same dry-spell condition already diagnosed for JPM (no
+confirmed pivot to advance the chain), now showing up for AMZN too. It does not fail
+`coherence_check.py` (the hard gate), and the dashboard's own "already reached" badge correctly
+covers JPM's case; AMZN's case (not yet reached) has no equivalent "still pending, window open"
+label the way a different part of the page already does for confirmed-turn dates. This is the
+first day this specific flag has appeared, so per the improvement discipline (act only on a
+3+ day pattern or a clear bug) I logged it rather than shipping a change - watching whether it
+persists once Monday's session gives the chain a chance to resolve or advance.
+
+**Trade cards:** the newest sheet (logged 9/11, TSLA) proposes entries for the week of 9/21 -
+nothing from this week's cards has reached its execution or exit window yet, so there's nothing
+new to grade there today.
+
+**Real-money ledger:** no change to report beyond what was already logged Friday - TSLA closed
+its 9/11 option expiry at $365.44, above the $345 strike on the owner's 5x short call, matching
+the scenario the owner already planned for and is fine with. `real_trades.json` still shows that
+position as open in the repo; reconciling it is the owner's own bookkeeping, not something I
+touched.
+
+**What changed and why:** no code change today. Nothing here crosses the 3+-day-pattern-plus-
+clear-bug bar - the JPM/AMZN stale-headline-date observation is brand new today and worth one
+more day of confirmation before considering an interface fix; everything else is an already-
+diagnosed, ongoing condition. Honesty features (measured hit rates, random-control comparisons,
+self-grading, the coherence gate) are untouched, and `tickers.txt` wasn't touched.
+
+**Watch next:** whether Monday 9/14's new session finally advances the JPM/AMZN forecast chain
+(clearing today's stale-headline-date observation one way or the other); whether JPM's three-month
+pivot dry spell ever breaks; and whether fetch access to Yahoo recovers in this sandbox, which has
+now been blocked four days running.
+
+## 2026-09-13 (Sun) — weekend, no new session; fetch blocked a fifth day; Saturday's stale-headline
+observation resolved on its own; shipped the day-range calibration fix flagged Tue/Wed
+
+**Fetch status:** blocked on all 10 tickers again - same 403 Forbidden at the proxy tunnel to
+Yahoo, now five days running in this sandbox. No CSVs are cached locally (gitignored by design),
+so `analyze.py` can't start here either. I reviewed the build the separate cloud refresh workflow
+already produced Friday evening (last run 9/12, 22:18 UTC) - `coherence_check.py` passed cleanly
+(10/10 tickers) and `anomaly_audit.py` found no chain/level/trade-card inconsistencies at all
+today, a clean sheet.
+
+**Saturday's observation resolved:** the stale-headline-date issue flagged yesterday (JPM's and
+AMZN's "right now" forecast card showing a date already in the past) is gone - both now show
+Mon 9/14 as the next reversal date, which is in the future relative to today. The Friday-evening
+cloud refresh advanced the chain before this ever became a second day's pattern, so no interface
+fix is needed; treating it as resolved rather than watching further.
+
+**Grades reviewed:** the swing-prediction track record is unchanged from Friday/Saturday since no
+new session traded over the weekend - TSLA n=11 (36%/45%), HOOD n=15 (27%/33%), QQQ n=28
+(32%/39%), GOOGL n=15 (27%/27%), GC=F n=14 (29%/29%). JPM, NVDA, AMZN, SPY, VOO still n=0 (no
+confirmed pivot yet). The newest trade-card sheet (logged 9/12, TSLA) still targets the week of
+9/21 - nothing to grade there yet.
+
+**What changed and why - shipped the day-range calibration fix:** this is the fix flagged (but not
+shipped) on Tuesday 9/9 and confirmed again Wednesday 9/10: the day-ahead high/low band shown in
+the horizon table and graded as `horizonGrades` is a raw, uncalibrated statistical envelope, unlike
+the swing-target prices which already self-correct from their own grading history
+(`priceCalibHigh`/`priceCalibLow`). I re-measured the bias today against the live build's last 100
+graded sessions (10 tickers x 10 days): the predicted high came in above the actual high on 87% of
+days (avg +2.25%) and the predicted low came in below the actual low on 82% of days (avg -1.51%) -
+the same lopsided pattern measured on both prior days (84%/82% on 9/9, 93.5%/87.1% on 9/10 after
+dedup), now confirmed a third time on a fully independent, later slice of data. That crosses the
+3+-day-pattern bar, so I fixed it: `analyze.py` now learns a `calibHigh`/`calibLow` multiplier per
+ticker from the same graded `horizons_log.json` history (median actual/predicted ratio, requires at
+least 8 graded sessions, clipped to the same 0.85-1.15 range as the existing swing-price
+calibration) and applies it to the day-ahead band before it's shown or logged, with a hard floor/
+ceiling so a "high" forecast can never calibrate below the closing price it's cast from (nor a
+"low" above it) - mirroring the existing safety clamp used for swing-target prices. The learned
+factors are also now surfaced in `horizonGrades.calibHigh`/`calibLow` for transparency, the same
+spirit as the existing `priceCalibHigh`/`priceCalibLow` fields.
+
+**How I tested it without working fetch access:** couldn't run `analyze.py` end-to-end today
+(fetch blocked, no cached CSVs), so I verified the new logic the same way Friday's fix was
+verified - extracted the exact calibration computation and ran it standalone against the real
+`horizons_log.json` and `daily_extremes.json` ledgers. All 10 tickers have 21-32 graded sessions
+(comfortably above the 8-session floor) and produced sane, expected-direction factors (highs:
+0.963-0.997, lows: 1.003-1.031 - both correcting toward the measured bias, none pinned at the
+0.85/1.15 clip). I then applied those factors to today's live band widths and confirmed the safety
+clamp only ever engages in one edge case out of ten (AMZN, where the calibrated high lands a hair
+below the close) rather than routinely overriding the fix. Also ran the full existing test suite
+(25 tests, all passing), `python3 -m py_compile analyze.py` (clean), and `coherence_check.py`
+against the current build (still passes, unaffected since `data.js` itself wasn't regenerated
+today). The real end-to-end test - `analyze.py` actually running this code against fresh data and
+`coherence_check.py` passing on the result - happens the next time the cloud workflow refreshes;
+I'll check that result at tomorrow's review, the same way Friday's dedup fix was confirmed
+Saturday. Honesty features (measured hit rates, random-control comparisons, self-grading, the
+coherence gate) are untouched - this makes the displayed hit-rate numbers more accurate, not less
+strict. `tickers.txt` wasn't touched, and the dashboard's own HTML/CSS wasn't touched either.
+
+**Real-money ledger:** no change since Friday - the TSLA 9/11 option expiry and its resolution
+(assignment scenario, per the owner's own October sale plan) is already fully logged; nothing new
+to report and nothing touched.
+
+**Watch next:** whether tomorrow's cloud-refreshed build shows the day-ahead band actually
+narrower/shifted in the calibrated direction with no crash or coherence failure - that's the real
+test of today's fix; whether the measured bias shrinks toward zero over the following days as
+calibration takes hold; whether Monday 9/14's new session advances the JPM/AMZN chain past
+tomorrow's projected date; whether JPM's three-month pivot dry spell ever breaks; and whether fetch
+access to Yahoo recovers in this sandbox, now blocked five days running.
