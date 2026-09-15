@@ -169,7 +169,7 @@
       "id": 3,
       "status": "working_unfilled",
       "account": "788822831 Agentic",
-      "orderId": "6aa9620a-f8d2-427b-92d6-fa429f3e57b8",
+      "orderId": "6aa962a6-29a9-4e1f-94df-60637ece25bb",
       "ticker": "HOOD",
       "strategy": "put credit spread",
       "legs": [
@@ -191,10 +191,10 @@
       "width": 5,
       "quantity": 2,
       "entryLimitCredit": 1.85,
-      "timeInForce": "gfd",
+      "timeInForce": "gtc",
       "exitTargetDebit": 0.9,
       "lossExitDebit": 3.7,
-      "placedAt": "2026-09-15T11:19 ET",
+      "placedAt": "2026-09-15T11:22 ET",
       "placedBy": "user in app",
       "alertId": 5,
       "spotAtPlan": 110.14,
@@ -218,7 +218,7 @@
       "closeCost": null,
       "pnl": null,
       "fees": 0.16,
-      "notes": "Alerted 10:34am at mid 1.41. User placed 2x at 1.50 GFD 10:54am, then cancelled and re-placed 2x at 1.85 GFD 11:19am on my advice (rest above today's 1.60 high; fills near HOOD 108 if the projected dip comes). Still good-for-day, so it expires at the close if unfilled. Exit plan if filled: buy to close at 0.90 (50% of credit), or at 3.70 debit / HOOD below 100.",
+      "notes": "Alerted 10:34am at mid 1.41. User placed 2x at 1.50 GFD 10:54am, then cancelled and re-placed 2x at 1.85 GFD 11:19am on my advice (rest above today's 1.60 high; fills near HOOD 108 if the projected dip comes). Replaced 11:22am with the same order as GTC (order 6aa962a6), so it stays working into the 9/16 open where the app projects the low. Exit plan if filled: buy to close at 0.90 (50% of credit), or at 3.70 debit / HOOD below 100.",
       "replacedOrders": [
         {
           "orderId": "6aa95c25-1607-4e28-b0ec-e455007ddd96",
@@ -226,6 +226,14 @@
           "placed": "10:54 ET",
           "cancelled": "11:19 ET",
           "reason": "raised limit to rest above the day's high; app projects HOOD low 103.51 on 9/16"
+        },
+        {
+          "orderId": "6aa9620a-f8d2-427b-92d6-fa429f3e57b8",
+          "limit": 1.85,
+          "tif": "gfd",
+          "placed": "11:19 ET",
+          "cancelled": "11:22 ET",
+          "reason": "replaced with GTC"
         }
       ]
     }
