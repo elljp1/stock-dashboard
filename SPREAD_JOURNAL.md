@@ -14,6 +14,8 @@ Robinhood rejects multi-leg orders placed through the agent in agentic accounts 
 - Exit: buy back at 50% of credit received (GTC order placed right after fill)
 - Loss rule: close if the spread costs 2x the credit to buy back, or short strike is breached
 
+- **TSLA bias (9/14):** Stuart expects a TSLA drop in October. No TSLA put credit spreads. Call credit spreads only, sold into a bounce (up ≥1.5% or RSI ≥60), $10 wide, expiring before the Oct 21 earnings. The 9/14 TSLA 335/325 put spread alert ($2.33 mid) was declined for this reason.
+
 ## Pre-trade card (shown before every order)
 Ticker, structure, expiry and DTE, spot, spread mid vs. limit, short delta and IV,
 breakeven, max profit, max loss, collateral held, probability of profit,
@@ -23,7 +25,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | # | Opened | Ticker | Structure | Credit | Max loss | BE | POP | % acct | Exit target | Closed | P&L |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | cancelled 9/10 2:13pm, never filled | GOOGL | 10/23 $305/$300 put credit spread x1 | $1.20 limit (mid $0.93) | $380 | $303.80 | 81% | 3.5% | $0.60 | | |
-| 2 | working (GTC, placed 9/10 2:19pm) | GOOGL | 10/23 $310/$305 put credit spread x1 | $1.20 limit (mid $1.03) | $380 | $308.80 | 79% | 3.5% | $0.60 | | |
+| 2 | cancelled 9/12 5:34am ET (broker-side, never filled; placed 9/10 2:19pm) | GOOGL | 10/23 $310/$305 put credit spread x1 | $1.20 limit (mid $1.03) | $380 | $308.80 | 79% | 3.5% | $0.60 | | |
 
 ## Monthly results
 | Month | Start | Deposits | Realized P&L | Growth | Trades | W/L |
@@ -33,5 +35,14 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 ## Other-account orders (read-only, not part of the spread P&L)
 | Account | Order | Limit | Status | Collateral | Placed |
 |---|---|---|---|---|---|
-| Individual | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | working | $32,500 | 9/10 2:27pm |
-| Joint | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | working | $32,500 | 9/10 2:26pm |
+| Individual | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | cancelled 9/14 8:33pm ET, never filled | $32,500 | 9/10 2:27pm |
+| Joint | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | cancelled 9/14 8:33pm ET, never filled | $32,500 | 9/10 2:26pm |
+
+## Alert log (graded at expiry, taken or not)
+
+| # | Date | Setup | Mid at alert | Taken | Outcome |
+|---|---|---|---|---|---|
+| 1 | 9/14 | TSLA 10/16 335/325 put | $2.33 | No (user bearish) | pending |
+| 2 | 9/14 | GOOGL 10/23 370/375 call | $1.03 (later $1.18) | No | pending |
+| 3 | 9/14 | GOOGL 10/23 375/380 call | $1.05 | No | pending |
+| 4 | 9/15 9:36am | HOOD 10/23 95/90 put | $1.15 (10:05am $1.06) | No, open | pending |
