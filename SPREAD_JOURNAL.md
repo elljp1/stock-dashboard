@@ -37,3 +37,12 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 |---|---|---|---|---|---|
 | Individual | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | cancelled 9/14 8:33pm ET, never filled | $32,500 | 9/10 2:27pm |
 | Joint | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | cancelled 9/14 8:33pm ET, never filled | $32,500 | 9/10 2:26pm |
+
+## Alert log (graded at expiry, taken or not)
+
+| # | Date | Setup | Mid at alert | Taken | Outcome |
+|---|---|---|---|---|---|
+| 1 | 9/14 | TSLA 10/16 335/325 put | $2.33 | No (user bearish) | pending |
+| 2 | 9/14 | GOOGL 10/23 370/375 call | $1.03 (later $1.18) | No | pending |
+| 3 | 9/14 | GOOGL 10/23 375/380 call | $1.05 | No | pending |
+| 4 | 9/15 9:36am | HOOD 10/23 95/90 put | $1.15 (10:05am $1.06) | No, open | pending |

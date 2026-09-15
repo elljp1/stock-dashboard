@@ -190,5 +190,54 @@
       "note": "same trade as Individual; both fill on the same dip = 200 shares assignment risk | Cancelled by user 9/14 8:33pm ET, never filled.",
       "cancelled": "2026-09-14T20:33 ET"
     }
-  ]
+  ],
+  "alerts": {
+    "purpose": "Every setup pushed to the user, whether or not it was traded, so alert quality can be graded at expiry (would-have outcome at max profit / max loss / partial).",
+    "gradeRule": "At expiry, mark outcome: 'expiredWorthless' (full credit kept), 'breached' (short strike crossed at expiry), or 'partial'; record underlying close and what the spread would have paid at the 50% profit target.",
+    "log": [
+      {
+        "id": 1,
+        "date": "2026-09-14",
+        "symbol": "TSLA",
+        "spread": "10/16 335/325 put credit",
+        "midAtAlert": 2.33,
+        "taken": false,
+        "reason": "user bearish on TSLA; declined",
+        "outcome": "pending"
+      },
+      {
+        "id": 2,
+        "date": "2026-09-14",
+        "symbol": "GOOGL",
+        "spread": "10/23 370/375 call credit",
+        "midAtAlert": 1.03,
+        "midLater": 1.18,
+        "taken": false,
+        "reason": "not entered",
+        "outcome": "pending"
+      },
+      {
+        "id": 3,
+        "date": "2026-09-14",
+        "symbol": "GOOGL",
+        "spread": "10/23 375/380 call credit",
+        "midAtAlert": 1.05,
+        "taken": false,
+        "reason": "not entered",
+        "outcome": "pending"
+      },
+      {
+        "id": 4,
+        "date": "2026-09-15",
+        "time": "09:36 ET",
+        "symbol": "HOOD",
+        "spread": "10/23 95/90 put credit",
+        "midAtAlert": 1.15,
+        "midLater": 1.06,
+        "taken": false,
+        "reason": "open; no order placed as of 10:10am ET",
+        "outcome": "pending"
+      }
+    ]
+  }
 }
