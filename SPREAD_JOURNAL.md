@@ -46,4 +46,8 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 2 | 9/14 | GOOGL 10/23 370/375 call | $1.03 (later $1.18) | No | pending |
 | 3 | 9/14 | GOOGL 10/23 375/380 call | $1.05 | No | pending |
 | 4 | 9/15 9:36am | HOOD 10/23 95/90 put | $1.15 (10:34am $0.98) | No | pending |
-| 5 | 9/15 10:34am | HOOD 10/23 100/95 put | $1.41 (limit $1.45) | Pushed, open | pending |
+| 5 | 9/15 10:34am | HOOD 10/23 100/95 put | $1.41 (limit $1.45) | Yes, 2x at $1.50 GFD (trade 3) | pending |
+
+## Trade 3 (working)
+
+**PUT CREDIT SPREAD, HOOD Oct 23, sell $100 put / buy $95 put, 2 contracts, limit $1.50 credit GFD.** Placed by user 9/15 10:54am ET in Agentic (order 6aa95c25). Max loss $700, collateral $1,000, 6.4% of account. Exit: buy to close at $0.75, or at $3.00 debit / HOOD below $100.

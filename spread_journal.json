@@ -163,6 +163,61 @@
       "placedBy": "user (app)",
       "cancelled": "2026-09-12T05:34 ET",
       "cancelNote": "Order state changed to cancelled Sat 9/12 5:34am ET, not by the agent; never filled (mid never exceeded ~$1.05 vs $1.20 limit). Likely broker-side cancel; confirm with user."
+    },
+    {
+      "id": 3,
+      "status": "working_unfilled",
+      "account": "788822831 Agentic",
+      "orderId": "6aa95c25-1607-4e28-b0ec-e455007ddd96",
+      "ticker": "HOOD",
+      "strategy": "put credit spread",
+      "legs": [
+        {
+          "side": "sell",
+          "type": "put",
+          "strike": 100,
+          "optionId": "15bdfd09-4909-4c87-9f8e-08dbcef9ffb0"
+        },
+        {
+          "side": "buy",
+          "type": "put",
+          "strike": 95,
+          "optionId": "4aabfcdd-b03f-404f-ac6d-ff572428e6a4"
+        }
+      ],
+      "expiry": "2026-10-23",
+      "dteAtPlan": 38,
+      "width": 5,
+      "quantity": 2,
+      "entryLimitCredit": 1.5,
+      "timeInForce": "gfd",
+      "exitTargetDebit": 0.75,
+      "lossExitDebit": 3.0,
+      "placedAt": "2026-09-15T10:54 ET",
+      "placedBy": "user in app",
+      "alertId": 5,
+      "spotAtPlan": 110.14,
+      "spreadMidAtPlan": 1.485,
+      "shortDeltaAtPlan": -0.286,
+      "ivAtPlan": 0.61,
+      "breakeven": 98.5,
+      "maxProfit": 300,
+      "maxLoss": 700,
+      "collateral": 1000,
+      "probabilityOfProfit": 0.72,
+      "roiOnRiskAtExpiry": 0.43,
+      "roiOnRiskAtTarget": 0.21,
+      "pctAccountAtRisk": {
+        "on11000": 0.064
+      },
+      "earningsDate": "2026-11-04",
+      "fillCredit": null,
+      "opened": null,
+      "closed": null,
+      "closeCost": null,
+      "pnl": null,
+      "fees": 0.16,
+      "notes": "Alerted 10:34am ET at mid 1.41 (rec limit 1.45). User placed 2x at 1.50 GFD; mid 1.485 at placement. Exit plan: buy to close at 0.75 (50% of credit) or if debit reaches 3.00 / HOOD breaks 100."
     }
   ],
   "otherAccountOrders": [
@@ -248,8 +303,8 @@
         "suggestedLimit": 1.45,
         "shortDelta": -0.27,
         "spot": 110.56,
-        "taken": false,
-        "reason": "pushed; awaiting user",
+        "taken": true,
+        "reason": "user placed 2x at 1.50 GFD, 10:54am ET (trade 3)",
         "outcome": "pending"
       }
     ]
