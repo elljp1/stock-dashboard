@@ -17,6 +17,7 @@ import ephem
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from scoring import nearest_prospective_pivot
+from horizon_ledger import original_horizons, record_horizon
 
 ET = ZoneInfo("America/New_York")
 NOW = datetime.now(ET)
@@ -1778,15 +1779,10 @@ def analyze(tkr):
     except Exception:
         _hcal_log = {"entries": []}
     _hcal_ext = EXTREMES.get(tkr, {})
-    _hcal_by_session = {}
-    for e in _hcal_log["entries"]:
-        if e["ticker"] != tkr:
-            continue
-        _cur = _hcal_by_session.get(e["session"])
-        if _cur is None or e["logged"] > _cur["logged"]:
-            _hcal_by_session[e["session"]] = e
     _hcal_hi_ratios, _hcal_lo_ratios = [], []
-    for e in _hcal_by_session.values():
+    # Calibrate only from the immutable first forecast for each session.  Using
+    # a later rewrite would leak updated information into the apparent result.
+    for e in original_horizons(_hcal_log["entries"], tkr):
         if e["session"] >= last_bar_date.strftime("%Y-%m-%d"):
             continue
         act = _hcal_ext.get(e["session"])
@@ -2214,38 +2210,26 @@ def analyze(tkr):
         horizons[_b]["low"] = _nest_pair(horizons[_a]["low"], horizons[_b]["low"], "low")
     out["horizons"] = horizons
 
-    # log horizons for future grading (replace any existing entry for the
-    # same ticker+session, not just same-day runs - the target session can
-    # stay the same across a weekend/holiday while "today" advances, and
-    # keying only on "today" let duplicate forecasts for one session pile up)
+    # Keep one immutable original per ticker/session. Existing history remains
+    # intact; repeated weekend/holiday runs cannot duplicate-weight a session.
     try:
         with open("horizons_log.json", encoding="utf-8") as f:
             HLOG = json.load(f)
     except Exception:
         HLOG = {"entries": []}
     _hz_today = NOW.strftime("%Y-%m-%d")
-    _hz_session = session.strftime("%Y-%m-%d")
-    HLOG["entries"] = [e for e in HLOG["entries"]
-                       if not (e["ticker"] == tkr and e["session"] == _hz_session)]
-    HLOG["entries"].append({"ticker": tkr, "logged": _hz_today,
-                            "session": _hz_session, "h": horizons})
+    record_horizon(HLOG["entries"], {
+        "ticker": tkr, "logged": _hz_today,
+        "session": session.strftime("%Y-%m-%d"), "h": horizons})
     with open("horizons_log.json", "w", encoding="utf-8") as f:
         json.dump(HLOG, f)
 
-    # grade past DAILY horizon calls against recorded extremes. De-duplicated
-    # by ticker+session (keeping the most-recently-logged forecast) so that
-    # rows logged more than once for the same session before the append-time
-    # fix above existed don't get graded and counted more than once.
+    # Grade past DAILY horizon calls against recorded extremes, using the first
+    # forecast saved for each ticker+session. Later refreshes cannot replace an
+    # earlier call with a shorter-lead revision before it is scored.
     ext_t = EXTREMES.get(tkr, {})
-    _by_session = {}
-    for e in HLOG["entries"]:
-        if e["ticker"] != tkr:
-            continue
-        _cur = _by_session.get(e["session"])
-        if _cur is None or e["logged"] > _cur["logged"]:
-            _by_session[e["session"]] = e
     hz_res = []
-    for e in sorted(_by_session.values(), key=lambda e: e["session"]):
+    for e in original_horizons(HLOG["entries"], tkr):
         if e["session"] >= last_bar_date.strftime("%Y-%m-%d"):
             continue
         act = ext_t.get(e["session"])
