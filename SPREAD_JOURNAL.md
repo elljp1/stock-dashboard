@@ -35,5 +35,5 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 ## Other-account orders (read-only, not part of the spread P&L)
 | Account | Order | Limit | Status | Collateral | Placed |
 |---|---|---|---|---|---|
-| Individual | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | working | $32,500 | 9/10 2:27pm |
-| Joint | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | working | $32,500 | 9/10 2:26pm |
+| Individual | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | cancelled 9/14 8:33pm ET, never filled | $32,500 | 9/10 2:27pm |
+| Joint | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | cancelled 9/14 8:33pm ET, never filled | $32,500 | 9/10 2:26pm |
