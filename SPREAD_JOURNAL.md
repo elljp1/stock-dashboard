@@ -45,4 +45,5 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 1 | 9/14 | TSLA 10/16 335/325 put | $2.33 | No (user bearish) | pending |
 | 2 | 9/14 | GOOGL 10/23 370/375 call | $1.03 (later $1.18) | No | pending |
 | 3 | 9/14 | GOOGL 10/23 375/380 call | $1.05 | No | pending |
-| 4 | 9/15 9:36am | HOOD 10/23 95/90 put | $1.15 (10:05am $1.06) | No, open | pending |
+| 4 | 9/15 9:36am | HOOD 10/23 95/90 put | $1.15 (10:34am $0.98) | No | pending |
+| 5 | 9/15 10:34am | HOOD 10/23 100/95 put | $1.41 (limit $1.45) | Pushed, open | pending |
