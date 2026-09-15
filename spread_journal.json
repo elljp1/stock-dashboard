@@ -38,7 +38,8 @@
         "setup": "TSLA 10/16 335/325 put credit spread, mid 2.33",
         "reason": "user bearish on TSLA; declined"
       }
-    ]
+    ],
+    "timingCheck": "Added 9/15: before alerting, read the dashboard's projected next turn for the ticker (data.js outlook/nextReversal). If a lower low (for puts) or higher high (for calls) is projected within 2 trading days, alert with a resting GTC limit above the current mid and check the short strike keeps a 6% cushion below the projected low; else name the next-lower spread. Record projectedTurn/projectedDate on the alert for later grading."
   },
   "monthly": [
     {
@@ -305,7 +306,10 @@
         "spot": 110.56,
         "taken": true,
         "reason": "user placed 2x at 1.50 GFD, 10:54am ET (trade 3)",
-        "outcome": "pending"
+        "outcome": "pending",
+        "projectedTurn": 103.51,
+        "projectedDate": "2026-09-16",
+        "note": "Timing gap: alerted at current mid while app projected a lower low next morning. Advised user 11:20am to rest GTC at 1.85 instead."
       }
     ]
   }
