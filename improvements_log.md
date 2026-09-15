@@ -1856,3 +1856,50 @@ GOOGL's dropping hit rate keeps drifting down or stabilizes; and whether fetch a
 recovers in this sandbox, now blocked six days running. I'll also do a quick scan for any other
 personal details that might have slipped into a note field the next few days, just in case this
 wasn't a one-off.
+
+## 2026-09-15 (Tue) — grade + log only; first post-fix session in, too noisy to judge yet
+
+**Data freshness:** my sandbox still can't reach Yahoo (403 Forbidden through the proxy tunnel on
+every ticker, seventh day running, no cached CSVs since they're gitignored), so `fetch_data.py`
+and `analyze.py` couldn't run end-to-end here. The separate cloud refresh workflow reached Yahoo
+fine and already regenerated everything today - `data.js` is stamped generated 5:40 PM ET 9/15,
+and `horizons_log.json`/`daily_extremes.json`/`predictions_log.json` all carry today's entries.
+`coherence_check.py` passes on that build (10/10 tickers), so today's review is against a current,
+valid dashboard, not a stale one.
+
+**Grades reviewed:** the day-range calibration fix shipped 9/13 now has its first graded session
+(9/14) in `horizonGrades` for all 10 tickers, but one day is far too little to judge - results are
+a mixed bag, not a trend. Some tickers improved a lot on the low side (TSLA -3.4% avg error down to
+-1.1%, NVDA -2.5% to +0.7%, JPM -1.2% to 0.0%), but the high side didn't budge or got worse for
+several (TSLA +1.8% to +2.7%, NVDA +1.7% to +5.7%), and HOOD's low side got notably worse (-2.7% to
+-7.5%). GOOGL swung the other way (high error dropped from +3.2% to -0.3%, low error worsened from
+-1.5% to -5.5%). This is consistent with normal day-to-day noise on a single new sample, not
+evidence the fix failed - I'm not touching the calibration code again after one graded day per the
+one-change discipline; it needs several more sessions before the median-based factors settle down
+and a real trend is visible.
+
+Swing track record is otherwise unchanged from yesterday: TSLA n=11 (36%/45%), HOOD n=32
+(12%/19%), QQQ n=28 (32%/39%), JPM n=21 (19%/29%), GOOGL n=25 (16%/16%), GC=F n=14 (29%/29%).
+I dug into the NVDA/AMZN/SPY/VOO n=0 question flagged in recent reviews and confirmed it's not a
+bug: I replayed the zigzag swing logic by hand against the closing-price ledger and none of the
+four has had a closing-price move of its own threshold size (10% for NVDA/AMZN, 5% for SPY/VOO)
+since their last recorded swing point - SPY/VOO have been climbing more or less steadily since
+March without a 5% close-to-close pullback, and NVDA/AMZN similarly since late July/early August.
+The daily high/low ledger shows bigger intraday swings, but the grading correctly uses closing
+prices, so this is a genuinely quiet stretch for those four names, not a stuck or broken grader.
+No code change needed here.
+
+**Privacy check:** re-read `real_trades.json` (no new entries since the 9/11 TSLA assignment) -
+the redaction from 9/14 is intact, no name or other personal detail has crept back in.
+
+**What changed and why:** nothing - today is a grade-and-log day. No pattern has yet persisted the
+required 3+ graded days since the 9/13 fix, and no new bug turned up.
+
+**Real-money ledger:** no change since 9/11 - the TSLA assignment stays closed and fully logged;
+the current TSLA trade-card sheet still targets the week of 9/21 with nothing executable yet.
+
+**Watch next:** whether the 9/15 and 9/16 graded sessions start showing the calibration fix
+converging on both sides (not just lows) across most tickers, or whether the high-side miss
+persisting for 3+ sessions turns into next fix; whether HOOD's worsening low-side miss is a fluke
+or the start of a real problem; whether JPM/GOOGL's hit rates hold up as more predictions resolve;
+and whether Yahoo access recovers in this sandbox (blocked seven days running now).
