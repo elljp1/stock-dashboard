@@ -236,6 +236,64 @@
           "reason": "replaced with GTC"
         }
       ]
+    },
+    {
+      "id": 4,
+      "status": "working_unfilled",
+      "account": "788822831 Agentic",
+      "orderId": "6aaa9e35-2d2a-4667-a488-ff4d333ca0e5",
+      "ticker": "HOOD",
+      "strategy": "put credit spread",
+      "legs": [
+        {
+          "side": "sell",
+          "type": "put",
+          "strike": 100,
+          "optionId": "15bdfd09-4909-4c87-9f8e-08dbcef9ffb0"
+        },
+        {
+          "side": "buy",
+          "type": "put",
+          "strike": 95,
+          "optionId": "4aabfcdd-b03f-404f-ac6d-ff572428e6a4"
+        }
+      ],
+      "expiry": "2026-10-23",
+      "dteAtPlan": 38,
+      "width": 5,
+      "quantity": 2,
+      "entryLimitCredit": 2.7,
+      "timeInForce": "gtc",
+      "exitTargetDebit": 1.35,
+      "lossExitDebit": 5.4,
+      "placedAt": "2026-09-16T09:48 ET",
+      "placedBy": "user in app",
+      "alertId": 5,
+      "spotAtPlan": 107.25,
+      "spreadMidAtPlan": 1.675,
+      "shortDeltaAtPlan": -0.318,
+      "ivAtPlan": 0.62,
+      "breakeven": 97.3,
+      "maxProfit": 540,
+      "maxLoss": 460,
+      "collateral": 1000,
+      "probabilityOfProfit": 0.55,
+      "roiOnRiskAtExpiry": 1.17,
+      "roiOnRiskAtTarget": 0.59,
+      "pctAccountAtRisk": {
+        "on11000": 0.042,
+        "combinedWithTrade3": 0.099
+      },
+      "earningsDate": "2026-11-04",
+      "fillCredit": null,
+      "opened": null,
+      "closed": null,
+      "closeCost": null,
+      "pnl": null,
+      "fees": 0.16,
+      "notes": "Second order on the same 100/95 strikes, resting for the app's projected HOOD low of $100.21 on Thu 9/17 at the open (support $99.47). Est. mid at HOOD $100: $2.70-2.90. Agent recommended 1x; user placed 2x (order 6aaa9e35). If both trade 3 and trade 4 fill: 4 contracts, $1,090 max loss = 9.9% of account, above the 8% cap; user accepted. Exit if filled: buy to close at $1.35 (50% of credit), or at $5.40 debit / HOOD below $97.",
+      "replacedOrders": [],
+      "note": "Second order on the same 100/95 strikes, resting for the app's projected HOOD low of $100.21 on Thu 9/17 (open). Agent recommended 1x; user placed 2x. If both orders fill: 4 contracts, $1,090 max loss = 9.9% of account, above the 8% cap; user accepted."
     }
   ],
   "otherAccountOrders": [
