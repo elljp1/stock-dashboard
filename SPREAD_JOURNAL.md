@@ -61,3 +61,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 ## Trade 4 (cancelled 10:45am ET 9/16, unfilled)
 
 **PUT CREDIT SPREAD, HOOD Oct 23, sell $100 put / buy $95 put, 2 contracts, limit $2.70 credit, GTC.** Placed 9:48am ET 9/16 (order 6aaa9e35) with HOOD at $107.25 and the spread mid at $1.68, resting for the app's projected low of $100.21 on Thu 9/17 at the open. Agent suggested 1x; user chose 2x. Max loss $460 per contract; if both trade 3 and trade 4 fill, 4 contracts and $1,090 at risk (9.9% of account, above the 8% cap; user accepted). Exit if filled: buy to close at $1.35, or at $5.40 debit / HOOD below $97.
+
+## Trade 5 (working)
+
+**PUT CREDIT SPREAD, QQQ Oct 23, sell $685 put / buy $680 put, 2 contracts, limit $1.55 credit, GTC.** Placed 3:33pm ET 9/16 (order 6aaaef01) with QQQ at $701.77 and the spread mid at $1.21, resting for the app's projected low of $690.31 on Thu 9/17. User-initiated; agent advised the $1.55 rest and 1 contract, user chose 2. Short strike sits 0.8% under the projected low (no cushion). Max loss $690 (6.3%); with trade 3 open, $1,320 at risk (12%). Exit if filled: buy to close at $0.75, or at $3.10 debit / QQQ under $685.
