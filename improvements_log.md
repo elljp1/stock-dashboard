@@ -1903,3 +1903,57 @@ converging on both sides (not just lows) across most tickers, or whether the hig
 persisting for 3+ sessions turns into next fix; whether HOOD's worsening low-side miss is a fluke
 or the start of a real problem; whether JPM/GOOGL's hit rates hold up as more predictions resolve;
 and whether Yahoo access recovers in this sandbox (blocked seven days running now).
+
+## 2026-09-16 (Wed) — found and fixed an exposed account number; grades otherwise unremarkable
+
+**Data freshness:** my sandbox still can't reach Yahoo (proxy rejects the connection, now the
+eighth day running), but the separate cloud refresh workflow reached Yahoo fine earlier today —
+`data.js` is stamped generated 5:39 PM ET 9/16, and `coherence_check.py` passes on that build
+(10/10 tickers), so today's review is against a current, valid dashboard.
+
+**Today's real find: a brokerage account number was committed in plain text.** While checking
+`spread_journal.json` for personal details (routine after the 9/14 name slip-up), I found the
+account number itself — not just a nickname — written out in full in three trade entries, added
+over the last two days rather than masked the way every other account reference in that file is
+(the file's own header masks it as `••••2831`; the three trade entries had the full digits
+instead). I redacted all three to match the file's existing `••••2831` masking convention and
+re-verified `spread_journal.json` isn't read anywhere in the `analyze.py`/`coherence_check.py`
+pipeline, so the number never reached `data.js` or any of the dashboard HTML pages — the public
+site itself was never exposed. It was, however, sitting in plain text in this file on the public
+GitHub repo for about two days across three commits before I caught it. Redacting today only fixes
+the current file; those three earlier commits still contain the plain-text number in the repo's
+history, and I did not rewrite history to scrub it since that's a destructive operation I won't do
+without asking first. I'm flagging this prominently — worth deciding whether that account number
+should be treated as exposed.
+
+**Grades reviewed:** swing track record ticked up slightly for HOOD (n=33, was 32; hit rates
+15%/21%, up from 12%/19%) and down slightly for JPM (n=22, was 21; 18%/27%, down from 19%/29% on
+one new resolved prediction) — both single-sample moves, not trends. TSLA, QQQ, GOOGL, and GC=F
+are unchanged. NVDA/AMZN/SPY/VOO remain at n=0 swings, still confirmed as a genuinely quiet
+stretch rather than a bug. The HOOD low-side calibration miss flagged after the 9/13 fix has only
+two graded sessions so far (9/14: -7.5%, 9/15: +3.1%) — opposite directions, so that's noise, not
+the 3+ day worsening pattern that would justify touching the calibration code. No calibration
+change today. Today's (9/16) predictions vs. what actually printed were mostly small, typical
+misses (highs a bit over, lows a bit under forecast) except HOOD, whose predicted low ($106.28)
+missed the actual low ($101.70) by about 4.3% — the worst of the ten tickers today, consistent with
+HOOD just being the noisiest name rather than a new problem.
+
+**Trade cards:** spot-checked several recently-expired "sell put at the projected low" cards
+(JPM/AMZN from 9/14, QQQ/SPY/VOO from 9/15) — in each case the actual low never reached the
+projected entry price, so none would have filled. No losses, just misses.
+
+**What changed and why:** one fix today — redacted the exposed account number in
+`spread_journal.json` described above. No other code change; the HOOD calibration pattern isn't
+persistent yet (2 sessions, not 3+, and they point opposite ways).
+
+**Real-money ledger:** no change since 9/11 — the TSLA assignment stays closed and fully logged.
+On the practice/paper side, `spread_journal.json` shows HOOD 10/23 100/95 put credit spread (trade
+3) filled and open (2x, opened 9/16, credit $370, exit resting at $0.90), a duplicate HOOD order
+(trade 4) placed and cancelled same day, and QQQ 10/23 685/680 put credit spread (trade 5) still
+working/unfilled.
+
+**Watch next:** whether the exposed account number needs any follow-up action beyond today's
+redaction (e.g. deciding whether to scrub git history); whether HOOD's low-side calibration error
+settles into a real direction once a third graded session lands; whether JPM's hit-rate dip is the
+start of a real drift or just noise; and whether Yahoo access recovers in this sandbox (blocked
+eight days running now).
