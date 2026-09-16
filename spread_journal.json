@@ -167,7 +167,7 @@
     },
     {
       "id": 3,
-      "status": "working_unfilled",
+      "status": "open",
       "account": "788822831 Agentic",
       "orderId": "6aa962a6-29a9-4e1f-94df-60637ece25bb",
       "ticker": "HOOD",
@@ -212,13 +212,13 @@
         "on11000": 0.057
       },
       "earningsDate": "2026-11-04",
-      "fillCredit": null,
-      "opened": null,
+      "fillCredit": 1.85,
+      "opened": "2026-09-16T11:34 ET",
       "closed": null,
       "closeCost": null,
       "pnl": null,
       "fees": 0.16,
-      "notes": "Alerted 10:34am at mid 1.41. User placed 2x at 1.50 GFD 10:54am, then cancelled and re-placed 2x at 1.85 GFD 11:19am on my advice (rest above today's 1.60 high; fills near HOOD 108 if the projected dip comes). Replaced 11:22am with the same order as GTC (order 6aa962a6), so it stays working into the 9/16 open where the app projects the low. Exit plan if filled: buy to close at 0.90 (50% of credit), or at 3.70 debit / HOOD below 100.",
+      "notes": "Alerted 10:34am at mid 1.41. User placed 2x at 1.50 GFD 10:54am, then cancelled and re-placed 2x at 1.85 GFD 11:19am on my advice (rest above today's 1.60 high; fills near HOOD 108 if the projected dip comes). Replaced 11:22am with the same order as GTC (order 6aa962a6), so it stays working into the 9/16 open where the app projects the low. Exit plan if filled: buy to close at 0.90 (50% of credit), or at 3.70 debit / HOOD below 100. FILLED 11:34am ET 9/16: 2x at 1.85 (sold 100p 5.65, bought 95p 3.80), HOOD 104.80, 37 DTE. Credit 370, max loss 630. Exit plan: buy to close at 0.90, or at 3.70 debit / HOOD under 100.",
       "replacedOrders": [
         {
           "orderId": "6aa95c25-1607-4e28-b0ec-e455007ddd96",
@@ -235,7 +235,13 @@
           "cancelled": "11:22 ET",
           "reason": "replaced with GTC"
         }
-      ]
+      ],
+      "spotAtFill": 104.8,
+      "fillLegs": {
+        "sell100put": 5.65,
+        "buy95put": 3.8
+      },
+      "creditReceived": 370
     },
     {
       "id": 4,
@@ -382,10 +388,12 @@
         "spot": 110.56,
         "taken": true,
         "reason": "user placed 2x at 1.50 GFD, 10:54am ET (trade 3)",
-        "outcome": "pending",
+        "outcome": "filled",
         "projectedTurn": 103.51,
         "projectedDate": "2026-09-16",
-        "note": "Timing gap: alerted at current mid while app projected a lower low next morning. Advised user 11:20am to rest GTC at 1.85 instead."
+        "note": "Timing gap: alerted at current mid while app projected a lower low next morning. Advised user 11:20am to rest GTC at 1.85 instead.",
+        "fillCredit": 1.85,
+        "filledAt": "2026-09-16T11:34 ET"
       },
       {
         "id": 6,

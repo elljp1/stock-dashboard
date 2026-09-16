@@ -46,14 +46,16 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 2 | 9/14 | GOOGL 10/23 370/375 call | $1.03 (later $1.18) | No | pending |
 | 3 | 9/14 | GOOGL 10/23 375/380 call | $1.05 | No | pending |
 | 4 | 9/15 9:36am | HOOD 10/23 95/90 put | $1.15 (10:34am $0.98) | No | pending |
-| 5 | 9/15 10:34am | HOOD 10/23 100/95 put | $1.41 (limit $1.45) | Yes, 2x at $1.50 GFD (trade 3) | pending |
+| 5 | 9/15 10:34am | HOOD 10/23 100/95 put | $1.41 (limit $1.45) | Yes, 2x at $1.85 GTC (trade 3) | FILLED 9/16 11:34am at $1.85 |
 | 6 | 9/15 11:46am | GOOGL 10/23 325/320 put | $1.23 (limit $1.25) | Pushed, open | pending |
 | 7 | 9/16 9:35am | HOOD 10/23 95/90 put | $1.14 (limit $1.15) | Pushed, open | pending |
 | 8 | 9/16 10:35am | HOOD 10/23 95/90 put | $1.29 (limit $1.45 GTC, app low $100.21 on 9/17) | Pushed, open (re-alert of #7) | pending |
 
-## Trade 3 (working)
+## Trade 3 (OPEN, filled 11:34am ET 9/16 at $1.85)
 
 **PUT CREDIT SPREAD, HOOD Oct 23, sell $100 put / buy $95 put, 2 contracts, limit $1.85 credit, GTC.** First placed at $1.50 10:54am ET, replaced at $1.85 11:19am ET, then re-placed as GTC 11:22am ET (order 6aa962a6) to rest above the day's $1.60 high; the app projects a HOOD low near $103.51 on 9/16. Max loss $630, collateral $1,000, 5.7% of account. Exit if filled: buy to close at $0.90, or at $3.70 debit / HOOD below $100.
+
+**Filled 11:34am ET 9/16: 2 contracts at $1.85 credit ($370), sold $100 put at $5.65 / bought $95 put at $3.80, HOOD $104.80, 37 DTE.** Exit: buy to close at $0.90 (50% of credit), or at $3.70 debit / HOOD under $100.
 
 ## Trade 4 (cancelled 10:45am ET 9/16, unfilled)
 
