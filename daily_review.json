@@ -1,7 +1,7 @@
 {
-  "reviewedAt": "2026-09-16T22:15:55.873695+00:00",
-  "snapshotCount": 1280,
-  "scoredOriginals": 36,
+  "reviewedAt": "2026-09-17T10:05:08.275317+00:00",
+  "snapshotCount": 1290,
+  "scoredOriginals": 42,
   "results": [
     {
       "snapshotId": "00f97f6b60dfa3e50afe3f8fa93b4829d02b1eced78f7fdef5ad31a04046737d",
@@ -204,6 +204,16 @@
       "absolutePriceErrorPct": 2.36
     },
     {
+      "snapshotId": "170c4908aa7b4224ccafb7f966932e250ee8bbcb6cb8ed2aacd4547873bae5ed",
+      "ticker": "NVDA",
+      "targetDate": "2026-09-16",
+      "observedDate": "2026-09-16",
+      "type": "low",
+      "predictedPrice": 210.32,
+      "actualClose": 213.9,
+      "absolutePriceErrorPct": 1.7
+    },
+    {
       "snapshotId": "7fae58f41c00915d84ac4bcdd88d6bb86d692d13d31fe0b4c5c04d47fe9fcbfc",
       "ticker": "SPY",
       "targetDate": "2026-09-10",
@@ -252,6 +262,16 @@
       "predictedPrice": 384.81,
       "actualClose": 363.56,
       "absolutePriceErrorPct": 5.52
+    },
+    {
+      "snapshotId": "067f41cc25371187fe23cc351c666ab18a94941daaf047d982db0a84f7fc298c",
+      "ticker": "JPM",
+      "targetDate": "2026-09-16",
+      "observedDate": "2026-09-16",
+      "type": "high",
+      "predictedPrice": 359.39,
+      "actualClose": 348.92,
+      "absolutePriceErrorPct": 2.91
     },
     {
       "snapshotId": "336898f63e467d1fd17cc51f286c8605c0cb881c9c3d8e2c0afd91c9b1e32652",
@@ -362,6 +382,46 @@
       "predictedPrice": 688.89,
       "actualClose": 696.2,
       "absolutePriceErrorPct": 1.06
+    },
+    {
+      "snapshotId": "6f3ad368dceec7f854a3ba1c5a81e6538cf06ce3f4151077b842769a0bb1d254",
+      "ticker": "JPM",
+      "targetDate": "2026-09-16",
+      "observedDate": "2026-09-16",
+      "type": "low",
+      "predictedPrice": 340.61,
+      "actualClose": 348.92,
+      "absolutePriceErrorPct": 2.44
+    },
+    {
+      "snapshotId": "99957889b676565839d3782732987d24070964cdf88323bb124c5a7469d50bae",
+      "ticker": "AMZN",
+      "targetDate": "2026-09-16",
+      "observedDate": "2026-09-16",
+      "type": "low",
+      "predictedPrice": 246.03,
+      "actualClose": 245.96,
+      "absolutePriceErrorPct": 0.03
+    },
+    {
+      "snapshotId": "ee3cbe03235b156f5d1ab19466bc1be00c6830545b77d2233e3512b56f76ac82",
+      "ticker": "GC=F",
+      "targetDate": "2026-09-16",
+      "observedDate": "2026-09-16",
+      "type": "low",
+      "predictedPrice": 4219.73,
+      "actualClose": 4387.5,
+      "absolutePriceErrorPct": 3.98
+    },
+    {
+      "snapshotId": "c3b2d4b6be37ca544b9c42dd9f7bc8a2858bea1929a1cff0fe70776e1565e829",
+      "ticker": "HOOD",
+      "targetDate": "2026-09-16",
+      "observedDate": "2026-09-16",
+      "type": "low",
+      "predictedPrice": 103.51,
+      "actualClose": 104.42,
+      "absolutePriceErrorPct": 0.88
     }
   ],
   "method": "Original future-date targets versus first available daily close on/after target, scored no earlier than the following Eastern date; price error only, not reversal accuracy or trading profit.",
@@ -3249,14 +3309,14 @@
     },
     "GC=F": {
       "bias": {
-        "samples": 77,
-        "timingBiasDays": -4,
-        "rawTimingDays": -7.0,
-        "rawMagnitudePct": 1.9,
-        "medianEarlyLate": -7.0,
+        "samples": 88,
+        "timingBiasDays": -3,
+        "rawTimingDays": -6.0,
+        "rawMagnitudePct": 2.0,
+        "medianEarlyLate": -6.0,
         "magnitudeBiasPct": 1.0,
-        "magSamples": 122,
-        "spacingUsed": 14,
+        "magSamples": 123,
+        "spacingUsed": 15,
         "recent": [
           {
             "isoDate": "2026-10-22",
@@ -3582,32 +3642,47 @@
               "Vibe: Helio Uranus sextile Neptune",
               "Vibe: Neptune = Uranus/Pluto midpoint"
             ]
+          },
+          {
+            "logged": "2026-07-22",
+            "predDate": "2026-09-08",
+            "type": "high",
+            "predPrice": 4356.9,
+            "actualDate": "2026-08-24",
+            "actualPrice": 4697.8,
+            "errDays": -10,
+            "hit2": false,
+            "hit3": false,
+            "methods": [
+              "Gann 144 days from high 04/17",
+              "Vibe: Helio Uranus sextile Neptune"
+            ]
           }
         ],
-        "n": 14,
-        "hit2Rate": 29.0,
-        "hit3Rate": 29.0,
+        "n": 15,
+        "hit2Rate": 27.0,
+        "hit3Rate": 27.0,
         "priceMedErrPct": 3.6,
         "priceCalibHigh": 1.036,
         "priceCalibLow": 1.0,
         "methodFactors": {
-          "hurst": 1.2,
           "gann": 0.5,
-          "vibration": 1.14,
-          "rhythm": 1.45,
-          "fib": 1.28
+          "hurst": 1.27,
+          "vibration": 1.13,
+          "rhythm": 1.55,
+          "fib": 1.36
         },
         "famStats": {
+          "gann": {
+            "n": 6,
+            "hits": 0
+          },
           "hurst": {
             "n": 6,
             "hits": 2
           },
-          "gann": {
-            "n": 5,
-            "hits": 0
-          },
           "vibration": {
-            "n": 12,
+            "n": 13,
             "hits": 4
           },
           "rhythm": {
