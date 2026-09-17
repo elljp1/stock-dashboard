@@ -1957,3 +1957,47 @@ redaction (e.g. deciding whether to scrub git history); whether HOOD's low-side 
 settles into a real direction once a third graded session lands; whether JPM's hit-rate dip is the
 start of a real drift or just noise; and whether Yahoo access recovers in this sandbox (blocked
 eight days running now).
+
+## 2026-09-17 (Thu) — grade + log only; no persistent pattern clears the bar for a code change
+
+**Fetch status:** blocked a ninth day running - same 403 Forbidden at the proxy gateway. No CSVs
+are committed to the repo (gitignored by design), so `analyze.py` correctly refused to overwrite
+the last published dashboard with a broken build. The separate cloud refresh workflow published a
+good build today at 5:40 PM ET, `coherence_check.py` passes cleanly against it (10/10 tickers), and
+I re-checked `spread_journal.json` for the account-number leak found yesterday - all account
+references are properly masked today (`••••2831`, `••••8549`, `••••6540`), no new plain-text
+numbers anywhere in the repo.
+
+**Grades reviewed:** HOOD's low-side calibration miss (flagged 9/13, watched since) now has a third
+graded session: 9/14 -7.5%, 9/15 +3.1%, 9/16 +4.5% - two of three positive, one sharply negative,
+still no consistent direction, so still noise rather than the persistent pattern that would justify
+touching the calibration code. JPM's swing track record continued its slow slide (n=23, up from 22;
+17%/26%, down from 18%/27%) for a third straight day, but this reads as small-sample dilution, not
+a new defect: n is still under 25, each day adds exactly one newly-resolved prediction, and JPM's
+per-family stats (gann 0/4, fib 0/3, rhythm 2/13) show it's simply a hard ticker for these methods
+right now, consistent with the 9/4 finding that JPM's swing detector goes long stretches with no
+qualifying pivot to confirm against. TSLA (n=11, unchanged), QQQ (n=28, up from prior), GOOGL (n=27)
+and GC=F (n=15) show only single-sample noise, no trend. NVDA/AMZN/SPY/VOO remain at n=0 swings -
+still a genuinely quiet stretch, not a bug. Today's (9/16, the latest fully graded session) daily
+high/low errors were typical across the board (roughly 1-3% misses), nothing standing out.
+
+**Trade cards:** the forward-looking MODEL cards logged today (TSLA, etc.) are all still open/unresolved
+by definition - nothing new to grade yet. The paper spread journal is unchanged since yesterday:
+HOOD 100/95 put credit spread (trade 3) still open, the duplicate HOOD order (trade 4) still
+cancelled, QQQ 685/680 put credit spread (trade 5) still working/unfilled. No new orders today.
+
+**What changed and why:** no code change. Neither the HOOD calibration question nor the JPM
+hit-rate slide clears the 3+-day-persistent-pattern-or-clear-bug bar for today - both look like
+ordinary small-sample noise on closer inspection, and touching the calibration or grading code
+without real evidence would risk the opposite of an improvement. Honesty features (measured hit
+rates, random-control comparisons, self-grading, the coherence gate) are untouched; `tickers.txt`
+wasn't touched.
+
+**Real-money ledger:** unchanged since the 9/11 TSLA assignment - still closed and fully logged, no
+new real trades.
+
+**Watch next:** whether HOOD's low-side error ever settles into one consistent direction; whether
+JPM's rate keeps sliding past the point where sample-size dilution is a believable explanation;
+whether the still-unresolved plain-text account number from three of last week's commits needs a
+decision on scrubbing git history; and whether Yahoo access recovers in this sandbox (blocked nine
+days running now).
