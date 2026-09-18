@@ -46,11 +46,11 @@
       "month": "2026-09",
       "startValue": 11000,
       "deposits": 10000,
-      "realizedPnl": 0,
-      "fees": 0,
-      "growthPct": 0,
-      "trades": 0,
-      "wins": 0,
+      "realizedPnl": 190,
+      "fees": 0.32,
+      "growthPct": 1.73,
+      "trades": 1,
+      "wins": 1,
       "losses": 0,
       "note": "Opened at 1,000; 10,000 deposit landed 2026-09-09 before any trade. Growth measured from 11,000."
     }
@@ -167,7 +167,7 @@
     },
     {
       "id": 3,
-      "status": "open",
+      "status": "closed",
       "account": "••••2831 Agentic",
       "orderId": "6aa962a6-29a9-4e1f-94df-60637ece25bb",
       "ticker": "HOOD",
@@ -214,11 +214,11 @@
       "earningsDate": "2026-11-04",
       "fillCredit": 1.85,
       "opened": "2026-09-16T11:34 ET",
-      "closed": null,
-      "closeCost": null,
-      "pnl": null,
-      "fees": 0.16,
-      "notes": "Alerted 10:34am at mid 1.41. User placed 2x at 1.50 GFD 10:54am, then cancelled and re-placed 2x at 1.85 GFD 11:19am on my advice (rest above today's 1.60 high; fills near HOOD 108 if the projected dip comes). Replaced 11:22am with the same order as GTC (order 6aa962a6), so it stays working into the 9/16 open where the app projects the low. Exit plan if filled: buy to close at 0.90 (50% of credit), or at 3.70 debit / HOOD below 100. FILLED 11:34am ET 9/16: 2x at 1.85 (sold 100p 5.65, bought 95p 3.80), HOOD 104.80, 37 DTE. Credit 370, max loss 630. Exit plan: buy to close at 0.90, or at 3.70 debit / HOOD under 100.",
+      "closed": "2026-09-18T10:20 ET",
+      "closeCost": 0.9,
+      "pnl": 190,
+      "fees": 0.32,
+      "notes": "Alerted 10:34am at mid 1.41. User placed 2x at 1.50 GFD 10:54am, then cancelled and re-placed 2x at 1.85 GFD 11:19am on my advice (rest above today's 1.60 high; fills near HOOD 108 if the projected dip comes). Replaced 11:22am with the same order as GTC (order 6aa962a6), so it stays working into the 9/16 open where the app projects the low. Exit plan if filled: buy to close at 0.90 (50% of credit), or at 3.70 debit / HOOD below 100. FILLED 11:34am ET 9/16: 2x at 1.85 (sold 100p 5.65, bought 95p 3.80), HOOD 104.80, 37 DTE. Credit 370, max loss 630. Exit plan: buy to close at 0.90, or at 3.70 debit / HOOD under 100. Closed 10:20am ET 9/18: take-profit GTC at 0.90 filled (bought 100 put 2.34, sold 95 put 1.44) with HOOD at 117.08, +6.6% on the day. P&L +190 (51% of credit, 30% on the 630 at risk) in 2 days.",
       "replacedOrders": [
         {
           "orderId": "6aa95c25-1607-4e28-b0ec-e455007ddd96",
@@ -243,7 +243,16 @@
       },
       "creditReceived": 370,
       "exitOrderId": "6aaab8f4-e803-42f7-977c-5a9fb42f543b",
-      "exitOrder": "buy to close 2x at 0.90 debit GTC, placed 2026-09-16T11:42 ET"
+      "exitOrder": "buy to close 2x at 0.90 debit GTC, placed 2026-09-16T11:42 ET",
+      "closeLegs": {
+        "buy100put": 2.34,
+        "sell95put": 1.44
+      },
+      "spotAtClose": 117.08,
+      "pnlNet": 189.68,
+      "returnOnRisk": 0.3,
+      "daysHeld": 2,
+      "exitReason": "50% profit target hit; GTC close at 0.90 filled"
     },
     {
       "id": 4,
@@ -447,7 +456,7 @@
         "spot": 110.56,
         "taken": true,
         "reason": "user placed 2x at 1.50 GFD, 10:54am ET (trade 3)",
-        "outcome": "filled",
+        "outcome": "closed +190 (50% target hit 9/18 10:20 ET, HOOD 117.08)",
         "projectedTurn": 103.51,
         "projectedDate": "2026-09-16",
         "note": "Timing gap: alerted at current mid while app projected a lower low next morning. Advised user 11:20am to rest GTC at 1.85 instead.",

@@ -26,11 +26,12 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | cancelled 9/10 2:13pm, never filled | GOOGL | 10/23 $305/$300 put credit spread x1 | $1.20 limit (mid $0.93) | $380 | $303.80 | 81% | 3.5% | $0.60 | | |
 | 2 | cancelled 9/12 5:34am ET (broker-side, never filled; placed 9/10 2:19pm) | GOOGL | 10/23 $310/$305 put credit spread x1 | $1.20 limit (mid $1.03) | $380 | $308.80 | 79% | 3.5% | $0.60 | | |
+| 3 | 9/16 11:34am | HOOD | 10/23 $100/$95 put credit spread x2 | $1.85 | $630 | $98.15 | 72% | 5.7% | $0.90 | 9/18 10:20am at $0.90 | **+$190** (30% on risk, 2 days) |
 
 ## Monthly results
 | Month | Start | Deposits | Realized P&L | Growth | Trades | W/L |
 |---|---|---|---|---|---|---|
-| 2026-09 | $11,000 (incl. $10k deposit 9/9) | $10,000 | $0 | 0% | 0 | 0/0 |
+| 2026-09 | $11,000 (incl. $10k deposit 9/9) | $10,000 | +$190 | +1.7% | 1 | 1/0 |
 
 ## Other-account orders (read-only, not part of the spread P&L)
 | Account | Order | Limit | Status | Collateral | Placed |
@@ -46,18 +47,20 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 2 | 9/14 | GOOGL 10/23 370/375 call | $1.03 (later $1.18) | No | pending |
 | 3 | 9/14 | GOOGL 10/23 375/380 call | $1.05 | No | pending |
 | 4 | 9/15 9:36am | HOOD 10/23 95/90 put | $1.15 (10:34am $0.98) | No | pending |
-| 5 | 9/15 10:34am | HOOD 10/23 100/95 put | $1.41 (limit $1.45) | Yes, 2x at $1.85 GTC (trade 3) | FILLED 9/16 11:34am at $1.85 |
+| 5 | 9/15 10:34am | HOOD 10/23 100/95 put | $1.41 (limit $1.45) | Yes, 2x at $1.85 GTC (trade 3) | FILLED 9/16 at $1.85, CLOSED 9/18 10:20am at $0.90, +$190 |
 | 6 | 9/15 11:46am | GOOGL 10/23 325/320 put | $1.23 (limit $1.25) | Pushed, open | pending |
 | 7 | 9/16 9:35am | HOOD 10/23 95/90 put | $1.14 (limit $1.15) | Pushed, open | pending |
 | 8 | 9/16 10:35am | HOOD 10/23 95/90 put | $1.29 (limit $1.45 GTC, app low $100.21 on 9/17) | Pushed, open (re-alert of #7) | pending |
 | 9 | 9/16 3:04pm | HOOD 10/23 90/85 put | $1.02 (limit $1.15 GTC, app low $100.21 on 9/17) | Pushed, open | pending |
 | 10 | 9/18 9:46am | GOOGL 10/23 385/390 call | $1.18 (limit $1.20; quotes wide, app high $372.21 on 9/25) | Pushed, open | pending |
 
-## Trade 3 (OPEN, filled 11:34am ET 9/16 at $1.85)
+## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
 **PUT CREDIT SPREAD, HOOD Oct 23, sell $100 put / buy $95 put, 2 contracts, limit $1.85 credit, GTC.** First placed at $1.50 10:54am ET, replaced at $1.85 11:19am ET, then re-placed as GTC 11:22am ET (order 6aa962a6) to rest above the day's $1.60 high; the app projects a HOOD low near $103.51 on 9/16. Max loss $630, collateral $1,000, 5.7% of account. Exit if filled: buy to close at $0.90, or at $3.70 debit / HOOD below $100.
 
 **Filled 11:34am ET 9/16: 2 contracts at $1.85 credit ($370), sold $100 put at $5.65 / bought $95 put at $3.80, HOOD $104.80, 37 DTE.** Exit: buy to close at $0.90 (50% of credit), or at $3.70 debit / HOOD under $100.  Take-profit order placed 11:42am ET: buy to close 2x at $0.90 GTC (order 6aaab8f4).
+
+**Closed 10:20am ET 9/18: the $0.90 GTC take-profit filled (bought $100 put at $2.34, sold $95 put at $1.44) with HOOD at $117.08, up 6.6% on the day. P&L +$190 (51% of credit, 30% on the $630 at risk) in 2 days.** The mark showed $0.90 from about 10:19 but a buy-to-close fills against the ask side, so it needed the mid to dip to about $0.85.
 
 ## Trade 4 (cancelled 10:45am ET 9/16, unfilled)
 
