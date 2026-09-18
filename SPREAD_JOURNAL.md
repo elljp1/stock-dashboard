@@ -51,6 +51,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 7 | 9/16 9:35am | HOOD 10/23 95/90 put | $1.14 (limit $1.15) | Pushed, open | pending |
 | 8 | 9/16 10:35am | HOOD 10/23 95/90 put | $1.29 (limit $1.45 GTC, app low $100.21 on 9/17) | Pushed, open (re-alert of #7) | pending |
 | 9 | 9/16 3:04pm | HOOD 10/23 90/85 put | $1.02 (limit $1.15 GTC, app low $100.21 on 9/17) | Pushed, open | pending |
+| 10 | 9/18 9:46am | GOOGL 10/23 385/390 call | $1.18 (limit $1.20; quotes wide, app high $372.21 on 9/25) | Pushed, open | pending |
 
 ## Trade 3 (OPEN, filled 11:34am ET 9/16 at $1.85)
 
