@@ -7,7 +7,7 @@ with the fields below before anything is placed, then a result row when closed.
 Robinhood rejects multi-leg orders placed through the agent in agentic accounts (confirmed 2026-09-09). Spreads are entered by hand in the app; the agent scans, reviews, tracks positions, and keeps this journal.
 
 ## Rules
-- Risk per trade: 5% to 8% of account value (max loss, not collateral)
+- Risk per trade: 8% to 13% of account value (max loss, not collateral); raised from 5-8% by the user on 9/18. Usually 3-4 contracts on a $5-wide GOOGL/HOOD spread, 1-2 on a $10-wide TSLA/QQQ spread. Total open risk across spreads under 25%.
 - Entry: limit orders only, never market; don't chase below the planned floor
 - Short strike: 15 to 28 delta, 28 to 50 days to expiry, expiry before earnings
 - Credit at least 20% of spread width

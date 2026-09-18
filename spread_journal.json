@@ -13,8 +13,8 @@
   },
   "rules": {
     "riskPerTradePct": [
-      5,
-      8
+      8,
+      13
     ],
     "shortDeltaRange": [
       0.15,
@@ -30,7 +30,7 @@
     "earningsRule": "expiry must be before the next earnings date",
     "entryOnly": "limit orders; never market",
     "goalStated": "33% per month (user)",
-    "goalRealistic": "2-5% per month at 5-8% risk per trade; see journal notes",
+    "goalRealistic": "3-8% per month at 8-13% risk per trade; a single max-loss trade costs 8-13%, so two losers in a row is a 20%+ drawdown",
     "tslaBias": "User bearish on TSLA through Oct 2026 (stated 9/14). No TSLA put credit spreads or any bullish TSLA exposure. TSLA call credit spreads only, sold into strength (up >=1.5% day or RSI >=60), $10 wide, expiry before Oct 21 earnings.",
     "skippedAlerts": [
       {
@@ -39,7 +39,26 @@
         "reason": "user bearish on TSLA; declined"
       }
     ],
-    "timingCheck": "Added 9/15: before alerting, read the dashboard's projected next turn for the ticker (data.js outlook/nextReversal). If a lower low (for puts) or higher high (for calls) is projected within 2 trading days, alert with a resting GTC limit above the current mid and check the short strike keeps a 6% cushion below the projected low; else name the next-lower spread. Record projectedTurn/projectedDate on the alert for later grading."
+    "timingCheck": "Added 9/15: before alerting, read the dashboard's projected next turn for the ticker (data.js outlook/nextReversal). If a lower low (for puts) or higher high (for calls) is projected within 2 trading days, alert with a resting GTC limit above the current mid and check the short strike keeps a 6% cushion below the projected low; else name the next-lower spread. Record projectedTurn/projectedDate on the alert for later grading.",
+    "riskPerTradeHistory": [
+      {
+        "from": "2026-09-09",
+        "to": "2026-09-18",
+        "pct": [
+          5,
+          8
+        ]
+      },
+      {
+        "from": "2026-09-18",
+        "pct": [
+          8,
+          13
+        ],
+        "setBy": "user 9/18 10:45 ET after trade 3 closed +190"
+      }
+    ],
+    "maxTotalOpenRiskPct": 25
   },
   "monthly": [
     {
