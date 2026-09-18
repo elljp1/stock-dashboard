@@ -2001,3 +2001,48 @@ JPM's rate keeps sliding past the point where sample-size dilution is a believab
 whether the still-unresolved plain-text account number from three of last week's commits needs a
 decision on scrubbing git history; and whether Yahoo access recovers in this sandbox (blocked nine
 days running now).
+
+## 2026-09-18 (Fri) — fetch blocked a tenth day; grade + log only, no persistent pattern clears the bar
+
+**Build status:** `fetch_data.py` failed on all 10 tickers again (403 Forbidden from the sandbox's
+network proxy on every symbol and every pre/post-market lookup) - blocked ten days running now.
+As designed, `analyze.py` refused to run without fresh CSVs rather than touch the last published
+build. The separate cloud refresh workflow ran twice today (around 5:09 PM and 5:45 PM ET) and
+published a good build; `coherence_check.py` passes cleanly against it (10/10 tickers), and all
+five local test suites (data freshness, horizon ledger, reliability, schedule gate, scoring) pass
+with no failures. `spread_journal.json`, `real_trades.json` and `trades_log.json` were re-checked
+for stray account numbers or other PII - only the expected masked references (`••••2831`) and the
+structural `account.last4` field appear; nothing new to scrub.
+
+**Grades reviewed:** HOOD's resolved-prediction window jumped by 6 in one day (n 35→41) because two
+long-pending "low" predictions from early August (logged 8/14 and 8/25, predicting $91.32 and
+$88.57) finally resolved against the 9/16 print of $104.42 - both missed (hit2/hit3 both false),
+consistent with the low-side calibration pattern watched since 9/13, still not a new, single-day
+direction change (hit2Rate 17%→15%, hit3Rate 23%→20%, a continuation not a reversal). The other four
+new window entries are just newly-logged pending predictions, not new grades. JPM was unchanged
+today (n=23, 17%/26%) - no newly-resolved predictions, so no fresh evidence either way on its
+multi-day slide. TSLA (n=11), QQQ (n=28) also unchanged. GOOGL added one resolved prediction
+(n 27→28, hit rates ticked up to 21%/21%) and GC=F added one (n 15→16, hit rates ticked down to
+25%/25%) - both single-sample moves, no trend. NVDA/AMZN/SPY/VOO remain at n=0 swings, still a quiet
+stretch. Daily high/low errors for the latest fully graded session (9/17) were typical across the
+board, nothing standing out.
+
+**Trade cards / paper journal:** HOOD 100/95 put credit spread (trade 3) remains closed +$190 realized,
+booked to September's $11,000 account. The duplicate HOOD order (trade 4) is still cancelled. The
+QQQ 685/680 put credit spread (trade 5) was cancelled by the user in the app this morning (9:29 AM
+ET) before filling - QQQ gapped over the app's projected 9/17 low of $690.31 and the spread's mid
+never rose above ~$0.80, so the resting $1.55 limit was never going to fill; cleanly logged, not a
+bug. Real-money ledger unchanged since the 9/11 TSLA assignment - still closed and fully logged.
+
+**What changed and why:** no code change. HOOD's low-side miss pattern and JPM's hit-rate slide are
+both still being watched but neither produced new evidence today that clears the 3+-day-persistent-
+pattern-or-clear-bug bar - HOOD's window jump was a batch of predictions crossing their horizon at
+once (verified by walking the added rows and family-stats delta by hand, not a double-counting bug),
+and JPM simply had nothing new to grade. Touching the calibration or grading code on today's evidence
+would risk the opposite of an improvement. Honesty features (measured hit rates, random-control
+comparisons, self-grading, the coherence gate) are untouched; `tickers.txt` wasn't touched.
+
+**Watch next:** whether HOOD's low-side error ever settles into a genuinely new pattern beyond the
+one already logged; whether JPM's rate resumes sliding once new predictions resolve; whether the
+still-unresolved plain-text account number from earlier commits needs a decision on scrubbing git
+history; and whether Yahoo access recovers in this sandbox (blocked ten days running now).
