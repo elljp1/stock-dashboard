@@ -2046,3 +2046,47 @@ comparisons, self-grading, the coherence gate) are untouched; `tickers.txt` wasn
 one already logged; whether JPM's rate resumes sliding once new predictions resolve; whether the
 still-unresolved plain-text account number from earlier commits needs a decision on scrubbing git
 history; and whether Yahoo access recovers in this sandbox (blocked ten days running now).
+
+## 2026-09-19 (Sat) — weekend, no new session; fetch blocked an eleventh day; grade + log only
+
+**Build status:** `fetch_data.py` failed on all 10 tickers again (403 Forbidden from the sandbox's
+network proxy on every symbol and every pre/post-market lookup) - blocked eleven days running now.
+As designed, `analyze.py` refused to touch the published dashboard without fresh CSVs (confirmed
+`data.js`, `dashboard.html`, `index.html` and `daily_extremes.json` were byte-for-byte unchanged
+before and after the run). Markets are closed Saturday, so there was no new session to fetch even
+if Yahoo had answered - the last published build is still Friday 9/18's 6:15 PM ET cloud-refresh
+run, and today is the first weekend day this eleven-day fetch outage has overlapped with, so
+nothing new was lost by the block. `coherence_check.py` passes cleanly against that build (10/10
+tickers), and all 30 local tests across the five suites (data freshness, horizon ledger,
+reliability, schedule gate, scoring) pass. Re-ran the account-number guard
+(`test_sensitive_data.py`, staged and full-tree) - clean, only the expected masked references
+(`••••2831`).
+
+**Grades reviewed:** every ticker's track record and horizon-grade numbers are identical to
+yesterday's review since no new predictions resolved and no new session graded (same Friday
+6:15 PM build). HOOD stays at n=41 (15%/20% hit rates) - its low-side daily error is still noisy,
+not a clean trend (nine of the last ten graded sessions swing between -7.5% and +4.5% with no
+consistent direction). JPM (n=23, 17%/26%), TSLA (n=11, 36%/45%), QQQ (n=28, 32%/39%), GOOGL
+(n=28, 21%/21%) and GC=F (n=16, 25%/25%) are all unchanged. NVDA/AMZN/SPY/VOO remain at n=0 swings.
+One thing worth naming: Thursday 9/17's horizon-grade session showed every one of the ten tickers
+missing to the low side that day (loErrPct from -1.3% to -6.2%, already reviewed in yesterday's
+log) - that reads as one broad down day across the whole watchlist rather than a per-ticker
+calibration problem, since it hit hedge-fund-unrelated names (JPM, GC=F) as hard as the volatile
+ones. A single shared day like that doesn't clear the 3+-day persistent-pattern bar on its own.
+
+**Trade cards / paper journal:** `spread_journal.json` unchanged since 9/18 - same 5 trades (HOOD
+spread 3 closed +$190, duplicate HOOD order 4 still cancelled, QQQ spread 5 still cancelled by the
+user before it could fill). `trades_log.json`'s newest sheet is still Friday 9/18's. Real-money
+ledger unchanged since the 9/11 TSLA assignment.
+
+**What changed and why:** no code change - there is no new data to justify one, and none of the
+open watch items (HOOD's low-side noise, JPM's hit-rate level) crossed the 3+-day persistent-
+pattern bar today. Honesty features (measured hit rates, random-control comparisons, self-grading,
+the coherence gate) are untouched; `tickers.txt` wasn't touched.
+
+**Watch next:** the plain-text account number committed in three commits around 9/14-9/16 is still
+sitting in the repo's public git history, unscrubbed - it's been flagged in this log every day since
+it was found and needs the owner's decision on whether to rewrite history to remove it (a
+destructive operation nobody has authorized yet). Also watching: whether HOOD's low-side error ever
+settles into a genuinely new pattern; whether JPM's rate resumes sliding once new predictions
+resolve; and whether Yahoo access recovers in this sandbox (blocked eleven days running now).
