@@ -1,6 +1,6 @@
 {
-  "reviewedAt": "2026-09-20T09:58:46.703751+00:00",
-  "snapshotCount": 1920,
+  "reviewedAt": "2026-09-20T22:15:19.135059+00:00",
+  "snapshotCount": 1930,
   "scoredOriginals": 54,
   "results": [
     {
@@ -816,21 +816,21 @@
         "priceCalibHigh": 1.0,
         "priceCalibLow": 0.881,
         "methodFactors": {
-          "fib": 1.3,
           "rhythm": 0.97,
+          "fib": 1.3,
           "gann": 0.97
         },
         "famStats": {
+          "rhythm": {
+            "n": 6,
+            "hits": 2
+          },
           "hurst": {
             "n": 2,
             "hits": 0
           },
           "fib": {
             "n": 4,
-            "hits": 2
-          },
-          "rhythm": {
-            "n": 6,
             "hits": 2
           },
           "gann": {
@@ -1402,14 +1402,18 @@
         "priceCalibHigh": 1.15,
         "priceCalibLow": 0.948,
         "methodFactors": {
+          "rhythm": 1.23,
           "hurst": 0.56,
           "fib": 0.68,
-          "rhythm": 1.23,
           "gann": 0.97,
           "vibration": 1.76,
           "moon": 2.0
         },
         "famStats": {
+          "rhythm": {
+            "n": 23,
+            "hits": 4
+          },
           "hurst": {
             "n": 9,
             "hits": 0
@@ -1417,10 +1421,6 @@
           "fib": {
             "n": 16,
             "hits": 1
-          },
-          "rhythm": {
-            "n": 23,
-            "hits": 4
           },
           "gann": {
             "n": 17,
@@ -1975,8 +1975,8 @@
           "fib": 1.0,
           "rhythm": 1.64,
           "gann": 0.8,
-          "moon": 1.8,
-          "vibration": 2.0
+          "vibration": 2.0,
+          "moon": 1.8
         },
         "famStats": {
           "hurst": {
@@ -1995,13 +1995,13 @@
             "n": 13,
             "hits": 3
           },
-          "moon": {
-            "n": 3,
-            "hits": 2
-          },
           "vibration": {
             "n": 5,
             "hits": 4
+          },
+          "moon": {
+            "n": 3,
+            "hits": 2
           }
         }
       }
@@ -2454,21 +2454,21 @@
         "priceCalibHigh": 1.004,
         "priceCalibLow": 1.0,
         "methodFactors": {
-          "hurst": 1.67,
           "moon": 1.67,
+          "hurst": 1.67,
           "gann": 0.83,
           "rhythm": 1.0,
           "fib": 1.0,
           "vibration": 2.0
         },
         "famStats": {
-          "hurst": {
-            "n": 10,
-            "hits": 3
-          },
           "moon": {
             "n": 4,
             "hits": 1
+          },
+          "hurst": {
+            "n": 10,
+            "hits": 3
           },
           "gann": {
             "n": 4,
@@ -3484,15 +3484,22 @@
     },
     "GC=F": {
       "bias": {
-        "samples": 88,
-        "timingBiasDays": -3,
-        "rawTimingDays": -6.0,
+        "samples": 90,
+        "timingBiasDays": -4,
+        "rawTimingDays": -7.0,
         "rawMagnitudePct": 2.1,
-        "medianEarlyLate": -6.0,
+        "medianEarlyLate": -7.0,
         "magnitudeBiasPct": 1.1,
         "magSamples": 124,
-        "spacingUsed": 15,
+        "spacingUsed": 14,
         "recent": [
+          {
+            "isoDate": "2026-11-05",
+            "type": "low",
+            "target": 4423.86,
+            "touched": "2026-09-20",
+            "deltaDays": -34
+          },
           {
             "isoDate": "2026-10-22",
             "type": "low",
@@ -3543,6 +3550,13 @@
             "deltaDays": -38
           },
           {
+            "isoDate": "2026-10-12",
+            "type": "low",
+            "target": 4438.2,
+            "touched": "2026-09-20",
+            "deltaDays": -16
+          },
+          {
             "isoDate": "2026-10-09",
             "type": "high",
             "target": 4707.84,
@@ -3560,20 +3574,6 @@
             "isoDate": "2026-10-09",
             "type": "low",
             "target": 4370.5,
-            "touched": "2026-09-10",
-            "deltaDays": -21
-          },
-          {
-            "isoDate": "2026-10-09",
-            "type": "low",
-            "target": 4372.36,
-            "touched": "2026-09-10",
-            "deltaDays": -21
-          },
-          {
-            "isoDate": "2026-10-09",
-            "type": "low",
-            "target": 4359.05,
             "touched": "2026-09-10",
             "deltaDays": -21
           }
@@ -3848,40 +3848,57 @@
               "Vibe: Helio Uranus sextile Neptune",
               "Vibe: Moon 9th-harmonic Mercury"
             ]
+          },
+          {
+            "logged": "2026-08-19",
+            "predDate": "2026-09-10",
+            "type": "high",
+            "predPrice": 4615.58,
+            "actualDate": null,
+            "actualPrice": null,
+            "errDays": null,
+            "hit2": false,
+            "hit3": false,
+            "methods": [
+              "Rhythm 15-bar",
+              "Hurst 20-day crest",
+              "new moon 11:26 PM ET",
+              "Vibe: Helio Uranus sextile Neptune"
+            ]
           }
         ],
-        "n": 16,
-        "hit2Rate": 25.0,
-        "hit3Rate": 25.0,
+        "n": 17,
+        "hit2Rate": 24.0,
+        "hit3Rate": 24.0,
         "priceMedErrPct": 3.6,
         "priceCalibHigh": 1.036,
         "priceCalibLow": 1.0,
         "methodFactors": {
-          "hurst": 1.35,
           "gann": 0.5,
+          "hurst": 1.27,
           "vibration": 1.12,
-          "rhythm": 1.64,
-          "fib": 1.44
+          "rhythm": 1.58,
+          "fib": 1.52
         },
         "famStats": {
-          "hurst": {
-            "n": 6,
-            "hits": 2
-          },
           "gann": {
             "n": 7,
             "hits": 0
           },
+          "hurst": {
+            "n": 7,
+            "hits": 2
+          },
           "vibration": {
-            "n": 14,
+            "n": 15,
             "hits": 4
           },
           "rhythm": {
-            "n": 9,
+            "n": 10,
             "hits": 4
           },
           "moon": {
-            "n": 1,
+            "n": 2,
             "hits": 0
           },
           "fib": {
