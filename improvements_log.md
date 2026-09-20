@@ -2047,6 +2047,47 @@ one already logged; whether JPM's rate resumes sliding once new predictions reso
 still-unresolved plain-text account number from earlier commits needs a decision on scrubbing git
 history; and whether Yahoo access recovers in this sandbox (blocked ten days running now).
 
+## 2026-09-20 (Sun) — weekend, no new session; fetch blocked a twelfth day; grade + log only
+
+**Build status:** `fetch_data.py` failed on all 10 tickers again (403 Forbidden from the
+sandbox's network proxy on every symbol and every pre/post-market lookup) - blocked twelve
+days running now. As designed, `analyze.py` refused to touch the published dashboard without
+fresh CSVs (it errored out immediately since no CSV files exist to fall back on - they are
+git-ignored and this sandbox never had a successful fetch to produce them). Confirmed the
+working tree was untouched before and after the run (`git status` clean throughout).
+Markets are closed Sunday, so there was no new session to fetch even if Yahoo had answered.
+The live site's last published build is still this morning's 5:58 AM ET cloud-refresh run,
+which itself also failed to pull fresh data (its `data.js` numbers are byte-for-byte identical
+to Friday 9/18's, only the generated timestamp moved) - the cloud runner is hitting the same
+block as this sandbox. `coherence_check.py` passes cleanly against that build (10/10 tickers),
+and all 30 local tests across the five suites (data freshness, horizon ledger, reliability,
+schedule gate, scoring) pass. Re-ran the account-number guard (`test_sensitive_data.py`,
+staged and full-tree) - clean, only the expected masked references.
+
+**Grades reviewed:** every ticker's track record and horizon-grade numbers are identical to
+yesterday's review since no new predictions resolved anywhere (sandbox or cloud). HOOD stays
+at n=41 (15%/20% hit rates) - still no consistent direction in its low-side daily error.
+JPM (n=23, 17%/26%), TSLA (n=11, 36%/45%), QQQ (n=28, 32%/39%), GOOGL (n=28, 21%/21%) and
+GC=F (n=16, 25%/25%) are all unchanged. NVDA/AMZN/SPY/VOO remain at n=0 swings.
+
+**Trade cards / paper journal:** `spread_journal.json` unchanged since 9/18 - same 5 tracked
+trades and 5 pushed-but-not-taken alerts, nothing new logged. `trades_log.json`'s newest
+sheet is still Friday 9/18's. Real-money ledger unchanged since the 9/11 TSLA assignment.
+
+**What changed and why:** no code change - there is no new data anywhere (sandbox or cloud
+refresh) to justify one, and no open watch item crossed the 3+-day persistent-pattern bar
+today since nothing new graded. Honesty features (measured hit rates, random-control
+comparisons, self-grading, the coherence gate) are untouched; `tickers.txt` wasn't touched.
+
+**Watch next:** the plain-text account number committed in three commits around 9/14-9/16 is
+still sitting in the repo's public git history, unscrubbed - flagged in this log every day
+since it was found (about a week now) and still needs the owner's explicit decision on
+whether to rewrite history to remove it (a destructive operation nobody has authorized yet).
+Also watching: whether the cloud refresh's own Yahoo access recovers now that it's confirmed
+hitting the same block as this sandbox (twelve days running); whether HOOD's low-side error
+ever settles into a genuinely new pattern; and whether JPM's hit rate resumes sliding once
+new predictions resolve.
+
 ## 2026-09-19 (Sat) — weekend, no new session; fetch blocked an eleventh day; grade + log only
 
 **Build status:** `fetch_data.py` failed on all 10 tickers again (403 Forbidden from the sandbox's
