@@ -38,6 +38,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 |---|---|---|---|---|---|
 | Individual | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | cancelled 9/14 8:33pm ET, never filled | $32,500 | 9/10 2:27pm |
 | Joint | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | cancelled 9/14 8:33pm ET, never filled | $32,500 | 9/10 2:26pm |
+| Individual | Sell to open HOOD $140 call 10/23 x2 (covered call) | $5.00 GTC | open, unfilled (mark $3.90) | 200 of 700 HOOD shares | 9/21 9:44am |
 
 ## Alert log (graded at expiry, taken or not)
 
