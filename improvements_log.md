@@ -2131,3 +2131,50 @@ it was found and needs the owner's decision on whether to rewrite history to rem
 destructive operation nobody has authorized yet). Also watching: whether HOOD's low-side error ever
 settles into a genuinely new pattern; whether JPM's rate resumes sliding once new predictions
 resolve; and whether Yahoo access recovers in this sandbox (blocked eleven days running now).
+
+## 2026-09-21 (Mon) — Yahoo access recovered after a 12-day block; backlog of swing grades resolved, mostly misses; grade + log only
+
+**Build status:** my sandbox still can't reach Yahoo (403 Forbidden on all 10 tickers, same
+block as every day for the last twelve days), so `analyze.py` correctly refused to touch the
+published dashboard (no CSVs to work from) and left it untouched - confirmed `git status` was
+clean before and after. But the separate cloud refresh workflow finally got through today:
+`data.js` is freshly stamped 5:50 PM ET 9/21, `daily_extremes.json` picked up a genuine new
+2026-09-21 session for all ten tickers (first new session since Friday 9/18), and today's
+option-trade-card sheet in `trades_log.json` is dated today too. `coherence_check.py` passes
+cleanly (10/10 tickers), and all 37 local tests across the six suites (data freshness, horizon
+ledger, reliability, schedule gate, scoring, sensitive-data guard) pass. The account-number
+guard is still clean - only the expected masked `••••2831` references.
+
+**Grades reviewed:** the 12-day data outage had been silently stacking up unconfirmed swing
+predictions (a high/low call needs enough later price action to confirm it actually was the
+swing point), and today's fresh data let a batch of them resolve at once: TSLA n 11→12, HOOD
+41→43, QQQ 28→34, JPM 23→24, GOOGL 28→30, GC=F 16→17 - 13 newly-resolved predictions in total,
+spanning original prediction dates from late July through early September. Of those 13, only 1
+was a hit (a GOOGL one); the other 12 missed, including all 6 of QQQ's, which is why QQQ's hit
+rate dropped the most (32%→26% on the looser hit-2 measure, 39%→32% on hit-3). This reads as a
+one-time backlog catching up, not a new trend: it's a single grading event covering weeks of old
+predictions, not several bad sessions in a row, so it doesn't clear the 3+-day persistent-pattern
+bar for a code change on its own - but if QQQ's rate keeps sliding once fresh, same-week
+predictions start resolving normally again, that would be worth acting on. The daily horizon
+grades (the high/low-of-the-day forecasts) haven't picked up a new session yet - they still end
+at 9/18 for every ticker; today's 9/21 session should grade in tomorrow's run. NVDA/AMZN/SPY/VOO
+remain at n=0 swings, still just a quiet stretch for those four, not a bug.
+
+**Trade cards / paper journal:** a different, separate agent session (not this one) placed a new
+QQQ call-credit-spread alert into `spread_journal.json` today (commit c780938, 15:47 UTC) - that's
+the live options-journal process the owner runs elsewhere, outside this review's scope; I didn't
+touch it. Real-money ledger unchanged since the 9/11 TSLA assignment.
+
+**What changed and why:** no code change - today's miss-heavy batch is backlog resolving after
+the outage, not a fresh 3+-day pattern, and there's no clear bug (the underlying daily bars for
+9/21 look sane and coherence_check passes). Honesty features (measured hit rates, random-control
+comparisons, self-grading, the coherence gate) are untouched; `tickers.txt` wasn't touched.
+
+**Watch next:** the plain-text brokerage account number committed in three commits around
+9/14-9/16 is still sitting unscrubbed in the repo's public git history - flagged in this log
+every day for a week now with no action taken yet; it needs the owner's explicit decision on
+whether to authorize rewriting history to remove it. Also watching: whether QQQ's hit rate keeps
+falling once new, non-backlog predictions resolve; whether tomorrow's first fresh daily-horizon
+grade for the 9/21 session lands calibrated or not; whether my own sandbox's Yahoo access
+recovers now that the cloud runner's has; and whether HOOD's low-side daily error settles into a
+real direction.
