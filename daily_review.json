@@ -1,6 +1,6 @@
 {
-  "reviewedAt": "2026-09-22T13:27:18.679997+00:00",
-  "snapshotCount": 2330,
+  "reviewedAt": "2026-09-22T13:37:07.586988+00:00",
+  "snapshotCount": 2340,
   "scoredOriginals": 68,
   "results": [
     {
@@ -688,13 +688,13 @@
   "learning": {
     "TSLA": {
       "bias": {
-        "samples": 123,
+        "samples": 124,
         "timingBiasDays": -3,
-        "rawTimingDays": -6.0,
-        "rawMagnitudePct": -0.0,
-        "medianEarlyLate": -6.0,
-        "magnitudeBiasPct": -0.0,
-        "magSamples": 180,
+        "rawTimingDays": -6.5,
+        "rawMagnitudePct": -0.4,
+        "medianEarlyLate": -6.5,
+        "magnitudeBiasPct": -0.2,
+        "magSamples": 182,
         "spacingUsed": 11,
         "recent": [
           {
@@ -754,6 +754,13 @@
             "deltaDays": -29
           },
           {
+            "isoDate": "2026-10-30",
+            "type": "low",
+            "target": 381.57,
+            "touched": "2026-09-22",
+            "deltaDays": -28
+          },
+          {
             "isoDate": "2026-10-29",
             "type": "high",
             "target": 361.59,
@@ -766,13 +773,6 @@
             "target": 317.34,
             "touched": "2026-09-04",
             "deltaDays": -39
-          },
-          {
-            "isoDate": "2026-10-29",
-            "type": "high",
-            "target": 313.58,
-            "touched": "2026-09-08",
-            "deltaDays": -37
           },
           {
             "isoDate": "2026-10-29",
@@ -971,22 +971,22 @@
         "priceCalibHigh": 1.0,
         "priceCalibLow": 0.881,
         "methodFactors": {
-          "rhythm": 1.05,
           "fib": 1.4,
+          "rhythm": 1.05,
           "gann": 0.93
         },
         "famStats": {
-          "rhythm": {
-            "n": 6,
-            "hits": 2
+          "hurst": {
+            "n": 2,
+            "hits": 0
           },
           "fib": {
             "n": 4,
             "hits": 2
           },
-          "hurst": {
-            "n": 2,
-            "hits": 0
+          "rhythm": {
+            "n": 6,
+            "hits": 2
           },
           "gann": {
             "n": 7,
@@ -1004,10 +1004,10 @@
         "samples": 186,
         "timingBiasDays": -3,
         "rawTimingDays": -6.5,
-        "rawMagnitudePct": 0.9,
+        "rawMagnitudePct": 1.0,
         "medianEarlyLate": -6.5,
-        "magnitudeBiasPct": 0.4,
-        "magSamples": 187,
+        "magnitudeBiasPct": 0.5,
+        "magSamples": 188,
         "spacingUsed": 8,
         "recent": [
           {
@@ -1099,39 +1099,6 @@
       "trackRecord": {
         "since": "2026-07-09",
         "resolved": [
-          {
-            "logged": "2026-07-29",
-            "predDate": "2026-08-04",
-            "type": "high",
-            "predPrice": 98.88,
-            "actualDate": null,
-            "actualPrice": null,
-            "errDays": null,
-            "hit2": false,
-            "hit3": false,
-            "methods": [
-              "Fib 21 bars from high 07/06",
-              "Hurst 10-day crest",
-              "Vibe: Mars = Sun/Jupiter midpoint"
-            ]
-          },
-          {
-            "logged": "2026-08-03",
-            "predDate": "2026-08-04",
-            "type": "low",
-            "predPrice": 91.12,
-            "actualDate": null,
-            "actualPrice": null,
-            "errDays": null,
-            "hit2": false,
-            "hit3": false,
-            "methods": [
-              "Rhythm 10-bar",
-              "Fib 21 bars from high 07/06",
-              "Hurst 10-day crest",
-              "Vibe: Mars = Sun/Jupiter midpoint"
-            ]
-          },
           {
             "logged": "2026-08-04",
             "predDate": "2026-08-05",
@@ -1551,34 +1518,63 @@
               "new moon 11:26 PM ET",
               "Vibe: Moon sesquiquadrate Neptune"
             ]
+          },
+          {
+            "logged": "2026-07-31",
+            "predDate": "2026-09-11",
+            "type": "low",
+            "predPrice": 82.51,
+            "actualDate": "2026-09-16",
+            "actualPrice": 104.42,
+            "errDays": 3,
+            "hit2": false,
+            "hit3": true,
+            "methods": [
+              "Fib 55 bars from low 06/25"
+            ]
+          },
+          {
+            "logged": "2026-08-05",
+            "predDate": "2026-09-11",
+            "type": "high",
+            "predPrice": 110.75,
+            "actualDate": "2026-09-03",
+            "actualPrice": 124.72,
+            "errDays": -5,
+            "hit2": false,
+            "hit3": false,
+            "methods": [
+              "Rhythm 6-bar",
+              "Fib 55 bars from low 06/25"
+            ]
           }
         ],
-        "n": 43,
-        "hit2Rate": 14.0,
-        "hit3Rate": 19.0,
+        "n": 45,
+        "hit2Rate": 13.0,
+        "hit3Rate": 20.0,
         "priceMedErrPct": 13.1,
         "priceCalibHigh": 1.15,
-        "priceCalibLow": 0.972,
+        "priceCalibLow": 0.996,
         "methodFactors": {
+          "hurst": 0.56,
+          "fib": 0.67,
           "rhythm": 1.29,
-          "fib": 0.71,
-          "hurst": 0.54,
-          "gann": 1.02,
-          "vibration": 1.61,
-          "moon": 1.61
+          "gann": 1.06,
+          "vibration": 1.68,
+          "moon": 1.68
         },
         "famStats": {
-          "rhythm": {
-            "n": 23,
-            "hits": 4
-          },
-          "fib": {
-            "n": 16,
-            "hits": 1
-          },
           "hurst": {
             "n": 10,
             "hits": 0
+          },
+          "fib": {
+            "n": 18,
+            "hits": 1
+          },
+          "rhythm": {
+            "n": 24,
+            "hits": 4
           },
           "gann": {
             "n": 17,
@@ -1597,13 +1593,13 @@
     },
     "QQQ": {
       "bias": {
-        "samples": 146,
+        "samples": 150,
         "timingBiasDays": -2,
         "rawTimingDays": -4.0,
-        "rawMagnitudePct": 0.7,
+        "rawMagnitudePct": 0.8,
         "medianEarlyLate": -4.0,
-        "magnitudeBiasPct": 0.3,
-        "magSamples": 159,
+        "magnitudeBiasPct": 0.4,
+        "magSamples": 166,
         "spacingUsed": 8,
         "recent": [
           {
@@ -1612,6 +1608,13 @@
             "target": 714.76,
             "touched": "2026-09-21",
             "deltaDays": -35
+          },
+          {
+            "isoDate": "2026-11-09",
+            "type": "high",
+            "target": 714.76,
+            "touched": "2026-09-22",
+            "deltaDays": -34
           },
           {
             "isoDate": "2026-11-04",
@@ -1682,33 +1685,12 @@
             "target": 720.24,
             "touched": "2026-09-18",
             "deltaDays": -27
-          },
-          {
-            "isoDate": "2026-10-15",
-            "type": "high",
-            "target": 735.32,
-            "touched": "2026-09-21",
-            "deltaDays": -18
           }
         ]
       },
       "trackRecord": {
         "since": "2026-07-09",
         "resolved": [
-          {
-            "logged": "2026-07-13",
-            "predDate": "2026-07-24",
-            "type": "high",
-            "predPrice": 740.06,
-            "actualDate": null,
-            "actualPrice": null,
-            "errDays": null,
-            "hit2": false,
-            "hit3": false,
-            "methods": [
-              "Hurst 80-day trough"
-            ]
-          },
           {
             "logged": "2026-07-14",
             "predDate": "2026-07-24",
@@ -2142,46 +2124,61 @@
             "methods": [
               "Rhythm 6-bar"
             ]
+          },
+          {
+            "logged": "2026-09-10",
+            "predDate": "2026-09-11",
+            "type": "low",
+            "predPrice": 696.39,
+            "actualDate": "2026-09-15",
+            "actualPrice": 704.54,
+            "errDays": 2,
+            "hit2": true,
+            "hit3": true,
+            "methods": [
+              "Rhythm 6-bar",
+              "Hurst 10-day trough"
+            ]
           }
         ],
-        "n": 34,
-        "hit2Rate": 26.0,
-        "hit3Rate": 32.0,
+        "n": 35,
+        "hit2Rate": 29.0,
+        "hit3Rate": 34.0,
         "priceMedErrPct": 1.6,
         "priceCalibHigh": 0.989,
-        "priceCalibLow": 0.967,
+        "priceCalibLow": 0.97,
         "methodFactors": {
-          "fib": 1.11,
-          "hurst": 1.35,
-          "rhythm": 1.44,
-          "gann": 0.9,
-          "vibration": 2.0,
-          "moon": 1.8
+          "hurst": 1.39,
+          "fib": 1.03,
+          "rhythm": 1.47,
+          "gann": 0.84,
+          "moon": 1.68,
+          "vibration": 2.0
         },
         "famStats": {
+          "hurst": {
+            "n": 15,
+            "hits": 6
+          },
           "fib": {
             "n": 11,
             "hits": 3
           },
-          "hurst": {
-            "n": 14,
-            "hits": 5
-          },
           "rhythm": {
-            "n": 13,
-            "hits": 5
+            "n": 14,
+            "hits": 6
           },
           "gann": {
             "n": 14,
             "hits": 3
           },
-          "vibration": {
-            "n": 5,
-            "hits": 4
-          },
           "moon": {
             "n": 4,
             "hits": 2
+          },
+          "vibration": {
+            "n": 5,
+            "hits": 4
           }
         }
       }
@@ -2649,21 +2646,21 @@
         "priceCalibHigh": 1.004,
         "priceCalibLow": 1.0,
         "methodFactors": {
-          "moon": 1.49,
           "hurst": 1.6,
+          "moon": 1.49,
           "gann": 0.87,
           "rhythm": 1.04,
           "fib": 1.04,
           "vibration": 2.0
         },
         "famStats": {
-          "moon": {
-            "n": 5,
-            "hits": 1
-          },
           "hurst": {
             "n": 11,
             "hits": 3
+          },
+          "moon": {
+            "n": 5,
+            "hits": 1
           },
           "gann": {
             "n": 4,
@@ -2686,7 +2683,7 @@
     },
     "GOOGL": {
       "bias": {
-        "samples": 131,
+        "samples": 137,
         "timingBiasDays": -4,
         "rawTimingDays": -7.0,
         "rawMagnitudePct": -4.6,
@@ -2745,6 +2742,13 @@
             "deltaDays": -38
           },
           {
+            "isoDate": "2026-11-02",
+            "type": "high",
+            "target": 350.86,
+            "touched": "2026-09-22",
+            "deltaDays": -29
+          },
+          {
             "isoDate": "2026-10-26",
             "type": "high",
             "target": 357.41,
@@ -2771,13 +2775,6 @@
             "target": 326.44,
             "touched": "2026-09-11",
             "deltaDays": -31
-          },
-          {
-            "isoDate": "2026-10-26",
-            "type": "high",
-            "target": 326.44,
-            "touched": "2026-09-14",
-            "deltaDays": -30
           }
         ]
       },
@@ -3234,8 +3231,8 @@
         "priceCalibLow": 0.97,
         "methodFactors": {
           "gann": 1.43,
-          "fib": 1.0,
           "hurst": 1.14,
+          "fib": 1.0,
           "rhythm": 0.62,
           "vibration": 0.89,
           "moon": 1.6
@@ -3245,13 +3242,13 @@
             "n": 12,
             "hits": 4
           },
-          "fib": {
-            "n": 10,
-            "hits": 2
-          },
           "hurst": {
             "n": 5,
             "hits": 1
+          },
+          "fib": {
+            "n": 10,
+            "hits": 2
           },
           "rhythm": {
             "n": 11,
@@ -3270,13 +3267,13 @@
     },
     "NVDA": {
       "bias": {
-        "samples": 75,
+        "samples": 77,
         "timingBiasDays": -4,
         "rawTimingDays": -12.0,
-        "rawMagnitudePct": 1.4,
+        "rawMagnitudePct": 1.1,
         "medianEarlyLate": -12.0,
-        "magnitudeBiasPct": 0.7,
-        "magSamples": 73,
+        "magnitudeBiasPct": 0.6,
+        "magSamples": 75,
         "spacingUsed": 8,
         "recent": [
           {
@@ -3296,6 +3293,13 @@
           {
             "isoDate": "2026-10-26",
             "type": "high",
+            "target": 229.32,
+            "touched": "2026-09-22",
+            "deltaDays": -24
+          },
+          {
+            "isoDate": "2026-10-26",
+            "type": "high",
             "target": 222.73,
             "touched": "2026-09-18",
             "deltaDays": -26
@@ -3306,6 +3310,13 @@
             "target": 221.32,
             "touched": "2026-09-18",
             "deltaDays": -26
+          },
+          {
+            "isoDate": "2026-10-26",
+            "type": "high",
+            "target": 228.97,
+            "touched": "2026-09-22",
+            "deltaDays": -24
           },
           {
             "isoDate": "2026-10-26",
@@ -3348,20 +3359,6 @@
             "target": 211.52,
             "touched": "2026-08-28",
             "deltaDays": -33
-          },
-          {
-            "isoDate": "2026-10-14",
-            "type": "high",
-            "target": 214.14,
-            "touched": "2026-09-01",
-            "deltaDays": -31
-          },
-          {
-            "isoDate": "2026-10-12",
-            "type": "high",
-            "target": 221.37,
-            "touched": "2026-08-27",
-            "deltaDays": -32
           }
         ]
       },
@@ -4100,20 +4097,20 @@
         "priceCalibHigh": 1.036,
         "priceCalibLow": 1.0,
         "methodFactors": {
-          "gann": 0.5,
           "hurst": 1.27,
+          "gann": 0.5,
           "vibration": 1.12,
           "rhythm": 1.58,
           "fib": 1.52
         },
         "famStats": {
-          "gann": {
-            "n": 7,
-            "hits": 0
-          },
           "hurst": {
             "n": 7,
             "hits": 2
+          },
+          "gann": {
+            "n": 7,
+            "hits": 0
           },
           "vibration": {
             "n": 15,
