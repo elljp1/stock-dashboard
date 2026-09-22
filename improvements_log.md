@@ -2178,3 +2178,45 @@ falling once new, non-backlog predictions resolve; whether tomorrow's first fres
 grade for the 9/21 session lands calibrated or not; whether my own sandbox's Yahoo access
 recovers now that the cloud runner's has; and whether HOOD's low-side daily error settles into a
 real direction.
+
+## 2026-09-22 (Tue) — cloud refresh got through; grades steady, HOOD/QQQ still just noise; grade + log only
+
+**Build status:** my sandbox's own Yahoo fetch is still 403-blocked on all 10 tickers (same as
+every prior day), so I did not attempt to touch `analyze.py`'s output myself - this sandbox has no
+committed CSVs to fall back on either (they're gitignored), so a local rebuild simply isn't possible
+today. But the separate cloud refresh workflow got through again: `data.js` is freshly stamped
+5:49-5:50 PM ET 9/22 for all ten tickers, `daily_extremes.json` and `trades_log.json` both picked up
+today's session, and `coherence_check.py` passes cleanly (10/10 tickers) against that committed
+build. All 37 local tests across the six suites (data freshness, horizon ledger, reliability,
+schedule gate, scoring, sensitive-data guard) pass, and the account-number guard is still clean -
+only the expected masked `••••2831`/`••••6540`/`••••8549` references, all last-4-digit only.
+
+**Grades reviewed:** the swing-prediction ledger picked up a couple more resolved calls since
+yesterday (HOOD n 43→45, QQQ n 34→35); the rest are unchanged (TSLA n=12, JPM n=24, GOOGL n=30,
+GC=F n=17, NVDA/AMZN/SPY/VOO still n=0). Hit rates barely moved: QQQ actually ticked up a touch
+(hit-2 26%→29%, hit-3 32%→34%) as the new resolution landed a hit; HOOD stayed roughly flat at
+13%/20% (was 15%/20%), which is the same noisy low-hit-rate level this name has shown for weeks,
+not a fresh drop. The daily high/low horizon grades now have a full 9/21 session graded for every
+ticker (10 sessions each, was 9 yesterday) and the errors look like ordinary noise - no ticker is
+showing a new, consistent directional bias beyond what's already been watched (HOOD's low side
+stays the noisiest, same as always). Nothing here crosses the 3+-consecutive-day persistent-pattern
+bar for a code change, and I didn't find a clear bug in the committed output.
+
+**Trade cards / paper journal:** `trades_log.json` picked up a fresh TSLA model sheet for today's
+session (call-spread ride toward the projected high) - informational only, nothing to act on.
+`spread_journal.json` has two pending mirror-call alerts (GOOGL, QQQ) from 9/21 still awaiting the
+owner's decision - that's the separate live options-journal process, outside this review's scope,
+and I didn't touch it. The real-money ledger (`real_trades.json`) is unchanged since the 9/11 TSLA
+assignment.
+
+**What changed and why:** no code change - grades are steady/noisy, not a new pattern, and nothing
+in today's committed build looks like a bug. Honesty features (measured hit rates, random-control
+comparisons, self-grading, the coherence gate) are untouched; `tickers.txt` wasn't touched.
+
+**Watch next:** the plain-text brokerage account number committed in three commits around
+9/14-9/16 is still sitting unscrubbed in the repo's public git history - flagged in this log for
+over a week now with no owner decision yet on whether to authorize rewriting history to remove it.
+Also watching: whether HOOD's hit rate ever breaks out of its long-running 13-20% band in either
+direction; whether QQQ's small uptick continues once more non-backlog predictions resolve; and
+whether my own sandbox's Yahoo access ever recovers now that the cloud runner's has stayed reliable
+for two days running.
