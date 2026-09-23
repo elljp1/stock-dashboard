@@ -1,6 +1,6 @@
 {
-  "reviewedAt": "2026-09-23T13:27:46.324232+00:00",
-  "snapshotCount": 2570,
+  "reviewedAt": "2026-09-23T14:18:57.797412+00:00",
+  "snapshotCount": 2580,
   "scoredOriginals": 77,
   "results": [
     {
@@ -778,15 +778,22 @@
   "learning": {
     "TSLA": {
       "bias": {
-        "samples": 123,
+        "samples": 129,
         "timingBiasDays": -3,
         "rawTimingDays": -6.0,
-        "rawMagnitudePct": -0.4,
+        "rawMagnitudePct": 0.1,
         "medianEarlyLate": -6.0,
-        "magnitudeBiasPct": -0.2,
-        "magSamples": 182,
+        "magnitudeBiasPct": 0.0,
+        "magSamples": 186,
         "spacingUsed": 11,
         "recent": [
+          {
+            "isoDate": "2026-11-23",
+            "type": "high",
+            "target": 309.41,
+            "touched": "2026-09-23",
+            "deltaDays": -43
+          },
           {
             "isoDate": "2026-11-16",
             "type": "high",
@@ -844,6 +851,13 @@
             "deltaDays": -29
           },
           {
+            "isoDate": "2026-10-30",
+            "type": "high",
+            "target": 330.59,
+            "touched": "2026-09-23",
+            "deltaDays": -27
+          },
+          {
             "isoDate": "2026-10-29",
             "type": "high",
             "target": 361.59,
@@ -856,20 +870,6 @@
             "target": 317.34,
             "touched": "2026-09-04",
             "deltaDays": -39
-          },
-          {
-            "isoDate": "2026-10-29",
-            "type": "high",
-            "target": 313.58,
-            "touched": "2026-09-08",
-            "deltaDays": -37
-          },
-          {
-            "isoDate": "2026-10-29",
-            "type": "high",
-            "target": 313.58,
-            "touched": "2026-09-08",
-            "deltaDays": -37
           }
         ]
       },
@@ -1070,13 +1070,13 @@
             "n": 4,
             "hits": 2
           },
-          "hurst": {
-            "n": 2,
-            "hits": 0
-          },
           "rhythm": {
             "n": 6,
             "hits": 2
+          },
+          "hurst": {
+            "n": 2,
+            "hits": 0
           },
           "gann": {
             "n": 7,
@@ -1094,10 +1094,10 @@
         "samples": 186,
         "timingBiasDays": -3,
         "rawTimingDays": -6.5,
-        "rawMagnitudePct": 1.0,
+        "rawMagnitudePct": 1.2,
         "medianEarlyLate": -6.5,
-        "magnitudeBiasPct": 0.5,
-        "magSamples": 188,
+        "magnitudeBiasPct": 0.6,
+        "magSamples": 193,
         "spacingUsed": 8,
         "recent": [
           {
@@ -1189,36 +1189,6 @@
       "trackRecord": {
         "since": "2026-07-09",
         "resolved": [
-          {
-            "logged": "2026-08-04",
-            "predDate": "2026-08-05",
-            "type": "low",
-            "predPrice": 91.27,
-            "actualDate": null,
-            "actualPrice": null,
-            "errDays": null,
-            "hit2": false,
-            "hit3": false,
-            "methods": [
-              "Rhythm 10-bar",
-              "Gann 30 days from high 07/06",
-              "Vibe: Mars = Sun/Jupiter midpoint"
-            ]
-          },
-          {
-            "logged": "2026-07-09",
-            "predDate": "2026-08-10",
-            "type": "low",
-            "predPrice": 99.98,
-            "actualDate": "2026-07-31",
-            "actualPrice": 86.56,
-            "errDays": -6,
-            "hit2": false,
-            "hit3": false,
-            "methods": [
-              "Gann 45 days from low 06/25"
-            ]
-          },
           {
             "logged": "2026-07-15",
             "predDate": "2026-08-10",
@@ -1637,38 +1607,66 @@
               "Rhythm 6-bar",
               "Fib 55 bars from low 06/25"
             ]
+          },
+          {
+            "logged": "2026-08-14",
+            "predDate": "2026-09-14",
+            "type": "high",
+            "predPrice": 105.18,
+            "actualDate": "2026-09-03",
+            "actualPrice": 124.72,
+            "errDays": -6,
+            "hit2": false,
+            "hit3": false,
+            "methods": [
+              "Gann 45 days from low 07/31"
+            ]
+          },
+          {
+            "logged": "2026-08-24",
+            "predDate": "2026-09-14",
+            "type": "low",
+            "predPrice": 93.16,
+            "actualDate": "2026-09-16",
+            "actualPrice": 104.42,
+            "errDays": 2,
+            "hit2": true,
+            "hit3": true,
+            "methods": [
+              "Gann 45 days from low 07/31"
+            ]
           }
         ],
-        "n": 45,
-        "hit2Rate": 13.0,
-        "hit3Rate": 20.0,
+        "n": 47,
+        "hit2Rate": 15.0,
+        "hit3Rate": 21.0,
         "priceMedErrPct": 13.1,
         "priceCalibHigh": 1.15,
-        "priceCalibLow": 0.996,
+        "priceCalibLow": 0.999,
         "methodFactors": {
-          "fib": 0.67,
-          "hurst": 0.56,
-          "rhythm": 1.29,
-          "gann": 1.06,
-          "vibration": 1.68,
-          "moon": 1.68
+          "fib": 0.61,
+          "rhythm": 1.18,
+          "hurst": 0.51,
+          "gann": 1.17,
+          "vibration": 1.53,
+          "moon": 1.53
         },
         "famStats": {
           "fib": {
             "n": 18,
             "hits": 1
           },
-          "hurst": {
-            "n": 10,
-            "hits": 0
-          },
           "rhythm": {
             "n": 24,
             "hits": 4
           },
+          "hurst": {
+            "n": 10,
+            "hits": 0
+          },
           "gann": {
-            "n": 17,
-            "hits": 2
+            "n": 19,
+            "hits": 3
           },
           "vibration": {
             "n": 14,
@@ -1683,13 +1681,13 @@
     },
     "QQQ": {
       "bias": {
-        "samples": 153,
+        "samples": 154,
         "timingBiasDays": -2,
         "rawTimingDays": -4.0,
-        "rawMagnitudePct": 0.8,
+        "rawMagnitudePct": 0.9,
         "medianEarlyLate": -4.0,
         "magnitudeBiasPct": 0.4,
-        "magSamples": 166,
+        "magSamples": 168,
         "spacingUsed": 8,
         "recent": [
           {
@@ -1705,6 +1703,13 @@
             "target": 720.48,
             "touched": "2026-09-22",
             "deltaDays": -34
+          },
+          {
+            "isoDate": "2026-11-09",
+            "type": "high",
+            "target": 720.48,
+            "touched": "2026-09-23",
+            "deltaDays": -33
           },
           {
             "isoDate": "2026-11-04",
@@ -1768,48 +1773,12 @@
             "target": 720.24,
             "touched": "2026-09-18",
             "deltaDays": -27
-          },
-          {
-            "isoDate": "2026-10-27",
-            "type": "high",
-            "target": 720.24,
-            "touched": "2026-09-18",
-            "deltaDays": -27
           }
         ]
       },
       "trackRecord": {
         "since": "2026-07-09",
         "resolved": [
-          {
-            "logged": "2026-07-14",
-            "predDate": "2026-07-24",
-            "type": "low",
-            "predPrice": 712.95,
-            "actualDate": "2026-07-29",
-            "actualPrice": 661.73,
-            "errDays": 3,
-            "hit2": false,
-            "hit3": true,
-            "methods": [
-              "Hurst 80-day trough"
-            ]
-          },
-          {
-            "logged": "2026-07-15",
-            "predDate": "2026-07-27",
-            "type": "low",
-            "predPrice": 712.95,
-            "actualDate": "2026-07-29",
-            "actualPrice": 661.73,
-            "errDays": 2,
-            "hit2": true,
-            "hit3": true,
-            "methods": [
-              "Gann 30 days from low 06/26",
-              "Hurst 80-day trough"
-            ]
-          },
           {
             "logged": "2026-07-23",
             "predDate": "2026-07-27",
@@ -2229,38 +2198,68 @@
               "Rhythm 6-bar",
               "Hurst 10-day trough"
             ]
+          },
+          {
+            "logged": "2026-07-15",
+            "predDate": "2026-09-14",
+            "type": "high",
+            "predPrice": 774.63,
+            "actualDate": null,
+            "actualPrice": null,
+            "errDays": null,
+            "hit2": false,
+            "hit3": false,
+            "methods": [
+              "Gann 90 days from high 06/15"
+            ]
+          },
+          {
+            "logged": "2026-07-24",
+            "predDate": "2026-09-14",
+            "type": "low",
+            "predPrice": 672.91,
+            "actualDate": "2026-09-15",
+            "actualPrice": 704.54,
+            "errDays": 1,
+            "hit2": true,
+            "hit3": true,
+            "methods": [
+              "Gann 90 days from high 06/15",
+              "Fib 55 bars from low 06/26",
+              "Hurst 40-day trough"
+            ]
           }
         ],
-        "n": 35,
-        "hit2Rate": 29.0,
-        "hit3Rate": 34.0,
+        "n": 37,
+        "hit2Rate": 30.0,
+        "hit3Rate": 35.0,
         "priceMedErrPct": 1.6,
         "priceCalibHigh": 0.989,
-        "priceCalibLow": 0.97,
+        "priceCalibLow": 0.974,
         "methodFactors": {
-          "fib": 1.03,
-          "hurst": 1.39,
-          "rhythm": 1.47,
-          "gann": 0.84,
-          "moon": 1.68,
+          "fib": 1.16,
+          "hurst": 1.44,
+          "rhythm": 1.42,
+          "gann": 0.9,
+          "moon": 1.62,
           "vibration": 2.0
         },
         "famStats": {
           "fib": {
-            "n": 11,
-            "hits": 3
+            "n": 12,
+            "hits": 4
           },
           "hurst": {
-            "n": 15,
-            "hits": 6
+            "n": 16,
+            "hits": 7
           },
           "rhythm": {
             "n": 14,
             "hits": 6
           },
           "gann": {
-            "n": 14,
-            "hits": 3
+            "n": 16,
+            "hits": 4
           },
           "moon": {
             "n": 4,
@@ -2275,13 +2274,13 @@
     },
     "JPM": {
       "bias": {
-        "samples": 129,
+        "samples": 130,
         "timingBiasDays": -4,
         "rawTimingDays": -7.0,
         "rawMagnitudePct": 1.5,
         "medianEarlyLate": -7.0,
         "magnitudeBiasPct": 0.7,
-        "magSamples": 154,
+        "magSamples": 155,
         "spacingUsed": 9,
         "recent": [
           {
@@ -2318,6 +2317,13 @@
             "target": 346.6,
             "touched": "2026-09-21",
             "deltaDays": -40
+          },
+          {
+            "isoDate": "2026-11-16",
+            "type": "low",
+            "target": 347.98,
+            "touched": "2026-09-23",
+            "deltaDays": -38
           },
           {
             "isoDate": "2026-11-09",
@@ -2358,13 +2364,6 @@
             "isoDate": "2026-10-21",
             "type": "low",
             "target": 350.37,
-            "touched": "2026-09-09",
-            "deltaDays": -30
-          },
-          {
-            "isoDate": "2026-10-21",
-            "type": "low",
-            "target": 350.36,
             "touched": "2026-09-09",
             "deltaDays": -30
           }
@@ -2773,7 +2772,7 @@
     },
     "GOOGL": {
       "bias": {
-        "samples": 143,
+        "samples": 144,
         "timingBiasDays": -4,
         "rawTimingDays": -7.0,
         "rawMagnitudePct": -4.6,
@@ -2871,35 +2870,6 @@
       "trackRecord": {
         "since": "2026-07-09",
         "resolved": [
-          {
-            "logged": "2026-07-09",
-            "predDate": "2026-07-13",
-            "type": "high",
-            "predPrice": 397.16,
-            "actualDate": "2026-07-15",
-            "actualPrice": 370.92,
-            "errDays": 2,
-            "hit2": true,
-            "hit3": true,
-            "methods": [
-              "Gann 60 days from high 05/13"
-            ]
-          },
-          {
-            "logged": "2026-07-13",
-            "predDate": "2026-07-16",
-            "type": "high",
-            "predPrice": 397.16,
-            "actualDate": "2026-07-15",
-            "actualPrice": 370.92,
-            "errDays": -1,
-            "hit2": true,
-            "hit3": true,
-            "methods": [
-              "Fib 13 bars from low 06/26",
-              "Hurst 40-day crest"
-            ]
-          },
           {
             "logged": "2026-07-14",
             "predDate": "2026-07-16",
@@ -3311,29 +3281,61 @@
               "Gann 120 days from high 05/13",
               "new moon 11:26 PM ET"
             ]
+          },
+          {
+            "logged": "2026-07-17",
+            "predDate": "2026-09-14",
+            "type": "high",
+            "predPrice": 395.49,
+            "actualDate": null,
+            "actualPrice": null,
+            "errDays": null,
+            "hit2": false,
+            "hit3": false,
+            "methods": [
+              "Gann 60 days from high 07/15",
+              "Fib 55 bars from low 06/26",
+              "Sepharial: any planet station day"
+            ]
+          },
+          {
+            "logged": "2026-07-27",
+            "predDate": "2026-09-14",
+            "type": "low",
+            "predPrice": 328.79,
+            "actualDate": "2026-09-09",
+            "actualPrice": 330.65,
+            "errDays": -3,
+            "hit2": false,
+            "hit3": true,
+            "methods": [
+              "Gann 60 days from high 07/15",
+              "Fib 55 bars from low 06/26",
+              "Sepharial: any planet station day"
+            ]
           }
         ],
-        "n": 30,
-        "hit2Rate": 23.0,
-        "hit3Rate": 23.0,
-        "priceMedErrPct": 6.1,
+        "n": 32,
+        "hit2Rate": 22.0,
+        "hit3Rate": 25.0,
+        "priceMedErrPct": 5.3,
         "priceCalibHigh": 0.934,
-        "priceCalibLow": 0.97,
+        "priceCalibLow": 0.979,
         "methodFactors": {
-          "gann": 1.43,
-          "fib": 1.0,
-          "hurst": 1.14,
-          "rhythm": 0.62,
-          "vibration": 0.89,
-          "moon": 1.6
+          "gann": 1.33,
+          "fib": 0.91,
+          "hurst": 1.21,
+          "rhythm": 0.65,
+          "vibration": 0.94,
+          "moon": 1.7
         },
         "famStats": {
           "gann": {
-            "n": 12,
+            "n": 14,
             "hits": 4
           },
           "fib": {
-            "n": 10,
+            "n": 12,
             "hits": 2
           },
           "hurst": {
@@ -3351,6 +3353,10 @@
           "moon": {
             "n": 3,
             "hits": 1
+          },
+          "sepharial": {
+            "n": 2,
+            "hits": 0
           }
         }
       }
@@ -3360,10 +3366,10 @@
         "samples": 77,
         "timingBiasDays": -4,
         "rawTimingDays": -12.0,
-        "rawMagnitudePct": 1.1,
+        "rawMagnitudePct": 1.0,
         "medianEarlyLate": -12.0,
-        "magnitudeBiasPct": 0.6,
-        "magSamples": 75,
+        "magnitudeBiasPct": 0.5,
+        "magSamples": 90,
         "spacingUsed": 8,
         "recent": [
           {
@@ -3467,7 +3473,7 @@
     },
     "AMZN": {
       "bias": {
-        "samples": 53,
+        "samples": 54,
         "timingBiasDays": -4,
         "rawTimingDays": -9.0,
         "rawMagnitudePct": -2.7,
@@ -3526,6 +3532,13 @@
             "deltaDays": -26
           },
           {
+            "isoDate": "2026-10-27",
+            "type": "low",
+            "target": 254.43,
+            "touched": "2026-09-23",
+            "deltaDays": -24
+          },
+          {
             "isoDate": "2026-10-15",
             "type": "low",
             "target": 244.74,
@@ -3552,13 +3565,6 @@
             "target": 251.5,
             "touched": "2026-09-09",
             "deltaDays": -25
-          },
-          {
-            "isoDate": "2026-10-14",
-            "type": "low",
-            "target": 245.19,
-            "touched": "2026-09-16",
-            "deltaDays": -20
           }
         ]
       },
@@ -4202,20 +4208,20 @@
         "priceCalibHigh": 1.036,
         "priceCalibLow": 1.0,
         "methodFactors": {
-          "hurst": 1.33,
           "gann": 0.5,
+          "hurst": 1.33,
           "vibration": 1.11,
           "rhythm": 1.67,
           "fib": 1.6
         },
         "famStats": {
-          "hurst": {
-            "n": 7,
-            "hits": 2
-          },
           "gann": {
             "n": 8,
             "hits": 0
+          },
+          "hurst": {
+            "n": 7,
+            "hits": 2
           },
           "vibration": {
             "n": 16,
@@ -4237,5 +4243,1759 @@
       }
     }
   },
-  "promotionPolicy": "Daily scoring and existing bounded calibration run automatically. New strategies require unseen-data validation; no guaranteed improvement or return."
+  "promotionPolicy": "Daily scoring and existing bounded calibration run automatically. New strategies require unseen-data validation; no guaranteed improvement or return.",
+  "timing": {
+    "version": "daily-close-turns-v1",
+    "forwardStart": "2026-09-24T00:00:00-04:00",
+    "reviewedAt": "2026-09-23T14:18:57.797412+00:00",
+    "unit": "trading sessions",
+    "tickers": {
+      "TSLA": {
+        "summary": {
+          "scored": 1,
+          "hits": 0,
+          "falseAlarms": 1,
+          "hitRatePct": 0.0,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "historicalAudit": {
+          "scored": 1,
+          "hits": 0,
+          "falseAlarms": 1,
+          "hitRatePct": 0.0,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "forward": {
+          "scored": 0,
+          "hits": 0,
+          "falseAlarms": 0,
+          "hitRatePct": null,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "pending": 22,
+        "excludedCount": 0,
+        "coverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
+        },
+        "results": [
+          {
+            "snapshotId": "8718b3fab7ec06a34c4efb8b351658ca6af35e3af10c5fb461090ab1f5af2d92",
+            "targetDate": "2026-09-10",
+            "type": "high",
+            "recordedAt": "2026-09-09T13:53:33.028880+00:00",
+            "methods": [
+              "Rhythm 11-bar",
+              "Hurst 10-day trough",
+              "new moon 11:26 PM ET"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          }
+        ],
+        "excluded": [],
+        "missed": [],
+        "methodTags": {
+          "Gann": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Hurst / rhythm": {
+            "scored": 1,
+            "hits": 0,
+            "falseAlarms": 1,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Fibonacci": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Astro / vibration": {
+            "scored": 1,
+            "hits": 0,
+            "falseAlarms": 1,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Other cycles": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          }
+        },
+        "lastClosedSession": "2026-09-22"
+      },
+      "HOOD": {
+        "summary": {
+          "scored": 3,
+          "hits": 1,
+          "falseAlarms": 2,
+          "hitRatePct": 33.3,
+          "medianAbsErrorSessions": 2,
+          "early": 1,
+          "late": 0,
+          "exact": 0
+        },
+        "historicalAudit": {
+          "scored": 3,
+          "hits": 1,
+          "falseAlarms": 2,
+          "hitRatePct": 33.3,
+          "medianAbsErrorSessions": 2,
+          "early": 1,
+          "late": 0,
+          "exact": 0
+        },
+        "forward": {
+          "scored": 0,
+          "hits": 0,
+          "falseAlarms": 0,
+          "hitRatePct": null,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "pending": 24,
+        "excludedCount": 1,
+        "coverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 1,
+          "missedTurns": 1,
+          "caughtTurns": 0
+        },
+        "results": [
+          {
+            "snapshotId": "b4faae8fc9e37025add5c49fac16a93cc13de0f66ab60d5c17f4c3e982b7e85e",
+            "targetDate": "2026-09-09",
+            "type": "high",
+            "recordedAt": "2026-09-08T13:35:35.946831+00:00",
+            "methods": [
+              "Rhythm 9-bar",
+              "Vibe: Moon sesquiquadrate Neptune"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "b4faae8fc9e37025add5c49fac16a93cc13de0f66ab60d5c17f4c3e982b7e85e",
+            "targetDate": "2026-09-14",
+            "type": "low",
+            "recordedAt": "2026-09-08T13:35:35.946831+00:00",
+            "methods": [
+              "Gann 45 days from low 07/31",
+              "Fib 55 bars from low 06/25"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-16",
+            "confirmedDate": "2026-09-18",
+            "errorSessions": -2
+          },
+          {
+            "snapshotId": "c3b2d4b6be37ca544b9c42dd9f7bc8a2858bea1929a1cff0fe70776e1565e829",
+            "targetDate": "2026-09-16",
+            "type": "low",
+            "recordedAt": "2026-09-15T13:37:18.833523+00:00",
+            "methods": [
+              "Rhythm 8-bar",
+              "Fib 8 bars from high 09/03"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          }
+        ],
+        "excluded": [
+          {
+            "snapshotId": "c85b6058134bcc22e7fb2fd07810a827f9ecf1627cd557deae3413c8861809bf",
+            "targetDate": "2026-09-07",
+            "type": "high",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Rhythm 9-bar",
+              "Hurst 10-day crest"
+            ],
+            "cohort": "historicalAudit",
+            "reason": "not a future-session original"
+          }
+        ],
+        "missed": [
+          {
+            "date": "2026-09-14",
+            "type": "high",
+            "index": 183,
+            "confirmedDate": "2026-09-16"
+          }
+        ],
+        "methodTags": {
+          "Gann": {
+            "scored": 1,
+            "hits": 1,
+            "falseAlarms": 0,
+            "hitRatePct": 100.0,
+            "medianAbsErrorSessions": 2,
+            "early": 1,
+            "late": 0,
+            "exact": 0
+          },
+          "Hurst / rhythm": {
+            "scored": 2,
+            "hits": 0,
+            "falseAlarms": 2,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Fibonacci": {
+            "scored": 2,
+            "hits": 1,
+            "falseAlarms": 1,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 2,
+            "early": 1,
+            "late": 0,
+            "exact": 0
+          },
+          "Astro / vibration": {
+            "scored": 1,
+            "hits": 0,
+            "falseAlarms": 1,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Other cycles": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          }
+        },
+        "lastClosedSession": "2026-09-22"
+      },
+      "QQQ": {
+        "summary": {
+          "scored": 5,
+          "hits": 1,
+          "falseAlarms": 4,
+          "hitRatePct": 20.0,
+          "medianAbsErrorSessions": 1,
+          "early": 1,
+          "late": 0,
+          "exact": 0
+        },
+        "historicalAudit": {
+          "scored": 5,
+          "hits": 1,
+          "falseAlarms": 4,
+          "hitRatePct": 20.0,
+          "medianAbsErrorSessions": 1,
+          "early": 1,
+          "late": 0,
+          "exact": 0
+        },
+        "forward": {
+          "scored": 0,
+          "hits": 0,
+          "falseAlarms": 0,
+          "hitRatePct": null,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "pending": 26,
+        "excludedCount": 1,
+        "coverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 1,
+          "missedTurns": 1,
+          "caughtTurns": 0
+        },
+        "results": [
+          {
+            "snapshotId": "00f97f6b60dfa3e50afe3f8fa93b4829d02b1eced78f7fdef5ad31a04046737d",
+            "targetDate": "2026-09-14",
+            "type": "low",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Gann 45 days from low 07/29",
+              "Gann 30 days from high 08/13"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-15",
+            "confirmedDate": "2026-09-17",
+            "errorSessions": -1
+          },
+          {
+            "snapshotId": "a5ca0aa66fa65f3b56279c96e38ae0d349b8e08279e91b45fce476df8ab883b6",
+            "targetDate": "2026-09-09",
+            "type": "high",
+            "recordedAt": "2026-09-08T13:35:35.946831+00:00",
+            "methods": [
+              "Rhythm 6-bar",
+              "Hurst 10-day trough",
+              "Hurst 20-day crest"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "336898f63e467d1fd17cc51f286c8605c0cb881c9c3d8e2c0afd91c9b1e32652",
+            "targetDate": "2026-09-11",
+            "type": "low",
+            "recordedAt": "2026-09-10T14:04:17.729426+00:00",
+            "methods": [
+              "Rhythm 6-bar",
+              "Hurst 10-day trough"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "c3b8dd938ac52d85a52e9d0fce1fadb71a8c2441c447e8f3cabf8c8116b1c8ac",
+            "targetDate": "2026-09-14",
+            "type": "high",
+            "recordedAt": "2026-09-11T14:04:29.906841+00:00",
+            "methods": [
+              "Rhythm 6-bar",
+              "Gann 45 days from low 07/29",
+              "Gann 30 days from high 08/13",
+              "Fib 21 bars from high 08/13"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "0ca4eee311faf02bf8a107962cb08efd8220db1a31f4cc72af48cd185973f5c7",
+            "targetDate": "2026-09-15",
+            "type": "low",
+            "recordedAt": "2026-09-14T11:07:39.571486+00:00",
+            "methods": [
+              "Rhythm 6-bar"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          }
+        ],
+        "excluded": [
+          {
+            "snapshotId": "00f97f6b60dfa3e50afe3f8fa93b4829d02b1eced78f7fdef5ad31a04046737d",
+            "targetDate": "2026-09-07",
+            "type": "high",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Rhythm 6-bar"
+            ],
+            "cohort": "historicalAudit",
+            "reason": "not a future-session original"
+          }
+        ],
+        "missed": [
+          {
+            "date": "2026-09-10",
+            "type": "low",
+            "index": 181,
+            "confirmedDate": "2026-09-14"
+          }
+        ],
+        "methodTags": {
+          "Gann": {
+            "scored": 2,
+            "hits": 1,
+            "falseAlarms": 1,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 1,
+            "early": 1,
+            "late": 0,
+            "exact": 0
+          },
+          "Hurst / rhythm": {
+            "scored": 4,
+            "hits": 0,
+            "falseAlarms": 4,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Fibonacci": {
+            "scored": 1,
+            "hits": 0,
+            "falseAlarms": 1,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Astro / vibration": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Other cycles": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          }
+        },
+        "lastClosedSession": "2026-09-22"
+      },
+      "JPM": {
+        "summary": {
+          "scored": 7,
+          "hits": 2,
+          "falseAlarms": 5,
+          "hitRatePct": 28.6,
+          "medianAbsErrorSessions": 1.5,
+          "early": 2,
+          "late": 0,
+          "exact": 0
+        },
+        "historicalAudit": {
+          "scored": 7,
+          "hits": 2,
+          "falseAlarms": 5,
+          "hitRatePct": 28.6,
+          "medianAbsErrorSessions": 1.5,
+          "early": 2,
+          "late": 0,
+          "exact": 0
+        },
+        "forward": {
+          "scored": 0,
+          "hits": 0,
+          "falseAlarms": 0,
+          "hitRatePct": null,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "pending": 30,
+        "excludedCount": 1,
+        "coverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 2,
+          "missedTurns": 1,
+          "caughtTurns": 1
+        },
+        "results": [
+          {
+            "snapshotId": "af969a12621e9480701cb9151790bc2d19725b5ea3221cd6b4e5c2e1aea60c26",
+            "targetDate": "2026-09-10",
+            "type": "high",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "new moon 11:26 PM ET"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-11",
+            "confirmedDate": "2026-09-15",
+            "errorSessions": -1
+          },
+          {
+            "snapshotId": "0b6f00e4d8683a1010a2dc4e187af2e6d4764874df7738d6c4846bc56581f25c",
+            "targetDate": "2026-09-09",
+            "type": "low",
+            "recordedAt": "2026-09-08T13:35:35.946831+00:00",
+            "methods": [
+              "Rhythm 8-bar"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "0b6f00e4d8683a1010a2dc4e187af2e6d4764874df7738d6c4846bc56581f25c",
+            "targetDate": "2026-09-14",
+            "type": "high",
+            "recordedAt": "2026-09-08T13:35:35.946831+00:00",
+            "methods": [
+              "Hurst 40-day trough"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "067f41cc25371187fe23cc351c666ab18a94941daaf047d982db0a84f7fc298c",
+            "targetDate": "2026-09-16",
+            "type": "high",
+            "recordedAt": "2026-09-09T13:53:33.028880+00:00",
+            "methods": [
+              "Gann 120 days from low 05/19",
+              "Hurst 10-day crest"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "0690913079f7c210fb44c7c19c1731e90e585a980f6cfd1bc9a4696072f62014",
+            "targetDate": "2026-09-11",
+            "type": "low",
+            "recordedAt": "2026-09-10T14:04:17.729426+00:00",
+            "methods": [
+              "Rhythm 8-bar",
+              "Gann 144 days from high 04/20"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "a356512dbcb547dbcffdea05934a6358cab4f905ff7b1d442a3d0cb496538887",
+            "targetDate": "2026-09-14",
+            "type": "low",
+            "recordedAt": "2026-09-12T22:18:29.111072+00:00",
+            "methods": [
+              "Rhythm 8-bar",
+              "Hurst 40-day trough"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-16",
+            "confirmedDate": "2026-09-18",
+            "errorSessions": -2
+          },
+          {
+            "snapshotId": "6f3ad368dceec7f854a3ba1c5a81e6538cf06ce3f4151077b842769a0bb1d254",
+            "targetDate": "2026-09-16",
+            "type": "low",
+            "recordedAt": "2026-09-15T10:07:16.518161+00:00",
+            "methods": [
+              "Rhythm 9-bar",
+              "Gann 120 days from low 05/19"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          }
+        ],
+        "excluded": [
+          {
+            "snapshotId": "af969a12621e9480701cb9151790bc2d19725b5ea3221cd6b4e5c2e1aea60c26",
+            "targetDate": "2026-09-07",
+            "type": "low",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Rhythm 8-bar"
+            ],
+            "cohort": "historicalAudit",
+            "reason": "not a future-session original"
+          }
+        ],
+        "missed": [
+          {
+            "date": "2026-09-08",
+            "type": "low",
+            "index": 179,
+            "confirmedDate": "2026-09-10"
+          }
+        ],
+        "methodTags": {
+          "Gann": {
+            "scored": 3,
+            "hits": 0,
+            "falseAlarms": 3,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Hurst / rhythm": {
+            "scored": 6,
+            "hits": 1,
+            "falseAlarms": 5,
+            "hitRatePct": 16.7,
+            "medianAbsErrorSessions": 2,
+            "early": 1,
+            "late": 0,
+            "exact": 0
+          },
+          "Fibonacci": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Astro / vibration": {
+            "scored": 1,
+            "hits": 1,
+            "falseAlarms": 0,
+            "hitRatePct": 100.0,
+            "medianAbsErrorSessions": 1,
+            "early": 1,
+            "late": 0,
+            "exact": 0
+          },
+          "Other cycles": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          }
+        },
+        "lastClosedSession": "2026-09-22"
+      },
+      "GOOGL": {
+        "summary": {
+          "scored": 4,
+          "hits": 2,
+          "falseAlarms": 2,
+          "hitRatePct": 50.0,
+          "medianAbsErrorSessions": 1.0,
+          "early": 1,
+          "late": 0,
+          "exact": 1
+        },
+        "historicalAudit": {
+          "scored": 4,
+          "hits": 2,
+          "falseAlarms": 2,
+          "hitRatePct": 50.0,
+          "medianAbsErrorSessions": 1.0,
+          "early": 1,
+          "late": 0,
+          "exact": 1
+        },
+        "forward": {
+          "scored": 0,
+          "hits": 0,
+          "falseAlarms": 0,
+          "hitRatePct": null,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "pending": 18,
+        "excludedCount": 1,
+        "coverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 2,
+          "missedTurns": 0,
+          "caughtTurns": 2
+        },
+        "results": [
+          {
+            "snapshotId": "40030db79d6d1841624c4969e9998cbc505ad7950d2ab3213ef6ce9370955167",
+            "targetDate": "2026-09-10",
+            "type": "high",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "new moon 11:26 PM ET",
+              "Vibe: Moon quincunx Pluto",
+              "Vibe: Numerology day 2",
+              "Sepharial: any planet station day"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-14",
+            "confirmedDate": "2026-09-16",
+            "errorSessions": -2
+          },
+          {
+            "snapshotId": "0c106ab6dbc07eecfe4dfa17a3723a785537b089d85bb81db6e981028b7ef05c",
+            "targetDate": "2026-09-14",
+            "type": "high",
+            "recordedAt": "2026-09-07T15:46:21.686530+00:00",
+            "methods": [
+              "Gann 60 days from high 07/15",
+              "Sepharial: any planet station day"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "aba1ce0806031d1b69fc747c281266891e7590945b3ce80a87852f8754409d89",
+            "targetDate": "2026-09-09",
+            "type": "low",
+            "recordedAt": "2026-09-08T13:35:35.946831+00:00",
+            "methods": [
+              "Rhythm 11-bar",
+              "Vibe: Moon quincunx Pluto"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-09",
+            "confirmedDate": "2026-09-11",
+            "errorSessions": 0
+          },
+          {
+            "snapshotId": "5b74c1cc9670151a6acce4d38cdc84f1a837da313c4891562548d9b20cc385b7",
+            "targetDate": "2026-09-11",
+            "type": "low",
+            "recordedAt": "2026-09-10T14:04:17.729426+00:00",
+            "methods": [
+              "Rhythm 11-bar",
+              "Vibe: Moon quincunx Pluto",
+              "Sepharial: any planet station day"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          }
+        ],
+        "excluded": [
+          {
+            "snapshotId": "40030db79d6d1841624c4969e9998cbc505ad7950d2ab3213ef6ce9370955167",
+            "targetDate": "2026-09-07",
+            "type": "low",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Rhythm 11-bar"
+            ],
+            "cohort": "historicalAudit",
+            "reason": "not a future-session original"
+          }
+        ],
+        "missed": [],
+        "methodTags": {
+          "Gann": {
+            "scored": 1,
+            "hits": 0,
+            "falseAlarms": 1,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Hurst / rhythm": {
+            "scored": 2,
+            "hits": 1,
+            "falseAlarms": 1,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 0,
+            "early": 0,
+            "late": 0,
+            "exact": 1
+          },
+          "Fibonacci": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Astro / vibration": {
+            "scored": 4,
+            "hits": 2,
+            "falseAlarms": 2,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 1.0,
+            "early": 1,
+            "late": 0,
+            "exact": 1
+          },
+          "Other cycles": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          }
+        },
+        "lastClosedSession": "2026-09-22"
+      },
+      "NVDA": {
+        "summary": {
+          "scored": 4,
+          "hits": 1,
+          "falseAlarms": 3,
+          "hitRatePct": 25.0,
+          "medianAbsErrorSessions": 2,
+          "early": 1,
+          "late": 0,
+          "exact": 0
+        },
+        "historicalAudit": {
+          "scored": 4,
+          "hits": 1,
+          "falseAlarms": 3,
+          "hitRatePct": 25.0,
+          "medianAbsErrorSessions": 2,
+          "early": 1,
+          "late": 0,
+          "exact": 0
+        },
+        "forward": {
+          "scored": 0,
+          "hits": 0,
+          "falseAlarms": 0,
+          "hitRatePct": null,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "pending": 16,
+        "excludedCount": 1,
+        "coverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 1,
+          "missedTurns": 0,
+          "caughtTurns": 1
+        },
+        "results": [
+          {
+            "snapshotId": "9b87f27e97f3e0f96138df3257896afa85f49dd248db64305309f57109e25ad8",
+            "targetDate": "2026-09-10",
+            "type": "low",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "new moon 11:26 PM ET",
+              "Vibe: Saturn = Mercury/Venus midpoint"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-14",
+            "confirmedDate": "2026-09-16",
+            "errorSessions": -2
+          },
+          {
+            "snapshotId": "cedffb3706e34bf8ee964c1deb3d60f94a4f41a26526ddca4472dcdd0dd08eac",
+            "targetDate": "2026-09-14",
+            "type": "low",
+            "recordedAt": "2026-09-07T15:46:21.686530+00:00",
+            "methods": [
+              "Gann 45 days from low 07/29",
+              "Gann 60 days from high 07/15",
+              "Fib 55 bars from low 06/26",
+              "Hurst 80-day crest"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "098da549d12ae30e1e9e96358d043e2c2a100d9a9c4bcc57562c62b254099d34",
+            "targetDate": "2026-09-09",
+            "type": "high",
+            "recordedAt": "2026-09-08T13:35:35.946831+00:00",
+            "methods": [
+              "Rhythm 8-bar",
+              "Vibe: Saturn = Mercury/Venus midpoint"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "170c4908aa7b4224ccafb7f966932e250ee8bbcb6cb8ed2aacd4547873bae5ed",
+            "targetDate": "2026-09-16",
+            "type": "low",
+            "recordedAt": "2026-09-08T23:58:38.143707+00:00",
+            "methods": [
+              "Rhythm 8-bar",
+              "Fib 34 bars from low 07/29"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          }
+        ],
+        "excluded": [
+          {
+            "snapshotId": "9b87f27e97f3e0f96138df3257896afa85f49dd248db64305309f57109e25ad8",
+            "targetDate": "2026-09-07",
+            "type": "high",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Rhythm 8-bar"
+            ],
+            "cohort": "historicalAudit",
+            "reason": "not a future-session original"
+          }
+        ],
+        "missed": [],
+        "methodTags": {
+          "Gann": {
+            "scored": 1,
+            "hits": 0,
+            "falseAlarms": 1,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Hurst / rhythm": {
+            "scored": 3,
+            "hits": 0,
+            "falseAlarms": 3,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Fibonacci": {
+            "scored": 2,
+            "hits": 0,
+            "falseAlarms": 2,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Astro / vibration": {
+            "scored": 2,
+            "hits": 1,
+            "falseAlarms": 1,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 2,
+            "early": 1,
+            "late": 0,
+            "exact": 0
+          },
+          "Other cycles": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          }
+        },
+        "lastClosedSession": "2026-09-22"
+      },
+      "AMZN": {
+        "summary": {
+          "scored": 5,
+          "hits": 3,
+          "falseAlarms": 2,
+          "hitRatePct": 60.0,
+          "medianAbsErrorSessions": 1,
+          "early": 2,
+          "late": 1,
+          "exact": 0
+        },
+        "historicalAudit": {
+          "scored": 5,
+          "hits": 3,
+          "falseAlarms": 2,
+          "hitRatePct": 60.0,
+          "medianAbsErrorSessions": 1,
+          "early": 2,
+          "late": 1,
+          "exact": 0
+        },
+        "forward": {
+          "scored": 0,
+          "hits": 0,
+          "falseAlarms": 0,
+          "hitRatePct": null,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "pending": 17,
+        "excludedCount": 1,
+        "coverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 2,
+          "missedTurns": 0,
+          "caughtTurns": 2
+        },
+        "results": [
+          {
+            "snapshotId": "9f1a584333a9268bdb4d5a4a0b9d33398df1288701aa4db68e204f316a46e7ce",
+            "targetDate": "2026-09-14",
+            "type": "high",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Gann 45 days from low 07/29",
+              "Gann 60 days from high 07/15",
+              "Vibe: Venus 9th-harmonic Saturn",
+              "Sepharial: any planet station day"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-11",
+            "confirmedDate": "2026-09-15",
+            "errorSessions": 1
+          },
+          {
+            "snapshotId": "5d285ce6102cf43f2ca53cf0d81abed05bfd629c0fc2866352ef6c631c77f12f",
+            "targetDate": "2026-09-09",
+            "type": "low",
+            "recordedAt": "2026-09-08T13:35:35.946831+00:00",
+            "methods": [
+              "Rhythm 20-bar",
+              "Cycle 16d trough (Goertzel)"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-10",
+            "confirmedDate": "2026-09-14",
+            "errorSessions": -1
+          },
+          {
+            "snapshotId": "e8536f3b3e6829f2d6452f3aa7eb9f7db961f9e0fca2041e32a7d18496e92301",
+            "targetDate": "2026-09-11",
+            "type": "low",
+            "recordedAt": "2026-09-10T14:04:17.729426+00:00",
+            "methods": [
+              "Rhythm 20-bar",
+              "Hurst 10-day trough",
+              "Sepharial: any planet station day",
+              "Sepharial: Moon crossing equator"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "5cb25a8021880f93e8cad8e3f81780a6b66cac5d4d30ed3ebead3be640759940",
+            "targetDate": "2026-09-14",
+            "type": "low",
+            "recordedAt": "2026-09-12T22:18:29.111072+00:00",
+            "methods": [
+              "Rhythm 20-bar",
+              "Gann 60 days from high 07/15",
+              "Vibe: Venus 9th-harmonic Saturn",
+              "Sepharial: any planet station day"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-16",
+            "confirmedDate": "2026-09-18",
+            "errorSessions": -2
+          },
+          {
+            "snapshotId": "99957889b676565839d3782732987d24070964cdf88323bb124c5a7469d50bae",
+            "targetDate": "2026-09-16",
+            "type": "low",
+            "recordedAt": "2026-09-15T10:07:16.518161+00:00",
+            "methods": [
+              "Rhythm 20-bar",
+              "Fib 34 bars from low 07/29",
+              "Hurst 10-day trough",
+              "Vibe: Venus 9th-harmonic Saturn"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          }
+        ],
+        "excluded": [
+          {
+            "snapshotId": "9f1a584333a9268bdb4d5a4a0b9d33398df1288701aa4db68e204f316a46e7ce",
+            "targetDate": "2026-09-07",
+            "type": "low",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Rhythm 20-bar",
+              "Hurst 20-day crest",
+              "Vibe: Moon semi-square Uranus"
+            ],
+            "cohort": "historicalAudit",
+            "reason": "not a future-session original"
+          }
+        ],
+        "missed": [],
+        "methodTags": {
+          "Gann": {
+            "scored": 2,
+            "hits": 2,
+            "falseAlarms": 0,
+            "hitRatePct": 100.0,
+            "medianAbsErrorSessions": 1.5,
+            "early": 1,
+            "late": 1,
+            "exact": 0
+          },
+          "Hurst / rhythm": {
+            "scored": 4,
+            "hits": 2,
+            "falseAlarms": 2,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 1.5,
+            "early": 2,
+            "late": 0,
+            "exact": 0
+          },
+          "Fibonacci": {
+            "scored": 1,
+            "hits": 0,
+            "falseAlarms": 1,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Astro / vibration": {
+            "scored": 4,
+            "hits": 2,
+            "falseAlarms": 2,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 1.5,
+            "early": 1,
+            "late": 1,
+            "exact": 0
+          },
+          "Other cycles": {
+            "scored": 1,
+            "hits": 1,
+            "falseAlarms": 0,
+            "hitRatePct": 100.0,
+            "medianAbsErrorSessions": 1,
+            "early": 1,
+            "late": 0,
+            "exact": 0
+          }
+        },
+        "lastClosedSession": "2026-09-22"
+      },
+      "SPY": {
+        "summary": {
+          "scored": 6,
+          "hits": 3,
+          "falseAlarms": 3,
+          "hitRatePct": 50.0,
+          "medianAbsErrorSessions": 2,
+          "early": 2,
+          "late": 1,
+          "exact": 0
+        },
+        "historicalAudit": {
+          "scored": 6,
+          "hits": 3,
+          "falseAlarms": 3,
+          "hitRatePct": 50.0,
+          "medianAbsErrorSessions": 2,
+          "early": 2,
+          "late": 1,
+          "exact": 0
+        },
+        "forward": {
+          "scored": 0,
+          "hits": 0,
+          "falseAlarms": 0,
+          "hitRatePct": null,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "pending": 22,
+        "excludedCount": 1,
+        "coverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 2,
+          "missedTurns": 0,
+          "caughtTurns": 2
+        },
+        "results": [
+          {
+            "snapshotId": "4187471bd814850976be38e3a04c8c08232a6208e46f4ee10e9a805de1f9f59c",
+            "targetDate": "2026-09-14",
+            "type": "low",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Hurst 80-day crest"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-10",
+            "confirmedDate": "2026-09-14",
+            "errorSessions": 2
+          },
+          {
+            "snapshotId": "99fd797e224ee8b2cc2c58a0e32466f9b031ff589aa470ac0b2cce21f2e09508",
+            "targetDate": "2026-09-09",
+            "type": "high",
+            "recordedAt": "2026-09-08T13:35:35.946831+00:00",
+            "methods": [
+              "Rhythm 16-bar",
+              "Hurst 20-day crest"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-11",
+            "confirmedDate": "2026-09-15",
+            "errorSessions": -2
+          },
+          {
+            "snapshotId": "7fae58f41c00915d84ac4bcdd88d6bb86d692d13d31fe0b4c5c04d47fe9fcbfc",
+            "targetDate": "2026-09-10",
+            "type": "low",
+            "recordedAt": "2026-09-09T13:12:57.702928+00:00",
+            "methods": [
+              "Rhythm 16-bar",
+              "Hurst 10-day trough",
+              "new moon 11:26 PM ET"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "7fae58f41c00915d84ac4bcdd88d6bb86d692d13d31fe0b4c5c04d47fe9fcbfc",
+            "targetDate": "2026-09-15",
+            "type": "high",
+            "recordedAt": "2026-09-09T13:12:57.702928+00:00",
+            "methods": [
+              "Hurst 80-day crest"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "58b6bb70b5a923f438d5a2f2b97de460de15ee1ab069f55da9b433f22f528272",
+            "targetDate": "2026-09-14",
+            "type": "high",
+            "recordedAt": "2026-09-11T14:04:29.906841+00:00",
+            "methods": [
+              "Rhythm 15-bar",
+              "Hurst 10-day trough"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "52c921643edb1d73763e7a961311d71efe70221e18561d2a5769c11f08a24d9d",
+            "targetDate": "2026-09-15",
+            "type": "low",
+            "recordedAt": "2026-09-14T11:07:39.571486+00:00",
+            "methods": [
+              "Rhythm 15-bar"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-16",
+            "confirmedDate": "2026-09-18",
+            "errorSessions": -1
+          }
+        ],
+        "excluded": [
+          {
+            "snapshotId": "4187471bd814850976be38e3a04c8c08232a6208e46f4ee10e9a805de1f9f59c",
+            "targetDate": "2026-09-07",
+            "type": "high",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Rhythm 16-bar"
+            ],
+            "cohort": "historicalAudit",
+            "reason": "not a future-session original"
+          }
+        ],
+        "missed": [],
+        "methodTags": {
+          "Gann": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Hurst / rhythm": {
+            "scored": 6,
+            "hits": 3,
+            "falseAlarms": 3,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 2,
+            "early": 2,
+            "late": 1,
+            "exact": 0
+          },
+          "Fibonacci": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Astro / vibration": {
+            "scored": 1,
+            "hits": 0,
+            "falseAlarms": 1,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Other cycles": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          }
+        },
+        "lastClosedSession": "2026-09-22"
+      },
+      "VOO": {
+        "summary": {
+          "scored": 5,
+          "hits": 3,
+          "falseAlarms": 2,
+          "hitRatePct": 60.0,
+          "medianAbsErrorSessions": 2,
+          "early": 2,
+          "late": 1,
+          "exact": 0
+        },
+        "historicalAudit": {
+          "scored": 5,
+          "hits": 3,
+          "falseAlarms": 2,
+          "hitRatePct": 60.0,
+          "medianAbsErrorSessions": 2,
+          "early": 2,
+          "late": 1,
+          "exact": 0
+        },
+        "forward": {
+          "scored": 0,
+          "hits": 0,
+          "falseAlarms": 0,
+          "hitRatePct": null,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "pending": 20,
+        "excludedCount": 1,
+        "coverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 2,
+          "missedTurns": 0,
+          "caughtTurns": 2
+        },
+        "results": [
+          {
+            "snapshotId": "9cb6cccc0cfd70eff52b4545acc9f58240a6d05057ecb1a5d77d05f56533d571",
+            "targetDate": "2026-09-14",
+            "type": "low",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Hurst 80-day crest"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-10",
+            "confirmedDate": "2026-09-14",
+            "errorSessions": 2
+          },
+          {
+            "snapshotId": "605c568d74b7ba870d364d0df2130a23eb6e5f59c62ce9745db83b7bce161c4e",
+            "targetDate": "2026-09-09",
+            "type": "high",
+            "recordedAt": "2026-09-08T13:35:35.946831+00:00",
+            "methods": [
+              "Rhythm 16-bar",
+              "Hurst 20-day crest"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-11",
+            "confirmedDate": "2026-09-15",
+            "errorSessions": -2
+          },
+          {
+            "snapshotId": "453616c8d93945dd6463fb7106e65d39a99b6b0ec550404394d32c8357c81a5f",
+            "targetDate": "2026-09-10",
+            "type": "low",
+            "recordedAt": "2026-09-09T13:12:57.702928+00:00",
+            "methods": [
+              "Rhythm 16-bar",
+              "Hurst 10-day trough",
+              "new moon 11:26 PM ET"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "453616c8d93945dd6463fb7106e65d39a99b6b0ec550404394d32c8357c81a5f",
+            "targetDate": "2026-09-15",
+            "type": "high",
+            "recordedAt": "2026-09-09T13:12:57.702928+00:00",
+            "methods": [
+              "Hurst 80-day crest"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "86bc27d82ef6898938035db7c2622ac598311490a4294233bb13ec713a5c53fe",
+            "targetDate": "2026-09-15",
+            "type": "low",
+            "recordedAt": "2026-09-14T11:07:39.571486+00:00",
+            "methods": [
+              "Rhythm 14-bar"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-16",
+            "confirmedDate": "2026-09-18",
+            "errorSessions": -1
+          }
+        ],
+        "excluded": [
+          {
+            "snapshotId": "9cb6cccc0cfd70eff52b4545acc9f58240a6d05057ecb1a5d77d05f56533d571",
+            "targetDate": "2026-09-07",
+            "type": "high",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Rhythm 16-bar"
+            ],
+            "cohort": "historicalAudit",
+            "reason": "not a future-session original"
+          }
+        ],
+        "missed": [],
+        "methodTags": {
+          "Gann": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Hurst / rhythm": {
+            "scored": 5,
+            "hits": 3,
+            "falseAlarms": 2,
+            "hitRatePct": 60.0,
+            "medianAbsErrorSessions": 2,
+            "early": 2,
+            "late": 1,
+            "exact": 0
+          },
+          "Fibonacci": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Astro / vibration": {
+            "scored": 1,
+            "hits": 0,
+            "falseAlarms": 1,
+            "hitRatePct": 0.0,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Other cycles": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          }
+        },
+        "lastClosedSession": "2026-09-22"
+      },
+      "GC=F": {
+        "summary": {
+          "scored": 2,
+          "hits": 1,
+          "falseAlarms": 1,
+          "hitRatePct": 50.0,
+          "medianAbsErrorSessions": 1,
+          "early": 1,
+          "late": 0,
+          "exact": 0
+        },
+        "historicalAudit": {
+          "scored": 2,
+          "hits": 1,
+          "falseAlarms": 1,
+          "hitRatePct": 50.0,
+          "medianAbsErrorSessions": 1,
+          "early": 1,
+          "late": 0,
+          "exact": 0
+        },
+        "forward": {
+          "scored": 0,
+          "hits": 0,
+          "falseAlarms": 0,
+          "hitRatePct": null,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "pending": 28,
+        "excludedCount": 0,
+        "coverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
+        },
+        "results": [
+          {
+            "snapshotId": "5215eba00bdf387e72096116c1df1bf8ff326b046d0890a5a2584b3e4c5ff0f4",
+            "targetDate": "2026-09-14",
+            "type": "low",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Rhythm 15-bar",
+              "Gann 60 days from low 07/16",
+              "Hurst 10-day trough",
+              "Vibe: Helio Uranus sextile Neptune"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-15",
+            "confirmedDate": "2026-09-17",
+            "errorSessions": -1
+          },
+          {
+            "snapshotId": "ee3cbe03235b156f5d1ab19466bc1be00c6830545b77d2233e3512b56f76ac82",
+            "targetDate": "2026-09-16",
+            "type": "low",
+            "recordedAt": "2026-09-15T10:07:16.518161+00:00",
+            "methods": [
+              "Rhythm 15-bar",
+              "Hurst 10-day trough",
+              "Vibe: Helio Uranus sextile Neptune",
+              "Vibe: Moon 7th-harmonic Saturn"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          }
+        ],
+        "excluded": [],
+        "missed": [],
+        "methodTags": {
+          "Gann": {
+            "scored": 1,
+            "hits": 1,
+            "falseAlarms": 0,
+            "hitRatePct": 100.0,
+            "medianAbsErrorSessions": 1,
+            "early": 1,
+            "late": 0,
+            "exact": 0
+          },
+          "Hurst / rhythm": {
+            "scored": 2,
+            "hits": 1,
+            "falseAlarms": 1,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 1,
+            "early": 1,
+            "late": 0,
+            "exact": 0
+          },
+          "Fibonacci": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Astro / vibration": {
+            "scored": 2,
+            "hits": 1,
+            "falseAlarms": 1,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 1,
+            "early": 1,
+            "late": 0,
+            "exact": 0
+          },
+          "Other cycles": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          }
+        },
+        "lastClosedSession": "2026-09-22"
+      }
+    },
+    "method": "First logged future-date call per ticker/date/type; strict five-session daily-close high/low; \u00b12 sessions; two later closed bars confirm. One turn credits one call, earliest-issued first. Error = called session minus actual session (negative = early).",
+    "limitations": "Daily-close turns are not intraday highs/lows or tradeable confirmation signals. Historical audit uses a rule chosen after those data; it is not unseen validation. Timing hits do not measure net trading profitability. Method tags describe blended calls, not standalone method performance.",
+    "promotion": "No weight changes. Require predeclared standalone/control comparisons on unseen sessions, adequate independent samples, and a separate cost/slippage/drawdown test."
+  }
 }
