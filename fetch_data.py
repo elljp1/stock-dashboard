@@ -62,7 +62,7 @@ for tkr in TICKERS:
             time.sleep(0.5)  # be polite to Yahoo
         frames['daily'] = reconcile_daily(
             frames['daily'], frames['hourly'], tkr, datetime.now(ET),
-            lambda: fetch(tkr, '1mo', '1d')[0])
+            lambda: fetch(tkr, '1mo', '1d')[0], intraday=frames['15m'])
         for name, df in frames.items():
             target = Path(f"{tkr}_{name}.csv")
             temp = target.with_suffix(".csv.tmp")
