@@ -9,6 +9,7 @@ import math
 from datetime import datetime, timezone
 from pathlib import Path
 from zoneinfo import ZoneInfo
+from timing_review import timing_review
 
 
 def read_constants(path='data.js'):
@@ -88,6 +89,7 @@ def review(data, now=None):
               'learning': {t: {'bias': d.get('biasLearning'), 'trackRecord': d.get('trackRecord')}
                            for t, d in data.items()},
               'promotionPolicy': 'Daily scoring and existing bounded calibration run automatically. New strategies require unseen-data validation; no guaranteed improvement or return.'}
+    report['timing'] = timing_review(data, ledger['snapshots'], now)
     atomic_json('daily_review.json', report)
     return report
 
@@ -101,9 +103,14 @@ def build():
         constants['WEEKPLAN'] = json.loads(Path('week_plan.json').read_text())
     constants.setdefault('WEEKPLAN', {})
     report = review(data)
-    for d in data.values():
+    for ticker, d in data.items():
         d['dailyReview'] = {'reviewedAt': report['reviewedAt'], 'snapshotCount': report['snapshotCount'],
                             'scoredOriginals': report['scoredOriginals']}
+        timing = report['timing']['tickers'][ticker]
+        d['timingReview'] = {k: v for k, v in timing.items() if k not in ('results', 'excluded', 'missed')}
+        d['timingReview'].update(version=report['timing']['version'],
+                                forwardStart=report['timing']['forwardStart'],
+                                recent=sorted(timing['results'], key=lambda r: r['targetDate'], reverse=True)[:12])
     script = '\n'.join('const ' + k + ' = ' + json.dumps(v, allow_nan=False).replace('</', '<\\/') + ';' for k, v in constants.items()) + '\n'
     Path('data.js').write_text(script)
     template = Path('dashboard.html').read_text()

@@ -18,6 +18,13 @@ const delay=()=>new Promise(r=>setTimeout(r,30));
   await delay();
   for(const ticker of w.eval('Object.keys(DATA_ALL)')){
     w.eval(`CUR=${JSON.stringify(ticker)};renderAll(DATA_ALL[CUR]);`);
+    const timing=w.eval('DATA_ALL[CUR].timingReview');
+    if(timing){
+      assert.equal(d.querySelectorAll('#timingCards > div').length,4);
+      assert.ok(d.getElementById('timingSummary').textContent.includes(`${timing.forward.scored} forward-test calls`));
+      assert.ok(d.getElementById('timingDetails').textContent.includes('not proof'));
+      assert.ok(!d.getElementById('timingPanel').textContent.includes('undefined'));
+    }
     const forecasts=w.eval('DATA_ALL[CUR].predictions');
     const chartRow=d.querySelector('[data-chart-targets]');
     for(const side of ['high','low']){
