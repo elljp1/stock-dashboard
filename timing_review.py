@@ -47,6 +47,35 @@ def summarize(results):
             'exact': sum(e == 0 for e in errors)}
 
 
+def match(calls, turns):
+    """Earliest-issued call claims the nearest unclaimed same-type turn."""
+    results, used = [], set()
+    for base, pos, observed_day in calls:
+        kind = base['type']
+        candidates = [t for t in turns if t['type'] == kind and t['date'] > observed_day
+                      and abs(t['index']-pos) <= TOLERANCE and (t['date'], kind) not in used]
+        if candidates:
+            turn = min(candidates, key=lambda t: (abs(t['index']-pos), t['date']))
+            used.add((turn['date'], kind))
+            results.append(dict(base, status='hit', actualDate=turn['date'],
+                                confirmedDate=turn['confirmedDate'], errorSessions=pos-turn['index']))
+        else:
+            results.append(dict(base, status='falseAlarm', actualDate=None,
+                                confirmedDate=None, errorSessions=None))
+    return results, used
+
+
+def coverage(turns, from_exclusive, end_i):
+    return [t for t in turns if from_exclusive and t['date'] > from_exclusive and t['index'] <= end_i]
+
+
+def coverage_summary(scope, used, from_exclusive, dates, end_i):
+    missed = sum((t['date'], t['type']) not in used for t in scope)
+    return {'fromExclusive': from_exclusive,
+            'through': dates[end_i] if end_i >= 0 else None,
+            'turns': len(scope), 'missedTurns': missed, 'caughtTurns': len(scope)-missed}
+
+
 def timing_review(data, snapshots, now):
     cutoff_day = eastern_day(now)
     # First means earliest timestamp, independent of file ordering. Never let a
@@ -57,7 +86,7 @@ def timing_review(data, snapshots, now):
             originals.setdefault((row['ticker'], pred['isoDate'], pred['type']), (row, pred))
     report = {'version': VERSION, 'forwardStart': FORWARD_START, 'reviewedAt': now,
               'unit': 'trading sessions', 'tickers': {},
-              'method': 'First logged future-date call per ticker/date/type; strict five-session daily-close high/low; ±2 sessions; two later closed bars confirm. One turn credits one call, earliest-issued first. Error = called session minus actual session (negative = early).',
+              'method': 'First logged future-date call per ticker/date/type; strict five-session daily-close high/low; ±2 sessions; two later closed bars confirm. One turn credits one call, earliest-issued first; historical-audit and forward cohorts are matched and covered independently (the combined summary uses one global matching). Error = called session minus actual session (negative = early).',
               'limitations': 'Daily-close turns are not intraday highs/lows or tradeable confirmation signals. Historical audit uses a rule chosen after those data; it is not unseen validation. Timing hits do not measure net trading profitability. Method tags describe blended calls, not standalone method performance.',
               'promotion': 'No weight changes. Require predeclared standalone/control comparisons on unseen sessions, adequate independent samples, and a separate cost/slippage/drawdown test.'}
     for ticker, d in data.items():
@@ -70,9 +99,8 @@ def timing_review(data, snapshots, now):
         closes = [p[1] for p in pairs]
         positions = {day: i for i, day in enumerate(dates)}
         turns = confirmed_turns(dates, closes)
-        results, pending, excluded = [], 0, []
-        used = set()
-        first_logged_day = None
+        calls, pending, excluded = [], 0, []
+        first_logged = {}
         # Coverage ends early enough that even the latest acceptable prediction
         # for a turn has itself matured. Otherwise "missed" would be premature.
         coverage_end_i = len(dates)-1-FLANK-2*TOLERANCE
@@ -80,11 +108,13 @@ def timing_review(data, snapshots, now):
             if symbol != ticker:
                 continue
             logged_day = eastern_day(row['recordedAt'])
+            cohort = 'forward' if datetime.fromisoformat(row['recordedAt']) >= datetime.fromisoformat(FORWARD_START) else 'historicalAudit'
             if logged_day < cutoff_day:
-                first_logged_day = min(first_logged_day or logged_day, logged_day)
+                for key in ('all', cohort):
+                    first_logged[key] = min(first_logged.get(key, logged_day), logged_day)
             base = {'snapshotId': row['id'], 'targetDate': target, 'type': kind,
                     'recordedAt': row['recordedAt'], 'methods': pred.get('methods', []),
-                    'cohort': 'forward' if datetime.fromisoformat(row['recordedAt']) >= datetime.fromisoformat(FORWARD_START) else 'historicalAudit'}
+                    'cohort': cohort}
             observed_day = max(logged_day, row.get('lastBar', logged_day),
                                datetime.strptime(row['generated'][:19], '%Y-%m-%d %I:%M %p').date().isoformat())
             if kind not in ('high', 'low') or target <= observed_day:
@@ -103,21 +133,17 @@ def timing_review(data, snapshots, now):
             if pos+TOLERANCE+FLANK >= len(dates):
                 pending += 1
                 continue
-            candidates = [t for t in turns if t['type'] == kind and t['date'] > observed_day
-                          and abs(t['index']-pos) <= TOLERANCE and (t['date'], kind) not in used]
-            if candidates:
-                turn = min(candidates, key=lambda t: (abs(t['index']-pos), t['date']))
-                used.add((turn['date'], kind))
-                results.append(dict(base, status='hit', actualDate=turn['date'],
-                                    confirmedDate=turn['confirmedDate'], errorSessions=pos-turn['index']))
-            else:
-                results.append(dict(base, status='falseAlarm', actualDate=None,
-                                    confirmedDate=None, errorSessions=None))
-        scope = [t for t in turns if first_logged_day and t['date'] > first_logged_day
-                 and t['index'] <= coverage_end_i]
+            calls.append((base, pos, observed_day))
+        # Each cohort is matched on its own: a forward call must never become a
+        # false alarm because an earlier historical call already claimed its
+        # turn. Within any one scorecard a turn still credits at most one call.
+        results, used = match(calls, turns)
+        historical, historical_used = match([c for c in calls if c[0]['cohort'] == 'historicalAudit'], turns)
+        forward, forward_used = match([c for c in calls if c[0]['cohort'] == 'forward'], turns)
+        forward_day = eastern_day(FORWARD_START)
+        historical_end_i = min(coverage_end_i, sum(day < forward_day for day in dates)-1)
+        scope = coverage(turns, first_logged.get('all'), coverage_end_i)
         missed = [t for t in scope if (t['date'], t['type']) not in used]
-        historical = [r for r in results if r['cohort'] == 'historicalAudit']
-        forward = [r for r in results if r['cohort'] == 'forward']
         # Tags overlap because a call may combine several methods. No causal
         # attribution or ranking is inferred from these descriptive buckets.
         families = {'Gann': lambda s: 'gann' in s,
@@ -130,10 +156,15 @@ def timing_review(data, snapshots, now):
         report['tickers'][ticker] = {
             'summary': summarize(results), 'historicalAudit': summarize(historical),
             'forward': summarize(forward), 'pending': pending, 'excludedCount': len(excluded),
-            'coverage': {'fromExclusive': first_logged_day,
-                         'through': dates[coverage_end_i] if coverage_end_i >= 0 else None,
-                         'turns': len(scope), 'missedTurns': len(missed),
-                         'caughtTurns': len(scope)-len(missed)},
-            'results': results, 'excluded': excluded, 'missed': missed, 'methodTags': tags,
+            'coverage': coverage_summary(scope, used, first_logged.get('all'), dates, coverage_end_i),
+            # Historical coverage stops before the forward start; forward
+            # coverage starts after the first forward original was logged.
+            'historicalCoverage': coverage_summary(
+                coverage(turns, first_logged.get('historicalAudit'), historical_end_i),
+                historical_used, first_logged.get('historicalAudit'), dates, historical_end_i),
+            'forwardCoverage': coverage_summary(
+                coverage(turns, first_logged.get('forward'), coverage_end_i),
+                forward_used, first_logged.get('forward'), dates, coverage_end_i),
+            'results': historical + forward, 'excluded': excluded, 'missed': missed, 'methodTags': tags,
             'lastClosedSession': dates[-1] if dates else None}
     return report

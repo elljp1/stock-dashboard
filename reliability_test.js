@@ -24,7 +24,15 @@ const delay=()=>new Promise(r=>setTimeout(r,30));
       assert.ok(d.getElementById('timingSummary').textContent.includes(`${timing.forward.scored} forward-test calls`));
       assert.ok(d.getElementById('timingDetails').textContent.includes('not proof'));
       assert.ok(!d.getElementById('timingPanel').textContent.includes('undefined'));
+      for(const card of d.querySelectorAll('#timingCards > div')){
+        assert.ok(card.textContent.includes('Historical audit') && card.textContent.includes('Forward test'),'cohorts must stay separate');
+      }
     }
+    const note=d.getElementById('hitnote').textContent;
+    assert.ok(!/proven edge —|trade those|REAL EDGE — trade this/i.test(d.body.textContent),'labels must not claim a proven edge or instruct trading');
+    const lead=w.eval('DATA_ALL[CUR].leadEdge')||{};
+    if(Object.values(lead).some(v=>v.edge<0)) assert.ok(note.includes('BELOW chance'),'below-chance bands must say so');
+    assert.ok(!d.getElementById('predTable').textContent.includes('ACTIONABLE'));
     const forecasts=w.eval('DATA_ALL[CUR].predictions');
     const chartRow=d.querySelector('[data-chart-targets]');
     for(const side of ['high','low']){
