@@ -21,6 +21,11 @@ reported separately and is not evidence of timing skill or trading profit.
   earliest-issued order, then claim the nearest unclaimed turn (earlier turn
   breaks a tie). One turn earns at most one hit. This is a fixed assignment
   rule, not a hindsight search for the best pairing.
+- The historical audit and forward cohort are matched independently. A
+  historical call can never use up a turn and turn a forward call into a false
+  alarm. Historical missed-turn coverage stops before September 24, 2026;
+  forward coverage starts after the first forward original is logged. The
+  combined `summary` uses one global matching and is not shown as a score.
 - Wait until the full window and both confirmation sessions are closed.
   Both the analysis build and review must be on a later Eastern date than any
   bar used. Do not shift an absent target date to a more convenient session.
@@ -41,6 +46,17 @@ Intraday timing is not inferred from daily closes, astronomy event times, or
 planetary-hour labels. Gold futures use provider session labels and must be
 evaluated separately from regular-hours equities.
 
+## Change-evidence policy
+
+Three graded days, a run of consecutive reviews, or a persistent pattern in
+the daily journal are **not** enough evidence to change forecast weights,
+timing rules or strategy. They justify an investigation or a bug fix with a
+demonstrated mechanical cause, nothing more. Weight or strategy promotion
+follows the research gate below. Dashboard labels such as ACTIONABLE
+(displayed as NEAR-TERM), WATCH and SKETCH describe lead time only. They
+never certify an edge or instruct a trade, and the in-sample lead-time
+measurement shown beside them may be below chance.
+
 ## Gann / cycle / astronomy research gate
 
 Gann's *The Tunnel Thru the Air* can supply research hypotheses; its narrative
@@ -51,7 +67,7 @@ The method-tag table describes methods present in blended forecasts. Its
 groups overlap. It cannot establish which method caused a hit, and must not
 be used to promote Gann or astrology weights.
 
-Next experiment (not yet implemented): predeclare a small set of standalone
+Next experiment (not yet implemented; full design in `RESEARCH_PROPOSAL_TIMING.md`): predeclare a small set of standalone
 rules, their anchor selection, maximum forecast count and lead times. Compare
 (1) simple calendar/swing-spacing controls, (2) Gann calendar counts, (3) Hurst/
 Fibonacci cycles, and (4) explicit astronomy-event rules, then evaluate adding

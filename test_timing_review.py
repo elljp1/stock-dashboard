@@ -125,6 +125,55 @@ class TimingReviewTests(unittest.TestCase):
         self.assertEqual(result['methodTags']['Astro / vibration']['hits'], 1)
         self.assertEqual(result['summary']['hits'], 1)
 
+    def forward_fixture(self):
+        # 30 sessions through 2026-10-12; one strict closing high at index 20
+        # (2026-09-29), after the forward cohort starts on 2026-09-24 (index 17).
+        day = date(2026, 9, 1)
+        self.days = []
+        while len(self.days) < 30:
+            if day.weekday() < 5:
+                self.days.append(day.isoformat())
+            day += timedelta(days=1)
+        self.closes = [100+i if i <= 20 else 140-i for i in range(30)]
+        self.data['TEST']['chart'] = {'dates': self.days, 'closes': self.closes}
+
+    def test_forward_call_is_not_blocked_by_historical_claim(self):
+        self.forward_fixture()
+        historical = self.row(20, 16, key='historical')
+        forward = self.row(21, 17, key='forward')
+        result = self.score([historical, forward])
+        self.assertEqual(result['historicalAudit']['hits'], 1)
+        self.assertEqual(result['forward']['hits'], 1)
+        self.assertEqual(result['forward']['falseAlarms'], 0)
+        # The combined figure still lets one turn credit only one call.
+        self.assertEqual(result['summary']['hits'], 1)
+        self.assertEqual(result['summary']['falseAlarms'], 1)
+        by_id = {r['snapshotId']: r for r in result['results']}
+        self.assertEqual(by_id['forward']['status'], 'hit')
+        self.assertEqual(by_id['forward']['errorSessions'], 1)
+
+    def test_cohort_coverage_is_partitioned_at_forward_start(self):
+        self.forward_fixture()
+        # Historical call far from the turn; forward call catches it.
+        result = self.score([self.row(8, 1, key='historical'), self.row(21, 17, key='forward')])
+        hist, fwd = result['historicalCoverage'], result['forwardCoverage']
+        self.assertEqual(hist['through'], self.days[16])
+        self.assertEqual(hist['turns'], 0)
+        self.assertEqual((fwd['fromExclusive'], fwd['turns'], fwd['missedTurns']), (self.days[17], 1, 0))
+        # Without a forward call the forward-period turn is not charged to
+        # the historical audit, and forward coverage has not started.
+        result = self.score([self.row(8, 1, key='historical')])
+        self.assertEqual(result['historicalCoverage']['turns'], 0)
+        self.assertEqual(result['forwardCoverage']['turns'], 0)
+        self.assertEqual(result['coverage']['missedTurns'], 1)
+
+    def test_forward_miss_is_counted_in_forward_coverage(self):
+        self.forward_fixture()
+        result = self.score([self.row(8, 1, key='historical'), self.row(24, 17, kind='low', key='forward')])
+        self.assertEqual(result['forwardCoverage']['turns'], 1)
+        self.assertEqual(result['forwardCoverage']['missedTurns'], 1)
+        self.assertEqual(result['forward']['falseAlarms'], 1)
+
 
 if __name__ == '__main__':
     unittest.main()

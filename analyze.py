@@ -49,8 +49,9 @@ except Exception:
 
 # ---- measured edge by lead time: how good are calls made N days ahead? ----
 # Graded fresh every run from the full prediction log vs realized turns.
-# This is what powers the ACTIONABLE / WATCH / SKETCH labels - the label is
-# a measurement, not an opinion.
+# The ACTIONABLE / WATCH / SKETCH labels are lead-time bands only (the page
+# shows ACTIONABLE as NEAR-TERM). This measurement is displayed beside them;
+# it is in-sample and can be below chance, so it never certifies an edge.
 def _measure_lead_edge():
     try:
         from datetime import date as _date
