@@ -7,7 +7,7 @@ from pathlib import Path
 import pandas as pd
 from zoneinfo import ZoneInfo
 from datetime import datetime
-from data_freshness import reconcile_daily
+from data_freshness import reconcile_daily, remember_completed
 
 ET = ZoneInfo("America/New_York")
 UA = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
@@ -48,6 +48,8 @@ def fetch(ticker, rng, interval, tries=3):
 
 
 failures = []
+cache_path = Path('completed_session_cache.json')
+cache = json.loads(cache_path.read_text()) if cache_path.exists() else {'version': 1, 'tickers': {}}
 for tkr in TICKERS:
     print(f"--- {tkr} ---")
     try:
@@ -62,7 +64,8 @@ for tkr in TICKERS:
             time.sleep(0.5)  # be polite to Yahoo
         frames['daily'] = reconcile_daily(
             frames['daily'], frames['hourly'], tkr, datetime.now(ET),
-            lambda: fetch(tkr, '1mo', '1d')[0], intraday=frames['15m'])
+            lambda: fetch(tkr, '1mo', '1d')[0], intraday=frames['15m'], cache=cache)
+        remember_completed(cache, tkr, frames['daily'], datetime.now(ET))
         for name, df in frames.items():
             target = Path(f"{tkr}_{name}.csv")
             temp = target.with_suffix(".csv.tmp")
@@ -105,3 +108,7 @@ print("pre/post prices:", pm)
 
 if failures:
     sys.exit("Incomplete data download: " + ", ".join(failures))
+
+cache_temp = cache_path.with_suffix('.json.tmp')
+cache_temp.write_text(json.dumps(cache, indent=2, allow_nan=False) + '\n')
+cache_temp.replace(cache_path)

@@ -681,9 +681,9 @@ def analyze(tkr):
            "price": last_close, "priceAsOf": price_as_of,
            "priceSource": price_source,
            "lastDailyBar": last_bar_date.strftime("%Y-%m-%d"),
-           "dailyBarSource": ("Recovered from complete 15-minute session plus 16:00 close"
-                              if daily.iloc[-1].get('Source') == 'recovered_15m_complete_session'
-                              else "Yahoo daily bar"),
+           "dailyBarSource": ({'recovered_15m_complete_session': "Recovered from complete 15-minute session plus 16:00 close",
+                               'cached_validated_completed_session': "Previously validated completed-session bar (cached)"}
+                              .get(daily.iloc[-1].get('Source'), "Yahoo daily bar")),
            "monthName": NOW.strftime("%B")}
 
     # ------- ranges -------
