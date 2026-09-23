@@ -1,6 +1,6 @@
 {
-  "reviewedAt": "2026-09-23T14:41:06.969639+00:00",
-  "snapshotCount": 2590,
+  "reviewedAt": "2026-09-23T14:44:07.197817+00:00",
+  "snapshotCount": 2600,
   "scoredOriginals": 77,
   "results": [
     {
@@ -790,7 +790,7 @@
           {
             "isoDate": "2026-11-23",
             "type": "high",
-            "target": 323.26,
+            "target": 315.29,
             "touched": "2026-09-23",
             "deltaDays": -43
           },
@@ -853,7 +853,7 @@
           {
             "isoDate": "2026-10-30",
             "type": "high",
-            "target": 344.11,
+            "target": 335.62,
             "touched": "2026-09-23",
             "deltaDays": -27
           },
@@ -1066,6 +1066,10 @@
           "gann": 0.93
         },
         "famStats": {
+          "hurst": {
+            "n": 2,
+            "hits": 0
+          },
           "rhythm": {
             "n": 6,
             "hits": 2
@@ -1073,10 +1077,6 @@
           "fib": {
             "n": 4,
             "hits": 2
-          },
-          "hurst": {
-            "n": 2,
-            "hits": 0
           },
           "gann": {
             "n": 7,
@@ -1644,14 +1644,18 @@
         "priceCalibHigh": 1.15,
         "priceCalibLow": 0.999,
         "methodFactors": {
+          "hurst": 0.51,
           "rhythm": 1.18,
           "fib": 0.61,
-          "hurst": 0.51,
           "gann": 1.17,
           "vibration": 1.53,
           "moon": 1.53
         },
         "famStats": {
+          "hurst": {
+            "n": 10,
+            "hits": 0
+          },
           "rhythm": {
             "n": 24,
             "hits": 4
@@ -1659,10 +1663,6 @@
           "fib": {
             "n": 18,
             "hits": 1
-          },
-          "hurst": {
-            "n": 10,
-            "hits": 0
           },
           "gann": {
             "n": 19,
@@ -2237,21 +2237,21 @@
         "priceCalibHigh": 0.989,
         "priceCalibLow": 0.974,
         "methodFactors": {
-          "fib": 1.16,
           "hurst": 1.44,
+          "fib": 1.16,
           "rhythm": 1.42,
           "gann": 0.9,
-          "vibration": 2.0,
-          "moon": 1.62
+          "moon": 1.62,
+          "vibration": 2.0
         },
         "famStats": {
-          "fib": {
-            "n": 12,
-            "hits": 4
-          },
           "hurst": {
             "n": 16,
             "hits": 7
+          },
+          "fib": {
+            "n": 12,
+            "hits": 4
           },
           "rhythm": {
             "n": 14,
@@ -2261,13 +2261,13 @@
             "n": 16,
             "hits": 4
           },
-          "vibration": {
-            "n": 5,
-            "hits": 4
-          },
           "moon": {
             "n": 4,
             "hits": 2
+          },
+          "vibration": {
+            "n": 5,
+            "hits": 4
           }
         }
       }
@@ -2321,7 +2321,7 @@
           {
             "isoDate": "2026-11-16",
             "type": "low",
-            "target": 350.98,
+            "target": 351.0,
             "touched": "2026-09-23",
             "deltaDays": -38
           },
@@ -2840,7 +2840,7 @@
           {
             "isoDate": "2026-11-02",
             "type": "high",
-            "target": 349.83,
+            "target": 349.56,
             "touched": "2026-09-23",
             "deltaDays": -28
           },
@@ -3323,8 +3323,8 @@
         "priceCalibLow": 0.979,
         "methodFactors": {
           "gann": 1.33,
-          "fib": 0.91,
           "hurst": 1.21,
+          "fib": 0.91,
           "rhythm": 0.65,
           "vibration": 0.94,
           "moon": 1.7
@@ -3334,13 +3334,13 @@
             "n": 14,
             "hits": 4
           },
-          "fib": {
-            "n": 12,
-            "hits": 2
-          },
           "hurst": {
             "n": 5,
             "hits": 1
+          },
+          "fib": {
+            "n": 12,
+            "hits": 2
           },
           "rhythm": {
             "n": 11,
@@ -3506,7 +3506,7 @@
           {
             "isoDate": "2026-11-02",
             "type": "low",
-            "target": 261.27,
+            "target": 261.21,
             "touched": "2026-09-23",
             "deltaDays": -28
           },
@@ -3541,7 +3541,7 @@
           {
             "isoDate": "2026-10-20",
             "type": "low",
-            "target": 260.57,
+            "target": 260.5,
             "touched": "2026-09-23",
             "deltaDays": -19
           },
@@ -4247,7 +4247,7 @@
   "timing": {
     "version": "daily-close-turns-v1",
     "forwardStart": "2026-09-24T00:00:00-04:00",
-    "reviewedAt": "2026-09-23T14:41:06.969639+00:00",
+    "reviewedAt": "2026-09-23T14:44:07.197817+00:00",
     "unit": "trading sessions",
     "tickers": {
       "TSLA": {
@@ -4285,6 +4285,20 @@
         "excludedCount": 0,
         "coverage": {
           "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
+        },
+        "historicalCoverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
+        },
+        "forwardCoverage": {
+          "fromExclusive": null,
           "through": "2026-09-14",
           "turns": 0,
           "missedTurns": 0,
@@ -4402,6 +4416,20 @@
           "through": "2026-09-14",
           "turns": 1,
           "missedTurns": 1,
+          "caughtTurns": 0
+        },
+        "historicalCoverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 1,
+          "missedTurns": 1,
+          "caughtTurns": 0
+        },
+        "forwardCoverage": {
+          "fromExclusive": null,
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
           "caughtTurns": 0
         },
         "results": [
@@ -4565,6 +4593,20 @@
           "through": "2026-09-14",
           "turns": 1,
           "missedTurns": 1,
+          "caughtTurns": 0
+        },
+        "historicalCoverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 1,
+          "missedTurns": 1,
+          "caughtTurns": 0
+        },
+        "forwardCoverage": {
+          "fromExclusive": null,
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
           "caughtTurns": 0
         },
         "results": [
@@ -4760,6 +4802,20 @@
           "turns": 2,
           "missedTurns": 1,
           "caughtTurns": 1
+        },
+        "historicalCoverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 2,
+          "missedTurns": 1,
+          "caughtTurns": 1
+        },
+        "forwardCoverage": {
+          "fromExclusive": null,
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
         },
         "results": [
           {
@@ -4980,6 +5036,20 @@
           "missedTurns": 0,
           "caughtTurns": 2
         },
+        "historicalCoverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 2,
+          "missedTurns": 0,
+          "caughtTurns": 2
+        },
+        "forwardCoverage": {
+          "fromExclusive": null,
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
+        },
         "results": [
           {
             "snapshotId": "40030db79d6d1841624c4969e9998cbc505ad7950d2ab3213ef6ce9370955167",
@@ -5153,6 +5223,20 @@
           "missedTurns": 0,
           "caughtTurns": 1
         },
+        "historicalCoverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 1,
+          "missedTurns": 0,
+          "caughtTurns": 1
+        },
+        "forwardCoverage": {
+          "fromExclusive": null,
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
+        },
         "results": [
           {
             "snapshotId": "9b87f27e97f3e0f96138df3257896afa85f49dd248db64305309f57109e25ad8",
@@ -5324,6 +5408,20 @@
           "turns": 2,
           "missedTurns": 0,
           "caughtTurns": 2
+        },
+        "historicalCoverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 2,
+          "missedTurns": 0,
+          "caughtTurns": 2
+        },
+        "forwardCoverage": {
+          "fromExclusive": null,
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
         },
         "results": [
           {
@@ -5519,6 +5617,20 @@
           "turns": 2,
           "missedTurns": 0,
           "caughtTurns": 2
+        },
+        "historicalCoverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 2,
+          "missedTurns": 0,
+          "caughtTurns": 2
+        },
+        "forwardCoverage": {
+          "fromExclusive": null,
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
         },
         "results": [
           {
@@ -5718,6 +5830,20 @@
           "missedTurns": 0,
           "caughtTurns": 2
         },
+        "historicalCoverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 2,
+          "missedTurns": 0,
+          "caughtTurns": 2
+        },
+        "forwardCoverage": {
+          "fromExclusive": null,
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
+        },
         "results": [
           {
             "snapshotId": "9cb6cccc0cfd70eff52b4545acc9f58240a6d05057ecb1a5d77d05f56533d571",
@@ -5901,6 +6027,20 @@
           "missedTurns": 0,
           "caughtTurns": 0
         },
+        "historicalCoverage": {
+          "fromExclusive": "2026-09-07",
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
+        },
+        "forwardCoverage": {
+          "fromExclusive": null,
+          "through": "2026-09-14",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
+        },
         "results": [
           {
             "snapshotId": "5215eba00bdf387e72096116c1df1bf8ff326b046d0890a5a2584b3e4c5ff0f4",
@@ -5994,7 +6134,7 @@
         "lastClosedSession": "2026-09-22"
       }
     },
-    "method": "First logged future-date call per ticker/date/type; strict five-session daily-close high/low; \u00b12 sessions; two later closed bars confirm. One turn credits one call, earliest-issued first. Error = called session minus actual session (negative = early).",
+    "method": "First logged future-date call per ticker/date/type; strict five-session daily-close high/low; \u00b12 sessions; two later closed bars confirm. One turn credits one call, earliest-issued first; historical-audit and forward cohorts are matched and covered independently (the combined summary uses one global matching). Error = called session minus actual session (negative = early).",
     "limitations": "Daily-close turns are not intraday highs/lows or tradeable confirmation signals. Historical audit uses a rule chosen after those data; it is not unseen validation. Timing hits do not measure net trading profitability. Method tags describe blended calls, not standalone method performance.",
     "promotion": "No weight changes. Require predeclared standalone/control comparisons on unseen sessions, adequate independent samples, and a separate cost/slippage/drawdown test."
   }
