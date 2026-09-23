@@ -60,10 +60,13 @@ before running any evaluation. It fixes:
   median spacing for C1 and any tie-break choices may be set here.
 - **Validation:** 2024-01-01 through 2025-12-31. Each family may run once
   here. After that, the only permitted change is to drop a family entirely.
-- **Untouched test:** 2026-01-01 onward, plus the live forward period that
-  begins 2026-09-24. The historical test run happens once. Data already viewed
-  on the dashboard since 2026-03 counts as inspected, so it is reported
-  separately and never relabeled as unseen.
+- **Held-out historical check:** 2026-01-01 through the pre-registration
+  date, run once. The dashboard already shows 5-year Gann, Fibonacci, Hurst
+  and lunar scorecards, so no historical period is truly unseen for these
+  families. This check is secondary evidence only.
+- **Untouched test (primary):** forecasts issued prospectively after the
+  pre-registration hash is committed, stored before their windows open. This
+  is the only data that counts as unseen.
 
 `daily_extremes.json` only goes back to March 2026. The study needs a frozen
 daily-bar archive, with a stored hash, built from the provider history before
@@ -93,14 +96,14 @@ using the block-bootstrap variance from the training period. The test count
 comes from that calculation, not from a count of profitable days.
 
 A family may be **proposed** for inclusion (not auto-promoted) only if all
-four conditions hold on the untouched test:
+four conditions hold:
 
-- its lower 95% bound for lift over C1 is above zero;
+- on the prospective untouched test, its lower 95% bound for lift over C1 is above zero;
 - it does not increase missed turns at matched frequency;
 - the result holds in at least two of three independent time blocks and in
   both rising and falling market regimes;
-- the forward cohort agrees in direction once it reaches the pre-computed
-  sample size.
+- the held-out historical check agrees in direction; if it disagrees, the
+  study reports that conflict and makes no proposal.
 
 **Explicitly excluded as evidence:** three consecutive graded days,
 single-week streaks, blended-call method tags, in-sample lead-edge tables, and
