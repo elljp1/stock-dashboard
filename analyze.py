@@ -18,6 +18,7 @@ from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from scoring import nearest_prospective_pivot
 from horizon_ledger import original_horizons, record_horizon
+from quote_selection import select_quote
 
 ET = ZoneInfo("America/New_York")
 NOW = datetime.now(ET)
@@ -643,15 +644,12 @@ def analyze(tkr):
     try:
         with open("premarket.json", encoding="utf-8") as f:
             _pm = json.load(f)
-        _quote = _pm.get("quotes", {}).get(tkr, {})
-        if time.time() - _pm.get("asof", 0) < 6 * 3600 and tkr in _pm.get("prices", {}):
-            _pmp = float(_pm["prices"][tkr])
-            if _quote.get("quoteTime"):
-                price_as_of = _quote["quoteTime"]
-                price_source = "latest available trade, including extended hours"
-            if _pmp > 0 and abs(_pmp / last_close - 1) > 0.001:
-                last_close = _pmp
-                is_pm = True
+        _quote = select_quote(_pm, tkr, daily.index[-1].to_pydatetime(), datetime.now(ET))
+        if _quote:
+            last_close = _quote['price']
+            price_as_of = _quote['priceAsOf']
+            price_source = _quote['priceSource']
+            is_pm = True
     except Exception:
         pass
 
