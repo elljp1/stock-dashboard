@@ -388,6 +388,54 @@
       "cancelled": "2026-09-18T09:29 ET",
       "spotAtCancel": 718.6,
       "spreadMidAtCancel": 0.73
+    },
+    {
+      "id": 6,
+      "status": "open",
+      "account": "••••2831 Agentic",
+      "orderId": "6ab3eade-bcab-4630-a419-d28f9c354227",
+      "ticker": "GOOGL",
+      "strategy": "put credit spread",
+      "expiry": "2026-10-23",
+      "dteAtPlan": 30,
+      "width": 5,
+      "quantity": 3,
+      "legs": {
+        "sell": {
+          "strike": 325,
+          "type": "put",
+          "optionId": "17bcbf4e-89ce-4ff7-8403-5481213b620b"
+        },
+        "buy": {
+          "strike": 320,
+          "type": "put",
+          "optionId": "cb2554ec-9b6f-4ee0-8205-b5dd23225630"
+        }
+      },
+      "entryLimitCredit": 1.25,
+      "timeInForce": "gtc",
+      "placedAt": "2026-09-23T11:06 ET",
+      "placedBy": "user in app",
+      "alertId": 12,
+      "spotAtPlan": 342.06,
+      "shortDeltaAtPlan": -0.257,
+      "breakeven": 323.75,
+      "maxProfit": 375,
+      "maxLoss": 1125,
+      "collateral": 1500,
+      "pctAccountAtRisk": {
+        "on11000": 0.102
+      },
+      "earningsDate": "2026-10-28",
+      "exitTargetDebit": 0.62,
+      "lossExitDebit": 2.5,
+      "fillCredit": 1.25,
+      "opened": "2026-09-23T11:27 ET",
+      "closed": null,
+      "closeCost": null,
+      "pnl": null,
+      "fees": 0.24,
+      "notes": "From alert 12 (limit 1.20 suggested; user entered 1.25). Filled 11:27am ET: sold 325P at 5.00, bought 320P at 3.75. Agent's own placement was blocked by the Claude Code permission check; user placed in app. App projects a GOOGL low of 316.40 on 10/07, below the short strike."
     }
   ],
   "otherAccountOrders": [
@@ -631,8 +679,8 @@
         "contracts": 3,
         "maxLoss": 1140,
         "breakeven": 323.8,
-        "taken": false,
-        "reason": "pushed; awaiting user",
+        "taken": true,
+        "reason": "user placed in app at 1.25; filled 11:27 ET (trade 6)",
         "outcome": "pending",
         "projectedTurn": 316.4,
         "projectedDate": "2026-10-07",
