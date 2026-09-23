@@ -245,6 +245,15 @@
 
 <div class="tabs" id="tabs"></div>
 
+<div class="panel" id="timingPanel" style="border:2px solid var(--blue)">
+  <h2>Timing first — original forecast scorecard</h2>
+  <div id="timingSummary" class="sub"></div>
+  <div id="timingCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-top:12px"></div>
+  <details style="margin-top:12px"><summary>Results and scoring rules</summary>
+    <div id="timingDetails" style="margin-top:8px"></div>
+  </details>
+</div>
+
 <div class="panel">
   <h2>Price, detected swings (H/L), and projected path</h2>
   <div class="chartwrap"><canvas id="chart" width="1140" height="360"></canvas></div>
@@ -506,6 +515,31 @@ function bars(id, labels, values, opts={}){
   });
 }
 
+function renderTimingReview(T){
+  if(!T){
+    $("timingSummary").textContent="Timing scorecard will appear after the next validated refresh.";
+    $("timingCards").innerHTML=""; $("timingDetails").innerHTML=""; return;
+  }
+  const s=T.summary, c=T.coverage;
+  const esc=v=>String(v == null ? "—" : v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  $("timingSummary").textContent=`Daily-close reversal dates · ±2 trading sessions · ${T.historicalAudit.scored} historical audit calls · ${T.forward.scored} forward-test calls. ${T.pending} await completed windows. Price-target error is scored separately.`;
+  const cards=[
+    [s.scored ? `${s.hits}/${s.scored}` : "Pending", "Calls near a turn", "One actual turn credits one call"],
+    [s.falseAlarms, "False alarms", "No unclaimed matching turn in the window"],
+    [`${c.missedTurns}/${c.turns}`, "Missed confirmed turns", c.through ? `Coverage through ${c.through}` : "Coverage pending"],
+    [s.medianAbsErrorSessions === null ? "—" : `${s.medianAbsErrorSessions} sessions`, "Typical timing miss", "Matched calls only; misses remain above"]
+  ];
+  $("timingCards").innerHTML=cards.map(([v,title,sub])=>`<div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--panel2)"><div style="font-size:26px;font-weight:750">${esc(v)}</div><b>${esc(title)}</b><div class="tag">${esc(sub)}</div></div>`).join("");
+  $("timingDetails").innerHTML=`<p><b>${s.early} early · ${s.exact} exact · ${s.late} late</b> among matched calls. Early/late describes the called date versus the actual turn date.</p>
+    <p>A turn is a strict daily closing high or low relative to the two sessions on each side. It is confirmed only after two later sessions close. Calls mature only after their full ±2-session window can be confirmed. This does not measure the minute of an intraday high/low.</p>
+    <p>Each ticker/date/type uses its earliest logged forecast. Same-day and retrospective calls are excluded; revisions cannot improve the original. Earlier-issued calls claim matching turns first. Missed-turn coverage ends earlier so later calls have time to mature. ${T.excludedCount} originals excluded.</p>
+    <p><b>Historical audit ≠ unseen validation.</b> Forward testing begins with originals logged on/after September 24, 2026 (Eastern). ${T.forward.scored} forward calls scored so far. No method weights change from this scorecard. Timing accuracy does not establish net trading profitability.</p>
+    <div class="tblwrap"><table><tr><th>Called date</th><th>Turn</th><th>Actual date</th><th>Timing result</th></tr>${T.recent.map(r=>`<tr><td>${esc(r.targetDate)}</td><td>${esc(r.type)}</td><td>${esc(r.actualDate)}</td><td>${r.status==='hit' ? (r.errorSessions===0 ? 'Exact session' : `${Math.abs(r.errorSessions)} session(s) ${r.errorSessions<0?'early':'late'}`) : 'False alarm'}</td></tr>`).join("")}</table></div>
+    <p><b>Methods present in blended calls</b> — overlapping groups, not proof that a method caused success:</p>
+    <div class="tblwrap"><table><tr><th>Method tag</th><th>Matched / scored</th></tr>${Object.entries(T.methodTags).map(([name,v])=>`<tr><td>${esc(name)}</td><td>${v.hits}/${v.scored}</td></tr>`).join("")}</table></div>
+    <p class="tag">Next research gate: compare fixed Gann, cycle and astro rules separately against simple calendar/rhythm controls on unseen sessions. Keep sample size, false alarms and missed turns visible. A separate trade simulation must include costs, slippage and drawdown before any strategy promotion.</p>`;
+}
+
 /* ---------- main render ---------- */
 function renderAll(D){
   const pb = D.predictionBasis;
@@ -522,6 +556,7 @@ function renderAll(D){
 
   const review=D.dailyReview;
   $("reviewStatus").textContent=review ? "Automatic review: " + new Date(review.reviewedAt).toLocaleString("en-US",{timeZone:"America/New_York"}) + " ET · " + review.snapshotCount + " saved forecast snapshots · " + review.scoredOriginals + " original targets scored. Learning adjusts estimates; improvement is not guaranteed." : "Automatic review will appear after the next scheduled run.";
+  renderTimingReview(D.timingReview);
   /* predictions */
   const p1 = D.predictions[0];
   const tn = D.turnFormed;
