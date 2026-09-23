@@ -1660,7 +1660,9 @@ function renderAll(D){
     const reviewed=d.dailyReview && Date.parse(d.dailyReview.reviewedAt);
     const late=reviewed && Date.now()-reviewed>45*60000;
     return (late ? "OLDER ANALYSIS — last completed refresh more than 45 minutes ago. " : "") +
-      "Analysis generated " + g + ". " + q + ". Checks for updates every 5 minutes; daily review runs automatically.";
+      "Analysis generated " + g + ". " + q + ". " +
+      (d.dailyBarSource ? "Daily bar: " + d.dailyBarSource + ". " : "") +
+      "Checks for updates every 5 minutes; daily review runs automatically.";
   }
   async function pullLatest(label){
     st.textContent = label || "fetching the latest data...";
