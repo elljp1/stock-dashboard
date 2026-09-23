@@ -2,7 +2,8 @@ from datetime import datetime
 from unittest import TestCase, main
 from unittest.mock import Mock
 import pandas as pd
-from data_freshness import reconcile_daily, recover_session, ET
+from data_freshness import reconcile_daily, recover_session, cached_session, remember_completed, ET
+import copy
 
 
 def bars(*dates):
@@ -11,6 +12,54 @@ def bars(*dates):
 
 
 class DailyFreshnessTests(TestCase):
+    def cache(self):
+        return {'version': 1, 'tickers': {'TSLA': {'2026-09-22': {
+            'Open':100.,'High':104.,'Low':98.,'Close':103.,'Volume':260.,
+            'source':'recovered_15m_complete_session','storedAt':'2026-09-23T08:00:00-04:00'}}}}
+
+    def test_exact_cached_close_survives_disappearing_closing_observation(self):
+        intraday = self.complete_session().iloc[:-1]
+        daily = bars('2026-09-21 09:30')
+        result = reconcile_daily(daily, bars('2026-09-22 15:30'), 'TSLA',
+                    datetime(2026,9,23,10,tzinfo=ET), lambda: daily, intraday, self.cache())
+        self.assertEqual(result.Close.iloc[-1],103.)
+        self.assertNotEqual(result.Close.iloc[-1],intraday.Close.iloc[-1])
+        self.assertEqual(result.Source.iloc[-1],'cached_validated_completed_session')
+
+    def test_cache_cannot_substitute_wrong_date_symbol_or_unknown_source(self):
+        cache = self.cache(); now=datetime(2026,9,23,10,tzinfo=ET)
+        self.assertIsNone(cached_session(cache,'SPY',now.date(),now))
+        self.assertIsNone(cached_session(cache,'TSLA',now.date(),now))
+        cache['tickers']['TSLA']['2026-09-22']['source']='unverified'
+        self.assertIsNone(cached_session(cache,'TSLA',datetime(2026,9,22).date(),now))
+
+    def test_cache_rejects_bad_ohlcv_and_unsettled_or_future_timestamps(self):
+        for k,v in [('Close',float('nan')),('High',80),('Volume',-1),
+                    ('storedAt','2026-09-22T15:59:00-04:00'),
+                    ('storedAt','2026-09-24T08:00:00-04:00'),
+                    ('storedAt','2026-09-23T08:00:00')]:
+            c=self.cache();c['tickers']['TSLA']['2026-09-22'][k]=v
+            self.assertIsNone(cached_session(c,'TSLA',datetime(2026,9,22).date(),
+                                             datetime(2026,9,23,10,tzinfo=ET)))
+
+    def test_fresh_daily_data_takes_precedence_over_cache(self):
+        daily=bars('2026-09-22 09:30')
+        result=reconcile_daily(daily,bars('2026-09-22 15:30'),'TSLA',
+                datetime(2026,9,23,10,tzinfo=ET),Mock(),cache=self.cache())
+        self.assertIs(result,daily)
+
+    def test_cache_records_completed_sessions_only_and_retains_source(self):
+        c={'version':1,'tickers':{}};now=datetime(2026,9,23,10,tzinfo=ET)
+        daily=recover_session(self.complete_session(),datetime(2026,9,22).date(),now)
+        current=daily.copy();current.index=pd.DatetimeIndex(['2026-09-23 09:30'],tz=ET)
+        remember_completed(c,'TSLA',pd.concat([daily,current]),now)
+        self.assertEqual(list(c['tickers']['TSLA']),['2026-09-22'])
+        self.assertEqual(c['tickers']['TSLA']['2026-09-22']['source'],'recovered_15m_complete_session')
+        old=copy.deepcopy(c)
+        cached=cached_session(c,'TSLA',datetime(2026,9,22).date(),now)
+        remember_completed(c,'TSLA',cached,now)
+        self.assertEqual(c,old)
+
     def complete_session(self):
         index = pd.date_range('2026-09-22 09:30', '2026-09-22 16:00', freq='15min', tz=ET)
         frame = pd.DataFrame({'Open': 100., 'High': 104., 'Low': 98.,
