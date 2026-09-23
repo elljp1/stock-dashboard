@@ -2220,3 +2220,41 @@ Also watching: whether HOOD's hit rate ever breaks out of its long-running 13-20
 direction; whether QQQ's small uptick continues once more non-backlog predictions resolve; and
 whether my own sandbox's Yahoo access ever recovers now that the cloud runner's has stayed reliable
 for two days running.
+
+## 2026-09-23 (Wed) — cloud refresh current; grades steady; grade + log only; account-number exposure now 8 days unresolved
+
+**Build status:** my sandbox's own Yahoo fetch is still 403-blocked on all 10 tickers, and this
+sandbox has no committed CSVs to fall back on (gitignored by design), so a local rebuild wasn't
+possible today. The separate cloud refresh workflow reached Yahoo fine on its own and pushed a
+fresh build about an hour before this review started (commit 5238407, `data.js` stamped 9/23);
+`coherence_check.py` passes cleanly against that committed build (10/10 tickers), and the
+account-number guard (`test_sensitive_data.py`) is clean on the current working copy - only the
+expected masked `••••2831`/`••••6540`/`••••8549` references.
+
+**Grades reviewed:** swing-ledger counts ticked up a little further (HOOD n 45→47, QQQ n 35→37);
+TSLA (n=12), JPM (n=24), GOOGL (n=32), GC=F (n=18) unchanged; NVDA/AMZN/SPY/VOO still n=0, still a
+quiet stretch, not a bug. Hit rates: TSLA 33%/42%, HOOD 15%/21%, QQQ 30%/35%, JPM 17%/25%, GOOGL
+22%/25%, GC=F 22%/22% - all within the same noisy bands seen on prior days, no ticker sliding for
+3+ straight sessions. The daily high/low horizon grades (last five graded sessions, 9/16-9/22) show
+ordinary noise across every ticker - a mild recurring negative low-side bias on TSLA/QQQ/HOOD/AMZN
+that's been visible for weeks and already watched, not a new pattern, and no ticker crosses the
+3+-day persistent-bar for a code change. I didn't find a bug in the committed output.
+
+**Trade cards / paper journal:** spot-checked `trades_log.json`'s latest sheet - nothing new to
+flag beyond the usual model cards. `spread_journal.json`'s most recent entries are a GOOGL
+10/23 325/320 put-credit spread (trade 6, opened, exit order resting at 0.60 GTC) and a GOOGL
+320/315 re-alert (alert 14) - the live options-journal process the owner runs elsewhere, outside
+this review's scope. `real_trades.json` unchanged since the 9/11 TSLA assignment.
+
+**What changed and why:** no code change - grades are steady, not a new pattern, and nothing in
+today's committed build looks like a bug. Honesty features (measured hit rates, random-control
+comparisons, self-grading, the coherence gate) are untouched; `tickers.txt` wasn't touched.
+
+**Watch next, and one flag for the owner directly:** the plain-text brokerage account number
+committed in three commits around 9/14-9/16 is still sitting unscrubbed in this repo's public git
+history - today is the 8th straight day this has been logged here with no visible owner decision
+yet on whether to authorize rewriting history to remove it. Since this sits in a daily log file
+that may not get read every day, I'm also sending a direct notification about it today rather than
+just noting it here again. Also watching: whether HOOD's hit rate ever breaks its long-running
+13-21% band; whether QQQ's slow uptick continues; and whether my own sandbox's Yahoo access ever
+recovers.
