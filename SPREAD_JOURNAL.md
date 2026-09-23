@@ -55,6 +55,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 9 | 9/16 3:04pm | HOOD 10/23 90/85 put | $1.02 (limit $1.15 GTC, app low $100.21 on 9/17) | Pushed, open | pending |
 | 10 | 9/18 9:46am | GOOGL 10/23 385/390 call | $1.18 (limit $1.20; quotes wide, app high $372.21 on 9/25) | Pushed, open | pending |
 | 11 | 9/21 | QQQ 10/23 765/775 call | $2.09 | No | pending |
+| 12 | 9/23 | GOOGL 10/23 325/320 put | $1.20 | No | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
