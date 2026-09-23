@@ -427,7 +427,7 @@
         "on11000": 0.102
       },
       "earningsDate": "2026-10-28",
-      "exitTargetDebit": 0.62,
+      "exitTargetDebit": 0.6,
       "lossExitDebit": 2.5,
       "fillCredit": 1.25,
       "opened": "2026-09-23T11:27 ET",
@@ -435,7 +435,16 @@
       "closeCost": null,
       "pnl": null,
       "fees": 0.24,
-      "notes": "From alert 12 (limit 1.20 suggested; user entered 1.25). Filled 11:27am ET: sold 325P at 5.00, bought 320P at 3.75. Agent's own placement was blocked by the Claude Code permission check; user placed in app. App projects a GOOGL low of 316.40 on 10/07, below the short strike."
+      "notes": "From alert 12 (limit 1.20 suggested; user entered 1.25). Filled 11:27am ET: sold 325P at 5.00, bought 320P at 3.75. Agent's own placement was blocked by the Claude Code permission check; user placed in app. App projects a GOOGL low of 316.40 on 10/07, below the short strike.",
+      "exitOrder": {
+        "orderId": "6ab3f0de-3dd5-4d3c-856c-e1f13b11c02e",
+        "type": "buy to close, limit",
+        "limitDebit": 0.6,
+        "timeInForce": "gtc",
+        "placedAt": "2026-09-23T11:31 ET",
+        "placedBy": "user in app",
+        "state": "resting"
+      }
     }
   ],
   "otherAccountOrders": [
@@ -686,6 +695,29 @@
         "projectedDate": "2026-10-07",
         "projectedTurnType": "low",
         "note": "GOOGL -2.56% triggered the put check. 325/320 mid 1.20 (325 mark 4.95 / 320 mark 3.75), credit/width 0.24, short delta -0.257, OI 672, earnings 10/28 (tentative) after expiry. Short-leg quote 4.85/5.05 (4% of mark). 320/315 failed at 0.19 credit/width. App's next projected low is 316.40 on 10/07, below the short strike, so the timing check did not apply (outside 2 trading days) but the cushion is negative; 3 contracts is the only count inside 8-13% of 11,000."
+      },
+      {
+        "id": 13,
+        "date": "2026-09-23",
+        "time": "11:46 ET",
+        "symbol": "GOOGL",
+        "spread": "10/23 320/315 put credit",
+        "midAtAlert": 1.0,
+        "suggestedLimit": 1.0,
+        "limitType": "at mid (no turn projected within 2 trading days)",
+        "shortDelta": -0.215,
+        "spot": 340.93,
+        "dayChangePct": -2.91,
+        "contracts": 3,
+        "maxLoss": 1200,
+        "breakeven": 319.0,
+        "taken": false,
+        "reason": "pushed; awaiting user",
+        "outcome": "pending",
+        "projectedTurn": 316.4,
+        "projectedDate": "2026-10-07",
+        "projectedTurnType": "low",
+        "note": "Second GOOGL setup while trade 6 (325/320 x3) is open. 320 mark 3.875 / 315 mark 2.875, credit/width exactly 0.20 (threshold), short delta -0.215, OI 941, short-leg quote 3.75/4.00. 3 contracts is the only count inside 8-13%; combined open risk with trade 6 would be 2,325 (21%), all in GOOGL. App's projected low 316.40 on 10/07 sits below this short strike too."
       }
     ]
   }
