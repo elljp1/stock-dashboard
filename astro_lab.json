@@ -1,12 +1,12 @@
 {
- "computed": "2026-09-17",
+ "computed": "2026-09-24",
  "window": 2,
  "liftBar": 1.3,
  "nBar": 10,
  "fdrQ": 0.1,
  "perTicker": {
   "TSLA": {
-   "tested": 1035,
+   "tested": 1032,
    "turns": 72,
    "expectedFalse": 0.7,
    "validated": [],
@@ -156,6 +156,24 @@
      }
     },
     {
+     "factor": "geo Sun-Moon 150",
+     "type": "low",
+     "n": 124,
+     "hits": 26,
+     "hitPct": 21.0,
+     "chancePct": 14.1,
+     "lift": 1.49,
+     "p": 0.02258,
+     "rep": {
+      "trainP": 0.2072,
+      "testP": 0.021,
+      "trainLift": 1.27,
+      "testLift": 1.88,
+      "trainN": 74,
+      "testN": 50
+     }
+    },
+    {
      "factor": "geo Mercury-Pluto 72",
      "type": "any",
      "n": 10,
@@ -172,49 +190,50 @@
       "trainN": 6,
       "testN": 4
      }
-    },
-    {
-     "factor": "geo Venus-Neptune 30",
-     "type": "any",
-     "n": 10,
-     "hits": 6,
-     "hitPct": 60.0,
-     "chancePct": 26.7,
-     "lift": 2.25,
-     "p": 0.02715,
-     "rep": {
-      "trainP": 0.0585,
-      "testP": 0.2469,
-      "trainLift": 2.35,
-      "testLift": 2.07,
-      "trainN": 6,
-      "testN": 4
-     }
     }
    ],
    "overrides": [],
    "upcoming": []
   },
   "HOOD": {
-   "tested": 1035,
-   "turns": 81,
+   "tested": 1032,
+   "turns": 82,
    "expectedFalse": 0.7,
    "validated": [
     {
      "factor": "geo Moon-Uranus 30",
      "type": "high",
-     "n": 136,
+     "n": 135,
      "hits": 35,
-     "hitPct": 25.7,
+     "hitPct": 25.9,
      "chancePct": 16.1,
-     "lift": 1.6,
-     "p": 0.00268,
+     "lift": 1.61,
+     "p": 0.00235,
      "rep": {
-      "trainP": 0.0111,
+      "trainP": 0.0095,
       "testP": 0.0713,
-      "trainLift": 1.64,
+      "trainLift": 1.66,
       "testLift": 1.53,
-      "trainN": 82,
+      "trainN": 81,
+      "testN": 54
+     },
+     "verdict": "REPLICATED"
+    },
+    {
+     "factor": "geo Moon-Uranus 45",
+     "type": "high",
+     "n": 135,
+     "hits": 34,
+     "hitPct": 25.2,
+     "chancePct": 16.1,
+     "lift": 1.57,
+     "p": 0.00441,
+     "rep": {
+      "trainP": 0.0188,
+      "testP": 0.0713,
+      "trainLift": 1.58,
+      "testLift": 1.53,
+      "trainN": 81,
       "testN": 54
      },
      "verdict": "REPLICATED"
@@ -227,33 +246,51 @@
      "n": 42,
      "hits": 15,
      "hitPct": 35.7,
-     "chancePct": 15.7,
-     "lift": 2.27,
-     "p": 0.00122,
+     "chancePct": 16.1,
+     "lift": 2.22,
+     "p": 0.00158,
      "rep": {
-      "trainP": 0.0007,
-      "testP": 0.2714,
-      "trainLift": 2.8,
-      "testLift": 1.5,
-      "trainN": 25,
-      "testN": 17
+      "trainP": 0.0004,
+      "testP": 0.4697,
+      "trainLift": 2.82,
+      "testLift": 1.2,
+      "trainN": 26,
+      "testN": 16
      }
     },
     {
      "factor": "geo Moon-Uranus 30",
      "type": "high",
-     "n": 136,
+     "n": 135,
      "hits": 35,
-     "hitPct": 25.7,
+     "hitPct": 25.9,
      "chancePct": 16.1,
-     "lift": 1.6,
-     "p": 0.00268,
+     "lift": 1.61,
+     "p": 0.00235,
      "rep": {
-      "trainP": 0.0111,
+      "trainP": 0.0095,
       "testP": 0.0713,
-      "trainLift": 1.64,
+      "trainLift": 1.66,
       "testLift": 1.53,
-      "trainN": 82,
+      "trainN": 81,
+      "testN": 54
+     }
+    },
+    {
+     "factor": "geo Moon-Uranus 45",
+     "type": "high",
+     "n": 135,
+     "hits": 34,
+     "hitPct": 25.2,
+     "chancePct": 16.1,
+     "lift": 1.57,
+     "p": 0.00441,
+     "rep": {
+      "trainP": 0.0188,
+      "testP": 0.0713,
+      "trainLift": 1.58,
+      "testLift": 1.53,
+      "trainN": 81,
       "testN": 54
      }
     },
@@ -263,34 +300,16 @@
      "n": 42,
      "hits": 14,
      "hitPct": 33.3,
-     "chancePct": 15.7,
-     "lift": 2.12,
-     "p": 0.00367,
-     "rep": {
-      "trainP": 0.003,
-      "testP": 0.2714,
-      "trainLift": 2.55,
-      "testLift": 1.5,
-      "trainN": 25,
-      "testN": 17
-     }
-    },
-    {
-     "factor": "geo Moon-Uranus 45",
-     "type": "high",
-     "n": 136,
-     "hits": 34,
-     "hitPct": 25.0,
      "chancePct": 16.1,
-     "lift": 1.55,
-     "p": 0.00498,
+     "lift": 2.07,
+     "p": 0.00461,
      "rep": {
-      "trainP": 0.0215,
-      "testP": 0.0713,
-      "trainLift": 1.57,
-      "testLift": 1.53,
-      "trainN": 82,
-      "testN": 54
+      "trainP": 0.0016,
+      "testP": 0.4697,
+      "trainLift": 2.59,
+      "testLift": 1.2,
+      "trainN": 26,
+      "testN": 16
      }
     },
     {
@@ -335,16 +354,34 @@
      "n": 14,
      "hits": 9,
      "hitPct": 64.3,
-     "chancePct": 29.2,
-     "lift": 2.2,
-     "p": 0.00682,
+     "chancePct": 29.6,
+     "lift": 2.17,
+     "p": 0.00751,
      "rep": {
-      "trainP": 0.2528,
+      "trainP": 0.265,
       "testP": 0.0082,
-      "trainLift": 1.68,
+      "trainLift": 1.64,
       "testLift": 2.66,
       "trainN": 6,
       "testN": 8
+     }
+    },
+    {
+     "factor": "geo Moon-Neptune 30",
+     "type": "high",
+     "n": 135,
+     "hits": 33,
+     "hitPct": 24.4,
+     "chancePct": 16.1,
+     "lift": 1.52,
+     "p": 0.00799,
+     "rep": {
+      "trainP": 0.0021,
+      "testP": 0.4783,
+      "trainLift": 1.81,
+      "testLift": 1.06,
+      "trainN": 81,
+      "testN": 54
      }
     },
     {
@@ -353,94 +390,124 @@
      "n": 16,
      "hits": 7,
      "hitPct": 43.8,
-     "chancePct": 15.7,
-     "lift": 2.79,
-     "p": 0.00722,
+     "chancePct": 16.1,
+     "lift": 2.72,
+     "p": 0.00829,
      "rep": {
-      "trainP": 0.0579,
+      "trainP": 0.0658,
       "testP": 0.0532,
-      "trainLift": 2.55,
+      "trainLift": 2.44,
       "testLift": 3.19,
       "trainN": 10,
       "testN": 6
      }
     },
     {
-     "factor": "geo Moon-Neptune 30",
-     "type": "high",
-     "n": 136,
-     "hits": 33,
-     "hitPct": 24.3,
+     "factor": "geo Moon-Venus 30",
+     "type": "low",
+     "n": 126,
+     "hits": 30,
+     "hitPct": 23.8,
      "chancePct": 16.1,
-     "lift": 1.51,
-     "p": 0.00895,
+     "lift": 1.48,
+     "p": 0.01589,
      "rep": {
-      "trainP": 0.0025,
-      "testP": 0.4783,
-      "trainLift": 1.79,
-      "testLift": 1.06,
-      "trainN": 82,
-      "testN": 54
-     }
-    },
-    {
-     "factor": "helio Venus-Pluto 90",
-     "type": "any",
-     "n": 16,
-     "hits": 9,
-     "hitPct": 56.2,
-     "chancePct": 29.2,
-     "lift": 1.93,
-     "p": 0.02151,
-     "rep": {
-      "trainP": 0.1476,
-      "testP": 0.0573,
-      "trainLift": 1.68,
-      "testLift": 2.36,
-      "trainN": 10,
-      "testN": 6
+      "trainP": 0.0019,
+      "testP": 0.6872,
+      "trainLift": 1.85,
+      "testLift": 0.89,
+      "trainN": 76,
+      "testN": 50
      }
     }
    ],
    "overrides": [],
    "upcoming": [
     {
+     "date": "2026-09-28",
+     "factor": "geo Moon-Uranus 45",
+     "type": "high",
+     "lift": 1.57,
+     "hitPct": 25.2,
+     "chancePct": 16.1
+    },
+    {
      "date": "2026-09-29",
      "factor": "geo Moon-Uranus 30",
      "type": "high",
-     "lift": 1.6,
-     "hitPct": 25.7,
+     "lift": 1.61,
+     "hitPct": 25.9,
      "chancePct": 16.1
     },
     {
      "date": "2026-10-03",
      "factor": "geo Moon-Uranus 30",
      "type": "high",
-     "lift": 1.6,
-     "hitPct": 25.7,
+     "lift": 1.61,
+     "hitPct": 25.9,
+     "chancePct": 16.1
+    },
+    {
+     "date": "2026-10-04",
+     "factor": "geo Moon-Uranus 45",
+     "type": "high",
+     "lift": 1.57,
+     "hitPct": 25.2,
+     "chancePct": 16.1
+    },
+    {
+     "date": "2026-10-25",
+     "factor": "geo Moon-Uranus 45",
+     "type": "high",
+     "lift": 1.57,
+     "hitPct": 25.2,
      "chancePct": 16.1
     },
     {
      "date": "2026-10-26",
      "factor": "geo Moon-Uranus 30",
      "type": "high",
-     "lift": 1.6,
-     "hitPct": 25.7,
+     "lift": 1.61,
+     "hitPct": 25.9,
      "chancePct": 16.1
     },
     {
      "date": "2026-10-30",
      "factor": "geo Moon-Uranus 30",
      "type": "high",
-     "lift": 1.6,
-     "hitPct": 25.7,
+     "lift": 1.61,
+     "hitPct": 25.9,
+     "chancePct": 16.1
+    },
+    {
+     "date": "2026-10-31",
+     "factor": "geo Moon-Uranus 45",
+     "type": "high",
+     "lift": 1.57,
+     "hitPct": 25.2,
+     "chancePct": 16.1
+    },
+    {
+     "date": "2026-11-22",
+     "factor": "geo Moon-Uranus 45",
+     "type": "high",
+     "lift": 1.57,
+     "hitPct": 25.2,
+     "chancePct": 16.1
+    },
+    {
+     "date": "2026-11-23",
+     "factor": "geo Moon-Uranus 30",
+     "type": "high",
+     "lift": 1.61,
+     "hitPct": 25.9,
      "chancePct": 16.1
     }
    ]
   },
   "QQQ": {
-   "tested": 1035,
-   "turns": 77,
+   "tested": 1032,
+   "turns": 78,
    "expectedFalse": 0.7,
    "validated": [],
    "candidates": [
@@ -486,13 +553,13 @@
      "n": 32,
      "hits": 10,
      "hitPct": 31.2,
-     "chancePct": 14.6,
-     "lift": 2.14,
-     "p": 0.01304,
+     "chancePct": 15.0,
+     "lift": 2.08,
+     "p": 0.01558,
      "rep": {
-      "trainP": 0.0233,
+      "trainP": 0.0289,
       "testP": 0.2212,
-      "trainLift": 2.31,
+      "trainLift": 2.21,
       "testLift": 1.82,
       "trainN": 20,
       "testN": 12
@@ -504,13 +571,13 @@
      "n": 12,
      "hits": 7,
      "hitPct": 58.3,
-     "chancePct": 26.6,
-     "lift": 2.19,
-     "p": 0.02019,
+     "chancePct": 27.0,
+     "lift": 2.16,
+     "p": 0.02188,
      "rep": {
-      "trainP": 0.2198,
+      "trainP": 0.2314,
       "testP": 0.0351,
-      "trainLift": 1.79,
+      "trainLift": 1.74,
       "testLift": 2.72,
       "trainN": 6,
       "testN": 6
@@ -522,16 +589,16 @@
      "n": 21,
      "hits": 7,
      "hitPct": 33.3,
-     "chancePct": 14.6,
-     "lift": 2.28,
-     "p": 0.0251,
+     "chancePct": 15.0,
+     "lift": 2.22,
+     "p": 0.02867,
      "rep": {
-      "trainP": 0.315,
-      "testP": 0.0157,
-      "trainLift": 1.52,
-      "testLift": 3.64,
-      "trainN": 13,
-      "testN": 8
+      "trainP": 0.2933,
+      "testP": 0.0252,
+      "trainLift": 1.58,
+      "testLift": 3.24,
+      "trainN": 12,
+      "testN": 9
      }
     },
     {
@@ -540,16 +607,16 @@
      "n": 21,
      "hits": 10,
      "hitPct": 47.6,
-     "chancePct": 26.6,
-     "lift": 1.79,
-     "p": 0.03146,
+     "chancePct": 27.0,
+     "lift": 1.76,
+     "p": 0.03465,
      "rep": {
-      "trainP": 0.2873,
-      "testP": 0.0251,
-      "trainLift": 1.37,
-      "testLift": 2.55,
-      "trainN": 13,
-      "testN": 8
+      "trainP": 0.2419,
+      "testP": 0.0452,
+      "trainLift": 1.45,
+      "testLift": 2.27,
+      "trainN": 12,
+      "testN": 9
      }
     },
     {
@@ -558,13 +625,13 @@
      "n": 42,
      "hits": 17,
      "hitPct": 40.5,
-     "chancePct": 26.6,
-     "lift": 1.52,
-     "p": 0.03531,
+     "chancePct": 27.0,
+     "lift": 1.5,
+     "p": 0.04025,
      "rep": {
-      "trainP": 0.0265,
+      "trainP": 0.0316,
       "testP": 0.4074,
-      "trainLift": 1.71,
+      "trainLift": 1.67,
       "testLift": 1.2,
       "trainN": 25,
       "testN": 17
@@ -576,16 +643,34 @@
      "n": 67,
      "hits": 25,
      "hitPct": 37.3,
-     "chancePct": 26.6,
-     "lift": 1.4,
-     "p": 0.03571,
+     "chancePct": 27.0,
+     "lift": 1.38,
+     "p": 0.04204,
      "rep": {
-      "trainP": 0.0347,
-      "testP": 0.335,
-      "trainLift": 1.52,
-      "testLift": 1.21,
+      "trainP": 0.0203,
+      "testP": 0.5054,
+      "trainLift": 1.57,
+      "testLift": 1.06,
       "trainN": 40,
       "testN": 27
+     }
+    },
+    {
+     "factor": "geo Sun-Pluto 135",
+     "type": "any",
+     "n": 11,
+     "hits": 6,
+     "hitPct": 54.5,
+     "chancePct": 27.0,
+     "lift": 2.02,
+     "p": 0.04897,
+     "rep": {
+      "trainP": 0.1094,
+      "testP": 0.2535,
+      "trainLift": 1.99,
+      "testLift": 2.04,
+      "trainN": 7,
+      "testN": 4
      }
     },
     {
@@ -594,31 +679,13 @@
      "n": 10,
      "hits": 4,
      "hitPct": 40.0,
-     "chancePct": 14.6,
-     "lift": 2.74,
-     "p": 0.0458,
+     "chancePct": 15.0,
+     "lift": 2.67,
+     "p": 0.04989,
      "rep": {
-      "trainP": 0.0489,
+      "trainP": 0.0546,
       "testP": 0.446,
-      "trainLift": 3.29,
-      "testLift": 1.82,
-      "trainN": 6,
-      "testN": 4
-     }
-    },
-    {
-     "factor": "geo Venus-Pluto 72",
-     "type": "low",
-     "n": 10,
-     "hits": 4,
-     "hitPct": 40.0,
-     "chancePct": 14.6,
-     "lift": 2.74,
-     "p": 0.0458,
-     "rep": {
-      "trainP": 0.0489,
-      "testP": 0.446,
-      "trainLift": 3.29,
+      "trainLift": 3.16,
       "testLift": 1.82,
       "trainN": 6,
       "testN": 4
@@ -629,7 +696,7 @@
    "upcoming": []
   },
   "JPM": {
-   "tested": 1035,
+   "tested": 1032,
    "turns": 65,
    "expectedFalse": 0.7,
    "validated": [],
@@ -644,29 +711,11 @@
      "lift": 1.98,
      "p": 0.00348,
      "rep": {
-      "trainP": 0.0623,
-      "testP": 0.0152,
-      "trainLift": 1.77,
-      "testLift": 2.31,
+      "trainP": 0.0642,
+      "testP": 0.0146,
+      "trainLift": 1.76,
+      "testLift": 2.32,
       "trainN": 20,
-      "testN": 12
-     }
-    },
-    {
-     "factor": "geo Moon-Uranus 180",
-     "type": "high",
-     "n": 31,
-     "hits": 9,
-     "hitPct": 29.0,
-     "chancePct": 13.0,
-     "lift": 2.24,
-     "p": 0.01417,
-     "rep": {
-      "trainP": 0.1988,
-      "testP": 0.0177,
-      "trainLift": 1.71,
-      "testLift": 2.99,
-      "trainN": 19,
       "testN": 12
      }
     },
@@ -680,10 +729,10 @@
      "lift": 2.53,
      "p": 0.01515,
      "rep": {
-      "trainP": 0.0029,
-      "testP": 0.6885,
-      "trainLift": 3.68,
-      "testLift": 0.99,
+      "trainP": 0.003,
+      "testP": 0.6852,
+      "trainLift": 3.66,
+      "testLift": 1.0,
       "trainN": 6,
       "testN": 4
      }
@@ -698,12 +747,30 @@
      "lift": 2.53,
      "p": 0.01515,
      "rep": {
-      "trainP": 0.134,
-      "testP": 0.0525,
-      "trainLift": 2.21,
-      "testLift": 2.97,
+      "trainP": 0.1359,
+      "testP": 0.0513,
+      "trainLift": 2.2,
+      "testLift": 2.99,
       "trainN": 6,
       "testN": 4
+     }
+    },
+    {
+     "factor": "geo Moon-Uranus 180",
+     "type": "high",
+     "n": 32,
+     "hits": 9,
+     "hitPct": 28.1,
+     "chancePct": 13.0,
+     "lift": 2.17,
+     "p": 0.0175,
+     "rep": {
+      "trainP": 0.2041,
+      "testP": 0.0241,
+      "trainLift": 1.69,
+      "testLift": 2.8,
+      "trainN": 19,
+      "testN": 13
      }
     },
     {
@@ -716,12 +783,12 @@
      "lift": 2.97,
      "p": 0.01904,
      "rep": {
-      "trainP": 0.2093,
-      "testP": 0.0389,
-      "trainLift": 2.32,
-      "testLift": 3.59,
-      "trainN": 7,
-      "testN": 6
+      "trainP": 0.0665,
+      "testP": 0.1418,
+      "trainLift": 3.02,
+      "testLift": 2.91,
+      "trainN": 8,
+      "testN": 5
      }
     },
     {
@@ -752,10 +819,10 @@
      "lift": 3.09,
      "p": 0.03092,
      "rep": {
-      "trainP": 0.0279,
-      "testP": 0.451,
-      "trainLift": 4.06,
-      "testLift": 1.8,
+      "trainP": 0.0287,
+      "testP": 0.446,
+      "trainLift": 4.02,
+      "testLift": 1.82,
       "trainN": 6,
       "testN": 4
      }
@@ -770,10 +837,10 @@
      "lift": 3.09,
      "p": 0.03092,
      "rep": {
-      "trainP": 0.5451,
-      "testP": 0.0097,
-      "trainLift": 1.35,
-      "testLift": 5.39,
+      "trainP": 0.5492,
+      "testP": 0.0093,
+      "trainLift": 1.34,
+      "testLift": 5.46,
       "trainN": 6,
       "testN": 4
      }
@@ -788,10 +855,10 @@
      "lift": 3.09,
      "p": 0.03092,
      "rep": {
-      "trainP": 0.5451,
-      "testP": 0.0097,
-      "trainLift": 1.35,
-      "testLift": 5.39,
+      "trainP": 0.5492,
+      "testP": 0.0093,
+      "trainLift": 1.34,
+      "testLift": 5.46,
       "trainN": 6,
       "testN": 4
      }
@@ -819,7 +886,7 @@
    "upcoming": []
   },
   "GOOGL": {
-   "tested": 1035,
+   "tested": 1032,
    "turns": 54,
    "expectedFalse": 0.7,
    "validated": [],
@@ -852,10 +919,10 @@
      "lift": 2.65,
      "p": 0.00486,
      "rep": {
-      "trainP": 0.0846,
-      "testP": 0.0167,
-      "trainLift": 2.35,
-      "testLift": 3.04,
+      "trainP": 0.0962,
+      "testP": 0.0139,
+      "trainLift": 2.25,
+      "testLift": 3.17,
       "trainN": 20,
       "testN": 12
      }
@@ -870,10 +937,10 @@
      "lift": 2.5,
      "p": 0.00704,
      "rep": {
-      "trainP": 0.0692,
-      "testP": 0.0381,
-      "trainLift": 2.41,
-      "testLift": 2.66,
+      "trainP": 0.0744,
+      "testP": 0.0351,
+      "trainLift": 2.35,
+      "testLift": 2.72,
       "trainN": 10,
       "testN": 6
      }
@@ -888,12 +955,12 @@
      "lift": 2.5,
      "p": 0.00704,
      "rep": {
-      "trainP": 0.0088,
-      "testP": 0.2456,
-      "trainLift": 3.34,
-      "testLift": 1.71,
-      "trainN": 9,
-      "testN": 7
+      "trainP": 0.0027,
+      "testP": 0.4544,
+      "trainLift": 3.53,
+      "testLift": 1.36,
+      "trainN": 10,
+      "testN": 6
      }
     },
     {
@@ -923,22 +990,11 @@
      "chancePct": 10.6,
      "lift": 3.77,
      "p": 0.01565,
-     "rep": null
-    },
-    {
-     "factor": "geo Venus-Uranus 150",
-     "type": "high",
-     "n": 10,
-     "hits": 4,
-     "hitPct": 40.0,
-     "chancePct": 10.6,
-     "lift": 3.77,
-     "p": 0.01565,
      "rep": {
-      "trainP": 0.0982,
-      "testP": 0.0817,
-      "trainLift": 3.64,
-      "testLift": 3.92,
+      "trainP": 0.0115,
+      "testP": 0.4307,
+      "trainLift": 5.62,
+      "testLift": 1.9,
       "trainN": 6,
       "testN": 4
      }
@@ -971,12 +1027,12 @@
      "lift": 2.95,
      "p": 0.02144,
      "rep": {
-      "trainP": 0.0061,
-      "testP": 0.6149,
-      "trainLift": 4.85,
-      "testLift": 1.12,
-      "trainN": 9,
-      "testN": 7
+      "trainP": 0.0094,
+      "testP": 0.5587,
+      "trainLift": 4.37,
+      "testLift": 1.31,
+      "trainN": 10,
+      "testN": 6
      }
     },
     {
@@ -989,12 +1045,30 @@
      "lift": 2.95,
      "p": 0.02144,
      "rep": {
-      "trainP": 0.035,
-      "testP": 0.248,
-      "trainLift": 3.92,
-      "testLift": 2.08,
-      "trainN": 9,
-      "testN": 7
+      "trainP": 0.0085,
+      "testP": 0.5705,
+      "trainLift": 4.49,
+      "testLift": 1.27,
+      "trainN": 10,
+      "testN": 6
+     }
+    },
+    {
+     "factor": "geo Venus-Uranus 150",
+     "type": "high",
+     "n": 11,
+     "hits": 4,
+     "hitPct": 36.4,
+     "chancePct": 10.6,
+     "lift": 3.43,
+     "p": 0.02255,
+     "rep": {
+      "trainP": 0.0982,
+      "testP": 0.1249,
+      "trainLift": 3.64,
+      "testLift": 3.14,
+      "trainN": 6,
+      "testN": 5
      }
     }
    ],
@@ -1002,7 +1076,7 @@
    "upcoming": []
   },
   "NVDA": {
-   "tested": 1035,
+   "tested": 1032,
    "turns": 32,
    "expectedFalse": 0.7,
    "validated": [
@@ -1016,10 +1090,10 @@
      "lift": 4.0,
      "p": 0.00196,
      "rep": {
-      "trainP": 0.0045,
-      "testP": 0.0741,
-      "trainLift": 8.19,
-      "testLift": 2.73,
+      "trainP": 0.0066,
+      "testP": 0.0657,
+      "trainLift": 7.16,
+      "testLift": 2.86,
       "trainN": 8,
       "testN": 5
      },
@@ -1037,10 +1111,10 @@
      "lift": 4.0,
      "p": 0.00196,
      "rep": {
-      "trainP": 0.0045,
-      "testP": 0.0741,
-      "trainLift": 8.19,
-      "testLift": 2.73,
+      "trainP": 0.0066,
+      "testP": 0.0657,
+      "trainLift": 7.16,
+      "testLift": 2.86,
       "trainN": 8,
       "testN": 5
      }
@@ -1073,10 +1147,10 @@
      "lift": 4.9,
      "p": 0.00702,
      "rep": {
-      "trainP": 0.0173,
-      "testP": 0.1086,
-      "trainLift": 9.55,
-      "testLift": 3.4,
+      "trainP": 0.0263,
+      "testP": 0.0932,
+      "trainLift": 7.64,
+      "testLift": 3.71,
       "trainN": 8,
       "testN": 5
      }
@@ -1109,10 +1183,10 @@
      "lift": 3.47,
      "p": 0.02096,
      "rep": {
-      "trainP": 0.2452,
-      "testP": 0.0354,
-      "trainLift": 3.64,
-      "testLift": 3.42,
+      "trainP": 0.2758,
+      "testP": 0.0311,
+      "trainLift": 3.18,
+      "testLift": 3.57,
       "trainN": 6,
       "testN": 4
      }
@@ -1145,10 +1219,10 @@
      "lift": 4.78,
      "p": 0.02127,
      "rep": {
-      "trainP": 0.1471,
-      "testP": 0.0706,
-      "trainLift": 6.37,
-      "testLift": 4.25,
+      "trainP": 0.181,
+      "testP": 0.0602,
+      "trainLift": 5.09,
+      "testLift": 4.64,
       "trainN": 6,
       "testN": 4
      }
@@ -1163,12 +1237,12 @@
      "lift": 3.98,
      "p": 0.0355,
      "rep": {
-      "trainP": 0.0011,
+      "trainP": 0.0017,
       "testP": 1.0,
-      "trainLift": 13.1,
+      "trainLift": 11.46,
       "testLift": 0.0,
-      "trainN": 7,
-      "testN": 5
+      "trainN": 8,
+      "testN": 4
      }
     },
     {
@@ -1199,12 +1273,12 @@
      "lift": 3.03,
      "p": 0.0394,
      "rep": {
-      "trainP": 0.2917,
-      "testP": 0.0578,
-      "trainLift": 2.94,
-      "testLift": 3.19,
-      "trainN": 13,
-      "testN": 8
+      "trainP": 0.3292,
+      "testP": 0.064,
+      "trainLift": 2.55,
+      "testLift": 3.09,
+      "trainN": 12,
+      "testN": 9
      }
     }
    ],
@@ -1221,7 +1295,7 @@
    ]
   },
   "AMZN": {
-   "tested": 1035,
+   "tested": 1032,
    "turns": 31,
    "expectedFalse": 0.7,
    "validated": [],
@@ -1254,12 +1328,12 @@
      "lift": 2.65,
      "p": 0.01489,
      "rep": {
-      "trainP": 0.0447,
-      "testP": 0.1255,
-      "trainLift": 2.94,
-      "testLift": 2.39,
-      "trainN": 26,
-      "testN": 16
+      "trainP": 0.0394,
+      "testP": 0.1439,
+      "trainLift": 3.06,
+      "testLift": 2.25,
+      "trainN": 25,
+      "testN": 17
      }
     },
     {
@@ -1362,12 +1436,12 @@
      "lift": 2.49,
      "p": 0.02681,
      "rep": {
-      "trainP": 0.035,
-      "testP": 0.2962,
-      "trainLift": 3.05,
-      "testLift": 1.85,
-      "trainN": 13,
-      "testN": 8
+      "trainP": 0.0263,
+      "testP": 0.3491,
+      "trainLift": 3.31,
+      "testLift": 1.64,
+      "trainN": 12,
+      "testN": 9
      }
     },
     {
@@ -1398,12 +1472,12 @@
      "lift": 3.24,
      "p": 0.03212,
      "rep": {
-      "trainP": 0.146,
-      "testP": 0.1,
-      "trainLift": 2.94,
-      "testLift": 3.64,
-      "trainN": 13,
-      "testN": 8
+      "trainP": 0.1278,
+      "testP": 0.1229,
+      "trainLift": 3.18,
+      "testLift": 3.24,
+      "trainN": 12,
+      "testN": 9
      }
     }
    ],
@@ -1411,7 +1485,7 @@
    "upcoming": []
   },
   "SPY": {
-   "tested": 1035,
+   "tested": 1032,
    "turns": 0,
    "expectedFalse": 0.7,
    "validated": [],
@@ -1484,8 +1558,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     },
     {
@@ -1502,8 +1576,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     },
     {
@@ -1520,8 +1594,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     },
     {
@@ -1538,8 +1612,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     },
     {
@@ -1556,8 +1630,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     },
     {
@@ -1574,8 +1648,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     },
     {
@@ -1592,8 +1666,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     }
    ],
@@ -1601,7 +1675,7 @@
    "upcoming": []
   },
   "VOO": {
-   "tested": 1035,
+   "tested": 1032,
    "turns": 0,
    "expectedFalse": 0.7,
    "validated": [],
@@ -1674,8 +1748,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     },
     {
@@ -1692,8 +1766,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     },
     {
@@ -1710,8 +1784,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     },
     {
@@ -1728,8 +1802,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     },
     {
@@ -1746,8 +1820,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     },
     {
@@ -1764,8 +1838,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     },
     {
@@ -1782,8 +1856,8 @@
       "testP": 1.0,
       "trainLift": 0,
       "testLift": 0,
-      "trainN": 75,
-      "testN": 51
+      "trainN": 76,
+      "testN": 50
      }
     }
    ],
@@ -1791,7 +1865,7 @@
    "upcoming": []
   },
   "GC=F": {
-   "tested": 1032,
+   "tested": 1029,
    "turns": 11,
    "expectedFalse": 0.7,
    "validated": [],
@@ -1900,18 +1974,36 @@
     {
      "factor": "geo Moon-Jupiter 30",
      "type": "high",
-     "n": 136,
+     "n": 134,
      "hits": 7,
-     "hitPct": 5.1,
+     "hitPct": 5.2,
      "chancePct": 2.3,
-     "lift": 2.19,
-     "p": 0.04216,
+     "lift": 2.23,
+     "p": 0.03943,
      "rep": {
       "trainP": 1.0,
       "testP": 0.0375,
       "trainLift": 0,
       "testLift": 2.21,
-      "trainN": 82,
+      "trainN": 80,
+      "testN": 54
+     }
+    },
+    {
+     "factor": "geo Moon-Jupiter 30",
+     "type": "any",
+     "n": 134,
+     "hits": 10,
+     "hitPct": 7.5,
+     "chancePct": 4.0,
+     "lift": 1.87,
+     "p": 0.04279,
+     "rep": {
+      "trainP": 1.0,
+      "testP": 0.0389,
+      "trainLift": 0,
+      "testLift": 1.86,
+      "trainN": 80,
       "testN": 54
      }
     },
@@ -1934,38 +2026,20 @@
      }
     },
     {
-     "factor": "helio Mercury-Jupiter 180",
-     "type": "any",
-     "n": 20,
-     "hits": 3,
-     "hitPct": 15.0,
-     "chancePct": 4.0,
-     "lift": 3.76,
-     "p": 0.04361,
-     "rep": {
-      "trainP": 1.0,
-      "testP": 0.0377,
-      "trainLift": 0,
-      "testLift": 3.76,
-      "trainN": 12,
-      "testN": 8
-     }
-    },
-    {
      "factor": "helio Mercury-Jupiter 120",
      "type": "low",
-     "n": 41,
+     "n": 40,
      "hits": 3,
-     "hitPct": 7.3,
+     "hitPct": 7.5,
      "chancePct": 2.0,
-     "lift": 3.74,
-     "p": 0.046,
+     "lift": 3.83,
+     "p": 0.04324,
      "rep": {
       "trainP": 1.0,
       "testP": 0.0405,
       "trainLift": 0,
       "testLift": 3.84,
-      "trainN": 25,
+      "trainN": 24,
       "testN": 16
      }
     }
