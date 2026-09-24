@@ -46,6 +46,7 @@ import numpy as np
 import pandas as pd
 
 OUT = "gann_lab.json"
+VERSION = 2          # bump to force a rerun when the method changes
 MAX_AGE_DAYS = 7
 WINDOW = 2
 SPLIT = 0.70
@@ -515,7 +516,7 @@ def main():
         try:
             prev = json.load(open(OUT, encoding="utf-8"))
             age = (today - datetime.strptime(prev["computed"], "%Y-%m-%d").date()).days
-            if age < MAX_AGE_DAYS and prev.get("tickers"):
+            if age < MAX_AGE_DAYS and prev.get("tickers") and prev.get("version") == VERSION:
                 print(f"{OUT} is {age}d old (<{MAX_AGE_DAYS}) - keeping it")
                 return
         except Exception:
@@ -542,7 +543,7 @@ def main():
     end = today + timedelta(days=1000)
     print(f"ephemeris {start} .. {end}")
     eph = ephemeris(start, end, PLANETS)
-    result = {"computed": today.strftime("%Y-%m-%d"), "window": WINDOW, "split": SPLIT,
+    result = {"computed": today.strftime("%Y-%m-%d"), "version": VERSION, "window": WINDOW, "split": SPLIT,
               "fdrQ": FDR_Q, "liftBar": LIFT_BAR, "draws": DRAWS,
               "method": __doc__.strip().split("\n\n")[0], "tickers": {}}
     for t, df in frames.items():
