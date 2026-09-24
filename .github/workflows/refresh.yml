@@ -57,6 +57,7 @@ jobs:
       - run: python backfill.py
       - run: python benchmark.py
       - run: python astro_lab.py || echo "::warning::Astro enrichment unavailable; retaining previous lab"
+      - run: python gann_lab.py || echo "::warning::Vibration lab unavailable; retaining previous results"
       - run: python analyze.py
       - run: python reliability.py
       - run: python coherence_check.py
@@ -64,12 +65,12 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: node smoke_test.js
       - run: node reliability_test.js
-      - run: python -m unittest test_reliability.py test_scoring.py test_schedule_gate.py test_data_freshness.py test_horizon_ledger.py test_quote_selection.py test_timing_review.py
+      - run: python -m unittest test_reliability.py test_scoring.py test_schedule_gate.py test_data_freshness.py test_horizon_ledger.py test_quote_selection.py test_timing_review.py test_gann_lab.py
       - name: Publish only validated artifacts
         run: |
           git config user.name "dashboard-bot"
           git config user.email "dashboard-bot@users.noreply.github.com"
-          git add index.html dashboard_single.html data.js predictions_log.json daily_extremes.json trades.json trades_log.json horizons_log.json real_trades.json improvements_log.md backfill.json benchmark.json week_plan.json week_plan_log.json revisions_log.json astro_lab.json forecast_ledger.json daily_review.json completed_session_cache.json
+          git add index.html dashboard_single.html data.js predictions_log.json daily_extremes.json trades.json trades_log.json horizons_log.json real_trades.json improvements_log.md backfill.json benchmark.json week_plan.json week_plan_log.json revisions_log.json astro_lab.json gann_lab.json forecast_ledger.json daily_review.json completed_session_cache.json
           python test_sensitive_data.py --staged
           if ! git diff --cached --quiet; then git commit -m "auto refresh and review (cloud)"; fi
           # Never resolve code/data races by discarding another writer's work.

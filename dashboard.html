@@ -323,6 +323,13 @@
   <div id="rvBody" class="tblwrap" style="margin-top:8px"></div>
 </div>
 
+<div class="panel" data-tab="Research" id="vibPanel">
+  <h2>Vibration finder — which Gann, planetary and cycle tools are in play for <span class="tkr2"></span></h2>
+  <div class="sub" id="vibSub"></div>
+  <div id="vibNext" style="margin-top:8px"></div>
+  <div class="tblwrap"><table id="vibTable" style="margin-top:8px"></table></div>
+</div>
+
 <div class="panel" data-tab="Research">
   <h2>Timing-school scorecard — what actually tested out on <span class="tkr2"></span></h2>
   <div class="sub" id="scoreSub"></div>
@@ -515,6 +522,27 @@ function bars(id, labels, values, opts={}){
   });
 }
 
+function renderVibration(V, ticker){
+  const esc=v=>String(v == null ? "—" : v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  if(!V){
+    $("vibSub").textContent="The vibration finder runs weekly on the full price history; results appear after its first run.";
+    $("vibNext").innerHTML=""; $("vibTable").innerHTML=""; return;
+  }
+  const nulls=(V.nullInPlay||[]).join(", ");
+  $("vibSub").innerHTML=`Each tool is tested on its own against ${esc(ticker)}'s ${esc(V.turns)} swing turns since ${esc(V.history.from)}
+    (a call hits when a turn lands within ±2 sessions). Chance = the tool's own calls moved in time.
+    Tools are selected on the history before ${esc(V.split)} and must work again on the later part they were not selected on.
+    <b>${esc(V.inPlay)} of ${esc(V.tested)} tools are in play.</b> Luck check: the same test on ${esc(ticker)}'s own moves reshuffled
+    (no real cycles) put ${esc(nulls)} tools in play. Computed ${esc(V.computed)}; calls logged from now on are the unseen test.`;
+  const up=(V.upcoming||[]).slice(0,10);
+  $("vibNext").innerHTML = up.length
+    ? `<b>Next dates from in-play tools:</b><div class="tblwrap"><table><tr><th>Date</th><th>Tools agreeing</th><th>Which</th></tr>${up.map(u=>`<tr><td class="num">${esc(u.date)}</td><td class="num">${esc(u.count)}</td><td>${u.tools.map(esc).join("<br>")}</td></tr>`).join("")}</table></div>`
+    : `<span class="tag">No in-play tool projects a date in the next 45 sessions.</span>`;
+  const cell=x=>x && x.n ? `${x.hitPct}% vs ${x.chancePct}% <span class="tag">(${x.lift ?? "—"}×, n=${x.n})</span>` : "—";
+  const badge=v=>`<span class="badge" style="${v==="IN PLAY"?"background:#dafbe1;color:#1a7f37":v==="FAILED HOLDOUT"?"background:#fff8c5;color:#7d4e00":"background:#eee;color:#777"}">${esc(v)}</span>`;
+  $("vibTable").innerHTML=`<tr><th>Tool</th><th>Family</th><th>Selection history</th><th>Later history</th><th>Verdict</th></tr>`+
+    (V.tools||[]).map(r=>`<tr><td>${esc(r.tool)}</td><td>${esc(r.family)}</td><td class="num">${cell(r.sel)}</td><td class="num">${cell(r.hold)}</td><td>${badge(r.verdict)}</td></tr>`).join("");
+}
 function renderTimingReview(T){
   if(!T){
     $("timingSummary").textContent="Timing scorecard will appear after the next validated refresh.";
@@ -563,6 +591,7 @@ function renderAll(D){
   const review=D.dailyReview;
   $("reviewStatus").textContent=review ? "Automatic review: " + new Date(review.reviewedAt).toLocaleString("en-US",{timeZone:"America/New_York"}) + " ET · " + review.snapshotCount + " saved forecast snapshots · " + review.scoredOriginals + " original targets scored. Learning adjusts estimates; improvement is not guaranteed." : "Automatic review will appear after the next scheduled run.";
   renderTimingReview(D.timingReview);
+  renderVibration(D.gannLab, D.ticker);
   /* predictions */
   const p1 = D.predictions[0];
   const tn = D.turnFormed;

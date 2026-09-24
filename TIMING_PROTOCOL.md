@@ -67,7 +67,12 @@ The method-tag table describes methods present in blended forecasts. Its
 groups overlap. It cannot establish which method caused a hit, and must not
 be used to promote Gann or astrology weights.
 
-Next experiment (not yet implemented; full design in `RESEARCH_PROPOSAL_TIMING.md`): predeclare a small set of standalone
+`gann_lab.py` (weekly, full history per stock) now scores each Gann time
+and price tool, planetary-degree rule and multi-scale history analog on its
+own, walk-forward, against its own time-shifted calls, with FDR selection on
+the first 70% and a second test on the rest, and a reshuffled-history luck
+baseline. Its IN PLAY tools are published on the dashboard and do not change
+forecast weights. Next experiment (full design in `RESEARCH_PROPOSAL_TIMING.md`): predeclare a small set of standalone
 rules, their anchor selection, maximum forecast count and lead times. Compare
 (1) simple calendar/swing-spacing controls, (2) Gann calendar counts, (3) Hurst/
 Fibonacci cycles, and (4) explicit astronomy-event rules, then evaluate adding

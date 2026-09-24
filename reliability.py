@@ -103,7 +103,16 @@ def build():
         constants['WEEKPLAN'] = json.loads(Path('week_plan.json').read_text())
     constants.setdefault('WEEKPLAN', {})
     report = review(data)
+    lab = json.loads(Path('gann_lab.json').read_text()) if Path('gann_lab.json').exists() else {}
     for ticker, d in data.items():
+        v = lab.get('tickers', {}).get(ticker)
+        if v:
+            # compact: every in-play tool plus the strongest others, and the next dates
+            tools = [t for t in v['tools'] if t['verdict'] == 'IN PLAY'] + \
+                    [t for t in v['tools'] if t['verdict'] != 'IN PLAY'][:15]
+            d['gannLab'] = {k: v[k] for k in ('history', 'turns', 'tested', 'inPlay', 'nullInPlay', 'split', 'upcoming') if k in v}
+            d['gannLab'].update(computed=lab.get('computed'), tools=[
+                {k: t[k] for k in ('tool', 'family', 'sel', 'hold', 'verdict')} for t in tools])
         d['dailyReview'] = {'reviewedAt': report['reviewedAt'], 'snapshotCount': report['snapshotCount'],
                             'scoredOriginals': report['scoredOriginals']}
         timing = report['timing']['tickers'][ticker]

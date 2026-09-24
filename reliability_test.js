@@ -33,6 +33,7 @@ const delay=()=>new Promise(r=>setTimeout(r,30));
     const lead=w.eval('DATA_ALL[CUR].leadEdge')||{};
     if(Object.values(lead).some(v=>v.edge<0)) assert.ok(note.includes('BELOW chance'),'below-chance bands must say so');
     assert.ok(!d.getElementById('predTable').textContent.includes('ACTIONABLE'));
+    assert.ok(!d.getElementById('vibPanel').textContent.includes('undefined'),'vibration panel renders for '+ticker);
     const forecasts=w.eval('DATA_ALL[CUR].predictions');
     const chartRow=d.querySelector('[data-chart-targets]');
     for(const side of ['high','low']){
