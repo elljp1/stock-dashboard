@@ -24,8 +24,10 @@ Tool families (each item below is a separately scored tool):
                   planetary longitude levels, scored on turn prices
 
 Scoring: a call hits when a confirmed swing turn (the app's threshold) lands
-within +-2 sessions. Chance is measured by shifting the tool's own calls in
-time 300 times, which keeps their number and spacing. History is split: the
+within +-2 sessions. Chance: each of the tool's calls is moved independently
+by 10-60 sessions, 2,000 times (same number and density of calls, no link to
+the tool's anchors); p = share of those copies that did as well. Price tools
+are compared with their turn prices nudged 2-10%. History is split: the
 first 70% selects (Benjamini-Hochberg, q = 0.10, lift >= 1.2); a tool is IN
 PLAY only if it also beats chance on the last 30% it was not selected on.
 That later 30% was still visible on the dashboard before, so the prospective
@@ -52,7 +54,7 @@ LIFT_BAR = 1.2
 N_SEL = 15
 N_HOLD = 8
 HOLD_P = 0.20
-DRAWS = 300
+DRAWS = 2000
 MAJOR_MULT = 2.5
 PLANETS = ["Sun", "Mercury", "Venus", "Mars", "Jupiter", "Saturn"]
 
@@ -154,15 +156,16 @@ def binom_sf(k, n, p):
 
 
 def result(hits, n, ctrl):
-    """Chance = the tool's own calls moved in time. p = binomial tail at that
-    chance rate (fine-grained enough for FDR); pPerm = the shifted copies."""
+    """Chance = the tool's own calls moved in time (or its turn prices nudged).
+    p = share of those shifted copies that did at least as well; the binomial
+    tail is kept for reference only because calls from one tool overlap."""
     c = float(ctrl.mean())
     rate = min(max(c / n, 1e-6), 1 - 1e-6)
     return {"n": n, "hits": int(hits), "hitPct": round(100 * hits / n, 1),
             "chancePct": round(100 * c / n, 1),
             "lift": round(hits / c, 2) if c > 0 else None,
-            "p": float(f"{binom_sf(int(hits), n, rate):.3g}"),
-            "pPerm": round(float((1 + (ctrl >= hits).sum()) / (1 + len(ctrl))), 4)}
+            "p": round(float((1 + (ctrl >= hits).sum()) / (1 + len(ctrl))), 5),
+            "pBinomial": float(f"{binom_sf(int(hits), n, rate):.3g}")}
 
 
 def score(targets, near, rng, lo, hi):
@@ -173,10 +176,10 @@ def score(targets, near, rng, lo, hi):
         return {"n": 0}
     hits = int(near[t].sum())
     span = hi - lo
-    shifts = rng.integers(10, 251, DRAWS) * rng.choice([-1, 1], DRAWS)
-    ctrl = np.empty(DRAWS)
-    for k, sh in enumerate(shifts):
-        ctrl[k] = near[lo + ((t - lo + sh) % span)].sum()
+    # each call moved independently by 10-60 sessions: same number of calls
+    # and roughly the same density, but no link to the tool's anchors
+    shifts = rng.integers(10, 61, (DRAWS, n)) * rng.choice([-1, 1], (DRAWS, n))
+    ctrl = near[lo + ((t[None, :] - lo + shifts) % span)].sum(1)
     return result(hits, n, ctrl)
 
 
@@ -185,15 +188,15 @@ def score_levels(pivot_prices, level_sets, tol, rng):
     if not pivot_prices:
         return {"n": 0}
     pp = np.array(pivot_prices, float)
-
-    def count(prices):
-        return sum(bool(len(L)) and np.min(np.abs(np.array(L) - x)) <= tol * x
-                   for x, L in zip(prices, level_sets))
-    hits = count(pp)
-    ctrl = np.empty(DRAWS // 3)
-    for k in range(len(ctrl)):
-        eps = rng.uniform(0.02, 0.10, len(pp)) * rng.choice([-1, 1], len(pp))
-        ctrl[k] = count(pp * (1 + eps))
+    eps = rng.uniform(0.02, 0.10, (DRAWS, len(pp))) * rng.choice([-1, 1], (DRAWS, len(pp)))
+    hits, ctrl = 0, np.zeros(DRAWS)
+    for j, (x, L) in enumerate(zip(pp, level_sets)):
+        if not len(L):
+            continue
+        L = np.asarray(L, float)
+        hits += int(np.min(np.abs(L - x)) <= tol * x)
+        q = x * (1 + eps[:, j])
+        ctrl += np.min(np.abs(L[None, :] - q[:, None]), 1) <= tol * q
     return result(hits, len(pp), ctrl)
 
 
@@ -447,7 +450,7 @@ def analyze_ticker(df, thresh, today, eph=None, seed=7, null=False):
     for i, r in enumerate(rows):
         s, h = r["sel"], r["hold"]
         passed = (i in selected and s.get("n", 0) >= N_SEL and (s.get("lift") or 0) >= LIFT_BAR
-                  and s.get("pPerm", 1) <= 0.05)
+                  )
         held = (h.get("n", 0) >= N_HOLD and (h.get("lift") or 0) > 1.0 and h.get("p", 1) <= HOLD_P)
         r["verdict"] = ("IN PLAY" if passed and held else
                         "FAILED HOLDOUT" if passed else
