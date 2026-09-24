@@ -458,6 +458,59 @@
         },
         "filledAt": "2026-09-24T12:41 ET"
       }
+    },
+    {
+      "id": 7,
+      "status": "resting",
+      "account": "\u2022\u2022\u2022\u20222831 Agentic",
+      "orderId": "6ab57776-6f28-4d8a-a7a4-8e3b0c4d6a11",
+      "ticker": "QQQ",
+      "strategy": "call credit spread",
+      "expiry": "2026-10-23",
+      "dteAtPlan": 29,
+      "width": 10,
+      "quantity": 2,
+      "legs": {
+        "sell": {
+          "strike": 770,
+          "type": "call",
+          "optionId": "38c2848e-e07a-4d20-97f7-79d0cb5c5057"
+        },
+        "buy": {
+          "strike": 780,
+          "type": "call",
+          "optionId": "54ac281c-77b7-434d-8793-791527a06bff"
+        }
+      },
+      "entryLimitCredit": 2.0,
+      "timeInForce": "gtc",
+      "placedAt": "2026-09-24T15:18 ET",
+      "placedBy": "user in app",
+      "alertId": 16,
+      "spotAtPlan": 741.03,
+      "shortDeltaAtPlan": 0.233,
+      "breakeven": 772.0,
+      "maxProfit": 400,
+      "maxLoss": 1600,
+      "collateral": 2000,
+      "pctAccountAtRisk": {
+        "on11000": 0.145
+      },
+      "earningsDate": null,
+      "exitTargetDebit": 1.0,
+      "lossExitDebit": 4.0,
+      "plannedExitTurn": {
+        "type": "low",
+        "date": "2026-10-15",
+        "time": "Saturn 12:41-1:37 PM",
+        "price": 707.87
+      },
+      "fillCredit": null,
+      "opened": null,
+      "closed": null,
+      "closeCost": null,
+      "pnl": null,
+      "notes": "Timing-led: app projects a QQQ high 9/24 (~748.65) then a low 10/15 (~707.87). Suggested 1 contract ($800 risk, 7.3%); user placed 2 and accepted ~15% of account at risk (above the 13% per-trade cap, user's call). Limit $2.00 sits above the 1.91/1.99 quote, so it rests until QQQ rises toward the projected high."
     }
   ],
   "otherAccountOrders": [
@@ -784,6 +837,36 @@
         "reason": "pushed; awaiting user",
         "outcome": "pending",
         "note": "First timing-led alert. QQQ's projected high is today, so the scan evaluated the next leg (down to a 10/15 low). 10/16 is only 1 trading day after the turn, so expiry is 10/23. 770/780 failed (0.15 credit/width); 760/770: 760 mark 5.805 (5.76/5.85), 770 mark 3.405, credit/width 0.24, OI 4092. 1 contract (7%): 2 would be 13.8%, over the 13% cap. Open risk with GOOGL trade 6: 1,885 (17%). GOOGL 10/09 call spreads failed credit (355/360 0.18); HOOD 10/02 113/108 and 114/109 failed (0.15, 0.18); TSLA skipped: no expiry between the 10/15 low + 2 days and 10/21 earnings."
+      },
+      {
+        "id": 16,
+        "date": "2026-09-24",
+        "time": "15:09 ET",
+        "symbol": "QQQ",
+        "spread": "10/23 770/780 call credit",
+        "midAtAlert": 1.92,
+        "suggestedLimit": 2.0,
+        "limitType": "resting GTC above mid (fills if QQQ rises toward the app's projected high)",
+        "shortDelta": 0.233,
+        "spot": 740.59,
+        "contracts": 1,
+        "maxLoss": 800,
+        "breakeven": 772.0,
+        "legType": "down (next turn LOW)",
+        "turnDate": "2026-10-15",
+        "turnTime": "Saturn 12:41-1:37 PM",
+        "turnPrice": 707.87,
+        "entryTurn": {
+          "type": "high",
+          "date": "2026-09-24",
+          "time": "Jupiter 1:48-2:48 PM",
+          "price": 748.65
+        },
+        "plannedExit": "close at the 10/15 projected low or at 50% of credit ($1.00); stop 2x credit ($4.00) or 770 breached",
+        "taken": true,
+        "reason": "user asked 'if you had to make a trade'; placed in app 3:18pm ET, 2 contracts (user accepted ~15% risk)",
+        "outcome": "pending",
+        "note": "Answer to a direct question, not a scan alert: mid credit/width 0.19 (just under 0.20); $2.00 limit meets 0.20. 760/770 excluded (short delta 0.33)."
       }
     ]
   }
