@@ -2258,3 +2258,41 @@ that may not get read every day, I'm also sending a direct notification about it
 just noting it here again. Also watching: whether HOOD's hit rate ever breaks its long-running
 13-21% band; whether QQQ's slow uptick continues; and whether my own sandbox's Yahoo access ever
 recovers.
+
+## 2026-09-24 (Thu) — cloud refresh current; grades steady; grade + log only
+
+**Build status:** my sandbox's own Yahoo fetch is 403-blocked again (gateway policy denial on
+`query1.finance.yahoo.com`, confirmed via the proxy status log), and this sandbox has no committed
+CSVs to fall back on (gitignored by design), so a local rebuild wasn't possible today - same as the
+last several days. The separate cloud refresh workflow reached Yahoo fine on its own and pushed a
+fresh build about an hour before this review started (commit 7fe49d6, data stamped 9/24 5:45pm ET);
+`coherence_check.py` passes cleanly against that committed build (10/10 tickers), the account-number
+guard (`test_sensitive_data.py`) is clean on the current working copy, and the full test suite
+(`python -m unittest discover`) passes all 75 tests.
+
+**Grades reviewed:** swing-ledger counts ticked up slightly (JPM 24→25, QQQ 37→38), others unchanged
+(TSLA n=12, HOOD n=47, GOOGL n=32, GC=F n=18); NVDA/AMZN/SPY/VOO still n=0. Hit rates: TSLA 33%/42%,
+HOOD 15%/21%, QQQ 32%/37%, JPM 16%/24%, GOOGL 22%/25%, GC=F 22%/22% - all within the same noisy
+bands seen all week, no ticker sliding for 3+ straight sessions. The daily high/low horizon grades
+(last five graded sessions, 9/17-9/23) still show the mild recurring negative low-side bias on
+TSLA/HOOD/QQQ/AMZN/GOOGL that's been visible for weeks and already watched - not a new pattern, and
+still short of the 3+-day bar for a code change since it isn't worsening or new. Didn't find a bug in
+the committed output.
+
+**Trade cards / paper journal:** `trades_log.json` has a fresh TSLA model sheet for today (call-spread
+ride toward the projected high plus an income put) - informational only. `spread_journal.json`: the
+GOOGL 325/320 put credit spread (trade 6) closed today near breakeven (+$15) against the app's current
+leg; a new QQQ 770/780 call credit spread (trade 7) opened today with an exit order resting - the
+owner's separate live options-journal process, outside this review's scope, untouched by me.
+`real_trades.json` unchanged since the 9/11 TSLA assignment.
+
+**What changed and why:** no code change - grades are steady/noisy, not a new pattern, and nothing in
+today's committed build looks like a bug. Honesty features (measured hit rates, random-control
+comparisons, self-grading, the coherence gate) are untouched; `tickers.txt` wasn't touched.
+
+**Watch next:** the plain-text brokerage account number committed in three commits around 9/14-9/16 is
+still sitting unscrubbed in the repo's public git history - this was already flagged directly to the
+owner on 9/23 and remains unresolved with no visible decision yet on authorizing a history rewrite;
+not re-flagging via notification today since nothing about it changed, but still noting it here.
+Also watching: whether HOOD's hit rate ever breaks its long-running 13-21% band; whether the low-side
+bias narrows or worsens; and whether my own sandbox's Yahoo access ever recovers.
