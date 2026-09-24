@@ -530,7 +530,7 @@ function renderVibration(V, ticker){
   }
   const nulls=(V.nullInPlay||[]).join(", ");
   $("vibSub").innerHTML=`Each tool is tested on its own against ${esc(ticker)}'s ${esc(V.turns)} swing turns since ${esc(V.history.from)}
-    (a call hits when a turn lands within ±2 sessions). Chance = the tool's own calls moved in time.
+    (a call hits when a turn lands within ±2 sessions). Chance = the same tool with each call moved randomly by 10–60 sessions.
     Tools are selected on the history before ${esc(V.split)} and must work again on the later part they were not selected on.
     <b>${esc(V.inPlay)} of ${esc(V.tested)} tools are in play.</b> Luck check: the same test on ${esc(ticker)}'s own moves reshuffled
     (no real cycles) put ${esc(nulls)} tools in play. Computed ${esc(V.computed)}; calls logged from now on are the unseen test.`;
