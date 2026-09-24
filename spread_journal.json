@@ -193,7 +193,7 @@
     {
       "id": 3,
       "status": "closed",
-      "account": "••••2831 Agentic",
+      "account": "\u2022\u2022\u2022\u20222831 Agentic",
       "orderId": "6aa962a6-29a9-4e1f-94df-60637ece25bb",
       "ticker": "HOOD",
       "strategy": "put credit spread",
@@ -282,7 +282,7 @@
     {
       "id": 4,
       "status": "cancelled",
-      "account": "••••2831 Agentic",
+      "account": "\u2022\u2022\u2022\u20222831 Agentic",
       "orderId": "6aaa9e35-2d2a-4667-a488-ff4d333ca0e5",
       "ticker": "HOOD",
       "strategy": "put credit spread",
@@ -341,7 +341,7 @@
     {
       "id": 5,
       "status": "cancelled",
-      "account": "••••2831 Agentic",
+      "account": "\u2022\u2022\u2022\u20222831 Agentic",
       "orderId": "6aaaef01-10dc-44b1-ba2a-b7128aa8aa5c",
       "ticker": "QQQ",
       "strategy": "put credit spread",
@@ -398,7 +398,7 @@
     {
       "id": 6,
       "status": "open",
-      "account": "••••2831 Agentic",
+      "account": "\u2022\u2022\u2022\u20222831 Agentic",
       "orderId": "6ab3eade-bcab-4630-a419-d28f9c354227",
       "ticker": "GOOGL",
       "strategy": "put credit spread",
@@ -443,19 +443,25 @@
       "fees": 0.24,
       "notes": "From alert 12 (limit 1.20 suggested; user entered 1.25). Filled 11:27am ET: sold 325P at 5.00, bought 320P at 3.75. Agent's own placement was blocked by the Claude Code permission check; user placed in app. App projects a GOOGL low of 316.40 on 10/07, below the short strike.",
       "exitOrder": {
-        "orderId": "6ab3f0de-3dd5-4d3c-856c-e1f13b11c02e",
+        "orderId": "6ab54f99-c190-4478-ae0b-d05ed4df7353",
         "type": "buy to close, limit",
-        "limitDebit": 0.6,
+        "limitDebit": 1.2,
         "timeInForce": "gtc",
-        "placedAt": "2026-09-23T11:31 ET",
+        "placedAt": "2026-09-24T12:28 ET",
         "placedBy": "user in app",
-        "state": "resting"
+        "state": "resting",
+        "replaced": {
+          "orderId": "6ab3f0de-3dd5-4d3c-856c-e1f13b11c02e",
+          "limitDebit": 0.6,
+          "placedAt": "2026-09-23T11:31 ET",
+          "cancelledAt": "2026-09-24T12:28 ET"
+        }
       }
     }
   ],
   "otherAccountOrders": [
     {
-      "account": "Individual ••••8549",
+      "account": "Individual \u2022\u2022\u2022\u20228549",
       "order": "sell GOOGL $325 put 10/9 x1",
       "limit": 10.0,
       "tif": "gtc",
@@ -467,7 +473,7 @@
       "cancelled": "2026-09-14T20:33 ET"
     },
     {
-      "account": "Joint ••••6540",
+      "account": "Joint \u2022\u2022\u2022\u20226540",
       "order": "sell GOOGL $325 put 10/9 x1",
       "limit": 10.0,
       "tif": "gtc",
@@ -479,7 +485,7 @@
       "cancelled": "2026-09-14T20:33 ET"
     },
     {
-      "account": "Individual ••••8549",
+      "account": "Individual \u2022\u2022\u2022\u20228549",
       "order": "sell to open HOOD $140 call 10/23 x2 (covered call)",
       "limit": 5.0,
       "tif": "gtc",
