@@ -29,7 +29,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 2 | cancelled 9/12 5:34am ET (broker-side, never filled; placed 9/10 2:19pm) | GOOGL | 10/23 $310/$305 put credit spread x1 | $1.20 limit (mid $1.03) | $380 | $308.80 | 79% | 3.5% | $0.60 | | |
 | 3 | 9/16 11:34am | HOOD | 10/23 $100/$95 put credit spread x2 | $1.85 | $630 | $98.15 | 72% | 5.7% | $0.90 | 9/18 10:20am at $0.90 | **+$190** (30% on risk, 2 days) |
 | 6 | 9/23 11:27am | GOOGL | 10/23 $325/$320 put credit spread x3 | $1.25 | $1,125 | $323.75 | 76% | 10.2% | $1.20 GTC (replaced $0.60 9/24) | 9/24 12:41pm at $1.20 | **+$15** (break-even; exited against the app's leg) |
-| 7 | resting since 9/24 3:18pm (GTC, not filled) | QQQ | 10/23 $770/$780 call credit spread x2 | $2.00 limit (mid $1.92) | $1,600 | $772.00 | ~82% | 14.5% (user accepted) | $1.00, or at the 10/15 projected low (stop $4.00 / QQQ above $770) | | resting |
+| 7 | 9/24 3:53pm | QQQ | 10/23 $770/$780 call credit spread x2 | $2.00 | $1,600 | $772.00 | ~82% | 14.5% (user accepted) | $1.00, or at the 10/15 projected low (stop $4.00 / QQQ above $770) | | open |
 
 ## Monthly results
 | Month | Start | Deposits | Realized P&L | Growth | Trades | W/L |
