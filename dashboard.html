@@ -538,7 +538,7 @@ function renderVibration(V, ticker){
   $("vibNext").innerHTML = up.length
     ? `<b>Next dates from in-play tools:</b><div class="tblwrap"><table><tr><th>Date</th><th>Tools agreeing</th><th>Which</th></tr>${up.map(u=>`<tr><td class="num">${esc(u.date)}</td><td class="num">${esc(u.count)}</td><td>${u.tools.map(esc).join("<br>")}</td></tr>`).join("")}</table></div>`
     : `<span class="tag">No in-play tool projects a date in the next 45 sessions.</span>`;
-  const cell=x=>x && x.n ? `${x.hitPct}% vs ${x.chancePct}% <span class="tag">(${x.lift ?? "—"}×, n=${x.n})</span>` : "—";
+  const cell=x=>x && x.n ? `${x.hitPct}% vs ${x.chancePct}% <span class="tag">(${x.lift == null ? "—" : x.lift}×, n=${x.n})</span>` : "—";
   const badge=v=>`<span class="badge" style="${v==="IN PLAY"?"background:#dafbe1;color:#1a7f37":v==="FAILED HOLDOUT"?"background:#fff8c5;color:#7d4e00":"background:#eee;color:#777"}">${esc(v)}</span>`;
   $("vibTable").innerHTML=`<tr><th>Tool</th><th>Family</th><th>Selection history</th><th>Later history</th><th>Verdict</th></tr>`+
     (V.tools||[]).map(r=>`<tr><td>${esc(r.tool)}</td><td>${esc(r.family)}</td><td class="num">${cell(r.sel)}</td><td class="num">${cell(r.hold)}</td><td>${badge(r.verdict)}</td></tr>`).join("");
