@@ -28,12 +28,12 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 1 | cancelled 9/10 2:13pm, never filled | GOOGL | 10/23 $305/$300 put credit spread x1 | $1.20 limit (mid $0.93) | $380 | $303.80 | 81% | 3.5% | $0.60 | | |
 | 2 | cancelled 9/12 5:34am ET (broker-side, never filled; placed 9/10 2:19pm) | GOOGL | 10/23 $310/$305 put credit spread x1 | $1.20 limit (mid $1.03) | $380 | $308.80 | 79% | 3.5% | $0.60 | | |
 | 3 | 9/16 11:34am | HOOD | 10/23 $100/$95 put credit spread x2 | $1.85 | $630 | $98.15 | 72% | 5.7% | $0.90 | 9/18 10:20am at $0.90 | **+$190** (30% on risk, 2 days) |
-| 6 | 9/23 11:27am | GOOGL | 10/23 $325/$320 put credit spread x3 | $1.25 | $1,125 | $323.75 | 76% | 10.2% | $1.20 GTC resting since 9/24 12:28pm, replaced $0.60 (stop $2.50) | | open |
+| 6 | 9/23 11:27am | GOOGL | 10/23 $325/$320 put credit spread x3 | $1.25 | $1,125 | $323.75 | 76% | 10.2% | $1.20 GTC (replaced $0.60 9/24) | 9/24 12:41pm at $1.20 | **+$15** (break-even; exited against the app's leg) |
 
 ## Monthly results
 | Month | Start | Deposits | Realized P&L | Growth | Trades | W/L |
 |---|---|---|---|---|---|---|
-| 2026-09 | $11,000 (incl. $10k deposit 9/9) | $10,000 | +$190 | +1.7% | 1 | 1/0 |
+| 2026-09 | $11,000 (incl. $10k deposit 9/9) | $10,000 | +$205 | +1.9% | 2 | 2/0 |
 
 ## Other-account orders (read-only, not part of the spread P&L)
 | Account | Order | Limit | Status | Collateral | Placed |
@@ -57,7 +57,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 9 | 9/16 3:04pm | HOOD 10/23 90/85 put | $1.02 (limit $1.15 GTC, app low $100.21 on 9/17) | Pushed, open | pending |
 | 10 | 9/18 9:46am | GOOGL 10/23 385/390 call | $1.18 (limit $1.20; quotes wide, app high $372.21 on 9/25) | Pushed, open | pending |
 | 11 | 9/21 | QQQ 10/23 765/775 call | $2.09 | No | pending |
-| 12 | 9/23 | GOOGL 10/23 325/320 put | $1.20 | Yes (trade 6, $1.25) | pending |
+| 12 | 9/23 | GOOGL 10/23 325/320 put | $1.20 | Yes (trade 6, $1.25) | closed 9/24 at $1.20, +$15 |
 | 13 | 9/23 11:46am | GOOGL 10/23 320/315 put | $1.00 | No | pending |
 | 14 | 9/23 3:33pm | GOOGL 10/23 320/315 put (re-alert) | $1.10 | No | pending |
 | 15 | 9/24 9:37am | QQQ 10/23 760/770 call (timing: leg down to 10/15 low) | $2.40 (limit $2.60 GTC) | No | pending |

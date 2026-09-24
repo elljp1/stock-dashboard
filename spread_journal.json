@@ -71,11 +71,11 @@
       "month": "2026-09",
       "startValue": 11000,
       "deposits": 10000,
-      "realizedPnl": 190,
-      "fees": 0.32,
-      "growthPct": 1.73,
-      "trades": 1,
-      "wins": 1,
+      "realizedPnl": 205,
+      "fees": 0.56,
+      "growthPct": 1.86,
+      "trades": 2,
+      "wins": 2,
       "losses": 0,
       "note": "Opened at 1,000; 10,000 deposit landed 2026-09-09 before any trade. Growth measured from 11,000."
     }
@@ -397,7 +397,7 @@
     },
     {
       "id": 6,
-      "status": "open",
+      "status": "closed",
       "account": "\u2022\u2022\u2022\u20222831 Agentic",
       "orderId": "6ab3eade-bcab-4630-a419-d28f9c354227",
       "ticker": "GOOGL",
@@ -437,11 +437,11 @@
       "lossExitDebit": 2.5,
       "fillCredit": 1.25,
       "opened": "2026-09-23T11:27 ET",
-      "closed": null,
-      "closeCost": null,
-      "pnl": null,
+      "closed": "2026-09-24T12:41 ET",
+      "closeCost": 1.2,
+      "pnl": 15,
       "fees": 0.24,
-      "notes": "From alert 12 (limit 1.20 suggested; user entered 1.25). Filled 11:27am ET: sold 325P at 5.00, bought 320P at 3.75. Agent's own placement was blocked by the Claude Code permission check; user placed in app. App projects a GOOGL low of 316.40 on 10/07, below the short strike.",
+      "notes": "From alert 12 (limit 1.20 suggested; user entered 1.25). Filled 11:27am ET: sold 325P at 5.00, bought 320P at 3.75. Agent's own placement was blocked by the Claude Code permission check; user placed in app. App projects a GOOGL low of 316.40 on 10/07, below the short strike. Closed 9/24 12:41pm ET at 1.20 debit (bought 325P at 4.68, sold 320P at 3.48): +$15, about break-even. Exited early because the app's next turn is a LOW (10/07), against a put credit spread.",
       "exitOrder": {
         "orderId": "6ab54f99-c190-4478-ae0b-d05ed4df7353",
         "type": "buy to close, limit",
@@ -449,13 +449,14 @@
         "timeInForce": "gtc",
         "placedAt": "2026-09-24T12:28 ET",
         "placedBy": "user in app",
-        "state": "resting",
+        "state": "filled",
         "replaced": {
           "orderId": "6ab3f0de-3dd5-4d3c-856c-e1f13b11c02e",
           "limitDebit": 0.6,
           "placedAt": "2026-09-23T11:31 ET",
           "cancelledAt": "2026-09-24T12:28 ET"
-        }
+        },
+        "filledAt": "2026-09-24T12:41 ET"
       }
     }
   ],
@@ -702,7 +703,7 @@
         "breakeven": 323.8,
         "taken": true,
         "reason": "user placed in app at 1.25; filled 11:27 ET (trade 6)",
-        "outcome": "pending",
+        "outcome": "closed early 9/24 at 1.20 debit, +$15 (exit: against the app's leg)",
         "projectedTurn": 316.4,
         "projectedDate": "2026-10-07",
         "projectedTurnType": "low",
