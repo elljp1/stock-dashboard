@@ -60,6 +60,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 12 | 9/23 | GOOGL 10/23 325/320 put | $1.20 | Yes (trade 6, $1.25) | pending |
 | 13 | 9/23 11:46am | GOOGL 10/23 320/315 put | $1.00 | No | pending |
 | 14 | 9/23 3:33pm | GOOGL 10/23 320/315 put (re-alert) | $1.10 | No | pending |
+| 15 | 9/24 9:37am | QQQ 10/23 760/770 call (timing: leg down to 10/15 low) | $2.40 (limit $2.60 GTC) | No | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
