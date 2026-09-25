@@ -3,6 +3,7 @@
 Protocol v1 is fixed before forward collection begins. Historical scores are an
 audit, not an unseen test. This module never changes forecasts or model weights.
 """
+import random
 from datetime import datetime
 from statistics import median
 from zoneinfo import ZoneInfo
@@ -63,6 +64,44 @@ def match(calls, turns):
             results.append(dict(base, status='falseAlarm', actualDate=None,
                                 confirmedDate=None, errorSessions=None))
     return results, used
+
+
+MIN_SCORED = 20
+
+
+def chance_rate(calls, turns, draws=300, seed=7):
+    """Hit rate the same calls would score with their dates moved at random.
+
+    Each call keeps its direction and issue day; only its target session is
+    redrawn from the span the real calls cover. The same one-turn-one-call
+    matching is applied, so crowding costs the blind calls exactly what it
+    costs the real ones.
+    """
+    if not calls:
+        return None
+    rng = random.Random(seed)
+    lo = min(pos for _, pos, _ in calls)
+    hi = max(pos for _, pos, _ in calls)
+    total = 0
+    for _ in range(draws):
+        shuffled = [(base, rng.randint(lo, hi), observed) for base, _, observed in calls]
+        hits = sum(r['status'] == 'hit' for r in match(shuffled, turns)[0])
+        total += hits / len(calls)
+    return round(100 * total / draws, 1)
+
+
+def use_verdict(summary, chance_pct):
+    """Is the dated-turn track record good enough to act on?
+
+    Unproven below MIN_SCORED calls. Otherwise the 95% Wilson lower bound of
+    the hit rate must clear the blind-call rate for this ticker."""
+    n, hits = summary['scored'], summary['hits']
+    if chance_pct is None or n < MIN_SCORED:
+        return {'status': 'unproven', 'needed': MIN_SCORED, 'scored': n, 'lowerBoundPct': None}
+    z, p = 1.96, hits / n
+    lower = (p + z*z/(2*n) - z * ((p*(1-p) + z*z/(4*n)) / n) ** 0.5) / (1 + z*z/n)
+    status = 'beatsChance' if 100 * lower > chance_pct else 'notAboveChance'
+    return {'status': status, 'needed': MIN_SCORED, 'scored': n, 'lowerBoundPct': round(100 * lower, 1)}
 
 
 def coverage(turns, from_exclusive, end_i):
@@ -153,8 +192,10 @@ def timing_review(data, snapshots, now):
                     'Other cycles': lambda s: 'cycle' in s or 'goertzel' in s}
         tags = {family: summarize([r for r in results if any(test(m.lower()) for m in r['methods'])])
                 for family, test in families.items()}
+        chance = chance_rate(calls, turns)
         report['tickers'][ticker] = {
-            'summary': summarize(results), 'historicalAudit': summarize(historical),
+            'summary': summarize(results),
+            'chanceHitPct': chance, 'useVerdict': use_verdict(summarize(results), chance), 'historicalAudit': summarize(historical),
             'forward': summarize(forward), 'pending': pending, 'excludedCount': len(excluded),
             'coverage': coverage_summary(scope, used, first_logged.get('all'), dates, coverage_end_i),
             # Historical coverage stops before the forward start; forward
