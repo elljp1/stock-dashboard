@@ -104,6 +104,7 @@ def build():
     constants.setdefault('WEEKPLAN', {})
     report = review(data)
     lab = json.loads(Path('gann_lab.json').read_text()) if Path('gann_lab.json').exists() else {}
+    board = json.loads(Path('horizon_scoreboard.json').read_text()) if Path('horizon_scoreboard.json').exists() else {}
     for ticker, d in data.items():
         v = lab.get('tickers', {}).get(ticker)
         if v:
@@ -113,6 +114,9 @@ def build():
             d['gannLab'] = {k: v[k] for k in ('history', 'turns', 'tested', 'inPlay', 'nullInPlay', 'split', 'upcoming') if k in v}
             d['gannLab'].update(computed=lab.get('computed'), tools=[
                 {k: t[k] for k in ('tool', 'family', 'sel', 'hold', 'verdict')} for t in tools])
+        if board.get('table'):
+            d['horizonScore'] = {'method': board.get('method'), 'mine': board['table'].get(ticker),
+                                 'all': board['table'].get('ALL')}
         d['dailyReview'] = {'reviewedAt': report['reviewedAt'], 'snapshotCount': report['snapshotCount'],
                             'scoredOriginals': report['scoredOriginals']}
         timing = report['timing']['tickers'][ticker]

@@ -330,6 +330,12 @@
   <div class="tblwrap"><table id="vibTable" style="margin-top:8px"></table></div>
 </div>
 
+<div class="panel" data-tab="Research" id="hsPanel">
+  <h2>High/low calls vs simple baselines — <span class="tkr2"></span></h2>
+  <div class="sub" id="hsSub"></div>
+  <div class="tblwrap"><table id="hsTable" style="margin-top:8px"></table></div>
+</div>
+
 <div class="panel" data-tab="Research">
   <h2>Timing-school scorecard — what actually tested out on <span class="tkr2"></span></h2>
   <div class="sub" id="scoreSub"></div>
@@ -522,6 +528,37 @@ function bars(id, labels, values, opts={}){
   });
 }
 
+function renderHorizonScore(H, ticker){
+  if(!H || !H.all){
+    $("hsSub").textContent = "The high/low scoreboard will appear after the next refresh.";
+    $("hsTable").innerHTML = ""; return;
+  }
+  const S = H.mine || H.all;
+  const who = H.mine ? nice(ticker) : "all tickers";
+  const v = (x, suf) => x == null ? "—" : x + suf;
+  const rows = [];
+  ["daily","weekly","monthly"].forEach(h => ["high","low"].forEach(side => {
+    const r = S[h] && S[h][side];
+    if(!r || !r.n) return;
+    const better = (a, b) => a == null || b == null ? "" : (a < b ? " ✓" : "");
+    const beats = (a, b) => a == null || b == null ? "" : (a > b ? " ✓" : "");
+    rows.push(`<tr><td>${h} ${side}</td><td class="num">${r.n}</td>
+      <td class="num">${v(r.medianPriceErrPct,"%")}${better(r.medianPriceErrPct, r.medianNaivePriceErrPct)}</td>
+      <td class="num">${v(r.medianNaivePriceErrPct,"%")}</td>
+      <td class="num">${h === "daily" ? "—" : v(r.dayHitPct,"%") + beats(r.dayHitPct, r.randomDayPct)}</td>
+      <td class="num">${h === "daily" ? "—" : v(r.randomDayPct,"%")}</td>
+      <td class="num">${r.timed ? v(r.withinHourPct,"%") + beats(r.withinHourPct, Math.max(r.randomWithinHourPct, r.openWithinHourPct)) : "—"}</td>
+      <td class="num">${r.timed ? v(r.randomWithinHourPct,"%") : "—"}</td>
+      <td class="num">${r.timed ? v(r.openWithinHourPct,"%") : "—"}</td></tr>`);
+  }));
+  $("hsSub").innerHTML = `Graded calls for ${who}: the first call made for each day, week and month, compared with simple guesses.
+    <b>Price</b>: typical miss vs using last period's actual high/low. <b>Day</b>: right session vs a random session.
+    <b>Time</b>: within 1 hour (only when the day was right) vs a random time and vs "the open". ✓ = the app beat every simple guess.
+    Hourly and yearly calls are not graded yet.`;
+  $("hsTable").innerHTML = `<tr><th>Call</th><th>Graded</th><th>Price miss</th><th>Last period</th><th>Right day</th><th>Random day</th><th>Time ±1 hr</th><th>Random time</th><th>The open</th></tr>` +
+    (rows.join("") || `<tr><td colspan="9">No graded calls yet.</td></tr>`);
+}
+
 function renderVibration(V, ticker){
   const esc=v=>String(v == null ? "—" : v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
   if(!V){
@@ -592,6 +629,7 @@ function renderAll(D){
   $("reviewStatus").textContent=review ? "Automatic review: " + new Date(review.reviewedAt).toLocaleString("en-US",{timeZone:"America/New_York"}) + " ET · " + review.snapshotCount + " saved forecast snapshots · " + review.scoredOriginals + " original targets scored. Learning adjusts estimates; improvement is not guaranteed." : "Automatic review will appear after the next scheduled run.";
   renderTimingReview(D.timingReview);
   renderVibration(D.gannLab, D.ticker);
+  renderHorizonScore(D.horizonScore, D.ticker);
   /* predictions */
   const p1 = D.predictions[0];
   const tn = D.turnFormed;
