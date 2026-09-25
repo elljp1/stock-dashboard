@@ -1,7 +1,7 @@
 {
-  "reviewedAt": "2026-09-24T22:13:55.674492+00:00",
-  "snapshotCount": 3120,
-  "scoredOriginals": 84,
+  "reviewedAt": "2026-09-25T10:10:20.098860+00:00",
+  "snapshotCount": 3130,
+  "scoredOriginals": 92,
   "results": [
     {
       "snapshotId": "716865f746fe8b4ff8fe0fb2d2bb08149c02e6dfb04b0a61d145865d35303ef0",
@@ -142,6 +142,16 @@
       "predictedPrice": 737.45,
       "actualClose": 741.47,
       "absolutePriceErrorPct": 0.55
+    },
+    {
+      "snapshotId": "34cb5d4dbc3e01ea7f7df41a99578e159bc6bc9eb76821681d97864cfc2b691f",
+      "ticker": "JPM",
+      "targetDate": "2026-09-24",
+      "observedDate": "2026-09-24",
+      "type": "high",
+      "predictedPrice": 369.66,
+      "actualClose": 338.56,
+      "absolutePriceErrorPct": 8.41
     },
     {
       "snapshotId": "0c106ab6dbc07eecfe4dfa17a3723a785537b089d85bb81db6e981028b7ef05c",
@@ -764,6 +774,16 @@
       "absolutePriceErrorPct": 9.05
     },
     {
+      "snapshotId": "42726caff9ab2ec60908e5f41d1abcc6777f970e18120dbb6784220e80e32583",
+      "ticker": "NVDA",
+      "targetDate": "2026-09-24",
+      "observedDate": "2026-09-24",
+      "type": "high",
+      "predictedPrice": 220.54,
+      "actualClose": 224.58,
+      "absolutePriceErrorPct": 1.83
+    },
+    {
       "snapshotId": "dd3eb15176d4e0733bff1c2b0c4942058aaadfe4f1bd75909db3143f776683e5",
       "ticker": "TSLA",
       "targetDate": "2026-09-22",
@@ -782,6 +802,16 @@
       "predictedPrice": 780.93,
       "actualClose": 773.38,
       "absolutePriceErrorPct": 0.97
+    },
+    {
+      "snapshotId": "162d737c5fad7049edb0b931a9e6fc0282b007dc36d6721c5289eb5752ce39b1",
+      "ticker": "QQQ",
+      "targetDate": "2026-09-24",
+      "observedDate": "2026-09-24",
+      "type": "high",
+      "predictedPrice": 748.65,
+      "actualClose": 741.1,
+      "absolutePriceErrorPct": 1.01
     },
     {
       "snapshotId": "c74749900961a74fa4550a574e015ea9320bcb85030ac57946c6311e3d58a911",
@@ -842,6 +872,56 @@
       "predictedPrice": 342.04,
       "actualClose": 337.53,
       "absolutePriceErrorPct": 1.32
+    },
+    {
+      "snapshotId": "734b075a0490e96b74f7726b2a006a76011172a4f36bfff6afc34a7d7668f4fa",
+      "ticker": "TSLA",
+      "targetDate": "2026-09-24",
+      "observedDate": "2026-09-24",
+      "type": "high",
+      "predictedPrice": 384.81,
+      "actualClose": 377.94,
+      "absolutePriceErrorPct": 1.79
+    },
+    {
+      "snapshotId": "fbafba3a4c2f5bfe7e4bd0ddccff1bc5532d761846a53b426fa5285ec571af81",
+      "ticker": "AMZN",
+      "targetDate": "2026-09-24",
+      "observedDate": "2026-09-24",
+      "type": "low",
+      "predictedPrice": 243.81,
+      "actualClose": 249.38,
+      "absolutePriceErrorPct": 2.28
+    },
+    {
+      "snapshotId": "54f83cd451cb2ff2b388570ce27f29803861f8eb0305a457584c6bc43c0a09ed",
+      "ticker": "SPY",
+      "targetDate": "2026-09-24",
+      "observedDate": "2026-09-24",
+      "type": "high",
+      "predictedPrice": 780.93,
+      "actualClose": 767.18,
+      "absolutePriceErrorPct": 1.76
+    },
+    {
+      "snapshotId": "db44b96c3113b18ad6b0efb4eb899b2add0ac77258a9acc0aaed0d663c03c9b3",
+      "ticker": "GC=F",
+      "targetDate": "2026-09-24",
+      "observedDate": "2026-09-24",
+      "type": "low",
+      "predictedPrice": 4256.57,
+      "actualClose": 4298.0,
+      "absolutePriceErrorPct": 0.97
+    },
+    {
+      "snapshotId": "45c1316819d62a97bc25454cbd4f200688f05d481593bc4576fcdb9e6b423493",
+      "ticker": "NVDA",
+      "targetDate": "2026-09-24",
+      "observedDate": "2026-09-24",
+      "type": "low",
+      "predictedPrice": 208.51,
+      "actualClose": 224.58,
+      "absolutePriceErrorPct": 7.71
     }
   ],
   "method": "Original future-date targets versus first available daily close on/after target, scored no earlier than the following Eastern date; price error only, not reversal accuracy or trading profit.",
@@ -1136,13 +1216,13 @@
           "gann": 0.93
         },
         "famStats": {
-          "hurst": {
-            "n": 2,
-            "hits": 0
-          },
           "rhythm": {
             "n": 6,
             "hits": 2
+          },
+          "hurst": {
+            "n": 2,
+            "hits": 0
           },
           "fib": {
             "n": 4,
@@ -1714,21 +1794,21 @@
         "priceCalibHigh": 1.15,
         "priceCalibLow": 0.999,
         "methodFactors": {
-          "hurst": 0.51,
           "rhythm": 1.18,
+          "hurst": 0.51,
           "fib": 0.61,
           "gann": 1.17,
           "vibration": 1.53,
           "moon": 1.53
         },
         "famStats": {
-          "hurst": {
-            "n": 10,
-            "hits": 0
-          },
           "rhythm": {
             "n": 24,
             "hits": 4
+          },
+          "hurst": {
+            "n": 10,
+            "hits": 0
           },
           "fib": {
             "n": 18,
@@ -2307,21 +2387,21 @@
         "priceCalibHigh": 0.989,
         "priceCalibLow": 0.975,
         "methodFactors": {
-          "hurst": 1.37,
           "fib": 1.1,
+          "hurst": 1.37,
           "rhythm": 1.45,
           "gann": 0.85,
           "vibration": 2.0,
           "moon": 1.54
         },
         "famStats": {
-          "hurst": {
-            "n": 16,
-            "hits": 7
-          },
           "fib": {
             "n": 12,
             "hits": 4
+          },
+          "hurst": {
+            "n": 16,
+            "hits": 7
           },
           "rhythm": {
             "n": 15,
@@ -3407,8 +3487,8 @@
         "priceCalibLow": 0.979,
         "methodFactors": {
           "gann": 1.33,
-          "hurst": 1.21,
           "fib": 0.91,
+          "hurst": 1.21,
           "rhythm": 0.65,
           "vibration": 0.94,
           "moon": 1.7
@@ -3418,13 +3498,13 @@
             "n": 14,
             "hits": 4
           },
-          "hurst": {
-            "n": 5,
-            "hits": 1
-          },
           "fib": {
             "n": 12,
             "hits": 2
+          },
+          "hurst": {
+            "n": 5,
+            "hits": 1
           },
           "rhythm": {
             "n": 11,
@@ -4331,14 +4411,14 @@
   "timing": {
     "version": "daily-close-turns-v1",
     "forwardStart": "2026-09-24T00:00:00-04:00",
-    "reviewedAt": "2026-09-24T22:13:55.674492+00:00",
+    "reviewedAt": "2026-09-25T10:10:20.098860+00:00",
     "unit": "trading sessions",
     "tickers": {
       "TSLA": {
         "summary": {
-          "scored": 1,
+          "scored": 3,
           "hits": 0,
-          "falseAlarms": 1,
+          "falseAlarms": 3,
           "hitRatePct": 0.0,
           "medianAbsErrorSessions": null,
           "early": 0,
@@ -4346,9 +4426,9 @@
           "exact": 0
         },
         "historicalAudit": {
-          "scored": 1,
+          "scored": 3,
           "hits": 0,
-          "falseAlarms": 1,
+          "falseAlarms": 3,
           "hitRatePct": 0.0,
           "medianAbsErrorSessions": null,
           "early": 0,
@@ -4365,25 +4445,25 @@
           "late": 0,
           "exact": 0
         },
-        "pending": 23,
+        "pending": 21,
         "excludedCount": 0,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
+          "through": "2026-09-16",
           "turns": 1,
           "missedTurns": 1,
           "caughtTurns": 0
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
+          "through": "2026-09-16",
           "turns": 1,
           "missedTurns": 1,
           "caughtTurns": 0
         },
         "forwardCoverage": {
-          "fromExclusive": null,
-          "through": "2026-09-15",
+          "fromExclusive": "2026-09-24",
+          "through": "2026-09-16",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -4398,6 +4478,36 @@
               "Rhythm 11-bar",
               "Hurst 10-day trough",
               "new moon 11:26 PM ET"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "f92e9819f7eaa595cea42fade9558734db3ad095eea31c5df66358d0574a2966",
+            "targetDate": "2026-09-18",
+            "type": "high",
+            "recordedAt": "2026-09-17T14:07:38.932017+00:00",
+            "methods": [
+              "Rhythm 11-bar",
+              "Fib 55 bars from high 07/01"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "1c94258508d77a23cb3d6c104805330d1025ff9cb9fc5eb81d14942003ca7e34",
+            "targetDate": "2026-09-18",
+            "type": "low",
+            "recordedAt": "2026-09-17T15:11:19.601639+00:00",
+            "methods": [
+              "Rhythm 11-bar",
+              "Fib 55 bars from high 07/01"
             ],
             "cohort": "historicalAudit",
             "status": "falseAlarm",
@@ -4427,9 +4537,9 @@
             "exact": 0
           },
           "Hurst / rhythm": {
-            "scored": 1,
+            "scored": 3,
             "hits": 0,
-            "falseAlarms": 1,
+            "falseAlarms": 3,
             "hitRatePct": 0.0,
             "medianAbsErrorSessions": null,
             "early": 0,
@@ -4437,10 +4547,10 @@
             "exact": 0
           },
           "Fibonacci": {
-            "scored": 0,
+            "scored": 2,
             "hits": 0,
-            "falseAlarms": 0,
-            "hitRatePct": null,
+            "falseAlarms": 2,
+            "hitRatePct": 0.0,
             "medianAbsErrorSessions": null,
             "early": 0,
             "late": 0,
@@ -4467,24 +4577,24 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-23"
+        "lastClosedSession": "2026-09-24"
       },
       "HOOD": {
         "summary": {
-          "scored": 4,
+          "scored": 5,
           "hits": 1,
-          "falseAlarms": 3,
-          "hitRatePct": 25.0,
+          "falseAlarms": 4,
+          "hitRatePct": 20.0,
           "medianAbsErrorSessions": 1,
           "early": 0,
           "late": 1,
           "exact": 0
         },
         "historicalAudit": {
-          "scored": 4,
+          "scored": 5,
           "hits": 1,
-          "falseAlarms": 3,
-          "hitRatePct": 25.0,
+          "falseAlarms": 4,
+          "hitRatePct": 20.0,
           "medianAbsErrorSessions": 1,
           "early": 0,
           "late": 1,
@@ -4500,25 +4610,25 @@
           "late": 0,
           "exact": 0
         },
-        "pending": 23,
+        "pending": 22,
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
-          "turns": 1,
+          "through": "2026-09-16",
+          "turns": 2,
           "missedTurns": 1,
-          "caughtTurns": 0
+          "caughtTurns": 1
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
-          "turns": 1,
+          "through": "2026-09-16",
+          "turns": 2,
           "missedTurns": 1,
-          "caughtTurns": 0
+          "caughtTurns": 1
         },
         "forwardCoverage": {
           "fromExclusive": null,
-          "through": "2026-09-15",
+          "through": "2026-09-16",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -4583,6 +4693,21 @@
             "actualDate": null,
             "confirmedDate": null,
             "errorSessions": null
+          },
+          {
+            "snapshotId": "684aefcafda68336740f7c00c244d9ba739e77ec7fbd2ae643d3881d97090d2d",
+            "targetDate": "2026-09-18",
+            "type": "low",
+            "recordedAt": "2026-09-15T15:39:59.842570+00:00",
+            "methods": [
+              "Rhythm 8-bar",
+              "Fib 34 bars from low 07/31"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
           }
         ],
         "excluded": [
@@ -4619,20 +4744,20 @@
             "exact": 0
           },
           "Hurst / rhythm": {
-            "scored": 3,
+            "scored": 4,
             "hits": 1,
-            "falseAlarms": 2,
-            "hitRatePct": 33.3,
+            "falseAlarms": 3,
+            "hitRatePct": 25.0,
             "medianAbsErrorSessions": 1,
             "early": 0,
             "late": 1,
             "exact": 0
           },
           "Fibonacci": {
-            "scored": 3,
+            "scored": 4,
             "hits": 1,
-            "falseAlarms": 2,
-            "hitRatePct": 33.3,
+            "falseAlarms": 3,
+            "hitRatePct": 25.0,
             "medianAbsErrorSessions": 1,
             "early": 0,
             "late": 1,
@@ -4659,7 +4784,7 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-23"
+        "lastClosedSession": "2026-09-24"
       },
       "QQQ": {
         "summary": {
@@ -4696,21 +4821,21 @@
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
+          "through": "2026-09-16",
           "turns": 2,
           "missedTurns": 1,
           "caughtTurns": 1
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
+          "through": "2026-09-16",
           "turns": 2,
           "missedTurns": 1,
           "caughtTurns": 1
         },
         "forwardCoverage": {
           "fromExclusive": null,
-          "through": "2026-09-15",
+          "through": "2026-09-16",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -4882,24 +5007,24 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-23"
+        "lastClosedSession": "2026-09-24"
       },
       "JPM": {
         "summary": {
-          "scored": 8,
+          "scored": 9,
           "hits": 2,
-          "falseAlarms": 6,
-          "hitRatePct": 25.0,
+          "falseAlarms": 7,
+          "hitRatePct": 22.2,
           "medianAbsErrorSessions": 1.5,
           "early": 2,
           "late": 0,
           "exact": 0
         },
         "historicalAudit": {
-          "scored": 8,
+          "scored": 9,
           "hits": 2,
-          "falseAlarms": 6,
-          "hitRatePct": 25.0,
+          "falseAlarms": 7,
+          "hitRatePct": 22.2,
           "medianAbsErrorSessions": 1.5,
           "early": 2,
           "late": 0,
@@ -4915,25 +5040,25 @@
           "late": 0,
           "exact": 0
         },
-        "pending": 30,
+        "pending": 29,
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
-          "turns": 2,
+          "through": "2026-09-16",
+          "turns": 3,
           "missedTurns": 1,
-          "caughtTurns": 1
+          "caughtTurns": 2
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
-          "turns": 2,
+          "through": "2026-09-16",
+          "turns": 3,
           "missedTurns": 1,
-          "caughtTurns": 1
+          "caughtTurns": 2
         },
         "forwardCoverage": {
-          "fromExclusive": null,
-          "through": "2026-09-15",
+          "fromExclusive": "2026-09-24",
+          "through": "2026-09-16",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -5054,6 +5179,21 @@
             "actualDate": null,
             "confirmedDate": null,
             "errorSessions": null
+          },
+          {
+            "snapshotId": "955e77933669d37dc0cff60c1c841b04320362bc58bf918acb3bb9e052d0d0f9",
+            "targetDate": "2026-09-18",
+            "type": "low",
+            "recordedAt": "2026-09-17T13:47:48.501432+00:00",
+            "methods": [
+              "Rhythm 9-bar",
+              "Hurst 10-day trough"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
           }
         ],
         "excluded": [
@@ -5089,10 +5229,10 @@
             "exact": 0
           },
           "Hurst / rhythm": {
-            "scored": 7,
+            "scored": 8,
             "hits": 1,
-            "falseAlarms": 6,
-            "hitRatePct": 14.3,
+            "falseAlarms": 7,
+            "hitRatePct": 12.5,
             "medianAbsErrorSessions": 2,
             "early": 1,
             "late": 0,
@@ -5129,7 +5269,7 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-23"
+        "lastClosedSession": "2026-09-24"
       },
       "GOOGL": {
         "summary": {
@@ -5166,21 +5306,21 @@
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
-          "turns": 2,
-          "missedTurns": 0,
+          "through": "2026-09-16",
+          "turns": 3,
+          "missedTurns": 1,
           "caughtTurns": 2
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
-          "turns": 2,
-          "missedTurns": 0,
+          "through": "2026-09-16",
+          "turns": 3,
+          "missedTurns": 1,
           "caughtTurns": 2
         },
         "forwardCoverage": {
           "fromExclusive": null,
-          "through": "2026-09-15",
+          "through": "2026-09-16",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -5263,7 +5403,14 @@
             "reason": "not a future-session original"
           }
         ],
-        "missed": [],
+        "missed": [
+          {
+            "date": "2026-09-16",
+            "type": "low",
+            "index": 184,
+            "confirmedDate": "2026-09-18"
+          }
+        ],
         "methodTags": {
           "Gann": {
             "scored": 1,
@@ -5316,24 +5463,24 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-23"
+        "lastClosedSession": "2026-09-24"
       },
       "NVDA": {
         "summary": {
-          "scored": 4,
+          "scored": 5,
           "hits": 1,
-          "falseAlarms": 3,
-          "hitRatePct": 25.0,
+          "falseAlarms": 4,
+          "hitRatePct": 20.0,
           "medianAbsErrorSessions": 2,
           "early": 1,
           "late": 0,
           "exact": 0
         },
         "historicalAudit": {
-          "scored": 4,
+          "scored": 5,
           "hits": 1,
-          "falseAlarms": 3,
-          "hitRatePct": 25.0,
+          "falseAlarms": 4,
+          "hitRatePct": 20.0,
           "medianAbsErrorSessions": 2,
           "early": 1,
           "late": 0,
@@ -5353,21 +5500,21 @@
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
+          "through": "2026-09-16",
           "turns": 1,
           "missedTurns": 0,
           "caughtTurns": 1
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
+          "through": "2026-09-16",
           "turns": 1,
           "missedTurns": 0,
           "caughtTurns": 1
         },
         "forwardCoverage": {
-          "fromExclusive": null,
-          "through": "2026-09-15",
+          "fromExclusive": "2026-09-24",
+          "through": "2026-09-16",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -5434,6 +5581,21 @@
             "actualDate": null,
             "confirmedDate": null,
             "errorSessions": null
+          },
+          {
+            "snapshotId": "86a0fb9b1f74d81a9337c2f936802a0e84c0457ecc739ae51f4d03cca6d71896",
+            "targetDate": "2026-09-18",
+            "type": "low",
+            "recordedAt": "2026-09-17T10:05:08.275317+00:00",
+            "methods": [
+              "Rhythm 8-bar",
+              "Hurst 10-day crest"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
           }
         ],
         "excluded": [
@@ -5462,9 +5624,9 @@
             "exact": 0
           },
           "Hurst / rhythm": {
-            "scored": 3,
+            "scored": 4,
             "hits": 0,
-            "falseAlarms": 3,
+            "falseAlarms": 4,
             "hitRatePct": 0.0,
             "medianAbsErrorSessions": null,
             "early": 0,
@@ -5502,27 +5664,27 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-23"
+        "lastClosedSession": "2026-09-24"
       },
       "AMZN": {
         "summary": {
-          "scored": 5,
+          "scored": 6,
           "hits": 3,
-          "falseAlarms": 2,
-          "hitRatePct": 60.0,
+          "falseAlarms": 3,
+          "hitRatePct": 50.0,
           "medianAbsErrorSessions": 1,
-          "early": 2,
-          "late": 1,
+          "early": 1,
+          "late": 2,
           "exact": 0
         },
         "historicalAudit": {
-          "scored": 5,
+          "scored": 6,
           "hits": 3,
-          "falseAlarms": 2,
-          "hitRatePct": 60.0,
+          "falseAlarms": 3,
+          "hitRatePct": 50.0,
           "medianAbsErrorSessions": 1,
-          "early": 2,
-          "late": 1,
+          "early": 1,
+          "late": 2,
           "exact": 0
         },
         "forward": {
@@ -5535,25 +5697,25 @@
           "late": 0,
           "exact": 0
         },
-        "pending": 20,
+        "pending": 19,
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
-          "turns": 2,
+          "through": "2026-09-16",
+          "turns": 3,
           "missedTurns": 0,
-          "caughtTurns": 2
+          "caughtTurns": 3
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
-          "turns": 2,
+          "through": "2026-09-16",
+          "turns": 3,
           "missedTurns": 0,
-          "caughtTurns": 2
+          "caughtTurns": 3
         },
         "forwardCoverage": {
-          "fromExclusive": null,
-          "through": "2026-09-15",
+          "fromExclusive": "2026-09-24",
+          "through": "2026-09-16",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -5575,6 +5737,21 @@
             "actualDate": "2026-09-11",
             "confirmedDate": "2026-09-15",
             "errorSessions": 1
+          },
+          {
+            "snapshotId": "e5c40ae81a3d75401967d03b95bf7fc559b68767c6ecad0200eaa3d08cf2c06a",
+            "targetDate": "2026-09-18",
+            "type": "low",
+            "recordedAt": "2026-09-07T15:46:21.686530+00:00",
+            "methods": [
+              "Fib 34 bars from high 08/03",
+              "Cycle 16d crest (Goertzel)"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-16",
+            "confirmedDate": "2026-09-18",
+            "errorSessions": 2
           },
           {
             "snapshotId": "5d285ce6102cf43f2ca53cf0d81abed05bfd629c0fc2866352ef6c631c77f12f",
@@ -5620,10 +5797,10 @@
               "Sepharial: any planet station day"
             ],
             "cohort": "historicalAudit",
-            "status": "hit",
-            "actualDate": "2026-09-16",
-            "confirmedDate": "2026-09-18",
-            "errorSessions": -2
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
           },
           {
             "snapshotId": "99957889b676565839d3782732987d24070964cdf88323bb124c5a7469d50bae",
@@ -5662,56 +5839,56 @@
         "methodTags": {
           "Gann": {
             "scored": 2,
-            "hits": 2,
-            "falseAlarms": 0,
-            "hitRatePct": 100.0,
-            "medianAbsErrorSessions": 1.5,
-            "early": 1,
+            "hits": 1,
+            "falseAlarms": 1,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 1,
+            "early": 0,
             "late": 1,
             "exact": 0
           },
           "Hurst / rhythm": {
             "scored": 4,
-            "hits": 2,
-            "falseAlarms": 2,
-            "hitRatePct": 50.0,
-            "medianAbsErrorSessions": 1.5,
-            "early": 2,
-            "late": 0,
-            "exact": 0
-          },
-          "Fibonacci": {
-            "scored": 1,
-            "hits": 0,
-            "falseAlarms": 1,
-            "hitRatePct": 0.0,
-            "medianAbsErrorSessions": null,
-            "early": 0,
-            "late": 0,
-            "exact": 0
-          },
-          "Astro / vibration": {
-            "scored": 4,
-            "hits": 2,
-            "falseAlarms": 2,
-            "hitRatePct": 50.0,
-            "medianAbsErrorSessions": 1.5,
-            "early": 1,
-            "late": 1,
-            "exact": 0
-          },
-          "Other cycles": {
-            "scored": 1,
             "hits": 1,
-            "falseAlarms": 0,
-            "hitRatePct": 100.0,
+            "falseAlarms": 3,
+            "hitRatePct": 25.0,
             "medianAbsErrorSessions": 1,
             "early": 1,
             "late": 0,
             "exact": 0
+          },
+          "Fibonacci": {
+            "scored": 2,
+            "hits": 1,
+            "falseAlarms": 1,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 2,
+            "early": 0,
+            "late": 1,
+            "exact": 0
+          },
+          "Astro / vibration": {
+            "scored": 4,
+            "hits": 1,
+            "falseAlarms": 3,
+            "hitRatePct": 25.0,
+            "medianAbsErrorSessions": 1,
+            "early": 0,
+            "late": 1,
+            "exact": 0
+          },
+          "Other cycles": {
+            "scored": 2,
+            "hits": 2,
+            "falseAlarms": 0,
+            "hitRatePct": 100.0,
+            "medianAbsErrorSessions": 1.5,
+            "early": 1,
+            "late": 1,
+            "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-23"
+        "lastClosedSession": "2026-09-24"
       },
       "SPY": {
         "summary": {
@@ -5748,21 +5925,21 @@
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
-          "turns": 2,
+          "through": "2026-09-16",
+          "turns": 3,
           "missedTurns": 0,
-          "caughtTurns": 2
+          "caughtTurns": 3
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
-          "turns": 2,
+          "through": "2026-09-16",
+          "turns": 3,
           "missedTurns": 0,
-          "caughtTurns": 2
+          "caughtTurns": 3
         },
         "forwardCoverage": {
-          "fromExclusive": null,
-          "through": "2026-09-15",
+          "fromExclusive": "2026-09-24",
+          "through": "2026-09-16",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -5937,24 +6114,24 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-23"
+        "lastClosedSession": "2026-09-24"
       },
       "VOO": {
         "summary": {
-          "scored": 5,
+          "scored": 6,
           "hits": 3,
-          "falseAlarms": 2,
-          "hitRatePct": 60.0,
+          "falseAlarms": 3,
+          "hitRatePct": 50.0,
           "medianAbsErrorSessions": 2,
           "early": 2,
           "late": 1,
           "exact": 0
         },
         "historicalAudit": {
-          "scored": 5,
+          "scored": 6,
           "hits": 3,
-          "falseAlarms": 2,
-          "hitRatePct": 60.0,
+          "falseAlarms": 3,
+          "hitRatePct": 50.0,
           "medianAbsErrorSessions": 2,
           "early": 2,
           "late": 1,
@@ -5970,25 +6147,25 @@
           "late": 0,
           "exact": 0
         },
-        "pending": 22,
+        "pending": 21,
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-14",
+          "through": "2026-09-15",
           "turns": 2,
           "missedTurns": 0,
           "caughtTurns": 2
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-14",
+          "through": "2026-09-15",
           "turns": 2,
           "missedTurns": 0,
           "caughtTurns": 2
         },
         "forwardCoverage": {
-          "fromExclusive": null,
-          "through": "2026-09-14",
+          "fromExclusive": "2026-09-24",
+          "through": "2026-09-15",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -6066,6 +6243,20 @@
             "actualDate": "2026-09-16",
             "confirmedDate": "2026-09-18",
             "errorSessions": -1
+          },
+          {
+            "snapshotId": "18f7a6d97eb6d09662b258bb68407e564bd88eb04734c31870c06ad39f85cb6b",
+            "targetDate": "2026-09-17",
+            "type": "low",
+            "recordedAt": "2026-09-16T10:05:33.174012+00:00",
+            "methods": [
+              "Rhythm 16-bar"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
           }
         ],
         "excluded": [
@@ -6094,10 +6285,10 @@
             "exact": 0
           },
           "Hurst / rhythm": {
-            "scored": 5,
+            "scored": 6,
             "hits": 3,
-            "falseAlarms": 2,
-            "hitRatePct": 60.0,
+            "falseAlarms": 3,
+            "hitRatePct": 50.0,
             "medianAbsErrorSessions": 2,
             "early": 2,
             "late": 1,
@@ -6134,7 +6325,7 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-23"
+        "lastClosedSession": "2026-09-24"
       },
       "GC=F": {
         "summary": {
@@ -6167,25 +6358,25 @@
           "late": 0,
           "exact": 0
         },
-        "pending": 27,
+        "pending": 28,
         "excludedCount": 0,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
+          "through": "2026-09-16",
           "turns": 1,
           "missedTurns": 0,
           "caughtTurns": 1
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-15",
+          "through": "2026-09-16",
           "turns": 1,
           "missedTurns": 0,
           "caughtTurns": 1
         },
         "forwardCoverage": {
           "fromExclusive": null,
-          "through": "2026-09-15",
+          "through": "2026-09-16",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -6295,7 +6486,7 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-23"
+        "lastClosedSession": "2026-09-24"
       }
     },
     "method": "First logged future-date call per ticker/date/type; strict five-session daily-close high/low; \u00b12 sessions; two later closed bars confirm. One turn credits one call, earliest-issued first; historical-audit and forward cohorts are matched and covered independently (the combined summary uses one global matching). Error = called session minus actual session (negative = early).",
