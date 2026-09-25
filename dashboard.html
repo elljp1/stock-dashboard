@@ -553,7 +553,7 @@ function renderTimingReview(T){
   // coverage under a cohort label.
   const HC=T.historicalCoverage, FC=T.forwardCoverage;
   const esc=v=>String(v == null ? "—" : v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  $("timingSummary").textContent=`Daily-close reversal dates · ±2 trading sessions · ${T.historicalAudit.scored} historical audit calls · ${T.forward.scored} forward-test calls. ${T.pending} await completed windows. The two groups are scored separately and never pooled. Price-target error is scored separately.`;
+  $("timingSummary").textContent=`Daily-close reversal dates · ±2 trading sessions · ${T.historicalAudit.scored} historical audit calls · ${T.forward.scored} forward-test calls. ${T.pending} await completed windows. The two groups are scored separately and never pooled. Price-target error is scored separately.${T.chanceHitPct == null ? "" : ` Random-date baseline: the same calls with their dates moved at random hit ${T.chanceHitPct}%; ${T.summary.hits}/${T.summary.scored} real calls hit.`}`;
   const hits=s=>s.scored ? `${s.hits}/${s.scored}` : "Pending";
   const cov=c=>!c ? "—" : c.turns ? `${c.missedTurns}/${c.turns}` : "Pending";
   const miss=s=>s.medianAbsErrorSessions === null ? "—" : `${s.medianAbsErrorSessions} sessions`;
@@ -622,6 +622,29 @@ function renderAll(D){
           return rv && rv.when === new Date().toISOString().slice(0,10)
             ? `<div style="margin-top:5px"><span class="badge" style="background:#fff8c5; color:#7d4e00; border-color:#7d4e0033">REVISED TODAY</span> <span class="tag">was ${rv.from.isoDate.slice(5)} ${rv.from.time || ""} → now ${rv.to.isoDate.slice(5)} · ${rv.reason}</span></div>`
             : `<div style="margin-top:5px"><span class="badge chip">NEW CALL</span> <span class="tag">first published today</span></div>`;
+        })()}
+        ${(function(){
+          const T = D.timingReview, v = T && T.useVerdict;
+          if(!v) return "";
+          const st = D.stability;
+          const held = st && st.call && st.call.isoDate === nr.isoDate ? st.stoodDays : 0;
+          const s = T.summary, blind = T.chanceHitPct == null ? "—" : T.chanceHitPct + "%";
+          const rate = s.scored ? Math.round(100 * s.hits / s.scored) + "%" : "—";
+          let look, head, body;
+          if(v.status === "beatsChance" && held >= 2){
+            look = ["#dafbe1", "#1a7f37"]; head = "USE THIS DATE";
+            body = `dated calls on ${nice(D.ticker)} beat random dates (worst case ${v.lowerBoundPct}% vs ${blind}), and this call has held ${held} days.`;
+          } else if(v.status === "beatsChance"){
+            look = ["#fff8c5", "#7d4e00"]; head = "WAIT FOR IT TO HOLD";
+            body = `the track record beats random dates, but this call ${held ? "has held only 1 day" : "is new or just moved"}. Act once it holds 2 days.`;
+          } else if(v.status === "notAboveChance"){
+            look = ["#ffebe9", "#cf222e"]; head = "DON'T TRADE THE DATE";
+            body = `dated calls on ${nice(D.ticker)} hit ${rate} of the time; the same calls on random dates hit ${blind}.`;
+          } else {
+            look = ["#f6f8fa", "#57606a"]; head = "NOT PROVEN YET";
+            body = `${s.scored} of ${v.needed} dated calls graded so far (${s.hits} hit, ${rate}); random dates would hit ${blind}. Treat the date as a guess and size small.`;
+          }
+          return `<div style="margin-top:6px; padding:6px 10px; border-radius:8px; background:${look[0]}; border:1px solid ${look[1]}33; color:${look[1]}; font-size:13px"><b>${head}:</b> ${body}</div>`;
         })()}
         <div class="tag" style="margin-top:4px">Timing is the primary call; the price target is secondary.
           Backtested date accuracy on ${nice(D.ticker)}: ${pct(nr.hit2)} within ±2 days, ${pct(nr.hit3)} within ±3 days.

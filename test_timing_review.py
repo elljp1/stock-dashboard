@@ -2,7 +2,8 @@ import copy
 from datetime import date, timedelta
 import unittest
 
-from timing_review import timing_review, confirmed_turns, eastern_day
+from timing_review import (timing_review, confirmed_turns, eastern_day, chance_rate,
+                           use_verdict, MIN_SCORED)
 
 
 class TimingReviewTests(unittest.TestCase):
@@ -173,6 +174,31 @@ class TimingReviewTests(unittest.TestCase):
         self.assertEqual(result['forwardCoverage']['turns'], 1)
         self.assertEqual(result['forwardCoverage']['missedTurns'], 1)
         self.assertEqual(result['forward']['falseAlarms'], 1)
+
+    def test_blind_baseline_is_reported_and_repeatable(self):
+        result = self.score([self.row(8)])
+        self.assertIn('chanceHitPct', result)
+        self.assertEqual(result['chanceHitPct'], self.score([self.row(8)])['chanceHitPct'])
+        self.assertEqual(result['useVerdict']['status'], 'unproven')
+
+    def test_blind_baseline_uses_same_matching(self):
+        turns = [{'date': self.days[8], 'type': 'high', 'index': 8, 'confirmedDate': self.days[10]}]
+        base = {'type': 'high'}
+        # A lone call anywhere in a 5-session span around the turn always hits.
+        self.assertEqual(chance_rate([(base, 6, self.days[1])], turns), 100.0)
+        # Two calls compete for one turn, so blind calls can score at most 50%.
+        calls = [(base, 6, self.days[1]), (base, 10, self.days[1])]
+        self.assertLessEqual(chance_rate(calls, turns), 50.0)
+        self.assertIsNone(chance_rate([], turns))
+
+    def test_verdict_needs_samples_and_must_clear_chance(self):
+        few = {'scored': MIN_SCORED - 1, 'hits': MIN_SCORED - 1}
+        self.assertEqual(use_verdict(few, 10.0)['status'], 'unproven')
+        strong = {'scored': 40, 'hits': 30}
+        self.assertEqual(use_verdict(strong, 33.0)['status'], 'beatsChance')
+        at_chance = {'scored': 40, 'hits': 14}
+        self.assertEqual(use_verdict(at_chance, 33.0)['status'], 'notAboveChance')
+        self.assertEqual(use_verdict(strong, None)['status'], 'unproven')
 
 
 if __name__ == '__main__':
