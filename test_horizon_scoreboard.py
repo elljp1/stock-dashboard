@@ -106,6 +106,23 @@ class SimpleForecastTests(unittest.TestCase):
         later['2026-12-31'] = [999.0, 1.0, 500.0, '12:00', '12:00']
         self.assertEqual(hs.simple_grade(later)[:2], first)
 
+    def test_best_time_maximizes_window_coverage(self):
+        # most extremes in the first hour plus a few before noon: 10:30 covers 9:30-11:30
+        bars = [570] * 5 + [600] * 2 + [680] * 3 + [900]
+        self.assertEqual(hs.best_time(bars), 630)
+        self.assertEqual(hs.best_time([945] * 4), 945)
+        self.assertIsNone(hs.best_time([]))
+
+    def test_app_rows_get_best_fixed_time_baseline(self):
+        days = self.series(hs.SIMPLE_MIN_HISTORY + 2, hi_t='09:30', lo_t='15:45')
+        keys = sorted(days)
+        entries = [{'ticker': 'T', 'logged': keys[-2], 'session': keys[-2],
+                    'h': {'daily': {'high': {'price': 1, 'time': 'at 2:00 PM', 'src': 'chain'}}}}]
+        row = hs.grade(entries, {'T': days})[0]
+        self.assertTrue(row['openWithin'])
+        self.assertTrue(row['fixedWithin'])
+        self.assertEqual(hs.summarize([row])['fixedWithinHourPct'], 100.0)
+
     def test_out_of_session_bars_skip_time(self):
         days = self.series(hs.SIMPLE_MIN_HISTORY + 1, hi_t='07:00', lo_t='03:00')
         call = hs.simple_call(days, sorted(days))

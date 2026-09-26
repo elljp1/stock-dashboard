@@ -14,7 +14,6 @@ concrete bar to beat.
 """
 import json
 import re
-from collections import Counter
 from datetime import date, timedelta
 from pathlib import Path
 from statistics import median
@@ -112,6 +111,8 @@ def grade(entries, extremes_by_ticker):
     for ticker, days in extremes_by_ticker.items():
         if not days:
             continue
+        full = full_sessions(days)
+        full_keys = sorted(full)
         last_day = max(days)
         for horizon in HORIZONS:
             ext = actual_extremes(days, horizon)
@@ -148,6 +149,10 @@ def grade(entries, extremes_by_ticker):
                     row.update(timeErrMin=pred_min - act_min,
                                randomTimeChance=round(random_time_chance(act_min), 3),
                                openWithin=act_min <= OPEN_MIN + NEAR_MIN)
+                    prior = [k for k in full_keys if k < day][-SIMPLE_TIME_SESSIONS:]
+                    fixed = best_time(session_bars(full, prior, 3 if side == 'high' else 4))
+                    if fixed is not None:
+                        row['fixedWithin'] = abs(fixed - act_min) <= NEAR_MIN
                 rows.append(row)
     return rows
 
@@ -170,7 +175,24 @@ def summarize(rows):
             randomWithinHourPct=round(100 * sum(r['randomTimeChance'] for r in timed) / len(timed), 1),
             openWithinHourPct=round(100 * sum(r['openWithin'] for r in timed) / len(timed), 1),
             medianTimeErrMin=int(median(abs(r['timeErrMin']) for r in timed)))
+        fixed = [r for r in timed if 'fixedWithin' in r]
+        if fixed:
+            out['fixedWithinHourPct'] = round(100 * sum(r['fixedWithin'] for r in fixed) / len(fixed), 1)
     return out
+
+
+def best_time(bars):
+    """Clock time (15-minute bar start) whose +/-1 hour window holds the most of bars;
+    ties go to the time closest to the bars overall, then the earliest."""
+    if not bars:
+        return None
+    return max(range(OPEN_MIN, CLOSE_MIN, 15),
+               key=lambda c: (sum(abs(c - m) <= NEAR_MIN for m in bars), -sum(abs(c - m) for m in bars), -c))
+
+
+def session_bars(days, keys, idx):
+    bars = [bar_minutes(days[k][idx]) for k in keys]
+    return [m for m in bars if m is not None and OPEN_MIN <= m < CLOSE_MIN]
 
 
 def full_sessions(days):
@@ -184,13 +206,11 @@ def simple_call(days, keys):
     for side, pi, ti in (('high', 0, 3), ('low', 1, 4)):
         moves = [days[keys[j]][pi] / days[keys[j - 1]][2] - 1
                  for j in range(max(1, len(keys) - SIMPLE_RANGE_SESSIONS), len(keys))]
-        bars = [bar_minutes(days[k][ti]) for k in keys[-SIMPLE_TIME_SESSIONS:]]
-        bars = [m for m in bars if m is not None and OPEN_MIN <= m < CLOSE_MIN]
+        bars = session_bars(days, keys[-SIMPLE_TIME_SESSIONS:], ti)
         c = {'price': round(last[2] * (1 + median(moves)), 2) if moves else None, 'time': None}
         if len(bars) * 2 >= min(len(keys), SIMPLE_TIME_SESSIONS):
-            mode = Counter(bars).most_common(1)[0][0]
-            c['time'] = mode
-            c['timeSharePct'] = round(100 * sum(abs(m - mode) <= NEAR_MIN for m in bars) / len(bars), 1)
+            c['time'] = best_time(bars)
+            c['timeSharePct'] = round(100 * sum(abs(m - c['time']) <= NEAR_MIN for m in bars) / len(bars), 1)
         call[side] = c
     return call
 
@@ -243,8 +263,8 @@ def simple_board(extremes_by_ticker):
         if len(full) >= SIMPLE_MIN_HISTORY:
             nxt[t] = simple_call(full, sorted(full))
     return {'method': f'Walk-forward: each session is forecast from earlier sessions only. Price = last close x the median '
-                      f'move to the high/low over the last {SIMPLE_RANGE_SESSIONS} sessions; time = the most common '
-                      f'15-minute bar for the high/low over the last {SIMPLE_TIME_SESSIONS} regular sessions.',
+                      f'move to the high/low over the last {SIMPLE_RANGE_SESSIONS} sessions; time = the clock time whose '
+                      f'+/-1 hour window held the most highs/lows over the last {SIMPLE_TIME_SESSIONS} regular sessions.',
             'table': table, 'next': nxt}
 
 
@@ -257,7 +277,8 @@ def scoreboard(entries, extremes_by_ticker):
                             for s in ('high', 'low')} for h in HORIZONS}
     return {'method': 'First logged daily/weekly/monthly high-low call per period; calls that report an '
                       'extreme already set are excluded. Price vs last period\'s actual extreme; day vs a random '
-                      'session in the period; time (only when the day is right) vs a random minute and vs the open. '
+                      'session in the period; time (only when the day is right) vs a random minute, the open, and the best fixed '
+                      'clock time over the prior 60 sessions (a call near the open covers less of the session). '
                       'Times use 15-minute bars. Hourly and yearly calls are not graded yet.',
             'rows': len(rows), 'table': table, 'simple': simple_board(extremes_by_ticker),
             'recent': sorted(rows, key=lambda r: (r['period'], r['ticker']), reverse=True)[:40]}
