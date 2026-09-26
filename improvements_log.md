@@ -2337,3 +2337,42 @@ open today, I'm sending another direct notification rather than letting it go qu
 that may not get read daily. Also watching: whether HOOD's hit rate ever breaks its long-running
 13-21% band; whether the low-side bias keeps easing or reverses; and whether my own sandbox's
 Yahoo access ever recovers.
+
+## 2026-09-26 (Sat) — weekend, no new session; grade + log only
+
+**Build status:** my sandbox's own Yahoo fetch is still 403-blocked (gateway policy denial on
+`query1.finance.yahoo.com`, confirmed via the proxy status log) on all 10 tickers, and this sandbox
+has no committed CSVs to fall back on (gitignored by design), so a local rebuild wasn't possible
+today - same pattern as recent days. The separate cloud refresh workflow reached Yahoo fine and
+pushed a build itself today (commit e4ddde5, data stamped 9/26 10:52am ET, reflecting Friday
+9/25's close since markets are shut Saturday); `coherence_check.py` passes cleanly against that
+committed build (10/10 tickers), the account-number guard (`test_sensitive_data.py`) is clean on
+the current working copy, and the full test suite (`python -m unittest discover`) passes all 90
+tests (up from 83 on Friday - two scoreboard PRs merged this week).
+
+**Grades reviewed:** swing-ledger counts and hit rates are unchanged from Friday's review, as
+expected with no new weekday close to grade: TSLA n=12 (33%/42%), HOOD n=48 (17%/23%), QQQ n=38
+(32%/37%), JPM n=26 (15%/23%), GOOGL n=32 (22%/25%), GC=F n=18 (22%/22%); NVDA/AMZN/SPY/VOO still
+n=0. The daily high/low horizon grades still end at session 9/24 (last trading day), showing the
+same mixed-to-positive turn on the previously-watched low-side bias noted Friday - no new data to
+move it either way. Didn't find a bug in the committed output.
+
+**Trade cards / paper journal:** `trades_log.json` has a fresh TSLA model sheet stamped today,
+re-projected from Friday's close (spot 372.59) - informational only, nothing anomalous.
+`spread_journal.json`: the QQQ 770/780 call-credit spread (trade 7) is still open with its exit
+order resting, GOOGL trade 6 still closed from Thursday - the owner's separate live
+options-journal process, outside this review's scope, untouched by me. `real_trades.json`
+unchanged since the 9/11 TSLA assignment.
+
+**What changed and why:** no code change - it's a weekend with no new graded session, existing
+grades are steady/noisy, and nothing in today's committed build looks like a bug. Honesty features
+(measured hit rates, random-control comparisons, self-grading, the coherence gate) are untouched;
+`tickers.txt` wasn't touched.
+
+**Watch next:** the plain-text brokerage account number committed in commits around 9/14-9/16 is
+still sitting unscrubbed in this repo's public git history - 11+ days unresolved now, flagged
+directly to the owner on 9/23 and again on 9/25, still with no visible decision on authorizing a
+history rewrite. Not repeating the direct notification today since nothing about it changed since
+the 9/25 flag, but it stays open and worth another direct nudge if it's still unresolved in a few
+more days. Also watching: whether HOOD's hit rate ever breaks its long-running 13-23% band; whether
+the low-side bias keeps easing; and whether my own sandbox's Yahoo access ever recovers.
