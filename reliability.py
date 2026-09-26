@@ -117,6 +117,11 @@ def build():
         if board.get('table'):
             d['horizonScore'] = {'method': board.get('method'), 'mine': board['table'].get(ticker),
                                  'all': board['table'].get('ALL')}
+            simple = board.get('simple') or {}
+            if simple.get('table'):
+                d['horizonScore']['simple'] = {'method': simple.get('method'), 'mine': simple['table'].get(ticker),
+                                               'all': simple['table'].get('ALL'),
+                                               'next': (simple.get('next') or {}).get(ticker)}
         d['dailyReview'] = {'reviewedAt': report['reviewedAt'], 'snapshotCount': report['snapshotCount'],
                             'scoredOriginals': report['scoredOriginals']}
         timing = report['timing']['tickers'][ticker]

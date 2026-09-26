@@ -6,9 +6,15 @@ Each call is scored on price, day and time of day against simple baselines:
 - time: a random minute of the session, and "the open" (9:30 ET).
 Only the first logged call per ticker/horizon/side/period counts, and calls
 that merely report an extreme already set ("actual") are not predictions.
+
+It also grades a simple daily forecast built only from each ticker's own past
+sessions (last close times the typical move to the high/low, and the most
+common bar for each), walked forward one session at a time, so the app has a
+concrete bar to beat.
 """
 import json
 import re
+from collections import Counter
 from datetime import date, timedelta
 from pathlib import Path
 from statistics import median
@@ -18,6 +24,9 @@ HORIZONS = ('daily', 'weekly', 'monthly')
 OPEN_MIN, CLOSE_MIN = 9 * 60 + 30, 16 * 60
 SESSION_MIN = CLOSE_MIN - OPEN_MIN
 NEAR_MIN = 60
+SIMPLE_RANGE_SESSIONS = 20
+SIMPLE_TIME_SESSIONS = 60
+SIMPLE_MIN_HISTORY = 40
 
 
 def period_key(horizon, day):
@@ -164,6 +173,81 @@ def summarize(rows):
     return out
 
 
+def full_sessions(days):
+    return {k: v for k, v in days.items() if len(v) >= 5}
+
+
+def simple_call(days, keys):
+    """Next-session daily high/low from the sessions in keys (oldest first) only."""
+    last = days[keys[-1]]
+    call = {'basis': keys[-1]}
+    for side, pi, ti in (('high', 0, 3), ('low', 1, 4)):
+        moves = [days[keys[j]][pi] / days[keys[j - 1]][2] - 1
+                 for j in range(max(1, len(keys) - SIMPLE_RANGE_SESSIONS), len(keys))]
+        bars = [bar_minutes(days[k][ti]) for k in keys[-SIMPLE_TIME_SESSIONS:]]
+        bars = [m for m in bars if m is not None and OPEN_MIN <= m < CLOSE_MIN]
+        c = {'price': round(last[2] * (1 + median(moves)), 2) if moves else None, 'time': None}
+        if len(bars) * 2 >= min(len(keys), SIMPLE_TIME_SESSIONS):
+            mode = Counter(bars).most_common(1)[0][0]
+            c['time'] = mode
+            c['timeSharePct'] = round(100 * sum(abs(m - mode) <= NEAR_MIN for m in bars) / len(bars), 1)
+        call[side] = c
+    return call
+
+
+def simple_grade(days):
+    days = full_sessions(days)
+    keys = sorted(days)
+    rows = []
+    for i in range(SIMPLE_MIN_HISTORY, len(keys)):
+        call = simple_call(days, keys[:i])
+        today, prev = days[keys[i]], days[keys[i - 1]]
+        for side, pi, ti in (('high', 0, 3), ('low', 1, 4)):
+            c, actual = call[side], today[pi]
+            if c['price'] is None:
+                continue
+            row = {'side': side, 'session': keys[i],
+                   'errPct': abs(c['price'] - actual) / actual * 100,
+                   'naivePct': abs(prev[pi] - actual) / actual * 100}
+            act = bar_minutes(today[ti])
+            if c['time'] is not None and act is not None and OPEN_MIN <= act < CLOSE_MIN:
+                row.update(timeHit=abs(c['time'] - act) <= NEAR_MIN, openHit=act <= OPEN_MIN + NEAR_MIN,
+                           randomChance=random_time_chance(act))
+            rows.append(row)
+    return rows
+
+
+def simple_summary(rows):
+    if not rows:
+        return {'n': 0}
+    timed = [r for r in rows if 'timeHit' in r]
+    out = {'n': len(rows), 'from': min(r['session'] for r in rows), 'to': max(r['session'] for r in rows),
+           'medianPriceErrPct': round(median(r['errPct'] for r in rows), 2),
+           'medianNaivePriceErrPct': round(median(r['naivePct'] for r in rows), 2), 'timed': len(timed)}
+    if timed:
+        out.update(withinHourPct=round(100 * sum(r['timeHit'] for r in timed) / len(timed), 1),
+                   openWithinHourPct=round(100 * sum(r['openHit'] for r in timed) / len(timed), 1),
+                   randomWithinHourPct=round(100 * sum(r['randomChance'] for r in timed) / len(timed), 1))
+    return out
+
+
+def simple_board(extremes_by_ticker):
+    graded = {t: simple_grade(days) for t, days in extremes_by_ticker.items() if days}
+    table = {}
+    for scope in sorted(graded) + ['ALL']:
+        rows = [r for t, rs in graded.items() if scope in ('ALL', t) for r in rs]
+        table[scope] = {s: simple_summary([r for r in rows if r['side'] == s]) for s in ('high', 'low')}
+    nxt = {}
+    for t, days in extremes_by_ticker.items():
+        full = full_sessions(days)
+        if len(full) >= SIMPLE_MIN_HISTORY:
+            nxt[t] = simple_call(full, sorted(full))
+    return {'method': f'Walk-forward: each session is forecast from earlier sessions only. Price = last close x the median '
+                      f'move to the high/low over the last {SIMPLE_RANGE_SESSIONS} sessions; time = the most common '
+                      f'15-minute bar for the high/low over the last {SIMPLE_TIME_SESSIONS} regular sessions.',
+            'table': table, 'next': nxt}
+
+
 def scoreboard(entries, extremes_by_ticker):
     rows = grade(entries, extremes_by_ticker)
     table = {}
@@ -175,7 +259,7 @@ def scoreboard(entries, extremes_by_ticker):
                       'extreme already set are excluded. Price vs last period\'s actual extreme; day vs a random '
                       'session in the period; time (only when the day is right) vs a random minute and vs the open. '
                       'Times use 15-minute bars. Hourly and yearly calls are not graded yet.',
-            'rows': len(rows), 'table': table,
+            'rows': len(rows), 'table': table, 'simple': simple_board(extremes_by_ticker),
             'recent': sorted(rows, key=lambda r: (r['period'], r['ticker']), reverse=True)[:40]}
 
 
@@ -188,6 +272,8 @@ def main():
     for h in HORIZONS:
         for s in ('high', 'low'):
             print(h, s, a.get(h, {}).get(s))
+    for s in ('high', 'low'):
+        print('simple daily', s, report['simple']['table'].get('ALL', {}).get(s))
 
 
 if __name__ == '__main__':
