@@ -183,10 +183,16 @@ for t, d in D.items():
             if min(x["low"] for x in dfa) < lcap - 0.01:
                 issues.append(f"{t}: a date-picker day undercuts the yearly low bound {lcap}")
 
-    _wk0 = today - timedelta(days=today.weekday())
-    _mo_end = (today.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
+    # Period headlines are anchored to the analysis' forecast session, which
+    # advances to the next trading day after the close.  Using wall-clock
+    # ``today`` here makes Friday evening audits compare next week's weekly
+    # headline with turns from the just-completed week and report false
+    # contradictions.
+    _period_start = date.fromisoformat(d.get("horizonSession", today.isoformat()))
+    _wk0 = _period_start - timedelta(days=_period_start.weekday())
+    _mo_end = (_period_start.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
     for _k, _s, _e in (("weekly", _wk0, _wk0 + timedelta(days=4)),
-                       ("monthly", today, _mo_end)):
+                       ("monthly", _period_start, _mo_end)):
         if _k not in hz:
             continue
         for _kind in ("high", "low"):
