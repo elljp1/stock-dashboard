@@ -334,6 +334,8 @@
   <h2>High/low calls vs simple baselines — <span class="tkr2"></span></h2>
   <div class="sub" id="hsSub"></div>
   <div class="tblwrap"><table id="hsTable" style="margin-top:8px"></table></div>
+  <div class="sub" id="hsSimpleSub" style="margin-top:12px"></div>
+  <div class="tblwrap"><table id="hsSimpleTable" style="margin-top:8px"></table></div>
 </div>
 
 <div class="panel" data-tab="Research">
@@ -557,6 +559,35 @@ function renderHorizonScore(H, ticker){
     Hourly and yearly calls are not graded yet.`;
   $("hsTable").innerHTML = `<tr><th>Call</th><th>Graded</th><th>Price miss</th><th>Last period</th><th>Right day</th><th>Random day</th><th>Time ±1 hr</th><th>Random time</th><th>The open</th></tr>` +
     (rows.join("") || `<tr><td colspan="9">No graded calls yet.</td></tr>`);
+  renderSimpleForecast(H.simple, ticker);
+}
+
+function renderSimpleForecast(P, ticker){
+  if(!P || !P.all){ $("hsSimpleSub").textContent = ""; $("hsSimpleTable").innerHTML = ""; return; }
+  const S = P.mine || P.all;
+  const v = (x, suf) => x == null ? "—" : x + suf;
+  const clock = m => { if(m == null) return "—"; const h = Math.floor(m / 60), mm = m % 60;
+    return ((h + 11) % 12 + 1) + ":" + (mm < 10 ? "0" : "") + mm + (h < 12 ? "am" : "pm"); };
+  const N = P.next;
+  const nextLine = N ? ["high", "low"].map(side => { const c = N[side] || {};
+      return `${side} ~$${v(c.price, "")}${c.time == null ? "" : `, most often near ${clock(c.time)} (${v(c.timeSharePct, "%")} of the last 60 days within an hour)`}`; }).join("; ")
+    : "not enough history yet";
+  $("hsSimpleSub").innerHTML = `<b>Simple forecast from ${nice(ticker)}'s own history</b> (no app model): price = last close × the typical move to the
+    high/low over the last 20 sessions; time = the bar where the high/low most often landed over the last 60 sessions.
+    Graded one session at a time using only earlier sessions. This is the bar the app's daily calls have to beat.
+    <br><b>Next session (from the ${N ? N.basis : "latest"} close):</b> ${nextLine}.`;
+  const rows = ["high", "low"].map(side => { const r = S[side];
+    if(!r || !r.n) return "";
+    const ok = (a, b) => a == null || b == null ? "" : (a < b ? " ✓" : "");
+    const up = (a, b) => a == null || b == null ? "" : (a > b ? " ✓" : "");
+    return `<tr><td>daily ${side}</td><td class="num">${r.n}</td>
+      <td class="num">${v(r.medianPriceErrPct, "%")}${ok(r.medianPriceErrPct, r.medianNaivePriceErrPct)}</td>
+      <td class="num">${v(r.medianNaivePriceErrPct, "%")}</td>
+      <td class="num">${r.timed ? v(r.withinHourPct, "%") + up(r.withinHourPct, Math.max(r.randomWithinHourPct, r.openWithinHourPct)) : "—"}</td>
+      <td class="num">${r.timed ? v(r.randomWithinHourPct, "%") : "—"}</td>
+      <td class="num">${r.timed ? v(r.openWithinHourPct, "%") : "—"}</td></tr>`; }).join("");
+  $("hsSimpleTable").innerHTML = `<tr><th>Simple call</th><th>Graded</th><th>Price miss</th><th>Yesterday's</th><th>Time ±1 hr</th><th>Random time</th><th>The open</th></tr>` +
+    (rows || `<tr><td colspan="7">Not enough history yet.</td></tr>`);
 }
 
 function renderVibration(V, ticker){

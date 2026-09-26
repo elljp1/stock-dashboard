@@ -71,5 +71,54 @@ class HorizonScoreboardTests(unittest.TestCase):
         self.assertEqual(hs.random_time_chance(hs.OPEN_MIN), 60 / 390)
 
 
+class SimpleForecastTests(unittest.TestCase):
+    def series(self, n, hi_t='09:30', lo_t='15:45'):
+        days, close = {}, 100.0
+        for i in range(n):
+            day = f'2026-{3 + i // 28:02d}-{1 + i % 28:02d}'
+            days[day] = [round(close * 1.01, 2), round(close * 0.98, 2), close, hi_t, lo_t]
+            close += 1
+        return days
+
+    def test_call_uses_typical_move_and_most_common_bar(self):
+        days = self.series(45)
+        keys = sorted(days)
+        call = hs.simple_call(days, keys)
+        last = days[keys[-1]][2]
+        moves = sorted(days[keys[j]][0] / days[keys[j - 1]][2] - 1 for j in range(len(keys) - 20, len(keys)))
+        self.assertAlmostEqual(call['high']['price'], round(last * (1 + (moves[9] + moves[10]) / 2), 2), places=2)
+        self.assertEqual((call['high']['time'], call['low']['time']), (hs.OPEN_MIN, 15 * 60 + 45))
+        self.assertEqual(call['high']['timeSharePct'], 100.0)
+
+    def test_grade_is_walk_forward_and_needs_history(self):
+        days = self.series(hs.SIMPLE_MIN_HISTORY + 3)
+        rows = hs.simple_grade(days)
+        self.assertEqual(len(rows), 6)
+        self.assertEqual(sorted({r['session'] for r in rows}), sorted(days)[-3:])
+        self.assertTrue(all(r['timeHit'] and r['openHit'] for r in rows if r['side'] == 'high'))
+        self.assertTrue(all(r['timeHit'] and not r['openHit'] for r in rows if r['side'] == 'low'))
+        self.assertEqual(hs.simple_grade(self.series(hs.SIMPLE_MIN_HISTORY)), [])
+
+    def test_future_sessions_do_not_change_past_calls(self):
+        days = self.series(hs.SIMPLE_MIN_HISTORY + 2)
+        first = hs.simple_grade(days)[:2]
+        later = dict(days)
+        later['2026-12-31'] = [999.0, 1.0, 500.0, '12:00', '12:00']
+        self.assertEqual(hs.simple_grade(later)[:2], first)
+
+    def test_out_of_session_bars_skip_time(self):
+        days = self.series(hs.SIMPLE_MIN_HISTORY + 1, hi_t='07:00', lo_t='03:00')
+        call = hs.simple_call(days, sorted(days))
+        self.assertIsNone(call['high']['time'])
+        rows = hs.simple_grade(days)
+        self.assertTrue(rows and all('timeHit' not in r for r in rows))
+
+    def test_board_has_all_scope_and_next_call(self):
+        board = hs.simple_board({'T': self.series(hs.SIMPLE_MIN_HISTORY + 5), 'U': {}})
+        self.assertEqual(board['table']['ALL']['high']['n'], 5)
+        self.assertEqual(board['next']['T']['basis'], max(self.series(hs.SIMPLE_MIN_HISTORY + 5)))
+        self.assertNotIn('U', board['next'])
+
+
 if __name__ == '__main__':
     unittest.main()
