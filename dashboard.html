@@ -549,16 +549,18 @@ function renderHorizonScore(H, ticker){
       <td class="num">${v(r.medianNaivePriceErrPct,"%")}</td>
       <td class="num">${h === "daily" ? "—" : v(r.dayHitPct,"%") + beats(r.dayHitPct, r.randomDayPct)}</td>
       <td class="num">${h === "daily" ? "—" : v(r.randomDayPct,"%")}</td>
-      <td class="num">${r.timed ? v(r.withinHourPct,"%") + beats(r.withinHourPct, Math.max(r.randomWithinHourPct, r.openWithinHourPct)) : "—"}</td>
+      <td class="num">${r.timed ? v(r.withinHourPct,"%") + beats(r.withinHourPct, Math.max(r.randomWithinHourPct, r.openWithinHourPct, r.fixedWithinHourPct == null ? 0 : r.fixedWithinHourPct)) : "—"}</td>
       <td class="num">${r.timed ? v(r.randomWithinHourPct,"%") : "—"}</td>
-      <td class="num">${r.timed ? v(r.openWithinHourPct,"%") : "—"}</td></tr>`);
+      <td class="num">${r.timed ? v(r.openWithinHourPct,"%") : "—"}</td>
+      <td class="num">${r.timed ? v(r.fixedWithinHourPct,"%") : "—"}</td></tr>`);
   }));
   $("hsSub").innerHTML = `Graded calls for ${who}: the first call made for each day, week and month, compared with simple guesses.
     <b>Price</b>: typical miss vs using last period's actual high/low. <b>Day</b>: right session vs a random session.
-    <b>Time</b>: within 1 hour (only when the day was right) vs a random time and vs "the open". ✓ = the app beat every simple guess.
+    <b>Time</b>: within 1 hour (only when the day was right) vs a random time, "the open", and the best fixed time of day
+    from the prior 60 sessions (the fair bar: a call at 10:30 covers 9:30–11:30, a call at the open covers only one hour). ✓ = the app beat every simple guess.
     Hourly and yearly calls are not graded yet.`;
-  $("hsTable").innerHTML = `<tr><th>Call</th><th>Graded</th><th>Price miss</th><th>Last period</th><th>Right day</th><th>Random day</th><th>Time ±1 hr</th><th>Random time</th><th>The open</th></tr>` +
-    (rows.join("") || `<tr><td colspan="9">No graded calls yet.</td></tr>`);
+  $("hsTable").innerHTML = `<tr><th>Call</th><th>Graded</th><th>Price miss</th><th>Last period</th><th>Right day</th><th>Random day</th><th>Time ±1 hr</th><th>Random time</th><th>The open</th><th>Best fixed time</th></tr>` +
+    (rows.join("") || `<tr><td colspan="10">No graded calls yet.</td></tr>`);
   renderSimpleForecast(H.simple, ticker);
 }
 
@@ -570,10 +572,10 @@ function renderSimpleForecast(P, ticker){
     return ((h + 11) % 12 + 1) + ":" + (mm < 10 ? "0" : "") + mm + (h < 12 ? "am" : "pm"); };
   const N = P.next;
   const nextLine = N ? ["high", "low"].map(side => { const c = N[side] || {};
-      return `${side} ~$${v(c.price, "")}${c.time == null ? "" : `, most often near ${clock(c.time)} (${v(c.timeSharePct, "%")} of the last 60 days within an hour)`}`; }).join("; ")
+      return `${side} ~$${v(c.price, "")}${c.time == null ? "" : `, best 2-hour window ${clock(Math.max(570, c.time - 60))}–${clock(Math.min(960, c.time + 60))} (caught ${v(c.timeSharePct, "%")} of the last 60 days)`}`; }).join("; ")
     : "not enough history yet";
   $("hsSimpleSub").innerHTML = `<b>Simple forecast from ${nice(ticker)}'s own history</b> (no app model): price = last close × the typical move to the
-    high/low over the last 20 sessions; time = the bar where the high/low most often landed over the last 60 sessions.
+    high/low over the last 20 sessions; time = the clock time whose ±1 hour window caught the most highs/lows over the last 60 sessions.
     Graded one session at a time using only earlier sessions. This is the bar the app's daily calls have to beat.
     <br><b>Next session (from the ${N ? N.basis : "latest"} close):</b> ${nextLine}.`;
   const rows = ["high", "low"].map(side => { const r = S[side];
