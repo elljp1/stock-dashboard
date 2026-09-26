@@ -1,5 +1,5 @@
 {
- "method": "First logged daily/weekly/monthly high-low call per period; calls that report an extreme already set are excluded. Price vs last period's actual extreme; day vs a random session in the period; time (only when the day is right) vs a random minute and vs the open. Times use 15-minute bars. Hourly and yearly calls are not graded yet.",
+ "method": "First logged daily/weekly/monthly high-low call per period; calls that report an extreme already set are excluded. Price vs last period's actual extreme; day vs a random session in the period; time (only when the day is right) vs a random minute, the open, and the best fixed clock time over the prior 60 sessions (a call near the open covers less of the session). Times use 15-minute bars. Hourly and yearly calls are not graded yet.",
  "rows": 864,
  "table": {
   "AMZN": {
@@ -14,7 +14,8 @@
      "withinHourPct": 55.6,
      "randomWithinHourPct": 21.2,
      "openWithinHourPct": 63.0,
-     "medianTimeErrMin": 45
+     "medianTimeErrMin": 45,
+     "fixedWithinHourPct": 74.1
     },
     "low": {
      "n": 30,
@@ -26,7 +27,8 @@
      "withinHourPct": 23.3,
      "randomWithinHourPct": 22.2,
      "openWithinHourPct": 53.3,
-     "medianTimeErrMin": 148
+     "medianTimeErrMin": 148,
+     "fixedWithinHourPct": 60.0
     }
    },
    "weekly": {
@@ -40,7 +42,8 @@
      "withinHourPct": 0.0,
      "randomWithinHourPct": 30.8,
      "openWithinHourPct": 0.0,
-     "medianTimeErrMin": 120
+     "medianTimeErrMin": 120,
+     "fixedWithinHourPct": 100.0
     },
     "low": {
      "n": 7,
@@ -52,7 +55,8 @@
      "withinHourPct": 50.0,
      "randomWithinHourPct": 17.3,
      "openWithinHourPct": 50.0,
-     "medianTimeErrMin": 192
+     "medianTimeErrMin": 192,
+     "fixedWithinHourPct": 50.0
     }
    },
    "monthly": {
@@ -86,7 +90,8 @@
      "withinHourPct": 7.7,
      "randomWithinHourPct": 5.5,
      "openWithinHourPct": 61.5,
-     "medianTimeErrMin": 531
+     "medianTimeErrMin": 531,
+     "fixedWithinHourPct": 15.4
     },
     "low": {
      "n": 39,
@@ -98,7 +103,8 @@
      "withinHourPct": 10.3,
      "randomWithinHourPct": 7.6,
      "openWithinHourPct": 69.2,
-     "medianTimeErrMin": 406
+     "medianTimeErrMin": 406,
+     "fixedWithinHourPct": 20.5
     }
    },
    "weekly": {
@@ -112,7 +118,8 @@
      "withinHourPct": 0.0,
      "randomWithinHourPct": 1.3,
      "openWithinHourPct": 100.0,
-     "medianTimeErrMin": 397
+     "medianTimeErrMin": 397,
+     "fixedWithinHourPct": 0.0
     },
     "low": {
      "n": 8,
@@ -124,7 +131,8 @@
      "withinHourPct": 0.0,
      "randomWithinHourPct": 7.7,
      "openWithinHourPct": 100.0,
-     "medianTimeErrMin": 246
+     "medianTimeErrMin": 246,
+     "fixedWithinHourPct": 50.0
     }
    },
    "monthly": {
@@ -138,7 +146,8 @@
      "withinHourPct": 0.0,
      "randomWithinHourPct": 0.0,
      "openWithinHourPct": 0.0,
-     "medianTimeErrMin": 549
+     "medianTimeErrMin": 549,
+     "fixedWithinHourPct": 0.0
     },
     "low": {
      "n": 2,
@@ -162,7 +171,8 @@
      "withinHourPct": 30.6,
      "randomWithinHourPct": 21.6,
      "openWithinHourPct": 66.7,
-     "medianTimeErrMin": 137
+     "medianTimeErrMin": 137,
+     "fixedWithinHourPct": 69.4
     },
     "low": {
      "n": 36,
@@ -174,7 +184,8 @@
      "withinHourPct": 11.1,
      "randomWithinHourPct": 21.7,
      "openWithinHourPct": 61.1,
-     "medianTimeErrMin": 170
+     "medianTimeErrMin": 170,
+     "fixedWithinHourPct": 69.4
     }
    },
    "weekly": {
@@ -188,7 +199,8 @@
      "withinHourPct": 0.0,
      "randomWithinHourPct": 21.8,
      "openWithinHourPct": 33.3,
-     "medianTimeErrMin": 107
+     "medianTimeErrMin": 107,
+     "fixedWithinHourPct": 66.7
     },
     "low": {
      "n": 8,
@@ -200,7 +212,8 @@
      "withinHourPct": 100.0,
      "randomWithinHourPct": 30.8,
      "openWithinHourPct": 0.0,
-     "medianTimeErrMin": 13
+     "medianTimeErrMin": 13,
+     "fixedWithinHourPct": 0.0
     }
    },
    "monthly": {
@@ -234,7 +247,8 @@
      "withinHourPct": 29.7,
      "randomWithinHourPct": 21.1,
      "openWithinHourPct": 70.3,
-     "medianTimeErrMin": 139
+     "medianTimeErrMin": 139,
+     "fixedWithinHourPct": 73.0
     },
     "low": {
      "n": 37,
@@ -246,7 +260,8 @@
      "withinHourPct": 40.5,
      "randomWithinHourPct": 20.3,
      "openWithinHourPct": 64.9,
-     "medianTimeErrMin": 170
+     "medianTimeErrMin": 170,
+     "fixedWithinHourPct": 73.0
     }
    },
    "weekly": {
@@ -260,7 +275,8 @@
      "withinHourPct": 33.3,
      "randomWithinHourPct": 28.2,
      "openWithinHourPct": 66.7,
-     "medianTimeErrMin": 210
+     "medianTimeErrMin": 210,
+     "fixedWithinHourPct": 66.7
     },
     "low": {
      "n": 8,
@@ -272,7 +288,8 @@
      "withinHourPct": 66.7,
      "randomWithinHourPct": 19.2,
      "openWithinHourPct": 100.0,
-     "medianTimeErrMin": 43
+     "medianTimeErrMin": 43,
+     "fixedWithinHourPct": 100.0
     }
    },
    "monthly": {
@@ -306,7 +323,8 @@
      "withinHourPct": 30.6,
      "randomWithinHourPct": 21.6,
      "openWithinHourPct": 61.1,
-     "medianTimeErrMin": 106
+     "medianTimeErrMin": 106,
+     "fixedWithinHourPct": 72.2
     },
     "low": {
      "n": 36,
@@ -318,7 +336,8 @@
      "withinHourPct": 41.7,
      "randomWithinHourPct": 23.8,
      "openWithinHourPct": 47.2,
-     "medianTimeErrMin": 83
+     "medianTimeErrMin": 83,
+     "fixedWithinHourPct": 61.1
     }
    },
    "weekly": {
@@ -332,7 +351,8 @@
      "withinHourPct": 0.0,
      "randomWithinHourPct": 23.1,
      "openWithinHourPct": 50.0,
-     "medianTimeErrMin": 119
+     "medianTimeErrMin": 119,
+     "fixedWithinHourPct": 100.0
     },
     "low": {
      "n": 8,
@@ -344,7 +364,8 @@
      "withinHourPct": 0.0,
      "randomWithinHourPct": 15.4,
      "openWithinHourPct": 100.0,
-     "medianTimeErrMin": 385
+     "medianTimeErrMin": 385,
+     "fixedWithinHourPct": 100.0
     }
    },
    "monthly": {
@@ -378,7 +399,8 @@
      "withinHourPct": 40.0,
      "randomWithinHourPct": 22.6,
      "openWithinHourPct": 50.0,
-     "medianTimeErrMin": 130
+     "medianTimeErrMin": 130,
+     "fixedWithinHourPct": 56.7
     },
     "low": {
      "n": 30,
@@ -390,7 +412,8 @@
      "withinHourPct": 30.0,
      "randomWithinHourPct": 22.1,
      "openWithinHourPct": 50.0,
-     "medianTimeErrMin": 193
+     "medianTimeErrMin": 193,
+     "fixedWithinHourPct": 56.7
     }
    },
    "weekly": {
@@ -404,7 +427,8 @@
      "withinHourPct": 25.0,
      "randomWithinHourPct": 23.1,
      "openWithinHourPct": 50.0,
-     "medianTimeErrMin": 84
+     "medianTimeErrMin": 84,
+     "fixedWithinHourPct": 75.0
     },
     "low": {
      "n": 6,
@@ -416,7 +440,8 @@
      "withinHourPct": 0.0,
      "randomWithinHourPct": 19.2,
      "openWithinHourPct": 100.0,
-     "medianTimeErrMin": 92
+     "medianTimeErrMin": 92,
+     "fixedWithinHourPct": 100.0
     }
    },
    "monthly": {
@@ -450,7 +475,8 @@
      "withinHourPct": 36.1,
      "randomWithinHourPct": 23.2,
      "openWithinHourPct": 41.7,
-     "medianTimeErrMin": 90
+     "medianTimeErrMin": 90,
+     "fixedWithinHourPct": 50.0
     },
     "low": {
      "n": 36,
@@ -462,7 +488,8 @@
      "withinHourPct": 25.0,
      "randomWithinHourPct": 22.9,
      "openWithinHourPct": 61.1,
-     "medianTimeErrMin": 141
+     "medianTimeErrMin": 141,
+     "fixedWithinHourPct": 72.2
     }
    },
    "weekly": {
@@ -476,7 +503,8 @@
      "withinHourPct": 0.0,
      "randomWithinHourPct": 23.1,
      "openWithinHourPct": 50.0,
-     "medianTimeErrMin": 147
+     "medianTimeErrMin": 147,
+     "fixedWithinHourPct": 100.0
     },
     "low": {
      "n": 8,
@@ -488,7 +516,8 @@
      "withinHourPct": 0.0,
      "randomWithinHourPct": 15.4,
      "openWithinHourPct": 100.0,
-     "medianTimeErrMin": 425
+     "medianTimeErrMin": 425,
+     "fixedWithinHourPct": 100.0
     }
    },
    "monthly": {
@@ -522,7 +551,8 @@
      "withinHourPct": 28.6,
      "randomWithinHourPct": 24.2,
      "openWithinHourPct": 42.9,
-     "medianTimeErrMin": 142
+     "medianTimeErrMin": 142,
+     "fixedWithinHourPct": 60.7
     },
     "low": {
      "n": 30,
@@ -534,7 +564,8 @@
      "withinHourPct": 23.3,
      "randomWithinHourPct": 26.0,
      "openWithinHourPct": 40.0,
-     "medianTimeErrMin": 129
+     "medianTimeErrMin": 129,
+     "fixedWithinHourPct": 66.7
     }
    },
    "weekly": {
@@ -548,7 +579,8 @@
      "withinHourPct": 0.0,
      "randomWithinHourPct": 30.8,
      "openWithinHourPct": 0.0,
-     "medianTimeErrMin": 90
+     "medianTimeErrMin": 90,
+     "fixedWithinHourPct": 100.0
     },
     "low": {
      "n": 6,
@@ -590,7 +622,8 @@
      "withinHourPct": 29.7,
      "randomWithinHourPct": 23.1,
      "openWithinHourPct": 54.1,
-     "medianTimeErrMin": 106
+     "medianTimeErrMin": 106,
+     "fixedWithinHourPct": 62.2
     },
     "low": {
      "n": 37,
@@ -602,7 +635,8 @@
      "withinHourPct": 51.4,
      "randomWithinHourPct": 21.4,
      "openWithinHourPct": 70.3,
-     "medianTimeErrMin": 45
+     "medianTimeErrMin": 45,
+     "fixedWithinHourPct": 75.7
     }
    },
    "weekly": {
@@ -616,7 +650,8 @@
      "withinHourPct": 50.0,
      "randomWithinHourPct": 15.4,
      "openWithinHourPct": 100.0,
-     "medianTimeErrMin": 53
+     "medianTimeErrMin": 53,
+     "fixedWithinHourPct": 100.0
     },
     "low": {
      "n": 8,
@@ -628,7 +663,8 @@
      "withinHourPct": 0.0,
      "randomWithinHourPct": 15.4,
      "openWithinHourPct": 100.0,
-     "medianTimeErrMin": 390
+     "medianTimeErrMin": 390,
+     "fixedWithinHourPct": 100.0
     }
    },
    "monthly": {
@@ -662,7 +698,8 @@
      "withinHourPct": 32.1,
      "randomWithinHourPct": 24.5,
      "openWithinHourPct": 39.3,
-     "medianTimeErrMin": 132
+     "medianTimeErrMin": 132,
+     "fixedWithinHourPct": 57.1
     },
     "low": {
      "n": 30,
@@ -674,7 +711,8 @@
      "withinHourPct": 32.1,
      "randomWithinHourPct": 25.7,
      "openWithinHourPct": 42.9,
-     "medianTimeErrMin": 97
+     "medianTimeErrMin": 97,
+     "fixedWithinHourPct": 67.9
     }
    },
    "weekly": {
@@ -688,7 +726,8 @@
      "withinHourPct": 100.0,
      "randomWithinHourPct": 30.8,
      "openWithinHourPct": 0.0,
-     "medianTimeErrMin": 17
+     "medianTimeErrMin": 17,
+     "fixedWithinHourPct": 100.0
     },
     "low": {
      "n": 6,
@@ -730,7 +769,8 @@
      "withinHourPct": 31.1,
      "randomWithinHourPct": 20.5,
      "openWithinHourPct": 55.7,
-     "medianTimeErrMin": 135
+     "medianTimeErrMin": 135,
+     "fixedWithinHourPct": 58.4
     },
     "low": {
      "n": 341,
@@ -742,7 +782,8 @@
      "withinHourPct": 28.9,
      "randomWithinHourPct": 21.0,
      "openWithinHourPct": 56.9,
-     "medianTimeErrMin": 157
+     "medianTimeErrMin": 157,
+     "fixedWithinHourPct": 61.9
     }
    },
    "weekly": {
@@ -756,7 +797,8 @@
      "withinHourPct": 18.2,
      "randomWithinHourPct": 21.0,
      "openWithinHourPct": 54.5,
-     "medianTimeErrMin": 106
+     "medianTimeErrMin": 106,
+     "fixedWithinHourPct": 72.7
     },
     "low": {
      "n": 73,
@@ -768,7 +810,8 @@
      "withinHourPct": 33.3,
      "randomWithinHourPct": 17.0,
      "openWithinHourPct": 83.3,
-     "medianTimeErrMin": 240
+     "medianTimeErrMin": 240,
+     "fixedWithinHourPct": 75.0
     }
    },
    "monthly": {
@@ -782,7 +825,8 @@
      "withinHourPct": 0.0,
      "randomWithinHourPct": 0.0,
      "openWithinHourPct": 0.0,
-     "medianTimeErrMin": 549
+     "medianTimeErrMin": 549,
+     "fixedWithinHourPct": 0.0
     },
     "low": {
      "n": 16,
@@ -796,7 +840,7 @@
   }
  },
  "simple": {
-  "method": "Walk-forward: each session is forecast from earlier sessions only. Price = last close x the median move to the high/low over the last 20 sessions; time = the most common 15-minute bar for the high/low over the last 60 regular sessions.",
+  "method": "Walk-forward: each session is forecast from earlier sessions only. Price = last close x the median move to the high/low over the last 20 sessions; time = the clock time whose +/-1 hour window held the most highs/lows over the last 60 regular sessions.",
   "table": {
    "AMZN": {
     "high": {
@@ -806,7 +850,7 @@
      "medianPriceErrPct": 0.85,
      "medianNaivePriceErrPct": 1.21,
      "timed": 50,
-     "withinHourPct": 60.0,
+     "withinHourPct": 70.0,
      "openWithinHourPct": 60.0,
      "randomWithinHourPct": 22.2
     },
@@ -817,7 +861,7 @@
      "medianPriceErrPct": 1.03,
      "medianNaivePriceErrPct": 0.89,
      "timed": 50,
-     "withinHourPct": 56.0,
+     "withinHourPct": 62.0,
      "openWithinHourPct": 56.0,
      "randomWithinHourPct": 22.2
     }
@@ -848,7 +892,7 @@
      "medianPriceErrPct": 1.21,
      "medianNaivePriceErrPct": 1.34,
      "timed": 50,
-     "withinHourPct": 64.0,
+     "withinHourPct": 68.0,
      "openWithinHourPct": 64.0,
      "randomWithinHourPct": 21.9
     },
@@ -859,7 +903,7 @@
      "medianPriceErrPct": 0.81,
      "medianNaivePriceErrPct": 0.89,
      "timed": 50,
-     "withinHourPct": 62.0,
+     "withinHourPct": 70.0,
      "openWithinHourPct": 62.0,
      "randomWithinHourPct": 21.7
     }
@@ -872,7 +916,7 @@
      "medianPriceErrPct": 2.14,
      "medianNaivePriceErrPct": 2.03,
      "timed": 50,
-     "withinHourPct": 72.0,
+     "withinHourPct": 74.0,
      "openWithinHourPct": 72.0,
      "randomWithinHourPct": 20.8
     },
@@ -883,7 +927,7 @@
      "medianPriceErrPct": 1.94,
      "medianNaivePriceErrPct": 2.47,
      "timed": 50,
-     "withinHourPct": 62.0,
+     "withinHourPct": 68.0,
      "openWithinHourPct": 62.0,
      "randomWithinHourPct": 20.7
     }
@@ -896,7 +940,7 @@
      "medianPriceErrPct": 0.55,
      "medianNaivePriceErrPct": 0.57,
      "timed": 50,
-     "withinHourPct": 56.0,
+     "withinHourPct": 70.0,
      "openWithinHourPct": 56.0,
      "randomWithinHourPct": 21.9
     },
@@ -907,7 +951,7 @@
      "medianPriceErrPct": 0.47,
      "medianNaivePriceErrPct": 0.59,
      "timed": 50,
-     "withinHourPct": 52.0,
+     "withinHourPct": 64.0,
      "openWithinHourPct": 52.0,
      "randomWithinHourPct": 23.0
     }
@@ -920,7 +964,7 @@
      "medianPriceErrPct": 1.3,
      "medianNaivePriceErrPct": 1.16,
      "timed": 50,
-     "withinHourPct": 56.0,
+     "withinHourPct": 60.0,
      "openWithinHourPct": 56.0,
      "randomWithinHourPct": 22.2
     },
@@ -931,7 +975,7 @@
      "medianPriceErrPct": 1.27,
      "medianNaivePriceErrPct": 1.38,
      "timed": 50,
-     "withinHourPct": 52.0,
+     "withinHourPct": 58.0,
      "openWithinHourPct": 52.0,
      "randomWithinHourPct": 22.8
     }
@@ -944,7 +988,7 @@
      "medianPriceErrPct": 0.6,
      "medianNaivePriceErrPct": 0.6,
      "timed": 50,
-     "withinHourPct": 38.0,
+     "withinHourPct": 52.0,
      "openWithinHourPct": 42.0,
      "randomWithinHourPct": 23.9
     },
@@ -955,7 +999,7 @@
      "medianPriceErrPct": 0.58,
      "medianNaivePriceErrPct": 0.88,
      "timed": 50,
-     "withinHourPct": 58.0,
+     "withinHourPct": 68.0,
      "openWithinHourPct": 58.0,
      "randomWithinHourPct": 23.2
     }
@@ -968,7 +1012,7 @@
      "medianPriceErrPct": 0.38,
      "medianNaivePriceErrPct": 0.37,
      "timed": 50,
-     "withinHourPct": 40.0,
+     "withinHourPct": 54.0,
      "openWithinHourPct": 40.0,
      "randomWithinHourPct": 24.3
     },
@@ -979,7 +1023,7 @@
      "medianPriceErrPct": 0.37,
      "medianNaivePriceErrPct": 0.41,
      "timed": 50,
-     "withinHourPct": 42.0,
+     "withinHourPct": 62.0,
      "openWithinHourPct": 42.0,
      "randomWithinHourPct": 24.8
     }
@@ -992,7 +1036,7 @@
      "medianPriceErrPct": 1.07,
      "medianNaivePriceErrPct": 1.45,
      "timed": 50,
-     "withinHourPct": 58.0,
+     "withinHourPct": 66.0,
      "openWithinHourPct": 58.0,
      "randomWithinHourPct": 22.5
     },
@@ -1003,7 +1047,7 @@
      "medianPriceErrPct": 1.4,
      "medianNaivePriceErrPct": 1.26,
      "timed": 50,
-     "withinHourPct": 66.0,
+     "withinHourPct": 70.0,
      "openWithinHourPct": 66.0,
      "randomWithinHourPct": 21.5
     }
@@ -1016,7 +1060,7 @@
      "medianPriceErrPct": 0.38,
      "medianNaivePriceErrPct": 0.37,
      "timed": 50,
-     "withinHourPct": 40.0,
+     "withinHourPct": 54.0,
      "openWithinHourPct": 40.0,
      "randomWithinHourPct": 24.4
     },
@@ -1027,7 +1071,7 @@
      "medianPriceErrPct": 0.36,
      "medianNaivePriceErrPct": 0.41,
      "timed": 50,
-     "withinHourPct": 42.0,
+     "withinHourPct": 62.0,
      "openWithinHourPct": 42.0,
      "randomWithinHourPct": 24.8
     }
@@ -1040,7 +1084,7 @@
      "medianPriceErrPct": 0.72,
      "medianNaivePriceErrPct": 0.78,
      "timed": 450,
-     "withinHourPct": 53.8,
+     "withinHourPct": 63.1,
      "openWithinHourPct": 54.2,
      "randomWithinHourPct": 22.7
     },
@@ -1051,7 +1095,7 @@
      "medianPriceErrPct": 0.71,
      "medianNaivePriceErrPct": 0.83,
      "timed": 450,
-     "withinHourPct": 54.7,
+     "withinHourPct": 64.9,
      "openWithinHourPct": 54.7,
      "randomWithinHourPct": 22.8
     }
@@ -1062,65 +1106,65 @@
     "basis": "2026-09-25",
     "high": {
      "price": 377.26,
-     "time": 570,
-     "timeSharePct": 56.7
+     "time": 630,
+     "timeSharePct": 66.7
     },
     "low": {
      "price": 368.75,
-     "time": 570,
-     "timeSharePct": 61.7
+     "time": 630,
+     "timeSharePct": 66.7
     }
    },
    "HOOD": {
     "basis": "2026-09-25",
     "high": {
      "price": 122.01,
-     "time": 570,
-     "timeSharePct": 68.3
+     "time": 630,
+     "timeSharePct": 71.7
     },
     "low": {
      "price": 116.84,
-     "time": 570,
-     "timeSharePct": 63.3
+     "time": 630,
+     "timeSharePct": 70.0
     }
    },
    "QQQ": {
     "basis": "2026-09-25",
     "high": {
      "price": 747.58,
-     "time": 570,
-     "timeSharePct": 40.0
+     "time": 630,
+     "timeSharePct": 51.7
     },
     "low": {
      "price": 741.05,
-     "time": 570,
-     "timeSharePct": 56.7
+     "time": 630,
+     "timeSharePct": 68.3
     }
    },
    "JPM": {
     "basis": "2026-09-25",
     "high": {
      "price": 345.94,
-     "time": 570,
-     "timeSharePct": 61.7
+     "time": 630,
+     "timeSharePct": 75.0
     },
     "low": {
      "price": 339.8,
-     "time": 570,
-     "timeSharePct": 55.0
+     "time": 630,
+     "timeSharePct": 68.3
     }
    },
    "GOOGL": {
     "basis": "2026-09-25",
     "high": {
      "price": 348.82,
-     "time": 570,
-     "timeSharePct": 65.0
+     "time": 615,
+     "timeSharePct": 68.3
     },
     "low": {
      "price": 341.28,
-     "time": 570,
-     "timeSharePct": 58.3
+     "time": 630,
+     "timeSharePct": 68.3
     }
    },
    "GC=F": {
@@ -1138,52 +1182,52 @@
     "basis": "2026-09-25",
     "high": {
      "price": 228.3,
-     "time": 570,
-     "timeSharePct": 51.7
+     "time": 630,
+     "timeSharePct": 55.0
     },
     "low": {
      "price": 223.7,
-     "time": 570,
-     "timeSharePct": 53.3
+     "time": 630,
+     "timeSharePct": 61.7
     }
    },
    "AMZN": {
     "basis": "2026-09-25",
     "high": {
      "price": 250.67,
-     "time": 570,
-     "timeSharePct": 56.7
+     "time": 630,
+     "timeSharePct": 65.0
     },
     "low": {
      "price": 246.11,
-     "time": 570,
-     "timeSharePct": 58.3
+     "time": 630,
+     "timeSharePct": 66.7
     }
    },
    "SPY": {
     "basis": "2026-09-25",
     "high": {
      "price": 771.77,
-     "time": 570,
-     "timeSharePct": 41.7
+     "time": 630,
+     "timeSharePct": 55.0
     },
     "low": {
      "price": 766.74,
-     "time": 570,
-     "timeSharePct": 43.3
+     "time": 630,
+     "timeSharePct": 61.7
     }
    },
    "VOO": {
     "basis": "2026-09-25",
     "high": {
      "price": 711.88,
-     "time": 570,
-     "timeSharePct": 41.7
+     "time": 630,
+     "timeSharePct": 55.0
     },
     "low": {
      "price": 706.75,
-     "time": 570,
-     "timeSharePct": 43.3
+     "time": 630,
+     "timeSharePct": 61.7
     }
    }
   }
@@ -1334,7 +1378,8 @@
    "actualTime": "15:45",
    "timeErrMin": -375,
    "randomTimeChance": 0.192,
-   "openWithin": false
+   "openWithin": false,
+   "fixedWithin": false
   },
   {
    "ticker": "NVDA",
@@ -1401,7 +1446,8 @@
    "actualTime": "13:45",
    "timeErrMin": -210,
    "randomTimeChance": 0.308,
-   "openWithin": false
+   "openWithin": false,
+   "fixedWithin": false
   },
   {
    "ticker": "HOOD",
@@ -1436,7 +1482,8 @@
    "actualTime": "09:30",
    "timeErrMin": 107,
    "randomTimeChance": 0.154,
-   "openWithin": true
+   "openWithin": true,
+   "fixedWithin": true
   },
   {
    "ticker": "GOOGL",
@@ -1471,7 +1518,8 @@
    "actualTime": "03:45",
    "timeErrMin": 390,
    "randomTimeChance": 0.0,
-   "openWithin": true
+   "openWithin": true,
+   "fixedWithin": false
   },
   {
    "ticker": "GC=F",
@@ -1682,7 +1730,8 @@
    "actualTime": "09:45",
    "timeErrMin": 92,
    "randomTimeChance": 0.192,
-   "openWithin": true
+   "openWithin": true,
+   "fixedWithin": true
   },
   {
    "ticker": "JPM",
@@ -1749,7 +1798,8 @@
    "actualTime": "09:30",
    "timeErrMin": 43,
    "randomTimeChance": 0.154,
-   "openWithin": true
+   "openWithin": true,
+   "fixedWithin": true
   },
   {
    "ticker": "GOOGL",
@@ -1768,7 +1818,8 @@
    "actualTime": "11:15",
    "timeErrMin": -105,
    "randomTimeChance": 0.308,
-   "openWithin": false
+   "openWithin": false,
+   "fixedWithin": true
   },
   {
    "ticker": "GOOGL",
@@ -1819,7 +1870,8 @@
    "actualTime": "08:30",
    "timeErrMin": 103,
    "randomTimeChance": 0.0,
-   "openWithin": true
+   "openWithin": true,
+   "fixedWithin": false
   },
   {
    "ticker": "AMZN",
