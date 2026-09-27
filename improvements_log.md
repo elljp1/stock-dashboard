@@ -2376,3 +2376,39 @@ history rewrite. Not repeating the direct notification today since nothing about
 the 9/25 flag, but it stays open and worth another direct nudge if it's still unresolved in a few
 more days. Also watching: whether HOOD's hit rate ever breaks its long-running 13-23% band; whether
 the low-side bias keeps easing; and whether my own sandbox's Yahoo access ever recovers.
+
+## 2026-09-27 (Sun) — weekend, no new session; grade + log only
+
+**Build status:** my sandbox's own Yahoo fetch is still 403-blocked (gateway policy denial on
+`query1.finance.yahoo.com`, confirmed via the proxy status log) on all 10 tickers and pre/post
+prices, and this sandbox has no committed CSVs to fall back on (gitignored by design), so a local
+rebuild wasn't possible today - same pattern as recent days, and markets are shut Saturday/Sunday
+anyway. `coherence_check.py` passes cleanly against the currently-committed build (10/10 tickers,
+generated 9/26 6:16pm ET, last daily bar 9/25's close), `test_sensitive_data.py` is clean on the
+current working copy, and the full test suite (`python -m unittest discover`) passes all 90 tests.
+
+**Grades reviewed:** swing-ledger counts and hit rates are unchanged from Friday/Saturday's review,
+as expected with no new weekday close to grade: TSLA n=12 (33%/42%), HOOD n=48 (17%/23%), QQQ n=38
+(32%/37%), JPM n=26 (15%/23%), GOOGL n=32 (22%/25%), GC=F n=18 (22%/22%); NVDA/AMZN/SPY/VOO still
+n=0. The daily high/low horizon grades still end at session 9/24 (Friday's 9/25 close is booked in
+`daily_extremes.json` but not yet scored in `horizonGrades`, which happens on the next successful
+run) - no new data to move any grade. Didn't find a bug in the committed output.
+
+**Trade cards / paper journal:** `trades_log.json` has no new model sheet since Friday (no new
+close to re-project from over the weekend). `spread_journal.json`: the QQQ 770/780 call-credit
+spread (trade 7) is still open with its exit order resting at 1.00, GOOGL trade 6 still closed -
+the owner's separate live options-journal process, outside this review's scope, untouched by me.
+`real_trades.json` unchanged since the 9/11 TSLA assignment.
+
+**What changed and why:** no code change - it's a weekend with no new graded session, existing
+grades are steady/noisy, and nothing in today's committed build looks like a bug. Honesty features
+(measured hit rates, random-control comparisons, self-grading, the coherence gate) are untouched;
+`tickers.txt` wasn't touched.
+
+**Watch next, and a repeat flag for the owner directly:** the plain-text brokerage account number
+committed in commits around 9/14-9/16 is still sitting unscrubbed in this repo's public git
+history - 14+ days unresolved now, flagged directly to the owner on 9/23 and 9/25 with no visible
+decision on authorizing a history rewrite. Sending another direct notification today since it has
+now gone unresolved for "a few more days" past the last flag with no sign of action. Also watching:
+whether HOOD's hit rate ever breaks its long-running 13-23% band; whether the low-side bias keeps
+easing; and whether my own sandbox's Yahoo access ever recovers.
