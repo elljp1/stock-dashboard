@@ -193,7 +193,7 @@
     {
       "id": 3,
       "status": "closed",
-      "account": "\u2022\u2022\u2022\u20222831 Agentic",
+      "account": "••••2831 Agentic",
       "orderId": "6aa962a6-29a9-4e1f-94df-60637ece25bb",
       "ticker": "HOOD",
       "strategy": "put credit spread",
@@ -282,7 +282,7 @@
     {
       "id": 4,
       "status": "cancelled",
-      "account": "\u2022\u2022\u2022\u20222831 Agentic",
+      "account": "••••2831 Agentic",
       "orderId": "6aaa9e35-2d2a-4667-a488-ff4d333ca0e5",
       "ticker": "HOOD",
       "strategy": "put credit spread",
@@ -341,7 +341,7 @@
     {
       "id": 5,
       "status": "cancelled",
-      "account": "\u2022\u2022\u2022\u20222831 Agentic",
+      "account": "••••2831 Agentic",
       "orderId": "6aaaef01-10dc-44b1-ba2a-b7128aa8aa5c",
       "ticker": "QQQ",
       "strategy": "put credit spread",
@@ -398,7 +398,7 @@
     {
       "id": 6,
       "status": "closed",
-      "account": "\u2022\u2022\u2022\u20222831 Agentic",
+      "account": "••••2831 Agentic",
       "orderId": "6ab3eade-bcab-4630-a419-d28f9c354227",
       "ticker": "GOOGL",
       "strategy": "put credit spread",
@@ -462,7 +462,7 @@
     {
       "id": 7,
       "status": "open",
-      "account": "\u2022\u2022\u2022\u20222831 Agentic",
+      "account": "••••2831 Agentic",
       "orderId": "6ab57776-6f28-4d8a-a7a4-8e3b0c4d6a11",
       "ticker": "QQQ",
       "strategy": "call credit spread",
@@ -524,7 +524,7 @@
   ],
   "otherAccountOrders": [
     {
-      "account": "Individual \u2022\u2022\u2022\u20228549",
+      "account": "Individual ••••8549",
       "order": "sell GOOGL $325 put 10/9 x1",
       "limit": 10.0,
       "tif": "gtc",
@@ -536,7 +536,7 @@
       "cancelled": "2026-09-14T20:33 ET"
     },
     {
-      "account": "Joint \u2022\u2022\u2022\u20226540",
+      "account": "Joint ••••6540",
       "order": "sell GOOGL $325 put 10/9 x1",
       "limit": 10.0,
       "tif": "gtc",
@@ -548,7 +548,7 @@
       "cancelled": "2026-09-14T20:33 ET"
     },
     {
-      "account": "Individual \u2022\u2022\u2022\u20228549",
+      "account": "Individual ••••8549",
       "order": "sell to open HOOD $140 call 10/23 x2 (covered call)",
       "limit": 5.0,
       "tif": "gtc",
@@ -899,6 +899,29 @@
         "reason": "pushed; awaiting user",
         "outcome": "pending",
         "note": "Timing-led. 365 (delta 0.208) nearest 0.20 but 365/370 too cheap; 360 (0.275) qualifies: 3.525-2.475 = 1.05, 0.21 of width, OI 1966, short quote 3.35/3.70 (10% of mark). 2 contracts (7.2%) keeps total open risk 21.7% with QQQ trade 7; 3 contracts would be 25.3%."
+      },
+      {
+        "id": 18,
+        "date": "2026-09-28",
+        "time": "15:06 ET",
+        "symbol": "GOOGL",
+        "spread": "10/09 355/360 call credit",
+        "midAtAlert": 1.02,
+        "suggestedLimit": 1.0,
+        "shortDelta": 0.268,
+        "spot": 342.69,
+        "contracts": 2,
+        "maxLoss": 800,
+        "breakeven": 356.0,
+        "legType": "down (next turn LOW)",
+        "turnDate": "2026-10-07",
+        "turnTime": "Jupiter 9:50-10:48 AM; Sun 11:45-12:43 PM",
+        "turnPrice": 316.4,
+        "plannedExit": "close at the 10/07 projected low or at 50% of credit ($0.50); stop $2.00 debit or 355 breached",
+        "taken": false,
+        "reason": "pushed; awaiting user",
+        "outcome": "pending",
+        "note": "Timing-led. 360 (delta 0.193) nearest 0.20 but 360/365 only 0.125 of width; 355 (0.268) qualifies: 2.965-1.95 = 1.015, 0.203 of width, OI 7711, short quote 2.88/3.05 (6% of mark). 2 contracts (7.3%) keeps total open risk 21.8% with QQQ trade 7; 3 would be 25.4%. HOOD 10/09 126-130 calls failed (best 126/131 0.18), TSLA 10/16 385/395 0.16, QQQ 10/06 750/760 0.196."
       }
     ]
   }
