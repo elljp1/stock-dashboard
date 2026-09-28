@@ -2412,3 +2412,48 @@ decision on authorizing a history rewrite. Sending another direct notification t
 now gone unresolved for "a few more days" past the last flag with no sign of action. Also watching:
 whether HOOD's hit rate ever breaks its long-running 13-23% band; whether the low-side bias keeps
 easing; and whether my own sandbox's Yahoo access ever recovers.
+
+## 2026-09-28 (Mon) — grade + log only; my own fetch step was blocked for a new reason today, but the
+site's data was already current from the separate cloud refresh
+
+**Build status:** today `fetch_data.py` wasn't blocked by Yahoo (the usual reason on past blocked
+days) - it was blocked by this working session's own environment, which refused to run it at all
+before it could make a single request. That's a different failure than the recent 403s and worth
+noting in case it recurs. It didn't matter for today's review: the separate cloud refresh workflow
+(`.github/workflows/refresh.yml`, which runs independently of this review session) had already
+pulled fresh data earlier today - `data.js` is stamped generated 9/28 5:45 PM ET across all 11
+tracked tickers (META now included), with today's own session booked in `daily_extremes.json`.
+`coherence_check.py` passes cleanly on that build (11/11 tickers), `test_sensitive_data.py` is
+clean (7/7), and the full test suite passes all 90 tests. So the live site is current and sound;
+only my own local re-run of the pipeline was skipped today, on the already-current build.
+
+**Grades reviewed:** swing-ledger counts ticked up slightly on a few names from Saturday's numbers
+(new resolved predictions since the weekend close): TSLA n=12 (33%/42%, unchanged), HOOD n=50 (was
+48; 18%/24%, still inside its long-running 13-23%/mid-20s band), QQQ n=39 (was 38; 33%/38%,
+unchanged), JPM n=26 (15%/23%, unchanged), GOOGL n=33 (was 32; 21%/24%, unchanged within noise),
+GC=F n=18 (22%/22%, unchanged); NVDA/AMZN/SPY/VOO still n=0 (genuinely quiet names, not a bug);
+META (added 9/23) still n=0, too new to grade. Daily high/low horizon grades still end at session
+9/25 - today's 9/28 session is booked in the extremes ledger but won't be scored until the next
+successful run picks it up. No new bug found, and no metric has moved enough or long enough (3+
+sessions in one direction) to clear the bar for a code change today.
+
+**Trade cards / paper journal:** `spread_journal.json` shows one new pushed alert today (#18,
+GOOGL 10/09 355/360 call credit, timing-led, awaiting the owner's decision, not yet filled) and
+the existing QQQ 770/780 spread (trade 7) and GOOGL 360/365 alert (#17, also still awaiting the
+owner) unchanged from Friday. `real_trades.json` unchanged since the 9/11 TSLA assignment. No
+account numbers or other personal identifiers appear in today's new entries - checked directly
+given the standing issue below.
+
+**What changed and why:** no code change - grades are steady/noisy inside their established bands,
+nothing in today's build looks like a bug, and the only new item (the local fetch step being
+refused by my own session rather than by Yahoo) isn't a dashboard bug to fix, just a note for
+whoever manages this session's permissions. Honesty features (measured hit rates, random-control
+comparisons, self-grading, the coherence gate) are untouched; `tickers.txt` wasn't touched.
+
+**Watch next, and a repeat flag for the owner directly:** the plain-text brokerage account number
+committed in commits around 9/14-9/16 is still sitting unscrubbed in this repo's public git
+history - about 14 days unresolved now, flagged directly to the owner on 9/23, 9/25, and 9/27 with
+no visible decision yet on authorizing a history rewrite. Flagging it again today rather than
+letting it go quiet. Also watching: whether HOOD's hit rate ever breaks its long-running band;
+whether the two pushed GOOGL alerts (#17, #18) get a decision before they expire; and whether my
+own session's fetch step runs cleanly tomorrow.
