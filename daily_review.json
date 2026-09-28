@@ -1,6 +1,6 @@
 {
-  "reviewedAt": "2026-09-28T20:08:52.815018+00:00",
-  "snapshotCount": 3670,
+  "reviewedAt": "2026-09-28T20:13:26.121073+00:00",
+  "snapshotCount": 3681,
   "scoredOriginals": 98,
   "results": [
     {
@@ -1042,7 +1042,7 @@
           {
             "isoDate": "2026-11-05",
             "type": "high",
-            "target": 346.22,
+            "target": 345.29,
             "touched": "2026-09-28",
             "deltaDays": -28
           },
@@ -1271,21 +1271,21 @@
         "priceCalibHigh": 1.0,
         "priceCalibLow": 0.881,
         "methodFactors": {
-          "rhythm": 1.05,
           "fib": 1.4,
+          "rhythm": 1.05,
           "gann": 0.93
         },
         "famStats": {
+          "fib": {
+            "n": 4,
+            "hits": 2
+          },
           "hurst": {
             "n": 2,
             "hits": 0
           },
           "rhythm": {
             "n": 6,
-            "hits": 2
-          },
-          "fib": {
-            "n": 4,
             "hits": 2
           },
           "gann": {
@@ -1313,7 +1313,7 @@
           {
             "isoDate": "2026-11-16",
             "type": "high",
-            "target": 119.24,
+            "target": 119.32,
             "touched": "2026-09-28",
             "deltaDays": -35
           },
@@ -1852,14 +1852,18 @@
         "priceCalibHigh": 1.15,
         "priceCalibLow": 0.999,
         "methodFactors": {
+          "fib": 0.9,
           "hurst": 0.5,
           "rhythm": 1.26,
-          "fib": 0.9,
           "gann": 0.99,
           "vibration": 1.3,
           "moon": 1.3
         },
         "famStats": {
+          "fib": {
+            "n": 21,
+            "hits": 3
+          },
           "hurst": {
             "n": 10,
             "hits": 0
@@ -1867,10 +1871,6 @@
           "rhythm": {
             "n": 27,
             "hits": 6
-          },
-          "fib": {
-            "n": 21,
-            "hits": 3
           },
           "gann": {
             "n": 19,
@@ -1901,7 +1901,7 @@
           {
             "isoDate": "2026-11-18",
             "type": "high",
-            "target": 724.16,
+            "target": 724.04,
             "touched": "2026-09-28",
             "deltaDays": -37
           },
@@ -2443,21 +2443,21 @@
         "priceCalibHigh": 0.989,
         "priceCalibLow": 0.975,
         "methodFactors": {
-          "hurst": 1.3,
           "fib": 1.05,
+          "hurst": 1.3,
           "rhythm": 1.46,
           "gann": 0.81,
           "vibration": 2.0,
           "moon": 1.46
         },
         "famStats": {
-          "hurst": {
-            "n": 16,
-            "hits": 7
-          },
           "fib": {
             "n": 12,
             "hits": 4
+          },
+          "hurst": {
+            "n": 16,
+            "hits": 7
           },
           "rhythm": {
             "n": 16,
@@ -3557,8 +3557,8 @@
         "priceCalibLow": 0.984,
         "methodFactors": {
           "gann": 1.37,
-          "hurst": 1.09,
           "fib": 0.94,
+          "hurst": 1.09,
           "rhythm": 0.67,
           "vibration": 0.88,
           "moon": 1.75
@@ -3568,13 +3568,13 @@
             "n": 14,
             "hits": 4
           },
-          "hurst": {
-            "n": 6,
-            "hits": 1
-          },
           "fib": {
             "n": 12,
             "hits": 2
+          },
+          "hurst": {
+            "n": 6,
+            "hits": 1
           },
           "rhythm": {
             "n": 11,
@@ -3609,7 +3609,7 @@
           {
             "isoDate": "2026-11-02",
             "type": "high",
-            "target": 220.78,
+            "target": 221.3,
             "touched": "2026-09-28",
             "deltaDays": -25
           },
@@ -4475,13 +4475,38 @@
           }
         }
       }
+    },
+    "META": {
+      "bias": {
+        "samples": 0,
+        "timingBiasDays": 0,
+        "rawTimingDays": 0.0,
+        "rawMagnitudePct": 0.0,
+        "medianEarlyLate": null,
+        "magnitudeBiasPct": 0.0,
+        "magSamples": 0,
+        "spacingUsed": 17,
+        "recent": []
+      },
+      "trackRecord": {
+        "since": "2026-09-28",
+        "resolved": [],
+        "n": 0,
+        "hit2Rate": null,
+        "hit3Rate": null,
+        "priceMedErrPct": null,
+        "priceCalibHigh": 1.0,
+        "priceCalibLow": 1.0,
+        "methodFactors": {},
+        "famStats": {}
+      }
     }
   },
   "promotionPolicy": "Daily scoring and existing bounded calibration run automatically. New strategies require unseen-data validation; no guaranteed improvement or return.",
   "timing": {
     "version": "daily-close-turns-v1",
     "forwardStart": "2026-09-24T00:00:00-04:00",
-    "reviewedAt": "2026-09-28T20:08:52.815018+00:00",
+    "reviewedAt": "2026-09-28T20:13:26.121073+00:00",
     "unit": "trading sessions",
     "tickers": {
       "TSLA": {
@@ -6819,6 +6844,124 @@
             "hitRatePct": 33.3,
             "medianAbsErrorSessions": 1,
             "early": 1,
+            "late": 0,
+            "exact": 0
+          },
+          "Other cycles": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          }
+        },
+        "lastClosedSession": "2026-09-25"
+      },
+      "META": {
+        "summary": {
+          "scored": 0,
+          "hits": 0,
+          "falseAlarms": 0,
+          "hitRatePct": null,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "chanceHitPct": null,
+        "useVerdict": {
+          "status": "unproven",
+          "needed": 20,
+          "scored": 0,
+          "lowerBoundPct": null
+        },
+        "historicalAudit": {
+          "scored": 0,
+          "hits": 0,
+          "falseAlarms": 0,
+          "hitRatePct": null,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "forward": {
+          "scored": 0,
+          "hits": 0,
+          "falseAlarms": 0,
+          "hitRatePct": null,
+          "medianAbsErrorSessions": null,
+          "early": 0,
+          "late": 0,
+          "exact": 0
+        },
+        "pending": 3,
+        "excludedCount": 0,
+        "coverage": {
+          "fromExclusive": null,
+          "through": "2026-09-17",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
+        },
+        "historicalCoverage": {
+          "fromExclusive": null,
+          "through": "2026-09-17",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
+        },
+        "forwardCoverage": {
+          "fromExclusive": null,
+          "through": "2026-09-17",
+          "turns": 0,
+          "missedTurns": 0,
+          "caughtTurns": 0
+        },
+        "results": [],
+        "excluded": [],
+        "missed": [],
+        "methodTags": {
+          "Gann": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Hurst / rhythm": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Fibonacci": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
+            "late": 0,
+            "exact": 0
+          },
+          "Astro / vibration": {
+            "scored": 0,
+            "hits": 0,
+            "falseAlarms": 0,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
+            "early": 0,
             "late": 0,
             "exact": 0
           },
