@@ -64,6 +64,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 15 | 9/24 9:37am | QQQ 10/23 760/770 call (timing: leg down to 10/15 low) | $2.40 (limit $2.60 GTC) | No | pending |
 | 16 | 9/24 3:09pm | QQQ 10/23 770/780 call (timing: leg down to 10/15 low; answer to user question) | $1.92 (limit $2.00 GTC) | Yes, 2x at $2.00 GTC (trade 7) | pending |
 | 17 | 9/25 9:34am | GOOGL 10/09 360/365 call (timing: leg down to 10/07 low) | $1.05 (limit $1.05, 2x) | Pushed, open | pending |
+| 18 | 9/28 3:06pm | GOOGL 10/09 355/360 call (timing: leg down to 10/07 low) | $1.02 (limit $1.00, 2x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
