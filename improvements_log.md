@@ -2457,3 +2457,62 @@ no visible decision yet on authorizing a history rewrite. Flagging it again toda
 letting it go quiet. Also watching: whether HOOD's hit rate ever breaks its long-running band;
 whether the two pushed GOOGL alerts (#17, #18) get a decision before they expire; and whether my
 own session's fetch step runs cleanly tomorrow.
+
+## 2026-09-29 (Tue) — grade + log only; confirmed the account-number history exposure is still live, with specifics
+
+**Build status:** my own `fetch_data.py` run was blocked again today, but for the first time I can say
+precisely why: every one of the 11 tickers (and pre/post prices) failed with a `403 Forbidden` from
+this session's own network proxy, not from Yahoo itself - the proxy's own documentation confirms a
+403 there means the destination host is blocked by this session's organization egress policy, so
+there was nothing to retry or route around. This sandbox has no committed CSVs to fall back on
+(gitignored by design), so a local rebuild wasn't possible - same net effect as the recent Yahoo-side
+403s, different cause. It didn't matter for the live site: the separate cloud refresh workflow had
+already run today - `data.js` is stamped generated 9/29 5:45 PM ET across all 11 tickers, and
+`spread_journal.json` logged a new META alert (#19, 10/23 790/800 call credit, pushed 3:05 PM ET,
+awaiting the owner). `coherence_check.py` passes cleanly on that build (11/11 tickers),
+`test_sensitive_data.py` is clean, and the full suite (`python -m unittest discover`) passes all 90
+tests.
+
+**Grades reviewed:** counts and hit rates are essentially unchanged from recent days, as expected with
+no session my own session could add: TSLA n=12 (33%/42%), HOOD n=30 (23%/17% on the stricter ±2-day/
+±3-day split I ran - still inside its long-running teens-to-twenties band), QQQ n=30 (40%/37%, still
+the strongest name), JPM n=26 (23%/15%), GOOGL n=30 (20%/17%), GC=F n=18 (22%/22%); NVDA/AMZN/SPY/VOO
+still n=0 (quiet names, not a bug); META (added 9/28) still n=0, one day too new to grade. Daily
+high/low horizon calibration factors are all within a few percent of 1.0 on every ticker except the
+brand-new META (still defaulted at 1.0/1.0) - no drift worth acting on. No bug found in the committed
+build, and nothing has moved 3+ sessions in one direction past its established band, so the bar for a
+code change isn't cleared today.
+
+**Trade cards / paper journal:** today's new item is alert #19 (META, 10/23 790/800 call credit,
+1 contract, pushed 3:05 PM ET) - awaiting the owner's decision, not yet filled. QQQ's trade 7
+(770/780 call credit) is still open with its exit resting on the app's projected low; GOOGL trade 6
+closed 9/24; `real_trades.json` unchanged since the 9/11 TSLA assignment. Checked `spread_journal.json`
+and `trades_log.json` directly for account numbers today (not just via the automated guard) given the
+open issue below - the live `account` object only holds a masked `last4: 2831`, no full number.
+
+**What changed and why:** no code change - grades sit inside their established bands, the coherence
+gate and full test suite both pass clean, and today's only new failure (my own fetch being denied by
+this session's egress policy rather than by Yahoo) is an environment condition, not a dashboard bug.
+Honesty features (measured hit rates, random-control comparisons, self-grading, the coherence gate)
+are untouched; `tickers.txt` wasn't touched.
+
+**The git-history account-number exposure - now confirmed with specifics, still unresolved:** I asked
+a sub-agent to check GitHub's copy of this repo's history directly (rather than relying on this
+session's shallow local clone) and got a precise answer. Three commits still reachable from `main`
+today - dated 9/15 and 9/16, 2026 - add a real, unmasked account number to `spread_journal.json`. A
+later same-week commit switched the live file over to a masked `••••2831` style, but that only added a
+new commit on top; it never removed or rewrote the three earlier ones, so the raw number is still
+sitting in this public repo's history right now, more than two weeks after it was first flagged
+(9/23, 9/25, 9/27, 9/28) with no visible action. Removing it requires rewriting shared history
+(commit-message-level edits won't do it), which is a destructive, hard-to-reverse operation I won't
+take on my own authority - it needs the owner's explicit go-ahead, and ideally the owner should also
+treat that account/brokerage login as something worth rotating credentials on, out of caution, since
+it's been in a public repo for two weeks. Sending a direct notification today with the specifics
+rather than just another log line, since the log-only flags haven't produced a decision in four
+rounds.
+
+**Watch next:** whether the owner authorizes the history rewrite (and considers rotating the exposed
+account's credentials); whether HOOD/GOOGL/JPM's hit rates ever break their long-running teens-to-
+twenties band; whether the pushed META alert (#19) and the still-open QQQ trade 7 get resolved; and
+whether this session's own fetch step gets un-blocked by its network policy tomorrow (it's an org
+policy question, not something to keep retrying).
