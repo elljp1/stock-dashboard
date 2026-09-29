@@ -1,7 +1,7 @@
 {
-  "reviewedAt": "2026-09-29T17:09:41.168371+00:00",
-  "snapshotCount": 3901,
-  "scoredOriginals": 114,
+  "reviewedAt": "2026-09-29T17:45:55.521475+00:00",
+  "snapshotCount": 3912,
+  "scoredOriginals": 113,
   "results": [
     {
       "snapshotId": "716865f746fe8b4ff8fe0fb2d2bb08149c02e6dfb04b0a61d145865d35303ef0",
@@ -1132,16 +1132,6 @@
       "predictedPrice": 780.93,
       "actualClose": 771.35,
       "absolutePriceErrorPct": 1.23
-    },
-    {
-      "snapshotId": "957f90cc00e4fb591caad5724ee467d4e57cd9b39f5b708f98f9f603ab704f4e",
-      "ticker": "GC=F",
-      "targetDate": "2026-09-28",
-      "observedDate": "2026-09-28",
-      "type": "low",
-      "predictedPrice": 4250.48,
-      "actualClose": 4168.4,
-      "absolutePriceErrorPct": 1.93
     }
   ],
   "method": "Original future-date targets versus first available daily close on/after target, scored no earlier than the following Eastern date; price error only, not reversal accuracy or trading profit.",
@@ -1209,7 +1199,7 @@
           {
             "isoDate": "2026-11-05",
             "type": "high",
-            "target": 309.6,
+            "target": 309.31,
             "touched": "2026-09-29",
             "deltaDays": -27
           },
@@ -1431,15 +1421,11 @@
         "priceCalibHigh": 1.0,
         "priceCalibLow": 0.881,
         "methodFactors": {
-          "fib": 1.4,
           "rhythm": 1.05,
+          "fib": 1.4,
           "gann": 0.93
         },
         "famStats": {
-          "fib": {
-            "n": 4,
-            "hits": 2
-          },
           "rhythm": {
             "n": 6,
             "hits": 2
@@ -1447,6 +1433,10 @@
           "hurst": {
             "n": 2,
             "hits": 0
+          },
+          "fib": {
+            "n": 4,
+            "hits": 2
           },
           "gann": {
             "n": 7,
@@ -2012,18 +2002,14 @@
         "priceCalibHigh": 1.15,
         "priceCalibLow": 0.999,
         "methodFactors": {
-          "fib": 0.9,
           "rhythm": 1.26,
           "hurst": 0.5,
+          "fib": 0.9,
           "gann": 0.99,
           "vibration": 1.3,
           "moon": 1.3
         },
         "famStats": {
-          "fib": {
-            "n": 21,
-            "hits": 3
-          },
           "rhythm": {
             "n": 27,
             "hits": 6
@@ -2031,6 +2017,10 @@
           "hurst": {
             "n": 10,
             "hits": 0
+          },
+          "fib": {
+            "n": 21,
+            "hits": 3
           },
           "gann": {
             "n": 19,
@@ -4657,7 +4647,7 @@
           {
             "isoDate": "2026-10-26",
             "type": "high",
-            "target": 692.92,
+            "target": 692.99,
             "touched": "2026-09-29",
             "deltaDays": -19
           }
@@ -4681,7 +4671,7 @@
   "timing": {
     "version": "daily-close-turns-v1",
     "forwardStart": "2026-09-24T00:00:00-04:00",
-    "reviewedAt": "2026-09-29T17:09:41.168371+00:00",
+    "reviewedAt": "2026-09-29T17:45:55.521475+00:00",
     "unit": "trading sessions",
     "tickers": {
       "TSLA": {
@@ -6989,30 +6979,30 @@
       },
       "GC=F": {
         "summary": {
-          "scored": 4,
-          "hits": 2,
+          "scored": 3,
+          "hits": 1,
           "falseAlarms": 2,
-          "hitRatePct": 50.0,
-          "medianAbsErrorSessions": 1.5,
+          "hitRatePct": 33.3,
+          "medianAbsErrorSessions": 1,
           "early": 1,
-          "late": 1,
+          "late": 0,
           "exact": 0
         },
-        "chanceHitPct": 32.2,
+        "chanceHitPct": 33.3,
         "useVerdict": {
           "status": "unproven",
           "needed": 20,
-          "scored": 4,
+          "scored": 3,
           "lowerBoundPct": null
         },
         "historicalAudit": {
-          "scored": 4,
-          "hits": 2,
+          "scored": 3,
+          "hits": 1,
           "falseAlarms": 2,
-          "hitRatePct": 50.0,
-          "medianAbsErrorSessions": 1.5,
+          "hitRatePct": 33.3,
+          "medianAbsErrorSessions": 1,
           "early": 1,
-          "late": 1,
+          "late": 0,
           "exact": 0
         },
         "forward": {
@@ -7025,25 +7015,25 @@
           "late": 0,
           "exact": 0
         },
-        "pending": 33,
+        "pending": 34,
         "excludedCount": 0,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
-          "turns": 2,
+          "through": "2026-09-17",
+          "turns": 1,
           "missedTurns": 0,
-          "caughtTurns": 2
+          "caughtTurns": 1
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
-          "turns": 2,
+          "through": "2026-09-17",
+          "turns": 1,
           "missedTurns": 0,
-          "caughtTurns": 2
+          "caughtTurns": 1
         },
         "forwardCoverage": {
           "fromExclusive": "2026-09-25",
-          "through": "2026-09-18",
+          "through": "2026-09-17",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -7065,22 +7055,6 @@
             "actualDate": "2026-09-15",
             "confirmedDate": "2026-09-17",
             "errorSessions": -1
-          },
-          {
-            "snapshotId": "e8a996b2b18141c871ff949421a7415b061c4a995e47a6a23081cbad616387d8",
-            "targetDate": "2026-09-22",
-            "type": "high",
-            "recordedAt": "2026-09-13T22:22:37.251190+00:00",
-            "methods": [
-              "Fib 21 bars from high 08/24",
-              "Vibe: Helio Uranus sextile Neptune",
-              "Vibe: Moon 9th-harmonic Saturn"
-            ],
-            "cohort": "historicalAudit",
-            "status": "hit",
-            "actualDate": "2026-09-18",
-            "confirmedDate": "2026-09-22",
-            "errorSessions": 2
           },
           {
             "snapshotId": "ee3cbe03235b156f5d1ab19466bc1be00c6830545b77d2233e3512b56f76ac82",
@@ -7139,23 +7113,23 @@
             "exact": 0
           },
           "Fibonacci": {
-            "scored": 1,
-            "hits": 1,
+            "scored": 0,
+            "hits": 0,
             "falseAlarms": 0,
-            "hitRatePct": 100.0,
-            "medianAbsErrorSessions": 2,
+            "hitRatePct": null,
+            "medianAbsErrorSessions": null,
             "early": 0,
-            "late": 1,
+            "late": 0,
             "exact": 0
           },
           "Astro / vibration": {
-            "scored": 4,
-            "hits": 2,
+            "scored": 3,
+            "hits": 1,
             "falseAlarms": 2,
-            "hitRatePct": 50.0,
-            "medianAbsErrorSessions": 1.5,
+            "hitRatePct": 33.3,
+            "medianAbsErrorSessions": 1,
             "early": 1,
-            "late": 1,
+            "late": 0,
             "exact": 0
           },
           "Other cycles": {
@@ -7169,7 +7143,7 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-28"
+        "lastClosedSession": "2026-09-25"
       },
       "META": {
         "summary": {
