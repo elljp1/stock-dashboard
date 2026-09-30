@@ -2516,3 +2516,44 @@ account's credentials); whether HOOD/GOOGL/JPM's hit rates ever break their long
 twenties band; whether the pushed META alert (#19) and the still-open QQQ trade 7 get resolved; and
 whether this session's own fetch step gets un-blocked by its network policy tomorrow (it's an org
 policy question, not something to keep retrying).
+
+## 2026-09-30 (Wed) — grade + log only; no code change
+
+**Build status:** this session's own `fetch_data.py` run was blocked again today — all 11
+tickers and pre/post prices failed with a `403` from this session's own network proxy (confirmed
+via the proxy's own status endpoint: "gateway answered 403 to CONNECT" for `query1.finance.yahoo.com`,
+i.e. this sandbox's egress policy, not Yahoo). This sandbox has no committed CSVs to fall back on
+(gitignored by design), so a local rebuild wasn't possible today. It didn't matter for the live
+site: the separate cloud refresh workflow had already run today — `data.js` is stamped generated
+9/30 5:45 PM ET across all 11 tickers. `coherence_check.py` passes cleanly on that build (11/11
+tickers) and the full test suite (`python -m unittest discover`) passes all 90 tests.
+
+**Grades reviewed:** hit rates and calibration are essentially unchanged from recent days and still
+inside their established bands: TSLA n=12 (33%/42%), HOOD n=30 (18%/25%), QQQ n=30 (33%/38%, still
+the strongest name), JPM n=26 (15%/23%), GOOGL n=30 (21%/24%), GC=F n=18 (22%/22%); NVDA/AMZN/SPY/VOO
+still n=0 (quiet names, not a bug); META (added 9/28) still n=0, too new to grade. Daily high/low
+horizon calibration factors are all within a few percent of 1.0 on every ticker. No bug found, and
+nothing has moved 3+ sessions past its band, so today's bar for a code change isn't cleared.
+
+**Trade cards / paper journal:** a new QQQ alert (#20, 10/16 760/770 call credit, 1 contract, pushed
+9:35 AM ET) is awaiting the owner. Alerts #18 (GOOGL) and #19 (META) from the past few days are also
+still pending, untaken. No account numbers appear in today's new entries (spot-checked directly).
+
+**What changed and why:** no code change — grades sit inside their established bands, the coherence
+gate and full test suite both pass clean, and today's only failure (this session's own fetch being
+denied by its egress policy) is an environment condition, not a dashboard bug. Honesty features
+(measured hit rates, random-control comparisons, self-grading, the coherence gate) are untouched;
+`tickers.txt` wasn't touched.
+
+**The git-history account-number exposure — re-checked, still unresolved, no new notification sent:**
+had a sub-agent re-verify directly against GitHub's history today. The same six commits from
+9/15–9/16 that add the real, unmasked account number are still reachable from `main`'s current tip —
+no rewrite or force-push has happened. This is unchanged from yesterday's finding, which was already
+escalated with a direct notification, so today's log records the re-check without sending a repeat
+alert; it will be escalated again if it keeps sitting unresolved for several more days, or the moment
+anything about it changes.
+
+**Watch next:** whether the owner authorizes the history rewrite (and considers rotating the exposed
+account's credentials); whether HOOD/GOOGL/JPM's hit rates ever break their long-running teens-to-
+twenties band; whether the three pending alerts (#18 GOOGL, #19 META, #20 QQQ) get resolved; and
+whether this session's own fetch step gets un-blocked by its network policy tomorrow.
