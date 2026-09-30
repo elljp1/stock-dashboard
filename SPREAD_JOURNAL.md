@@ -43,8 +43,8 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | Joint | Sell GOOGL $325 put 10/9 x1 | $10.00 GTC | cancelled 9/14 8:33pm ET, never filled | $32,500 | 9/10 2:26pm |
 | Individual | Sell to open HOOD $140 call 10/23 x2 (covered call) | $5.00 GTC | cancelled 9/28 2:35pm ET, never filled | 200 of 700 HOOD shares | 9/21 9:44am |
 
-| Individual | Sell to open TSLA $330 put 10/30 x2 | $10.00 GTC | filled 9/30 9:44am at $10.00 ($2,000); close orders resting: 1 @ $7.00, 1 @ $8.00 GTC | $66,000 | 9/30 9:43am |
-| Joint | Sell to open TSLA $330 put 10/30 x3 | $10.00 GTC | filled 9/30 9:44am at $10.00 ($3,000); close orders resting: 1 @ $7.00, 2 @ $8.00 GTC | $99,000 | 9/30 9:43am |
+| Individual | Sell to open TSLA $330 put 10/30 x2 | $10.00 GTC | filled 9/30 9:44am at $10.00 ($2,000); 1 closed at $8.00 on 9/30 1:41pm (+$200); 1 open, $7.00 GTC close resting | $66,000 | 9/30 9:43am |
+| Joint | Sell to open TSLA $330 put 10/30 x3 | $10.00 GTC | filled 9/30 9:44am at $10.00 ($3,000); 2 closed at $8.00 on 9/30 1:41pm (+$400); 1 open, $7.00 GTC close resting | $99,000 | 9/30 9:43am |
 ## Alert log (graded at expiry, taken or not)
 
 | # | Date | Setup | Mid at alert | Taken | Outcome |
