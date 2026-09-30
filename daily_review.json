@@ -1,7 +1,7 @@
 {
-  "reviewedAt": "2026-09-29T22:20:24.345582+00:00",
-  "snapshotCount": 4011,
-  "scoredOriginals": 113,
+  "reviewedAt": "2026-09-30T10:09:58.760487+00:00",
+  "snapshotCount": 4022,
+  "scoredOriginals": 117,
   "results": [
     {
       "snapshotId": "716865f746fe8b4ff8fe0fb2d2bb08149c02e6dfb04b0a61d145865d35303ef0",
@@ -1132,6 +1132,46 @@
       "predictedPrice": 780.93,
       "actualClose": 771.35,
       "absolutePriceErrorPct": 1.23
+    },
+    {
+      "snapshotId": "957f90cc00e4fb591caad5724ee467d4e57cd9b39f5b708f98f9f603ab704f4e",
+      "ticker": "GC=F",
+      "targetDate": "2026-09-28",
+      "observedDate": "2026-09-28",
+      "type": "low",
+      "predictedPrice": 4250.48,
+      "actualClose": 4168.4,
+      "absolutePriceErrorPct": 1.93
+    },
+    {
+      "snapshotId": "d5cfdbd9376e4f726e485a7d78607bc93e1f007c8c543842e573d0ecea75da0d",
+      "ticker": "NVDA",
+      "targetDate": "2026-09-29",
+      "observedDate": "2026-09-29",
+      "type": "high",
+      "predictedPrice": 235.74,
+      "actualClose": 227.21,
+      "absolutePriceErrorPct": 3.62
+    },
+    {
+      "snapshotId": "17aae3bd4f9a65c7bb310ff74b9ca4a42e32411d54b7f67e5b39496a12355ab8",
+      "ticker": "QQQ",
+      "targetDate": "2026-09-29",
+      "observedDate": "2026-09-29",
+      "type": "high",
+      "predictedPrice": 749.85,
+      "actualClose": 737.93,
+      "absolutePriceErrorPct": 1.59
+    },
+    {
+      "snapshotId": "cb428fab2a24ec5da86e37db51d7196a55ed06688b77fec9473a06a05460552c",
+      "ticker": "JPM",
+      "targetDate": "2026-09-29",
+      "observedDate": "2026-09-29",
+      "type": "low",
+      "predictedPrice": 334.61,
+      "actualClose": 334.98,
+      "absolutePriceErrorPct": 0.11
     }
   ],
   "method": "Original future-date targets versus first available daily close on/after target, scored no earlier than the following Eastern date; price error only, not reversal accuracy or trading profit.",
@@ -1199,7 +1239,7 @@
           {
             "isoDate": "2026-11-05",
             "type": "high",
-            "target": 311.14,
+            "target": 311.23,
             "touched": "2026-09-29",
             "deltaDays": -27
           },
@@ -1421,21 +1461,21 @@
         "priceCalibHigh": 1.0,
         "priceCalibLow": 0.881,
         "methodFactors": {
-          "rhythm": 1.05,
           "fib": 1.4,
+          "rhythm": 1.05,
           "gann": 0.93
         },
         "famStats": {
+          "fib": {
+            "n": 4,
+            "hits": 2
+          },
           "hurst": {
             "n": 2,
             "hits": 0
           },
           "rhythm": {
             "n": 6,
-            "hits": 2
-          },
-          "fib": {
-            "n": 4,
             "hits": 2
           },
           "gann": {
@@ -2002,14 +2042,18 @@
         "priceCalibHigh": 1.15,
         "priceCalibLow": 0.999,
         "methodFactors": {
+          "fib": 0.9,
           "hurst": 0.5,
           "rhythm": 1.26,
-          "fib": 0.9,
           "gann": 0.99,
           "vibration": 1.3,
           "moon": 1.3
         },
         "famStats": {
+          "fib": {
+            "n": 21,
+            "hits": 3
+          },
           "hurst": {
             "n": 10,
             "hits": 0
@@ -2017,10 +2061,6 @@
           "rhythm": {
             "n": 27,
             "hits": 6
-          },
-          "fib": {
-            "n": 21,
-            "hits": 3
           },
           "gann": {
             "n": 19,
@@ -2593,21 +2633,21 @@
         "priceCalibHigh": 0.989,
         "priceCalibLow": 0.975,
         "methodFactors": {
-          "hurst": 1.3,
           "fib": 1.05,
+          "hurst": 1.3,
           "rhythm": 1.46,
           "gann": 0.81,
           "vibration": 2.0,
           "moon": 1.46
         },
         "famStats": {
-          "hurst": {
-            "n": 16,
-            "hits": 7
-          },
           "fib": {
             "n": 12,
             "hits": 4
+          },
+          "hurst": {
+            "n": 16,
+            "hits": 7
           },
           "rhythm": {
             "n": 16,
@@ -3707,8 +3747,8 @@
         "priceCalibLow": 0.984,
         "methodFactors": {
           "gann": 1.37,
-          "hurst": 1.09,
           "fib": 0.94,
+          "hurst": 1.09,
           "rhythm": 0.67,
           "vibration": 0.88,
           "moon": 1.75
@@ -3718,13 +3758,13 @@
             "n": 14,
             "hits": 4
           },
-          "hurst": {
-            "n": 6,
-            "hits": 1
-          },
           "fib": {
             "n": 12,
             "hits": 2
+          },
+          "hurst": {
+            "n": 6,
+            "hits": 1
           },
           "rhythm": {
             "n": 11,
@@ -4592,20 +4632,20 @@
         "priceCalibHigh": 1.036,
         "priceCalibLow": 1.0,
         "methodFactors": {
-          "hurst": 1.33,
           "gann": 0.5,
+          "hurst": 1.33,
           "vibration": 1.11,
           "rhythm": 1.67,
           "fib": 1.6
         },
         "famStats": {
-          "hurst": {
-            "n": 7,
-            "hits": 2
-          },
           "gann": {
             "n": 8,
             "hits": 0
+          },
+          "hurst": {
+            "n": 7,
+            "hits": 2
           },
           "vibration": {
             "n": 16,
@@ -4671,7 +4711,7 @@
   "timing": {
     "version": "daily-close-turns-v1",
     "forwardStart": "2026-09-24T00:00:00-04:00",
-    "reviewedAt": "2026-09-29T22:20:24.345582+00:00",
+    "reviewedAt": "2026-09-30T10:09:58.760487+00:00",
     "unit": "trading sessions",
     "tickers": {
       "TSLA": {
@@ -4716,21 +4756,21 @@
         "excludedCount": 0,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 1,
           "missedTurns": 1,
           "caughtTurns": 0
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 1,
           "missedTurns": 1,
           "caughtTurns": 0
         },
         "forwardCoverage": {
           "fromExclusive": "2026-09-24",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -4890,31 +4930,31 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-28"
+        "lastClosedSession": "2026-09-29"
       },
       "HOOD": {
         "summary": {
-          "scored": 7,
+          "scored": 8,
           "hits": 2,
-          "falseAlarms": 5,
-          "hitRatePct": 28.6,
+          "falseAlarms": 6,
+          "hitRatePct": 25.0,
           "medianAbsErrorSessions": 0.5,
           "early": 0,
           "late": 1,
           "exact": 1
         },
-        "chanceHitPct": 30.8,
+        "chanceHitPct": 28.5,
         "useVerdict": {
           "status": "unproven",
           "needed": 20,
-          "scored": 7,
+          "scored": 8,
           "lowerBoundPct": null
         },
         "historicalAudit": {
-          "scored": 7,
+          "scored": 8,
           "hits": 2,
-          "falseAlarms": 5,
-          "hitRatePct": 28.6,
+          "falseAlarms": 6,
+          "hitRatePct": 25.0,
           "medianAbsErrorSessions": 0.5,
           "early": 0,
           "late": 1,
@@ -4930,25 +4970,25 @@
           "late": 0,
           "exact": 0
         },
-        "pending": 22,
+        "pending": 21,
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 2,
           "missedTurns": 1,
           "caughtTurns": 1
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 2,
           "missedTurns": 1,
           "caughtTurns": 1
         },
         "forwardCoverage": {
           "fromExclusive": "2026-09-25",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -4977,6 +5017,20 @@
             "methods": [
               "Rhythm 9-bar",
               "Fib 55 bars from high 07/06"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
+          },
+          {
+            "snapshotId": "66c0143c9282a644d4c4b1fef1464a291d75d59edaa8ac2bd477ad7b1d9bfa14",
+            "targetDate": "2026-09-23",
+            "type": "low",
+            "recordedAt": "2026-09-08T01:17:42.161085+00:00",
+            "methods": [
+              "Gann 90 days from low 06/25"
             ],
             "cohort": "historicalAudit",
             "status": "falseAlarm",
@@ -5085,9 +5139,9 @@
         ],
         "methodTags": {
           "Gann": {
-            "scored": 1,
+            "scored": 2,
             "hits": 0,
-            "falseAlarms": 1,
+            "falseAlarms": 2,
             "hitRatePct": 0.0,
             "medianAbsErrorSessions": null,
             "early": 0,
@@ -5135,7 +5189,7 @@
             "exact": 1
           }
         },
-        "lastClosedSession": "2026-09-28"
+        "lastClosedSession": "2026-09-29"
       },
       "QQQ": {
         "summary": {
@@ -5179,21 +5233,21 @@
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 2,
           "missedTurns": 1,
           "caughtTurns": 1
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 2,
           "missedTurns": 1,
           "caughtTurns": 1
         },
         "forwardCoverage": {
           "fromExclusive": "2026-09-25",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -5411,34 +5465,34 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-28"
+        "lastClosedSession": "2026-09-29"
       },
       "JPM": {
         "summary": {
-          "scored": 11,
-          "hits": 3,
-          "falseAlarms": 8,
-          "hitRatePct": 27.3,
-          "medianAbsErrorSessions": 2,
+          "scored": 13,
+          "hits": 4,
+          "falseAlarms": 9,
+          "hitRatePct": 30.8,
+          "medianAbsErrorSessions": 2.0,
           "early": 3,
-          "late": 0,
+          "late": 1,
           "exact": 0
         },
-        "chanceHitPct": 31.2,
+        "chanceHitPct": 29.6,
         "useVerdict": {
           "status": "unproven",
           "needed": 20,
-          "scored": 11,
+          "scored": 13,
           "lowerBoundPct": null
         },
         "historicalAudit": {
-          "scored": 11,
-          "hits": 3,
-          "falseAlarms": 8,
-          "hitRatePct": 27.3,
-          "medianAbsErrorSessions": 2,
+          "scored": 13,
+          "hits": 4,
+          "falseAlarms": 9,
+          "hitRatePct": 30.8,
+          "medianAbsErrorSessions": 2.0,
           "early": 3,
-          "late": 0,
+          "late": 1,
           "exact": 0
         },
         "forward": {
@@ -5455,21 +5509,21 @@
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
-          "turns": 3,
+          "through": "2026-09-21",
+          "turns": 4,
           "missedTurns": 1,
-          "caughtTurns": 2
+          "caughtTurns": 3
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
-          "turns": 3,
+          "through": "2026-09-21",
+          "turns": 4,
           "missedTurns": 1,
-          "caughtTurns": 2
+          "caughtTurns": 3
         },
         "forwardCoverage": {
           "fromExclusive": "2026-09-24",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -5546,6 +5600,21 @@
             "actualDate": null,
             "confirmedDate": null,
             "errorSessions": null
+          },
+          {
+            "snapshotId": "0690913079f7c210fb44c7c19c1731e90e585a980f6cfd1bc9a4696072f62014",
+            "targetDate": "2026-09-23",
+            "type": "high",
+            "recordedAt": "2026-09-10T14:04:17.729426+00:00",
+            "methods": [
+              "Rhythm 8-bar",
+              "Gann 180 days from low 03/27"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-21",
+            "confirmedDate": "2026-09-23",
+            "errorSessions": 2
           },
           {
             "snapshotId": "a356512dbcb547dbcffdea05934a6358cab4f905ff7b1d442a3d0cb496538887",
@@ -5634,6 +5703,22 @@
             "actualDate": null,
             "confirmedDate": null,
             "errorSessions": null
+          },
+          {
+            "snapshotId": "384ea61c83ad3eb83446b188875825dfd160656f5e533df12c8a7958dd72f57c",
+            "targetDate": "2026-09-23",
+            "type": "low",
+            "recordedAt": "2026-09-22T13:47:20.235758+00:00",
+            "methods": [
+              "Rhythm 9-bar",
+              "Hurst 20-day trough",
+              "Cycle 37d crest (Goertzel)"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
           }
         ],
         "excluded": [
@@ -5659,23 +5744,23 @@
         ],
         "methodTags": {
           "Gann": {
-            "scored": 3,
-            "hits": 0,
+            "scored": 4,
+            "hits": 1,
             "falseAlarms": 3,
-            "hitRatePct": 0.0,
-            "medianAbsErrorSessions": null,
+            "hitRatePct": 25.0,
+            "medianAbsErrorSessions": 2,
             "early": 0,
-            "late": 0,
+            "late": 1,
             "exact": 0
           },
           "Hurst / rhythm": {
-            "scored": 10,
-            "hits": 2,
-            "falseAlarms": 8,
-            "hitRatePct": 20.0,
-            "medianAbsErrorSessions": 2.0,
+            "scored": 12,
+            "hits": 3,
+            "falseAlarms": 9,
+            "hitRatePct": 25.0,
+            "medianAbsErrorSessions": 2,
             "early": 2,
-            "late": 0,
+            "late": 1,
             "exact": 0
           },
           "Fibonacci": {
@@ -5699,17 +5784,17 @@
             "exact": 0
           },
           "Other cycles": {
-            "scored": 0,
+            "scored": 1,
             "hits": 0,
-            "falseAlarms": 0,
-            "hitRatePct": null,
+            "falseAlarms": 1,
+            "hitRatePct": 0.0,
             "medianAbsErrorSessions": null,
             "early": 0,
             "late": 0,
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-28"
+        "lastClosedSession": "2026-09-29"
       },
       "GOOGL": {
         "summary": {
@@ -5753,21 +5838,21 @@
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
-          "turns": 3,
+          "through": "2026-09-21",
+          "turns": 4,
           "missedTurns": 1,
-          "caughtTurns": 2
+          "caughtTurns": 3
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
-          "turns": 3,
+          "through": "2026-09-21",
+          "turns": 4,
           "missedTurns": 1,
-          "caughtTurns": 2
+          "caughtTurns": 3
         },
         "forwardCoverage": {
           "fromExclusive": null,
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -5940,35 +6025,35 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-28"
+        "lastClosedSession": "2026-09-29"
       },
       "NVDA": {
         "summary": {
-          "scored": 8,
+          "scored": 9,
           "hits": 3,
-          "falseAlarms": 5,
-          "hitRatePct": 37.5,
+          "falseAlarms": 6,
+          "hitRatePct": 33.3,
           "medianAbsErrorSessions": 2,
           "early": 2,
-          "late": 0,
-          "exact": 1
+          "late": 1,
+          "exact": 0
         },
-        "chanceHitPct": 22.2,
+        "chanceHitPct": 25.0,
         "useVerdict": {
           "status": "unproven",
           "needed": 20,
-          "scored": 8,
+          "scored": 9,
           "lowerBoundPct": null
         },
         "historicalAudit": {
-          "scored": 8,
+          "scored": 9,
           "hits": 3,
-          "falseAlarms": 5,
-          "hitRatePct": 37.5,
+          "falseAlarms": 6,
+          "hitRatePct": 33.3,
           "medianAbsErrorSessions": 2,
           "early": 2,
-          "late": 0,
-          "exact": 1
+          "late": 1,
+          "exact": 0
         },
         "forward": {
           "scored": 0,
@@ -5984,21 +6069,21 @@
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 1,
           "missedTurns": 0,
           "caughtTurns": 1
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 1,
           "missedTurns": 0,
           "caughtTurns": 1
         },
         "forwardCoverage": {
           "fromExclusive": "2026-09-24",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -6018,6 +6103,21 @@
             "actualDate": "2026-09-14",
             "confirmedDate": "2026-09-16",
             "errorSessions": -2
+          },
+          {
+            "snapshotId": "9b87f27e97f3e0f96138df3257896afa85f49dd248db64305309f57109e25ad8",
+            "targetDate": "2026-09-23",
+            "type": "high",
+            "recordedAt": "2026-09-07T15:13:48.236068+00:00",
+            "methods": [
+              "Hurst 20-day trough",
+              "Cycle 15d crest (Goertzel)"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-22",
+            "confirmedDate": "2026-09-24",
+            "errorSessions": 1
           },
           {
             "snapshotId": "cedffb3706e34bf8ee964c1deb3d60f94a4f41a26526ddca4472dcdd0dd08eac",
@@ -6105,10 +6205,10 @@
               "Vibe: Numerology day 5"
             ],
             "cohort": "historicalAudit",
-            "status": "hit",
-            "actualDate": "2026-09-22",
-            "confirmedDate": "2026-09-24",
-            "errorSessions": 0
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
           },
           {
             "snapshotId": "8837891e5b532f918ea885ac7af3c1d5652978c4a6345859b7b8e185bb92587b",
@@ -6152,14 +6252,14 @@
             "exact": 0
           },
           "Hurst / rhythm": {
-            "scored": 7,
+            "scored": 8,
             "hits": 2,
-            "falseAlarms": 5,
-            "hitRatePct": 28.6,
-            "medianAbsErrorSessions": 1.0,
+            "falseAlarms": 6,
+            "hitRatePct": 25.0,
+            "medianAbsErrorSessions": 1.5,
             "early": 1,
-            "late": 0,
-            "exact": 1
+            "late": 1,
+            "exact": 0
           },
           "Fibonacci": {
             "scored": 2,
@@ -6173,26 +6273,26 @@
           },
           "Astro / vibration": {
             "scored": 4,
-            "hits": 3,
-            "falseAlarms": 1,
-            "hitRatePct": 75.0,
-            "medianAbsErrorSessions": 2,
+            "hits": 2,
+            "falseAlarms": 2,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 2.0,
             "early": 2,
             "late": 0,
-            "exact": 1
+            "exact": 0
           },
           "Other cycles": {
-            "scored": 0,
-            "hits": 0,
+            "scored": 1,
+            "hits": 1,
             "falseAlarms": 0,
-            "hitRatePct": null,
-            "medianAbsErrorSessions": null,
+            "hitRatePct": 100.0,
+            "medianAbsErrorSessions": 1,
             "early": 0,
-            "late": 0,
+            "late": 1,
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-28"
+        "lastClosedSession": "2026-09-29"
       },
       "AMZN": {
         "summary": {
@@ -6236,21 +6336,21 @@
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
-          "turns": 3,
+          "through": "2026-09-21",
+          "turns": 4,
           "missedTurns": 0,
-          "caughtTurns": 3
+          "caughtTurns": 4
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
-          "turns": 3,
+          "through": "2026-09-21",
+          "turns": 4,
           "missedTurns": 0,
-          "caughtTurns": 3
+          "caughtTurns": 4
         },
         "forwardCoverage": {
           "fromExclusive": "2026-09-24",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -6456,7 +6556,7 @@
             "exact": 1
           }
         },
-        "lastClosedSession": "2026-09-28"
+        "lastClosedSession": "2026-09-29"
       },
       "SPY": {
         "summary": {
@@ -6500,21 +6600,21 @@
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
-          "turns": 3,
+          "through": "2026-09-21",
+          "turns": 4,
           "missedTurns": 0,
-          "caughtTurns": 3
+          "caughtTurns": 4
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
-          "turns": 3,
+          "through": "2026-09-21",
+          "turns": 4,
           "missedTurns": 0,
-          "caughtTurns": 3
+          "caughtTurns": 4
         },
         "forwardCoverage": {
           "fromExclusive": "2026-09-24",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -6730,33 +6830,33 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-28"
+        "lastClosedSession": "2026-09-29"
       },
       "VOO": {
         "summary": {
-          "scored": 8,
-          "hits": 3,
+          "scored": 9,
+          "hits": 4,
           "falseAlarms": 5,
-          "hitRatePct": 37.5,
-          "medianAbsErrorSessions": 2,
-          "early": 2,
+          "hitRatePct": 44.4,
+          "medianAbsErrorSessions": 2.0,
+          "early": 3,
           "late": 1,
           "exact": 0
         },
-        "chanceHitPct": 31.0,
+        "chanceHitPct": 28.6,
         "useVerdict": {
           "status": "unproven",
           "needed": 20,
-          "scored": 8,
+          "scored": 9,
           "lowerBoundPct": null
         },
         "historicalAudit": {
-          "scored": 8,
-          "hits": 3,
+          "scored": 9,
+          "hits": 4,
           "falseAlarms": 5,
-          "hitRatePct": 37.5,
-          "medianAbsErrorSessions": 2,
-          "early": 2,
+          "hitRatePct": 44.4,
+          "medianAbsErrorSessions": 2.0,
+          "early": 3,
           "late": 1,
           "exact": 0
         },
@@ -6770,25 +6870,25 @@
           "late": 0,
           "exact": 0
         },
-        "pending": 24,
+        "pending": 23,
         "excludedCount": 1,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 3,
           "missedTurns": 0,
           "caughtTurns": 3
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 3,
           "missedTurns": 0,
           "caughtTurns": 3
         },
         "forwardCoverage": {
           "fromExclusive": "2026-09-24",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -6907,6 +7007,20 @@
             "actualDate": null,
             "confirmedDate": null,
             "errorSessions": null
+          },
+          {
+            "snapshotId": "2cc9ad220cdb3847e973ce75549bef30abcfb01bcd34bdcc624221f63024003a",
+            "targetDate": "2026-09-23",
+            "type": "high",
+            "recordedAt": "2026-09-22T10:14:50.108417+00:00",
+            "methods": [
+              "Rhythm 14-bar"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-25",
+            "confirmedDate": "2026-09-29",
+            "errorSessions": -2
           }
         ],
         "excluded": [
@@ -6935,12 +7049,12 @@
             "exact": 0
           },
           "Hurst / rhythm": {
-            "scored": 7,
-            "hits": 3,
+            "scored": 8,
+            "hits": 4,
             "falseAlarms": 4,
-            "hitRatePct": 42.9,
-            "medianAbsErrorSessions": 2,
-            "early": 2,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 2.0,
+            "early": 3,
             "late": 1,
             "exact": 0
           },
@@ -6975,34 +7089,34 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-28"
+        "lastClosedSession": "2026-09-29"
       },
       "GC=F": {
         "summary": {
-          "scored": 3,
-          "hits": 1,
-          "falseAlarms": 2,
-          "hitRatePct": 33.3,
-          "medianAbsErrorSessions": 1,
-          "early": 1,
-          "late": 0,
+          "scored": 6,
+          "hits": 3,
+          "falseAlarms": 3,
+          "hitRatePct": 50.0,
+          "medianAbsErrorSessions": 2,
+          "early": 2,
+          "late": 1,
           "exact": 0
         },
-        "chanceHitPct": 33.3,
+        "chanceHitPct": 26.8,
         "useVerdict": {
           "status": "unproven",
           "needed": 20,
-          "scored": 3,
+          "scored": 6,
           "lowerBoundPct": null
         },
         "historicalAudit": {
-          "scored": 3,
-          "hits": 1,
-          "falseAlarms": 2,
-          "hitRatePct": 33.3,
-          "medianAbsErrorSessions": 1,
-          "early": 1,
-          "late": 0,
+          "scored": 6,
+          "hits": 3,
+          "falseAlarms": 3,
+          "hitRatePct": 50.0,
+          "medianAbsErrorSessions": 2,
+          "early": 2,
+          "late": 1,
           "exact": 0
         },
         "forward": {
@@ -7015,25 +7129,25 @@
           "late": 0,
           "exact": 0
         },
-        "pending": 34,
+        "pending": 32,
         "excludedCount": 0,
         "coverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-17",
-          "turns": 1,
+          "through": "2026-09-21",
+          "turns": 2,
           "missedTurns": 0,
-          "caughtTurns": 1
+          "caughtTurns": 2
         },
         "historicalCoverage": {
           "fromExclusive": "2026-09-07",
-          "through": "2026-09-17",
-          "turns": 1,
+          "through": "2026-09-21",
+          "turns": 2,
           "missedTurns": 0,
-          "caughtTurns": 1
+          "caughtTurns": 2
         },
         "forwardCoverage": {
           "fromExclusive": "2026-09-25",
-          "through": "2026-09-17",
+          "through": "2026-09-21",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -7055,6 +7169,22 @@
             "actualDate": "2026-09-15",
             "confirmedDate": "2026-09-17",
             "errorSessions": -1
+          },
+          {
+            "snapshotId": "e8a996b2b18141c871ff949421a7415b061c4a995e47a6a23081cbad616387d8",
+            "targetDate": "2026-09-22",
+            "type": "high",
+            "recordedAt": "2026-09-13T22:22:37.251190+00:00",
+            "methods": [
+              "Fib 21 bars from high 08/24",
+              "Vibe: Helio Uranus sextile Neptune",
+              "Vibe: Moon 9th-harmonic Saturn"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-18",
+            "confirmedDate": "2026-09-22",
+            "errorSessions": 2
           },
           {
             "snapshotId": "ee3cbe03235b156f5d1ab19466bc1be00c6830545b77d2233e3512b56f76ac82",
@@ -7087,49 +7217,83 @@
             "actualDate": null,
             "confirmedDate": null,
             "errorSessions": null
+          },
+          {
+            "snapshotId": "93eb1496b14c8fd70fd988f47f59abf02ce860b5bcfed70537460df0d623a408",
+            "targetDate": "2026-09-23",
+            "type": "high",
+            "recordedAt": "2026-09-16T12:16:19.477009+00:00",
+            "methods": [
+              "Gann 30 days from high 08/24",
+              "Fib 21 bars from high 08/24",
+              "Hurst 10-day crest",
+              "Vibe: Helio Uranus sextile Neptune"
+            ],
+            "cohort": "historicalAudit",
+            "status": "hit",
+            "actualDate": "2026-09-25",
+            "confirmedDate": "2026-09-29",
+            "errorSessions": -2
+          },
+          {
+            "snapshotId": "71fdae1b7fefcfb5f6343f80b3c88fff046776821aea55185cda3efd59367a2c",
+            "targetDate": "2026-09-23",
+            "type": "low",
+            "recordedAt": "2026-09-22T10:50:43.752426+00:00",
+            "methods": [
+              "Rhythm 14-bar",
+              "Gann 30 days from high 08/24",
+              "Fib 21 bars from high 08/24",
+              "Vibe: Helio Uranus sextile Neptune"
+            ],
+            "cohort": "historicalAudit",
+            "status": "falseAlarm",
+            "actualDate": null,
+            "confirmedDate": null,
+            "errorSessions": null
           }
         ],
         "excluded": [],
         "missed": [],
         "methodTags": {
           "Gann": {
-            "scored": 1,
-            "hits": 1,
-            "falseAlarms": 0,
-            "hitRatePct": 100.0,
-            "medianAbsErrorSessions": 1,
-            "early": 1,
+            "scored": 3,
+            "hits": 2,
+            "falseAlarms": 1,
+            "hitRatePct": 66.7,
+            "medianAbsErrorSessions": 1.5,
+            "early": 2,
             "late": 0,
             "exact": 0
           },
           "Hurst / rhythm": {
-            "scored": 3,
-            "hits": 1,
-            "falseAlarms": 2,
-            "hitRatePct": 33.3,
-            "medianAbsErrorSessions": 1,
-            "early": 1,
+            "scored": 5,
+            "hits": 2,
+            "falseAlarms": 3,
+            "hitRatePct": 40.0,
+            "medianAbsErrorSessions": 1.5,
+            "early": 2,
             "late": 0,
             "exact": 0
           },
           "Fibonacci": {
-            "scored": 0,
-            "hits": 0,
-            "falseAlarms": 0,
-            "hitRatePct": null,
-            "medianAbsErrorSessions": null,
-            "early": 0,
-            "late": 0,
+            "scored": 3,
+            "hits": 2,
+            "falseAlarms": 1,
+            "hitRatePct": 66.7,
+            "medianAbsErrorSessions": 2.0,
+            "early": 1,
+            "late": 1,
             "exact": 0
           },
           "Astro / vibration": {
-            "scored": 3,
-            "hits": 1,
-            "falseAlarms": 2,
-            "hitRatePct": 33.3,
-            "medianAbsErrorSessions": 1,
-            "early": 1,
-            "late": 0,
+            "scored": 6,
+            "hits": 3,
+            "falseAlarms": 3,
+            "hitRatePct": 50.0,
+            "medianAbsErrorSessions": 2,
+            "early": 2,
+            "late": 1,
             "exact": 0
           },
           "Other cycles": {
@@ -7143,7 +7307,7 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-25"
+        "lastClosedSession": "2026-09-29"
       },
       "META": {
         "summary": {
@@ -7187,21 +7351,21 @@
         "excludedCount": 0,
         "coverage": {
           "fromExclusive": "2026-09-28",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
         },
         "historicalCoverage": {
           "fromExclusive": null,
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
         },
         "forwardCoverage": {
           "fromExclusive": "2026-09-28",
-          "through": "2026-09-18",
+          "through": "2026-09-21",
           "turns": 0,
           "missedTurns": 0,
           "caughtTurns": 0
@@ -7261,7 +7425,7 @@
             "exact": 0
           }
         },
-        "lastClosedSession": "2026-09-28"
+        "lastClosedSession": "2026-09-29"
       }
     },
     "method": "First logged future-date call per ticker/date/type; strict five-session daily-close high/low; \u00b12 sessions; two later closed bars confirm. One turn credits one call, earliest-issued first; historical-audit and forward cohorts are matched and covered independently (the combined summary uses one global matching). Error = called session minus actual session (negative = early).",
