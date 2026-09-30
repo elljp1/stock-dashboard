@@ -570,6 +570,44 @@
       "shortDelta": 0.288,
       "spotAtPlacement": 122.56,
       "note": "Covered by 700 HOOD shares in the same account, so no naked risk; 200 shares are committed if HOOD closes above 140 on 10/23. Limit 5.00 sits ~1.10 above the 3.90 mark, so it needs HOOD near 127-128 to fill. Not part of the Agentic spread P&L."
+    },
+    {
+      "order": "sell to open TSLA $330 put 10/30 x2",
+      "limit": 10.0,
+      "tif": "gtc",
+      "status": "filled",
+      "placed": "2026-09-30T09:43 ET",
+      "filled": "2026-09-30T09:44 ET",
+      "fillPrice": 10.0,
+      "breakeven": 320,
+      "shortDelta": -0.32,
+      "spotAtFill": 347.1,
+      "placedAgent": "user",
+      "account": "Individual ••••8549",
+      "quantity": 2,
+      "premium": 2000,
+      "collateral": 66000,
+      "orderId": "6abd11e8-be54-4463-a497-c2be74507e35",
+      "note": "Cash-secured short put placed by the user. App projects a TSLA low near 304 on 10/12, and TSLA earnings 10/21 fall before the 10/30 expiry. Not part of the Agentic spread P&L."
+    },
+    {
+      "order": "sell to open TSLA $330 put 10/30 x3",
+      "limit": 10.0,
+      "tif": "gtc",
+      "status": "filled",
+      "placed": "2026-09-30T09:43 ET",
+      "filled": "2026-09-30T09:44 ET",
+      "fillPrice": 10.0,
+      "breakeven": 320,
+      "shortDelta": -0.32,
+      "spotAtFill": 347.1,
+      "placedAgent": "user",
+      "account": "Joint ••••6540",
+      "quantity": 3,
+      "premium": 3000,
+      "collateral": 99000,
+      "orderId": "6abd1216-c3bd-4944-a808-7934416ad5d7",
+      "note": "Same trade as Individual (5 contracts total, 500 shares of assignment risk across both accounts). Not part of the Agentic spread P&L."
     }
   ],
   "alerts": {
@@ -972,14 +1010,14 @@
         "entryTurnDate": "2026-10-01",
         "entryTurnTime": "Saturn 12:45-1:44 PM; Jupiter 1:44-2:42 PM",
         "entryTurnPrice": 749.85,
-        "turnDate": "2026-10-14",
-        "turnTime": "Saturn 9:30-9:53 AM; Saturn 3:29-4:00 PM",
-        "turnPrice": 714.87,
-        "plannedExit": "close at the 10/14 projected low or at 50% of credit ($1.10); stop $4.40 debit or 760 breached",
+        "turnDate": "2026-10-12",
+        "turnTime": "Saturn 2:34-3:31 PM",
+        "turnPrice": 719.91,
+        "plannedExit": "close at the 10/12 projected low or at 50% of credit ($1.10); stop $4.40 debit or 760 breached",
         "taken": false,
         "reason": "pushed; awaiting user",
         "outcome": "pending",
-        "note": "765 (delta 0.21) gave 765/775 at 1.635 (0.16 of width), so tested the next strike closer: 760 (delta 0.27) 4.28 (4.26/4.30), 770 2.04, credit/width 0.224, OI 81,823. 1 contract = 7.1% (2 would be 14.1%, over the 13% cap); total open risk with QQQ trade 7 would be 21.6%. Same direction as trade 7 (both bearish QQQ)."
+        "note": "765 (delta 0.21) gave 765/775 at 1.635 (0.16 of width), so tested the next strike closer: 760 (delta 0.27) 4.28 (4.26/4.30), 770 2.04, credit/width 0.224, OI 81,823. 1 contract = 7.1% (2 would be 14.1%, over the 13% cap); total open risk with QQQ trade 7 would be 21.6%. Same direction as trade 7 (both bearish QQQ). 9:47am refresh moved the exit low from 10/14 (714.87) to 10/12 (719.91); 10/16 expiry still 2+ trading days after it."
       }
     ]
   }
