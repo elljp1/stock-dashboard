@@ -68,7 +68,8 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 17 | 9/25 9:34am | GOOGL 10/09 360/365 call (timing: leg down to 10/07 low) | $1.05 (limit $1.05, 2x) | Pushed, open | pending |
 | 18 | 9/28 3:06pm | GOOGL 10/09 355/360 call (timing: leg down to 10/07 low) | $1.02 (limit $1.00, 2x) | Pushed, open | pending |
 | 19 | 9/29 3:05pm | META 10/23 790/800 call (timing: leg down to 10/19 low) | $2.00 (limit $2.00, 1x) | Pushed, open | pending |
-| 20 | 9/30 9:35am | QQQ 10/16 760/770 call (timing: place at the 10/01 high, leg down to 10/12 low, moved from 10/14) | $2.24 (limit $2.20, 1x) | Pushed, open | pending |
+| 20 | 9/30 9:35am | QQQ 10/16 760/770 call (timing: place at the 10/01 high, leg down to 10/14 low) | $2.24 (limit $2.20, 1x) | Pushed, open | pending |
+| 21 | 10/1 9:47am | HOOD 10/23 103/98 put (timing: place at the 10/02 low, leg up to 10/19 high) | $1.03 (limit $1.00, 3x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
