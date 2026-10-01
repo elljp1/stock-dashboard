@@ -2557,3 +2557,53 @@ anything about it changes.
 account's credentials); whether HOOD/GOOGL/JPM's hit rates ever break their long-running teens-to-
 twenties band; whether the three pending alerts (#18 GOOGL, #19 META, #20 QQQ) get resolved; and
 whether this session's own fetch step gets un-blocked by its network policy tomorrow.
+
+## 2026-10-01 (Thu) — grade + log only; no code change
+
+**Build status:** this session's own `fetch_data.py` run was blocked again today — all 11 tickers
+and pre/post prices failed with a `403` from this sandbox's own network proxy, not from Yahoo
+itself, so there was nothing new to fetch locally. It didn't matter for the live site: the separate
+cloud refresh workflow had already run today and `data.js` is stamped generated 10/01 5:45 PM ET
+across all 11 tickers. `coherence_check.py` passes cleanly on that build (11/11 tickers), the deeper
+cross-check `anomaly_audit.py` found no inconsistencies between the forecast chain, period extremes,
+levels, and trade cards, and the full test suite (`python -m unittest discover`) passes all 90 tests.
+
+**Grades reviewed:** swing-prediction hit rates are steady and inside their established bands: TSLA
+n=12 (33%/42%), HOOD n=52 (19%/29%), QQQ n=40 (32%/38%, still the strongest name), JPM n=26
+(15%/23%), GOOGL n=34 (21%/24%), GC=F n=18 (22%/22%). NVDA/AMZN/SPY/VOO are still at n=0 graded
+swing predictions (going on ~2 months for NVDA/AMZN, ~6 months of quiet price action for SPY/VOO
+before that) — confirmed this is because their zigzag swing detector genuinely hasn't formed a new
+qualifying turn since early August (NVDA/AMZN) or March (SPY/VOO), not a grading bug; these are just
+quiet, low-swing names right now. META (added 9/28) still n=0, three days old, too new to grade.
+Day-ahead high/low calibration factors are all within a few percent of 1.0 on every ticker. One
+number worth a note: HOOD's longer-horizon swing-price calibration (`priceCalibHigh`) is sitting at
+1.15, the top of its allowed adjustment range — HOOD's predicted swing highs have been running
+meaningfully below where price actually turns. The system is already correcting for this
+automatically (that's what the calibration multiplier is for); watching whether it keeps pressing
+against that ceiling, which would be the first clear case of a pattern worth loosening the clamp for.
+
+**Trade cards / paper journal:** several new HOOD and QQQ alerts today (#21, #22, #23) — all still
+pending the owner's decision. Two of today's alerts (#20 QQQ, #21 HOOD) were auto-voided intraday
+when the underlying forecast's next turn flipped before they could be acted on (QQQ's 10/02 call
+flipped between high and low five times today per the app's own revision log) — this is the existing
+stability-tracking feature working as designed, openly logged, not a bug. No account numbers appear
+in today's new entries (spot-checked directly, as always).
+
+**What changed and why:** no code change — grades sit inside their established bands, coherence and
+the full test suite both pass clean, and today's only failure (this session's own fetch being denied
+by its sandbox egress policy) is an environment condition, not a dashboard bug. Honesty features
+(measured hit rates, random-control comparisons, self-grading, the coherence gate) are untouched;
+`tickers.txt` wasn't touched.
+
+**The git-history account-number exposure — re-confirmed, still unresolved, no new notification
+sent:** had a sub-agent re-verify directly against GitHub's history today. The raw account number is
+still retrievable from several commits dated 9/15–9/16 (still reachable from `main`'s current tip);
+today's live `spread_journal.json` is still correctly masked. This is unchanged since the direct
+notification sent 9/29, so today's entry records the re-check without repeating the alert, per the
+plan to escalate again only after it sits for several more days or something changes.
+
+**Watch next:** whether the owner authorizes the history rewrite (and considers rotating the exposed
+account's credentials) — will re-escalate directly if this stretches much further past 9/29; whether
+HOOD's swing-price calibration keeps pressing against its 1.15 ceiling; whether NVDA/AMZN/SPY/VOO
+ever produce a qualifying swing to grade; and whether today's pending alerts (#18 GOOGL, #19 META,
+#21/#22 HOOD, #23 QQQ) get resolved.
