@@ -1094,8 +1094,8 @@
         "plannedExit": "close at the 10/19 projected high or at 50% of credit ($0.50); stop $2.00 debit or 103 breached",
         "taken": false,
         "reason": "pushed; awaiting user",
-        "outcome": "pending",
-        "note": "102 (delta -0.20) gave 102/97 at 0.94 (0.19 of width), so tested the next strike closer: 103 (delta -0.22) 2.155 (2.05/2.26), 98 1.13, credit/width 0.205, OI 654. 103 is 3.1% below the 10/02 projected low 106.28. Expiry 10/23 is before 11/04 earnings. 3 contracts = 10.9%; with QQQ trade 7 ($1,600) total open risk would be 25.4%, past the 25% cap (2 contracts keeps it at 21.8%)."
+        "outcome": "void",
+        "note": "102 (delta -0.20) gave 102/97 at 0.94 (0.19 of width), so tested the next strike closer: 103 (delta -0.22) 2.155 (2.05/2.26), 98 1.13, credit/width 0.205, OI 654. 103 is 3.1% below the 10/02 projected low 106.28. Expiry 10/23 is before 11/04 earnings. 3 contracts = 10.9%; with QQQ trade 7 ($1,600) total open risk would be 25.4%, past the 25% cap (2 contracts keeps it at 21.8%). VOID 10/1 2:34pm ET: app lowered the 10/02 HOOD low to 103.97, so the short put must be at or below 100 (3% rule); 100/95 is only 0.16 of width."
       },
       {
         "id": 22,
@@ -1120,8 +1120,34 @@
         "plannedExit": "close at the 10/19 projected high or at 50% of credit ($0.58); stop $2.30 debit or 103 breached",
         "taken": false,
         "reason": "re-alert of #21: mid improved $0.16 (1.025 -> 1.185)",
+        "outcome": "void",
+        "note": "103 put 2.445 (2.39/2.50), 98 put 1.26; credit/width 0.237; OI 654. 3 contracts = 10.5%; with QQQ trade 7 total open risk 25.0% (2 contracts = 7.0%, 21.5% total). VOID 10/1 2:34pm ET: app lowered the 10/02 HOOD low to 103.97, so the short put must be at or below 100 (3% rule); 100/95 is only 0.16 of width."
+      },
+      {
+        "id": 23,
+        "date": "2026-10-01",
+        "time": "14:34 ET",
+        "symbol": "QQQ",
+        "spread": "10/16 760/770 call credit",
+        "midAtAlert": 2.28,
+        "suggestedLimit": 2.25,
+        "shortDelta": 0.273,
+        "spot": 742.72,
+        "contracts": 1,
+        "maxLoss": 775,
+        "breakeven": 762.25,
+        "legType": "next leg down (current leg up to 10/02 HIGH; resting GTC to place at the turn)",
+        "entryTurnDate": "2026-10-02",
+        "entryTurnTime": "Saturn 9:49-10:47 AM; Jupiter 10:47-11:46 AM",
+        "entryTurnPrice": 749.85,
+        "turnDate": "2026-10-14",
+        "turnTime": "Saturn 9:30-9:53 AM; Saturn 3:29-4:00 PM",
+        "turnPrice": 717.82,
+        "plannedExit": "close at the 10/14 projected low or at 50% of credit ($1.13); stop $4.50 debit or 760 breached",
+        "taken": false,
+        "reason": "pushed; awaiting user",
         "outcome": "pending",
-        "note": "103 put 2.445 (2.39/2.50), 98 put 1.26; credit/width 0.237; OI 654. 3 contracts = 10.5%; with QQQ trade 7 total open risk 25.0% (2 contracts = 7.0%, 21.5% total)."
+        "note": "765 ~0.21 delta; next strike closer 760 (0.273) 4.21 (4.20/4.22), 770 1.93; credit/width 0.228; OI 80,974. 1 contract = 7.0% (2 = 14.0%, over 13%); total open risk with trade 7 = 21.6%. The app flipped the 10/02 QQQ turn between high and low five times on 10/1; place only if the 10/02 turn is still a HIGH at the open. Same strikes as void alert 20 (9/30)."
       }
     ]
   }
