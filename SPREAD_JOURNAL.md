@@ -29,7 +29,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 2 | cancelled 9/12 5:34am ET (broker-side, never filled; placed 9/10 2:19pm) | GOOGL | 10/23 $310/$305 put credit spread x1 | $1.20 limit (mid $1.03) | $380 | $308.80 | 79% | 3.5% | $0.60 | | |
 | 3 | 9/16 11:34am | HOOD | 10/23 $100/$95 put credit spread x2 | $1.85 | $630 | $98.15 | 72% | 5.7% | $0.90 | 9/18 10:20am at $0.90 | **+$190** (30% on risk, 2 days) |
 | 6 | 9/23 11:27am | GOOGL | 10/23 $325/$320 put credit spread x3 | $1.25 | $1,125 | $323.75 | 76% | 10.2% | $1.20 GTC (replaced $0.60 9/24) | 9/24 12:41pm at $1.20 | **+$15** (break-even; exited against the app's leg) |
-| 7 | 9/24 3:53pm | QQQ | 10/23 $770/$780 call credit spread x2 | $2.00 | $1,600 | $772.00 | ~82% | 14.5% (user accepted) | plan 10/1: lower the $1.00 GTC (resting since 9/24) to $0.50; if unfilled, close at the 10/14 projected low; no hold past 10/14 (stop $4.00 / QQQ above $770) | | open |
+| 7 | 9/24 3:53pm | QQQ | 10/23 $770/$780 call credit spread x2 | $2.00 | $1,600 | $772.00 | ~82% | 14.5% (user accepted) | $1.00 GTC resting since 9/24; revised 10/1 10:34am: app now projects a 10/02 low then a 10/14 HIGH, so close at the 10/02 low (Saturn 9:49-10:47am) (stop $4.00 / QQQ above $770) | | open |
 
 ## Monthly results
 | Month | Start | Deposits | Realized P&L | Growth | Trades | W/L |
@@ -68,7 +68,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 17 | 9/25 9:34am | GOOGL 10/09 360/365 call (timing: leg down to 10/07 low) | $1.05 (limit $1.05, 2x) | Pushed, open | pending |
 | 18 | 9/28 3:06pm | GOOGL 10/09 355/360 call (timing: leg down to 10/07 low) | $1.02 (limit $1.00, 2x) | Pushed, open | pending |
 | 19 | 9/29 3:05pm | META 10/23 790/800 call (timing: leg down to 10/19 low) | $2.00 (limit $2.00, 1x) | Pushed, open | pending |
-| 20 | 9/30 9:35am | QQQ 10/16 760/770 call (timing: place at the 10/01 high, leg down to 10/14 low) | $2.24 (limit $2.20, 1x) | Pushed, open | pending |
+| 20 | 9/30 9:35am | QQQ 10/16 760/770 call (timing: place at the 10/01 high, leg down to 10/14 low) | $2.24 (limit $2.20, 1x) | Pushed, open | void (10/01 high removed by 10/1 refresh) |
 | 21 | 10/1 9:47am | HOOD 10/23 103/98 put (timing: place at the 10/02 low, leg up to 10/19 high) | $1.03 (limit $1.00, 3x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
