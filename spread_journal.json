@@ -529,7 +529,7 @@
           "replacedOn": "2026-09-28"
         }
       ],
-      "exitPlan": "Agreed with user 10/1 10:21am ET: replace the $1.00 GTC with $0.50 GTC (75%, +$300); if unfilled by the 10/14 projected low (Saturn 9:30-9:53am or 3:29-4:00pm, ~717.77), close at market then; do not hold past 10/14. Order change is the user's to make in the app (still $1.00 as of 10:21am). REVISED 10/1 10:34am ET: app refresh now projects a QQQ LOW on 10/02 (Saturn 9:49-10:47am, ~726.66) then a HIGH on 10/14 (~748.65). The 10/02 low is now the exit turn; close there (spread ~$1.50 at 10:34am) rather than wait for $0.50, since the next leg runs up against the call spread."
+      "exitPlan": "Agreed with user 10/1 10:21am ET: replace the $1.00 GTC with $0.50 GTC (75%, +$300); if unfilled by the 10/14 projected low (Saturn 9:30-9:53am or 3:29-4:00pm, ~717.77), close at market then; do not hold past 10/14. Order change is the user's to make in the app (still $1.00 as of 10:21am). REVISED 10/1 10:34am ET: app refresh now projects a QQQ LOW on 10/02 (Saturn 9:49-10:47am, ~726.66) then a HIGH on 10/14 (~748.65). The 10/02 low is now the exit turn; close there (spread ~$1.50 at 10:34am) rather than wait for $0.50, since the next leg runs up against the call spread. REVISED AGAIN 10/1 12:16pm ET: the app's 10/02 QQQ turn has flipped high/low several times today (high to 10:11am, low 10:25am, high 10:36-10:45am, low 11:10-11:46am, high 12:10pm). Latest: HIGH 10/02 (~749.85, Saturn 9:49-10:47am / Jupiter 10:47-11:46am) then LOW 10/14 (~717.6). Hold, keep the $1.00 GTC; do not act on the 10/02 label until it is stable. Every version keeps QQQ below the 770 short strike."
     }
   ],
   "otherAccountOrders": [
@@ -1096,6 +1096,32 @@
         "reason": "pushed; awaiting user",
         "outcome": "pending",
         "note": "102 (delta -0.20) gave 102/97 at 0.94 (0.19 of width), so tested the next strike closer: 103 (delta -0.22) 2.155 (2.05/2.26), 98 1.13, credit/width 0.205, OI 654. 103 is 3.1% below the 10/02 projected low 106.28. Expiry 10/23 is before 11/04 earnings. 3 contracts = 10.9%; with QQQ trade 7 ($1,600) total open risk would be 25.4%, past the 25% cap (2 contracts keeps it at 21.8%)."
+      },
+      {
+        "id": 22,
+        "date": "2026-10-01",
+        "time": "12:17 ET",
+        "symbol": "HOOD",
+        "spread": "10/23 103/98 put credit",
+        "midAtAlert": 1.185,
+        "suggestedLimit": 1.15,
+        "shortDelta": -0.252,
+        "spot": 111.44,
+        "contracts": 3,
+        "maxLoss": 1155,
+        "breakeven": 101.85,
+        "legType": "next leg up (current leg down to 10/02 LOW; resting GTC to place at the turn)",
+        "entryTurnDate": "2026-10-02",
+        "entryTurnTime": "Moon 9:30-9:49 AM; Sun 12:44-1:43 PM; Moon 3:40-4:00 PM",
+        "entryTurnPrice": 106.28,
+        "turnDate": "2026-10-19",
+        "turnTime": "Venus 11:45-12:40 PM; Saturn 2:30-3:25 PM",
+        "turnPrice": 129.28,
+        "plannedExit": "close at the 10/19 projected high or at 50% of credit ($0.58); stop $2.30 debit or 103 breached",
+        "taken": false,
+        "reason": "re-alert of #21: mid improved $0.16 (1.025 -> 1.185)",
+        "outcome": "pending",
+        "note": "103 put 2.445 (2.39/2.50), 98 put 1.26; credit/width 0.237; OI 654. 3 contracts = 10.5%; with QQQ trade 7 total open risk 25.0% (2 contracts = 7.0%, 21.5% total)."
       }
     ]
   }
