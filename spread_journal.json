@@ -1120,8 +1120,8 @@
         "plannedExit": "close at the 10/19 projected high or at 50% of credit ($0.58); stop $2.30 debit or 103 breached",
         "taken": false,
         "reason": "re-alert of #21: mid improved $0.16 (1.025 -> 1.185)",
-        "outcome": "pending",
-        "note": "103 put 2.445 (2.39/2.50), 98 put 1.26; credit/width 0.237; OI 654. 3 contracts = 10.5%; with QQQ trade 7 total open risk 25.0% (2 contracts = 7.0%, 21.5% total). VOID 10/1 2:34pm ET: app lowered the 10/02 HOOD low to 103.97, so the short put must be at or below 100 (3% rule); 100/95 is only 0.16 of width. REINSTATED 10/1 3:06pm ET: app moved the 10/02 HOOD low back to 106.28, so 103 clears the 3% rule again (mid 1.12 at 3:05pm)."
+        "outcome": "void",
+        "note": "103 put 2.445 (2.39/2.50), 98 put 1.26; credit/width 0.237; OI 654. 3 contracts = 10.5%; with QQQ trade 7 total open risk 25.0% (2 contracts = 7.0%, 21.5% total). VOID 10/1 2:34pm ET: app lowered the 10/02 HOOD low to 103.97, so the short put must be at or below 100 (3% rule); 100/95 is only 0.16 of width. REINSTATED 10/1 3:06pm ET: app moved the 10/02 HOOD low back to 106.28, so 103 clears the 3% rule again (mid 1.12 at 3:05pm). VOID 10/2 9:35am ET: app lowered the 10/02 low to 103.97 again (3% rule needs <=100) and HOOD gapped up to 117.49 at the open."
       },
       {
         "id": 23,
@@ -1146,8 +1146,31 @@
         "plannedExit": "close at the 10/14 projected low or at 50% of credit ($1.13); stop $4.50 debit or 760 breached",
         "taken": false,
         "reason": "pushed; awaiting user",
+        "outcome": "void",
+        "note": "765 ~0.21 delta; next strike closer 760 (0.273) 4.21 (4.20/4.22), 770 1.93; credit/width 0.228; OI 80,974. 1 contract = 7.0% (2 = 14.0%, over 13%); total open risk with trade 7 = 21.6%. The app flipped the 10/02 QQQ turn between high and low five times on 10/1; place only if the 10/02 turn is still a HIGH at the open. Same strikes as void alert 20 (9/30). VOID 10/2 9:35am ET: QQQ gapped to 749.99; 760 call now 0.37 delta (over 0.28). Nearest-0.20 770/780 10/16 is 1.765 (0.18 of width), so no qualifying place-at-the-turn spread."
+      },
+      {
+        "id": 24,
+        "date": "2026-10-02",
+        "time": "9:35 ET",
+        "symbol": "META",
+        "spread": "10/23 790/800 call credit",
+        "midAtAlert": 2.1,
+        "suggestedLimit": 2.05,
+        "shortDelta": 0.275,
+        "spot": 736.89,
+        "contracts": 1,
+        "maxLoss": 795,
+        "breakeven": 792.05,
+        "legType": "current leg down to 10/19 LOW",
+        "turnDate": "2026-10-19",
+        "turnTime": "Saturn 2:30-3:25 PM",
+        "turnPrice": 631.43,
+        "plannedExit": "close at the 10/19 projected low or at 50% of credit ($1.03); stop $4.10 debit or 790 breached",
+        "taken": false,
+        "reason": "pushed; awaiting user",
         "outcome": "pending",
-        "note": "765 ~0.21 delta; next strike closer 760 (0.273) 4.21 (4.20/4.22), 770 1.93; credit/width 0.228; OI 80,974. 1 contract = 7.0% (2 = 14.0%, over 13%); total open risk with trade 7 = 21.6%. The app flipped the 10/02 QQQ turn between high and low five times on 10/1; place only if the 10/02 turn is still a HIGH at the open. Same strikes as void alert 20 (9/30)."
+        "note": "800 (0.19 delta) nearest 0.20; next strike closer 790 (0.275) 10.375 (10.10/10.65), 800 8.275; credit/width 0.21; OI 764. Expiry 10/23 before 10/28 earnings. 1 contract = 7.2% (2 = 14.4%, over 13%); with QQQ trade 7 total open risk 21.7%."
       }
     ]
   }
