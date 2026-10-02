@@ -2607,3 +2607,50 @@ account's credentials) — will re-escalate directly if this stretches much furt
 HOOD's swing-price calibration keeps pressing against its 1.15 ceiling; whether NVDA/AMZN/SPY/VOO
 ever produce a qualifying swing to grade; and whether today's pending alerts (#18 GOOGL, #19 META,
 #21/#22 HOOD, #23 QQQ) get resolved.
+
+## 2026-10-02 (Fri) — grade + log only; no code change
+
+**Build status:** this session's own `fetch_data.py` run was blocked again today — all 11 tickers and
+pre/post prices failed with a `403 Forbidden` from the sandbox's own network connection, not from
+Yahoo itself, so there was nothing new to fetch locally; `analyze.py` correctly refused to touch
+`data.js` with no fresh bars rather than risk an inconsistent build. The live site wasn't affected:
+the separate cloud refresh workflow had already run today, `data.js` is stamped generated 10/02 5:45
+PM ET across all 11 tickers, `coherence_check.py` passes clean (11/11 tickers), and the full test
+suite (`python -m unittest discover`) passes all 90 tests.
+
+**Grades reviewed:** hit rates and calibration are steady and inside their established bands: TSLA
+n=12 (33%/42%), HOOD n=54 (20%/30%), QQQ n=41 (32%/37%, still the strongest name), JPM n=26
+(15%/23%), GOOGL n=34 (21%/24%), GC=F n=18 (22%/22%). NVDA/AMZN/SPY/VOO remain at n=0 graded swing
+predictions (quiet names, not a bug) and META (added 9/28) is still n=0, five days old. Day-ahead
+high/low calibration factors are all within a few percent of 1.0 on every ticker. HOOD's longer-
+horizon swing-price calibration (`priceCalibHigh`) is still sitting at 1.15, the top of its allowed
+range — this is only the second day this has been noted (first flagged 10/01), so it hasn't cleared
+the 3-day bar for loosening the clamp yet.
+
+**Trade cards / paper journal:** four alerts are pending the owner's decision: #18 (GOOGL), #19
+(META), #26 (QQQ, 10/16 765/775 call), and #27 (META, 10/23 770/780 call). Two other alerts logged
+today (#24 META, #25 HOOD) were auto-voided intraday when the underlying forecast's next turn
+flipped before they could be acted on — the existing stability-tracking feature working as designed.
+No account numbers appear in today's new entries (spot-checked directly).
+
+**What changed and why:** no code change — grades sit inside their established bands, coherence and
+the full test suite both pass clean, and today's only failure (this session's own fetch being denied
+by its sandbox network policy) is an environment condition, not a dashboard bug. Honesty features
+(measured hit rates, random-control comparisons, self-grading, the coherence gate) are untouched;
+`tickers.txt` wasn't touched.
+
+**The git-history account-number exposure — still unresolved, re-escalating:** this session did a
+full, non-shallow fetch of the repo's actual commit history (the local clone had been shallow on
+previous checks) and confirmed directly: three commits from 9/15–9/16 (`1cc6c81`, `04d76e3`,
+`afa7b82`) still carry the real, unmasked brokerage account number `788822831` in
+`spread_journal.json`, and all three are still reachable from `main`'s current tip on GitHub — no
+history rewrite or force-push has happened since the first direct notification on 9/29. Today's live
+`spread_journal.json` is correctly masked (`••••2831`), so nothing is exposed on the dashboard itself
+or in any new entries — only those three old commits in the repo's public history. This has now sat
+unresolved for a week past the first alert, so a fresh notification is going out today rather than
+waiting further.
+
+**Watch next:** whether the owner authorizes rewriting those three commits out of history (and
+considers rotating the exposed account's credentials); whether HOOD's 1.15 calibration ceiling
+becomes a 3-day pattern tomorrow; whether NVDA/AMZN/SPY/VOO ever produce a qualifying swing to grade;
+and whether today's four pending alerts (#18, #19, #26, #27) get resolved.
