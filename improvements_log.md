@@ -2654,3 +2654,49 @@ waiting further.
 considers rotating the exposed account's credentials); whether HOOD's 1.15 calibration ceiling
 becomes a 3-day pattern tomorrow; whether NVDA/AMZN/SPY/VOO ever produce a qualifying swing to grade;
 and whether today's four pending alerts (#18, #19, #26, #27) get resolved.
+
+## 2026-10-03 (Sat) — grade + log only; re-escalating the account-number exposure
+
+**Build status:** today is a Saturday (no market session), so there was nothing new for either this
+session's own fetch or the cloud refresh workflow to pull — `data.js` is still correctly stamped to
+Friday 10/02 6:16 PM ET, and that's expected, not a gap. This session's own `fetch_data.py` was
+blocked anyway (confirmed via the proxy's own status log: `403` on every ticker, "gateway answered
+403 to CONNECT" to `query1.finance.yahoo.com` — this sandbox's egress policy, not Yahoo), and
+`analyze.py` correctly refused to touch `data.js` with no fresh bars rather than risk an inconsistent
+build. `coherence_check.py` passes clean on the committed build (11/11 tickers), and the full test
+suite (`python -m unittest discover`) passes all 90 tests.
+
+**Grades reviewed:** identical to Friday's numbers, as expected with no new session: TSLA n=12
+(33%/42%), HOOD n=54 (20%/30%), QQQ n=41 (32%/37%, still the strongest name), JPM n=26 (15%/23%),
+GOOGL n=34 (21%/24%), GC=F n=18 (22%/22%); NVDA/AMZN/SPY/VOO still n=0 (quiet names, not a bug); META
+still n=3 daily-horizon grades, too new for swing grading. HOOD's longer-horizon swing-price
+calibration (`priceCalibHigh`) is still pinned at 1.15, the top of its range, but this is still only
+two distinct trading sessions (10/01, 10/02) since it was first noted — no new session today to make
+it a third, so it still hasn't cleared the 3-day bar. No bug found; no code change today.
+
+**Trade cards / paper journal:** no new alerts since there was no trading session today. Four alerts
+remain pending the owner's decision (#18 GOOGL, #19 META, #26 QQQ, #27 META); six earlier ones sit
+auto-voided by the stability tracker, working as designed. Checked `spread_journal.json`'s `account`
+object directly — still only the masked `last4: "2831"`, no full number in any current file.
+
+**What changed and why:** no code change — it's a non-trading day, grades are unchanged from Friday
+and sit inside their established bands, coherence and the full test suite both pass clean. Honesty
+features (measured hit rates, random-control comparisons, self-grading, the coherence gate) are
+untouched; `tickers.txt` wasn't touched.
+
+**The git-history account-number exposure — still unresolved, re-escalating directly:** re-verified
+against the repository's full history (did a complete, non-shallow fetch this session rather than
+trust a shallow clone). The same three commits from 9/15–9/16 (`1cc6c81`, `04d76e3`, `afa7b82`) still
+carry the real, unmasked brokerage account number in `spread_journal.json`, and all three are still
+reachable from `main`'s current tip — no history rewrite or force-push has happened since this was
+first flagged on 9/23, nor since the direct notifications on 9/29 and 10/02. It is now roughly ten
+days past the first alert with no visible decision. Today's live files remain correctly masked, so
+nothing new is exposed — only those three old commits in the repo's public history. Sending another
+direct notification today rather than letting another cycle pass quietly, since log-only entries
+clearly haven't produced a decision.
+
+**Watch next:** whether the owner authorizes rewriting those three commits out of history this time
+(and considers rotating the exposed account's credentials, since it's been public for ten days);
+whether HOOD's 1.15 calibration ceiling becomes a genuine 3-day pattern on the next trading session;
+whether NVDA/AMZN/SPY/VOO ever produce a qualifying swing to grade; and whether the four pending
+alerts (#18, #19, #26, #27) get resolved.
