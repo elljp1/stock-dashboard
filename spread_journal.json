@@ -1270,8 +1270,8 @@
         "plannedExit": "close at the 10/22 projected high or at 50% of credit ($0.50); stop $2.00 debit or 100 breached",
         "taken": false,
         "reason": "pushed; awaiting user",
-        "outcome": "pending",
-        "note": "100P (-0.204) nearest 0.20; next strike closer 101 fails the 3% rule (lowest projected low before expiry 103.97 on 10/05 -> short at or below 100.85). 100P 2.415 (2.37/2.46), 95P 1.40; credit/width 0.203; OI 5,549. Expiry 10/30 (first listed >= 2 trading days after the 10/22 high), before 11/04 earnings. 3 contracts = 10.9%; with QQQ trade 7 total open risk 25.5% (over 25%); 2 contracts keeps it at 21.8%."
+        "outcome": "void",
+        "note": "100P (-0.204) nearest 0.20; next strike closer 101 fails the 3% rule (lowest projected low before expiry 103.97 on 10/05 -> short at or below 100.85). 100P 2.415 (2.37/2.46), 95P 1.40; credit/width 0.203; OI 5,549. Expiry 10/30 (first listed >= 2 trading days after the 10/22 high), before 11/04 earnings. 3 contracts = 10.9%; with QQQ trade 7 total open risk 25.5% (over 25%); 2 contracts keeps it at 21.8%. VOID 10/5 10:34am ET: superseded by alert 30; app's 10/05 low moved up to 109.09 (cap 105.82), 101P now nearest 0.20 and next-closer 102/97 qualifies; 100/95 down to 0.955 (0.19 of width)."
       },
       {
         "id": 29,
@@ -1295,6 +1295,32 @@
         "reason": "pushed; awaiting user",
         "outcome": "pending",
         "note": "790C (0.219) nearest 0.20: 790/800 1.675 (0.17 of width); next strike closer 780C (0.266) 9.30 (8.95/9.65), 790C 7.225; credit/width 0.21; OI 803. Expiry 10/23 before 10/28 earnings. 1 contract = 7.2% (2 = 14.5%, over 13%); with QQQ trade 7 total open risk 21.8% (32.7% if HOOD alert 28 is also taken at 3x)."
+      },
+      {
+        "id": 30,
+        "date": "2026-10-05",
+        "time": "10:34 ET",
+        "symbol": "HOOD",
+        "spread": "10/30 102/97 put credit",
+        "midAtAlert": 1.17,
+        "suggestedLimit": 1.15,
+        "shortDelta": -0.233,
+        "spot": 113.47,
+        "contracts": 3,
+        "maxLoss": 1155,
+        "breakeven": 100.85,
+        "legType": "next leg up (current leg down to 10/05 LOW today; resting GTC to place at the turn)",
+        "entryTurnDate": "2026-10-05",
+        "entryTurnTime": "Sun 10:48-11:46 AM; Moon 1:41-2:39 PM",
+        "entryTurnPrice": 109.09,
+        "turnDate": "2026-10-22",
+        "turnTime": "Venus 9:57-10:51 AM; Saturn 12:40-1:34 PM",
+        "turnPrice": 133.05,
+        "plannedExit": "close at the 10/22 projected high or at 50% of credit ($0.58); stop $2.30 debit or 102 breached",
+        "taken": false,
+        "reason": "pushed; awaiting user",
+        "outcome": "pending",
+        "note": "101P (-0.206) nearest 0.20: 101/96 0.94 (0.19 of width); next strike closer 102P (-0.233) 2.85 (2.79/2.91), 97P 1.68; credit/width 0.234; OI 692. 3% rule: lowest projected low before expiry 109.09 (10/05) -> short at or below 105.82. Expiry 10/30 before 11/04 earnings. 3 contracts = 10.5%; with QQQ trade 7 total open risk 25.0%; 2 contracts keeps it at 21.5%. With META alert 29 also taken, 32.3%."
       }
     ]
   }

@@ -76,8 +76,9 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 25 | 10/2 2:34pm | HOOD 10/23 104/99 put (timing: place at the 10/05 low, leg up to 10/19 high) | $1.025 (limit $1.00, 3x) | Pushed, open | void (10/2 3:05pm: 10/05 low back to $106.28, 104 fails the 3% rule) |
 | 26 | 10/2 2:34pm | QQQ 10/16 765/775 call (timing: 10/02 high passed, leg down to 10/14 low) | $2.055 (limit $2.05, 1x) | Pushed, open | pending |
 | 27 | 10/2 3:33pm | META 10/23 770/780 call (timing: leg down to 10/19 low) | $2.10 (limit $2.05, 1x) | Pushed, open | void (10/5 9:47am: superseded by 29, 770 delta 0.32) |
-| 28 | 10/5 9:35am | HOOD 10/30 100/95 put (timing: place at the 10/05 low, leg up to 10/22 high) | $1.015 (limit $1.00, 3x) | Pushed, open | pending |
+| 28 | 10/5 9:35am | HOOD 10/30 100/95 put (timing: place at the 10/05 low, leg up to 10/22 high) | $1.015 (limit $1.00, 3x) | Pushed, open | void (10/5 10:34am: superseded by 30) |
 | 29 | 10/5 9:47am | META 10/23 780/790 call (timing: leg down to 10/19 low) | $2.075 (limit $2.05, 1x) | Pushed, open | pending |
+| 30 | 10/5 10:34am | HOOD 10/30 102/97 put (timing: place at the 10/05 low, leg up to 10/22 high) | $1.17 (limit $1.15, 3x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
