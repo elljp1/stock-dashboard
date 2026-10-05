@@ -30,6 +30,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 3 | 9/16 11:34am | HOOD | 10/23 $100/$95 put credit spread x2 | $1.85 | $630 | $98.15 | 72% | 5.7% | $0.90 | 9/18 10:20am at $0.90 | **+$190** (30% on risk, 2 days) |
 | 6 | 9/23 11:27am | GOOGL | 10/23 $325/$320 put credit spread x3 | $1.25 | $1,125 | $323.75 | 76% | 10.2% | $1.20 GTC (replaced $0.60 9/24) | 9/24 12:41pm at $1.20 | **+$15** (break-even; exited against the app's leg) |
 | 7 | 9/24 3:53pm | QQQ | 10/23 $770/$780 call credit spread x2 | $2.00 | $1,600 | $772.00 | ~82% | 14.5% (user accepted) | $1.00 GTC resting since 9/24; 10/1: app flipped the 10/02 turn high/low several times; latest (12:10pm) is a 10/02 HIGH then 10/14 LOW, so hold and keep the $1.00 GTC until the label settles (stop $4.00 / QQQ above $770) | | open |
+| 8 | 10/5 2:45pm | HOOD | 10/30 $101/$96 put credit spread x3 | $1.05 | $1,185 | $99.95 | ~78% | 10.8% (25.3% total with #7, user accepted) | $0.53 or the 10/22 projected high (~130); stop $2.10 / HOOD close below $101 | | open |
 
 ## Monthly results
 | Month | Start | Deposits | Realized P&L | Growth | Trades | W/L |
@@ -81,7 +82,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 30 | 10/5 10:34am | HOOD 10/30 102/97 put (timing: place at the 10/05 low, leg up to 10/22 high) | $1.17 (limit $1.15, 3x) | Pushed, open | void (10/5 2:35pm: superseded by 33) |
 | 31 | 10/5 11:46am | META 10/23 790/800 call (timing: leg down to 10/19 low) | $2.00 (limit $2.00, 1x) | Pushed, open | pending |
 | 32 | 10/5 2:35pm | QQQ 10/16 770/780 call (timing: place at the 10/05 high, leg down to 10/14 low) | $2.05 (limit $2.05, 1x) | Pushed, open | pending |
-| 33 | 10/5 2:35pm | HOOD 10/30 101/96 put (timing: place at the 10/05 low, leg up to 10/22 high) | $1.015 (limit $1.00, 3x) | Pushed, open | pending |
+| 33 | 10/5 2:35pm | HOOD 10/30 101/96 put (timing: place at the 10/05 low, leg up to 10/22 high) | $1.015 (limit $1.00, 3x) | Taken (trade 8, 3x at $1.05) | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
