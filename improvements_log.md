@@ -2642,7 +2642,7 @@ by its sandbox network policy) is an environment condition, not a dashboard bug.
 **The git-history account-number exposure — still unresolved, re-escalating:** this session did a
 full, non-shallow fetch of the repo's actual commit history (the local clone had been shallow on
 previous checks) and confirmed directly: three commits from 9/15–9/16 (`1cc6c81`, `04d76e3`,
-`afa7b82`) still carry the real, unmasked brokerage account number `788822831` in
+`afa7b82`) still carry the real, unmasked brokerage account number (••••2831) in
 `spread_journal.json`, and all three are still reachable from `main`'s current tip on GitHub — no
 history rewrite or force-push has happened since the first direct notification on 9/29. Today's live
 `spread_journal.json` is correctly masked (`••••2831`), so nothing is exposed on the dashboard itself
@@ -2732,7 +2732,7 @@ their established bands, and coherence plus the full test suite both pass clean.
 **The git-history account-number exposure — still unresolved, re-escalating again:** did a full,
 non-shallow fetch of the repository this session and confirmed directly, by reading the actual
 diffs: the same three commits from 9/15–9/16 (`1cc6c81`, `04d76e3`, `afa7b82`) still contain the
-real, unmasked brokerage account number `788822831` in `spread_journal.json`, and all three are
+real, unmasked brokerage account number (••••2831) in `spread_journal.json`, and all three are
 still reachable from `main`'s current tip on GitHub. No history rewrite, force-push, or credential
 rotation has happened since this was first flagged on 9/23. It has now been roughly three weeks with
 no visible action. Today's live `spread_journal.json` remains correctly masked, so nothing new is
@@ -2753,6 +2753,67 @@ worth acting on: it's the small spreads-only account, not a main account, and a 
 alone isn't enough to actually move money on it. Noted for the record: some brokerages will accept
 an account number paired with other identifying info for ACH-pull verification, so this isn't
 literally zero-risk, but that's the owner's call to make and they've made it.
+
+## 2026-10-05 (Mon) — daily review: one calibration fix, plus a new (now-fixed) privacy finding
+
+**Build status:** this session's own `fetch_data.py` was blocked again (sandbox network policy
+rejects the connection to Yahoo, not Yahoo itself), but the separate cloud refresh workflow had
+already run today with real market access — `data.js` is stamped generated 10/05 5:45 PM ET across
+all 11 tickers. With no fresh CSVs locally, `analyze.py` correctly refused to rebuild from nothing
+and left the already-current build untouched. `coherence_check.py` passes clean (11/11 tickers) and
+the full test suite passes all 92 tests, both before and after today's changes.
+
+**Grades reviewed:** TSLA n=12 (33%/42%), HOOD n=55 (20%/29%), QQQ n=42 (31%/36%, still the
+strongest name), JPM n=27 (15%/22%), GOOGL n=34 (21%/24%), GC=F n=18 (22%/22%); NVDA/AMZN/SPY/VOO
+still n=0 (quiet names, confirmed not a bug); META still too new for swing grading. HOOD's longer-
+horizon swing-price calibration (`priceCalibHigh`) has now sat pinned at the old 1.15 ceiling across
+three distinct real trading sessions (10/01, 10/02, and today 10/05 — the 10/03-10/04 weekend added
+no new session) — this clears the 3-graded-day bar the last several entries have been watching for.
+
+**What changed and why (the one dashboard code change today):** widened the swing-level price-
+calibration clamp in `analyze.py` from ±15% (0.85-1.15) to ±20% (0.80-1.20) for both `priceCalibHigh`
+and `priceCalibLow`. HOOD was the only ticker pinned at the old ceiling (every other ticker's
+measured calibration already sits well inside both the old and new bounds, so this only changes
+HOOD's behavior); the self-correcting design was already measuring HOOD's predicted swing highs as
+running meaningfully below where price actually turns, but the old clamp was capping the correction
+itself, not the underlying bias. Couldn't re-run `analyze.py` end-to-end today (no fresh CSVs in this
+sandbox), so this was verified by compiling cleanly, the full test suite, `coherence_check.py`, and
+`anomaly_audit.py` all passing against the untouched committed build; the next cloud refresh (which
+has real data access) will be the first real test of HOOD's new calibrated number, worth checking
+tomorrow. Honesty features (measured hit rates, random-control comparisons, grading, coherence gate)
+are untouched; `tickers.txt` wasn't touched.
+
+**New finding, found and fixed today — raw account number was live on the public dashboard:** while
+reviewing past entries in this file, noticed two older entries (10/02 and 10/03) had quoted the real,
+unmasked brokerage account number in plain prose while escalating the git-history exposure. Because
+`analyze.py` embeds the last 9,000 characters of this file verbatim into `data.js`, `index.html`, and
+`dashboard_single.html` for the dashboard's own improvements-log viewer tab, that raw number has been
+rendered in plain text on the live public site (not buried in git history — directly on the page
+served today) for as long as either entry sat inside that rolling window. This is a different and
+more exposed situation than the git-history-only finding the owner already reviewed and closed on
+10/05, since that one required git archaeology and this one was plainly visible on the current live
+page; closing the old finding didn't cover this. Fixed today: redacted both source entries in this
+file to the same masked form `spread_journal.json` already uses (••••2831), and patched the same raw
+string directly in the already-published `data.js`, `index.html`, and `dashboard_single.html` so the
+live site stops serving it immediately rather than waiting on the next successful cloud build. Did
+*not* add an automated regression guard for this (tried extending `test_sensitive_data.py`'s file
+list to cover this file, but its digit-grouping heuristic threw a false positive on an ordinary price
+range written as "4600-4680" in older prose) — a guard that misfires on normal log text risks
+breaking the daily cloud pipeline's test step outright, which would be worse than today's fix. Flagging
+for the owner and future reviews: going forward, never quote a real account number (or any credential)
+in this log even when describing a finding — describe it in words instead, as this entry does.
+
+**Trade cards / paper journal:** today's new real trade (#8, HOOD 10/30 101/96 put credit spread,
+filled at $1.05) and the still-open #7 (QQQ 770/780 call credit spread, open since 9/24) look
+unremarkable; no account numbers or other sensitive values appear in any new entries (spot-checked
+directly). Several intraday alerts voided as the forecast's next turn flipped before they could be
+acted on — the existing stability-tracking feature working as designed, not a bug.
+
+**Watch next:** whether tomorrow's real cloud-refresh run shows HOOD's `priceCalibHigh` move off the
+old 1.15 ceiling under the new ±20% bound, and whether that improves or worsens its hit rate over the
+next several graded sessions (if it makes things worse, this change should be reverted); whether
+NVDA/AMZN/SPY/VOO ever produce a qualifying swing to grade; and whether alerts #7, #18, #19, #26,
+#27, #31, #32 get resolved.
 
 **Decision:** no history rewrite, no forced credential rotation. Daily reviews should stop
 re-flagging this specific item going forward - it's a closed, accepted risk, not an open bug. If
