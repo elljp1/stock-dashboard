@@ -2744,3 +2744,18 @@ rotates the exposed account's credentials, since it's been public for three week
 1.15 calibration ceiling becomes a genuine 3-day pattern on the next actual trading session; whether
 NVDA/AMZN/SPY/VOO ever produce a qualifying swing to grade; and whether the four pending alerts
 (#18, #19, #26, #27) get resolved.
+
+## 2026-10-05 — owner decision: account-number history exposure accepted, closing the daily re-escalation
+
+The owner reviewed the git-history account-number exposure (real number in three old commits,
+`1cc6c81`, `04d76e3`, `afa7b82` from 9/15-9/16, still reachable from `main`) and decided it's not
+worth acting on: it's the small spreads-only account, not a main account, and a bare account number
+alone isn't enough to actually move money on it. Noted for the record: some brokerages will accept
+an account number paired with other identifying info for ACH-pull verification, so this isn't
+literally zero-risk, but that's the owner's call to make and they've made it.
+
+**Decision:** no history rewrite, no forced credential rotation. Daily reviews should stop
+re-flagging this specific item going forward - it's a closed, accepted risk, not an open bug. If
+anything changes (e.g. a login credential, password, or SSN/routing-number-level detail ever turns
+up unmasked anywhere in the repo - not just an account number), that would be a new, different
+finding worth raising fresh, not a continuation of this one.
