@@ -5,6 +5,19 @@ from pathlib import Path
 import tempfile
 import unittest
 import reliability
+from datetime import datetime, timezone
+
+from market_time import eastern_date
+
+
+class MarketClockTests(unittest.TestCase):
+    def test_utc_midnight_remains_prior_eastern_date(self):
+        instant = datetime(2026, 10, 1, 0, 19, tzinfo=timezone.utc)
+        self.assertEqual(eastern_date(instant).isoformat(), '2026-09-30')
+
+    def test_naive_clock_input_is_rejected(self):
+        with self.assertRaises(ValueError):
+            eastern_date(datetime(2026, 10, 1, 0, 19))
 
 class ReliabilityTests(unittest.TestCase):
     def setUp(self):
