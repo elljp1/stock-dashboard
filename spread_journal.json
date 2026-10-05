@@ -1293,8 +1293,8 @@
         "plannedExit": "close at the 10/19 projected low or at 50% of credit ($1.03); stop $4.10 debit or 780 breached",
         "taken": false,
         "reason": "pushed; awaiting user",
-        "outcome": "pending",
-        "note": "790C (0.219) nearest 0.20: 790/800 1.675 (0.17 of width); next strike closer 780C (0.266) 9.30 (8.95/9.65), 790C 7.225; credit/width 0.21; OI 803. Expiry 10/23 before 10/28 earnings. 1 contract = 7.2% (2 = 14.5%, over 13%); with QQQ trade 7 total open risk 21.8% (32.7% if HOOD alert 28 is also taken at 3x)."
+        "outcome": "void",
+        "note": "790C (0.219) nearest 0.20: 790/800 1.675 (0.17 of width); next strike closer 780C (0.266) 9.30 (8.95/9.65), 790C 7.225; credit/width 0.21; OI 803. Expiry 10/23 before 10/28 earnings. 1 contract = 7.2% (2 = 14.5%, over 13%); with QQQ trade 7 total open risk 21.8% (32.7% if HOOD alert 28 is also taken at 3x). VOID 10/5 11:46am ET: superseded by alert 31; META kept rising, 780C now 0.305 delta (over 0.28)."
       },
       {
         "id": 30,
@@ -1321,6 +1321,29 @@
         "reason": "pushed; awaiting user",
         "outcome": "pending",
         "note": "101P (-0.206) nearest 0.20: 101/96 0.94 (0.19 of width); next strike closer 102P (-0.233) 2.85 (2.79/2.91), 97P 1.68; credit/width 0.234; OI 692. 3% rule: lowest projected low before expiry 109.09 (10/05) -> short at or below 105.82. Expiry 10/30 before 11/04 earnings. 3 contracts = 10.5%; with QQQ trade 7 total open risk 25.0%; 2 contracts keeps it at 21.5%. With META alert 29 also taken, 32.3%."
+      },
+      {
+        "id": 31,
+        "date": "2026-10-05",
+        "time": "11:46 ET",
+        "symbol": "META",
+        "spread": "10/23 790/800 call credit",
+        "midAtAlert": 2.0,
+        "suggestedLimit": 2.0,
+        "shortDelta": 0.253,
+        "spot": 744.97,
+        "contracts": 1,
+        "maxLoss": 800,
+        "breakeven": 792.0,
+        "legType": "current leg down to 10/19 LOW",
+        "turnDate": "2026-10-19",
+        "turnTime": "Saturn 2:30-3:25 PM",
+        "turnPrice": 653.06,
+        "plannedExit": "close at the 10/19 projected low or at 50% of credit ($1.00); stop $4.00 debit or 790 breached",
+        "taken": false,
+        "reason": "pushed; awaiting user",
+        "outcome": "pending",
+        "note": "800C (0.207) nearest 0.20; next strike closer 790C (0.253) 8.725 (8.45/9.00), 800C 6.725; credit/width 0.200 at mid (limit at mid, no room below); OI 372. Same strikes as void alert 24 (10/2, >24h ago). Expiry 10/23 before 10/28 earnings. 1 contract = 7.3%; with QQQ trade 7 total open risk 21.8% (32.3% if HOOD alert 30 is also taken at 3x)."
       }
     ]
   }
