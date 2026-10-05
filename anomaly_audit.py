@@ -7,6 +7,8 @@ import json
 import re
 from datetime import datetime, date, timedelta
 
+from market_time import eastern_now
+
 raw = open("data.js", encoding="utf-8").read()
 D = json.loads(raw.replace("const DATA_ALL = ", "").split("const TRADES")[0].strip().rstrip(";"))
 try:
@@ -16,7 +18,8 @@ except Exception:
 
 MON = {m: i for i, m in enumerate(
     ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], 1)}
-today = date.today()
+audit_now = eastern_now()
+today = audit_now.date()
 issues = []
 notes = []
 
@@ -241,7 +244,7 @@ for t, d in D.items():
     if T.get(t) and not T[t].get("bestToday") and not T[t].get("bestWeek"):
         notes.append(f"{t}: next turn is far out - no trade today or this week")
 
-print(f"AUDIT {datetime.now():%Y-%m-%d %H:%M} - {len(D)} tickers")
+print(f"AUDIT {audit_now:%Y-%m-%d %H:%M} ET - {len(D)} tickers")
 if issues:
     print(f"\n{len(issues)} ANOMALIES:")
     for i in issues:
