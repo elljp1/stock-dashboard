@@ -394,7 +394,7 @@ for _ds in _FOMC:
 _add_series("FOMC decision day", _fomc)
 
 # Ebertin midpoints: planet C sitting on the A/B midpoint axis
-# (8th-harmonic angles 0/45/90/135/180, tight 1Â° orb - Ebertin's method)
+# (8th-harmonic angles 0/45/90/135/180, tight 1° orb - Ebertin's method)
 _bodies10 = [n for n, _ in BODY_FNS]
 for _i in range(len(_bodies10)):
     for _j in range(_i + 1, len(_bodies10)):
