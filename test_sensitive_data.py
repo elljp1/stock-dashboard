@@ -80,7 +80,7 @@ class SensitiveDataTests(unittest.TestCase):
                 self.assertTrue(contains_account_number("fixture.json", text))
 
     def test_masked_and_structured_aliases(self):
-        for value in ("TEST account", "TEST â¢â¢â¢â¢1234", {"label": "TEST", "last4": "1234"}):
+        for value in ("TEST account", "TEST ••••1234", {"label": "TEST", "last4": "1234"}):
             self.assertFalse(contains_account_number("fixture.json", json.dumps({"account": value})))
 
     def test_financial_amount_is_not_an_account_identifier(self):
@@ -88,7 +88,7 @@ class SensitiveDataTests(unittest.TestCase):
 
     def test_markdown(self):
         self.assertTrue(contains_account_number("fixture.md", "Account: TEST 123456789"))
-        self.assertFalse(contains_account_number("fixture.md", "Account: TEST â¢â¢â¢â¢1234"))
+        self.assertFalse(contains_account_number("fixture.md", "Account: TEST ••••1234"))
         self.assertFalse(contains_account_number("fixture.md", "Review 2026-09-18, balance $11,000"))
         self.assertFalse(contains_account_number("fixture.md", "Gold range 4600-4680"))
         self.assertTrue(contains_account_number(
