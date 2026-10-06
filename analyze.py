@@ -2208,6 +2208,37 @@ def analyze(tkr):
     _cover("monthly", [x for x in day_fc
                        if datetime.strptime(x["date"], "%Y-%m-%d").date() <= mo_end])
     _cover("yearly", day_fc)
+
+    # A future dated turn is the model's headline call for its period.  Keep
+    # the wider statistical/day-picker extreme as a disclosed bound instead
+    # of letting the final reconciliation silently replace the chart's turn.
+    # Start at ``session`` (not the calendar week's Monday) after the close so
+    # a completed same-week call cannot masquerade as a future headline.
+    def _anchor_chain(period_key, start, end):
+        if period_key not in horizons:
+            return
+        for kind, pick in (("high", max), ("low", min)):
+            evs = [p for p in preds if p["type"] == kind
+                   and start <= datetime.strptime(p["isoDate"], "%Y-%m-%d").date() <= end
+                   and ((kind == "high" and p["price"] >= last_close * 0.995)
+                        or (kind == "low" and p["price"] <= last_close * 1.005))]
+            if not evs:
+                continue
+            old = horizons[period_key][kind]
+            if old.get("src") == "actual":
+                continue
+            ev = pick(evs, key=lambda p: p["price"])
+            effective = _eff(old, kind)
+            cell = {"price": ev["price"], "date": ev["date"],
+                    "time": ev.get("planetHour") or ev["time"], "src": "chain"}
+            if ((kind == "high" and effective > ev["price"])
+                    or (kind == "low" and effective < ev["price"])):
+                cell["bound"] = round(effective, 2)
+                cell["boundDate"] = old.get("boundDate") or old.get("date")
+            horizons[period_key][kind] = cell
+
+    _anchor_chain("weekly", session, _wk_end)
+    _anchor_chain("monthly", session, mo_end)
     # re-apply nesting after widening
     _o2 = [k for k in ("daily", "weekly", "monthly", "yearly") if k in horizons]
     for _a, _b in zip(_o2, _o2[1:]):
