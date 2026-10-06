@@ -5,6 +5,7 @@ and current price against each other. Prints every inconsistency found.
 """
 import json
 import re
+import sys
 from datetime import datetime, date, timedelta
 
 from market_time import eastern_now
@@ -156,8 +157,14 @@ for t, d in D.items():
     # band top on Wed while the chain, the daily row and every trade card
     # called the turn for Tue - three surfaces agreeing, one disagreeing.
     def _turn_in(kind, start, end):
+        # A rebound high below the period's starting price (or a pullback low
+        # above it) is a local turn, not the period's final extreme.  Requiring
+        # that local turn to own the period headline creates a contradiction
+        # of its own: e.g. a "final high" below the already-known spot.
         evs = [p for p in preds if p["type"] == kind
-               and start <= datetime.strptime(p["isoDate"], "%Y-%m-%d").date() <= end]
+               and start <= datetime.strptime(p["isoDate"], "%Y-%m-%d").date() <= end
+               and ((kind == "high" and p["price"] >= spot * 0.995)
+                    or (kind == "low" and p["price"] <= spot * 1.005))]
         if not evs:
             return None
         return max(evs, key=lambda p: p["price"]) if kind == "high" else min(evs, key=lambda p: p["price"])
@@ -194,7 +201,7 @@ for t, d in D.items():
     _period_start = date.fromisoformat(d.get("horizonSession", today.isoformat()))
     _wk0 = _period_start - timedelta(days=_period_start.weekday())
     _mo_end = (_period_start.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)
-    for _k, _s, _e in (("weekly", _wk0, _wk0 + timedelta(days=4)),
+    for _k, _s, _e in (("weekly", _period_start, _wk0 + timedelta(days=4)),
                        ("monthly", _period_start, _mo_end)):
         if _k not in hz:
             continue
@@ -251,3 +258,9 @@ if issues:
         print("  -", i)
 else:
     print("\nNo anomalies: chain, levels, horizons and trade cards all line up.")
+
+# This script is a release gate, not a passive report.  A zero exit status on
+# contradictions previously let a workflow publish a page its own audit had
+# just declared inconsistent.
+if issues:
+    sys.exit(1)
