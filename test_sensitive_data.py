@@ -14,8 +14,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 LONG_NUMBER = re.compile(r"(?<!\d)(?:\d{8,}|\d{3,}(?:[ -]\d{3,})+)(?!\d)")
+ACCOUNT_CONTEXT = re.compile(r"(?i)\b(?:brokerage\s+)?account(?:\s+number)?\b")
 ACCOUNT_KEYS = {"account", "accountnumber", "brokerageaccount"}
-FILES = ("spread_journal.json", "real_trades.json", "trades_log.json", "SPREAD_JOURNAL.md")
+FILES = ("spread_journal.json", "real_trades.json", "trades_log.json",
+         "SPREAD_JOURNAL.md", "improvements_log.md")
 
 
 def account_strings(value):
@@ -31,9 +33,21 @@ def account_strings(value):
 
 
 def contains_account_number(name, text):
-    candidates = account_strings(json.loads(text)) if name.endswith(".json") else [text]
-    return any(sum(c.isdigit() for c in match.group()) >= 8
-               for value in candidates for match in LONG_NUMBER.finditer(value))
+    if name.endswith(".json"):
+        candidates = account_strings(json.loads(text))
+        return any(sum(c.isdigit() for c in match.group()) >= 8
+                   for value in candidates for match in LONG_NUMBER.finditer(value))
+
+    # Prose logs contain legitimate long numeric price ranges.  Require an
+    # account-related label near a long number so those ranges remain valid
+    # while narrative leaks such as "brokerage account number ..." fail.
+    for match in LONG_NUMBER.finditer(text):
+        if sum(c.isdigit() for c in match.group()) < 8:
+            continue
+        context = text[max(0, match.start() - 160):min(len(text), match.end() + 40)]
+        if ACCOUNT_CONTEXT.search(context):
+            return True
+    return False
 
 
 def check_files(read):
@@ -76,6 +90,12 @@ class SensitiveDataTests(unittest.TestCase):
         self.assertTrue(contains_account_number("fixture.md", "Account: TEST 123456789"))
         self.assertFalse(contains_account_number("fixture.md", "Account: TEST ••••1234"))
         self.assertFalse(contains_account_number("fixture.md", "Review 2026-09-18, balance $11,000"))
+        self.assertFalse(contains_account_number("fixture.md", "Gold range 4600-4680"))
+        self.assertTrue(contains_account_number(
+            "fixture.md", "The brokerage account number was TEST-123-456-789."))
+
+    def test_improvements_log_is_guarded(self):
+        self.assertIn("improvements_log.md", FILES)
 
     def test_parse_error_fails_closed(self):
         self.assertEqual(check_files(lambda _: "invalid json"), 3)
