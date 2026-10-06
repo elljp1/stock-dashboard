@@ -2820,3 +2820,54 @@ re-flagging this specific item going forward - it's a closed, accepted risk, not
 anything changes (e.g. a login credential, password, or SSN/routing-number-level detail ever turns
 up unmasked anywhere in the repo - not just an account number), that would be a new, different
 finding worth raising fresh, not a continuation of this one.
+
+## 2026-10-06 (Tue) — daily review: grades steady, no code change; two owner-merged PRs from last night reviewed
+
+**Build status:** this session's own `fetch_data.py` was blocked again (sandbox network policy
+rejects the tunnel to Yahoo with a 403, same failure mode as prior sessions, not a Yahoo-side block).
+The separate cloud refresh workflow had already run several times today with real market access —
+`data.js` is stamped generated 10/06 10:36 AM ET across all 11 tickers, matching the latest "auto
+refresh and review (cloud)" commit. With no fresh CSVs locally, `analyze.py` correctly refused to
+rebuild from nothing (`RuntimeError: Incomplete analysis; retaining last published dashboard`) and
+left the already-current build untouched. `coherence_check.py` passes clean (11/11 tickers),
+`anomaly_audit.py` (now a blocking release gate as of last night's PR #22) reports no anomalies, and
+the full test suite passes: 93 Python tests plus the four Node tests (pin, smoke, reliability,
+scheduler — the first three needed `npm install` for `jsdom`, which wasn't present in this sandbox).
+
+**Two owner PRs merged overnight (10/05, outside this daily routine) resolve both open watch items
+from yesterday's entry:** PR #21 ("Guard narrative logs and hold unproven calibration") deliberately
+reverted yesterday's clamp widening back to ±15% for HOOD's `priceCalibHigh`/`priceCalibLow`, on the
+reasoning that a calibration value sitting at its ceiling on historical samples isn't yet evidence
+that a wider production bound will help — it wants a wider candidate to prove itself on untouched
+forward sessions first. That same PR also added the context-aware account-number guard to
+`test_sensitive_data.py` covering `improvements_log.md` that the 10/05 entry said it couldn't build
+without false-positiving on ordinary price ranges (verified today: an ordinary gold price range
+still passes, while a synthetic fixture pairing the words "account number" with a long digit string
+still fails, as intended). PR #22 made `anomaly_audit.py` a blocking release gate and added a check
+that period headlines can't contradict the forecast's own next-turn direction. Confirmed both are
+intentional, reasoned changes merged by the owner's own GitHub account, not bugs — not reverting or
+redoing either. Spot-checked all five guarded files plus `improvements_log.md` directly today: no
+raw account numbers or other sensitive values present.
+
+**Grades reviewed:** TSLA n=12 (33%/42%), HOOD n=55 (20%/29%, calibHigh correctly back at the
+deliberate 1.15 ceiling), QQQ n=42 (31%/36%, still the strongest name), JPM n=27 (15%/22%), GOOGL
+n=34 (21%/24%), GC=F n=18 (22%/22%) — all unchanged from yesterday, meaning no new swing confirmed
+on any of these names since the last entry. NVDA/AMZN/SPY/VOO/META still show n=0 on swing grading
+(confirmed not a bug — quiet/too-new names), but the separate period-extreme horizon grading has
+real samples for all of them (e.g. AMZN n=57 since 7/17, high timing hits its predicted hour 68% of
+sessions vs 23% for a random hour). No 3+-day pattern or clear bug surfaced today, so no code change.
+
+**Trade cards / paper journal:** alert 34 (HOOD 10/23 104/99 put credit, proposed for the 10/07 low)
+is still open/pushed; the system itself flagged it as exceeding the 25% risk cap and duplicating
+trade 8's existing HOOD exposure — the risk-warning feature working as intended, left for the owner
+to decide, not something to override here. Trade 8 (HOOD put credit, filled $1.05) and trade 7 (QQQ
+call credit, open since 9/24) are otherwise unremarkable today.
+
+**Watch next:** whether HOOD's hit rate holds up or slips now that its calibration is confirmed back
+at the owner's chosen 1.15 ceiling rather than the one-day-only widened value; whether NVDA/AMZN/SPY/
+VOO/META ever produce a qualifying swing to grade; and whether alert 34 gets taken, pushed further,
+or voided given its own risk-cap/duplicate-exposure warning.
+
+**Decision:** grade + log only, no code change — the correction this routine would otherwise have
+proposed next (re-widening HOOD's clamp) was already considered and deliberately rejected by the
+owner last night for a sound reason, so redoing it here would just fight that decision.
