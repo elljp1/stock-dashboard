@@ -394,7 +394,7 @@ for _ds in _FOMC:
 _add_series("FOMC decision day", _fomc)
 
 # Ebertin midpoints: planet C sitting on the A/B midpoint axis
-# (8th-harmonic angles 0/45/90/135/180, tight 1° orb - Ebertin's method)
+# (8th-harmonic angles 0/45/90/135/180, tight 1Â° orb - Ebertin's method)
 _bodies10 = [n for n, _ in BODY_FNS]
 for _i in range(len(_bodies10)):
     for _j in range(_i + 1, len(_bodies10)):
@@ -1130,14 +1130,13 @@ def analyze(tkr):
                  if r["type"] == "high" and r["actualPrice"]]
     lo_ratios = [r["actualPrice"] / r["predPrice"] for r in resolved_u
                  if r["type"] == "low" and r["actualPrice"]]
-    # widened from +/-15% after HOOD's calibHigh sat pinned at the old 1.15
-    # ceiling across 3 straight graded sessions (10/01, 10/02, 10/05) - the
-    # measured bias was still running past the cap, so the clamp was capping
-    # the correction, not the underlying bias
+    # Keep calibration bounded until a wider candidate beats this setting on
+    # untouched forward sessions. Reaching the ceiling on historical samples
+    # is not by itself evidence that widening the production bound will help.
     if len(hi_ratios) >= 4:
-        cal_hi = float(np.clip(np.median(hi_ratios), 0.80, 1.20))
+        cal_hi = float(np.clip(np.median(hi_ratios), 0.85, 1.15))
     if len(lo_ratios) >= 4:
-        cal_lo = float(np.clip(np.median(lo_ratios), 0.80, 1.20))
+        cal_lo = float(np.clip(np.median(lo_ratios), 0.85, 1.15))
     # learned multiplier per method family: >1 = earning trust, <1 = losing it
     MF = {}
     for fam, st in fam_stats.items():
