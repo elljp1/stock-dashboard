@@ -2871,3 +2871,40 @@ or voided given its own risk-cap/duplicate-exposure warning.
 **Decision:** grade + log only, no code change — the correction this routine would otherwise have
 proposed next (re-widening HOOD's clamp) was already considered and deliberately rejected by the
 owner last night for a sound reason, so redoing it here would just fight that decision.
+
+## 2026-10-07 (Wed) — daily review: grades steady, no code change
+
+**Build status:** this session's own `fetch_data.py` was blocked again (sandbox network policy
+rejects the tunnel to Yahoo with a 403 on all 11 tickers, same failure mode as every recent day, not
+a Yahoo-side block). With no fresh CSVs locally, `analyze.py` correctly refused to rebuild from
+nothing (`RuntimeError: Incomplete analysis; retaining last published dashboard`) and left the
+already-current build untouched. The separate cloud refresh workflow had already run today with real
+market access — `data.js` is stamped generated 10/07 6:02 PM ET across all 11 tickers.
+`coherence_check.py` passes clean (11/11 tickers), `anomaly_audit.py` reports no anomalies, the full
+Python test suite passes all 98 tests, and all 4 Node tests (pin, smoke, reliability, scheduler) pass
+too (ran `npm install` fresh in this sandbox since `node_modules` isn't committed).
+
+**Grades reviewed:** TSLA n=13 (31%/38% within 2/3 days), HOOD n=57 (19%/28%, `priceCalibHigh`
+correctly still at the owner's deliberate 1.15 ceiling from the 10/5 night PR — only the second
+session since that revert, not yet a fresh 3-day read), QQQ n=44 (30%/34%, still the strongest
+timing name), JPM n=27 (15%/22%), GOOGL n=34 (21%/24%), GC=F n=19 (21%/21%); NVDA/AMZN/SPY/VOO/META
+still n=0 on swing grading (confirmed not a bug — quiet/too-new names), though the separate
+period-extreme horizon grading keeps building real samples for all of them. No 3+-day pattern or
+clear bug surfaced today.
+
+**Trade cards / paper journal:** alert 34 (HOOD put credit duplicating trade 8's exposure, flagged
+over the 25% risk cap) voided itself today as the projected low moved and failed its own 3% rule —
+the stability-tracking feature working as designed. Three new alerts since yesterday (35, 36, 37 —
+META and QQQ call spreads) are pending or already superseded by later re-alerts, normal churn. Trade
+7 (QQQ call credit, open since 9/24) and trade 8 (HOOD put credit, filled 10/5) are unchanged.
+Real-money ledger (`real_trades.json`) unchanged since 9/11. Spot-checked `spread_journal.json`
+directly: the account number stays correctly masked (`••••2831`), and `test_sensitive_data.py`'s
+guard passes all 8 of its own tests.
+
+**What changed and why:** nothing. No bug found, no 3+-day pattern crossed the change bar, and the
+git-history account-number item stays closed per the owner's 10/5 decision — not re-escalating it.
+Honesty features, ledgers, and the coherence gate are untouched; `tickers.txt` wasn't touched.
+
+**Watch next:** whether HOOD's hit rate holds or slips as a third session confirms the 1.15 ceiling
+is genuinely the right call; whether NVDA/AMZN/SPY/VOO/META ever produce a qualifying swing to grade;
+and the open alerts (26, 31, 32, 36, 37) and open trades (7, 8).
