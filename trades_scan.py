@@ -12,6 +12,8 @@ import http.cookiejar
 import json
 from datetime import datetime, timezone, date
 
+from market_time import eastern_now
+
 
 def _session():
     jar = http.cookiejar.CookieJar()
@@ -71,7 +73,8 @@ def build_trades(dall):
         return json.load(op.open(url, timeout=30))["optionChain"]["result"][0]
 
     now = datetime.now(timezone.utc)
-    today = date.today()
+    # GitHub runners use UTC; keep trade labels aligned with the app and audit.
+    today = eastern_now().date()
     out = {}
     for tkr, D in dall.items():
         spot = D["price"]
