@@ -69,15 +69,20 @@ for t, d in D.items():
                           f"already printed in this swing (since {sw['since']})")
 
     # 1c. velocity: the move between consecutive forecast events must be
-    # achievable in the sessions between them (caught a -19% one-day HOOD call)
+    # achievable in the sessions between them (caught a -19% one-day HOOD call).
+    # Two nearby turns are not inherently contradictory: a volatile ticker can
+    # make a modest high-to-low swing in two sessions.  Block only impossible
+    # ordering/same-session turns and moves whose per-session velocity is
+    # implausible.  The old unconditional ``sess < 3`` rule could hold the
+    # entire dashboard stale even when the prices themselves were coherent.
     for p1, p2 in zip(preds, preds[1:]):
         d1 = datetime.strptime(p1["isoDate"], "%Y-%m-%d").date()
         d2 = datetime.strptime(p2["isoDate"], "%Y-%m-%d").date()
         sess = sum(1 for k in range((d2 - d1).days)
                    if (d1 + timedelta(days=k + 1)).weekday() < 5)
-        if sess < 3:
-            issues.append(f"{t}: forecast events {p1['isoDate']} and {p2['isoDate']} are only "
-                          f"{sess} session(s) apart")
+        if sess < 1:
+            issues.append(f"{t}: forecast events {p1['isoDate']} and {p2['isoDate']} "
+                          "land in the same trading session")
         move = abs(p2["price"] / p1["price"] - 1) * 100
         if sess and move / max(sess, 1) > 9:
             issues.append(f"{t}: {move:.0f}% move between {p1['isoDate']} and {p2['isoDate']} "
