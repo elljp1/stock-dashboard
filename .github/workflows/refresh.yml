@@ -93,7 +93,16 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: public-site
-      - uses: actions/deploy-pages@v4
+      - id: deploy_pages
+        name: Deploy Pages
+        continue-on-error: true
+        uses: actions/deploy-pages@v4
+      - name: Wait before retrying a transient Pages artifact lookup
+        if: steps.deploy_pages.outcome == 'failure'
+        run: sleep 15
+      - name: Retry Pages deployment once
+        if: steps.deploy_pages.outcome == 'failure'
+        uses: actions/deploy-pages@v4
       - name: Report failure
         if: failure()
         run: echo "::error::Refresh or deployment failed. Previous publication remains available; next scheduled run retries. Inspect this run before treating data as current."
