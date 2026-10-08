@@ -501,9 +501,9 @@
       "lossExitDebit": 4.0,
       "plannedExitTurn": {
         "type": "low",
-        "date": "2026-10-02",
-        "time": "Saturn 9:49-10:47 AM; Mars 11:46-12:44 PM",
-        "price": 714.76
+        "date": "2026-10-22",
+        "time": "Saturn 12:40-1:34 PM; Jupiter 1:34-2:28 PM",
+        "price": 735.32
       },
       "fillCredit": 2.0,
       "opened": "2026-09-24T15:53 ET",
@@ -527,6 +527,13 @@
           "time": "Saturn 12:41-1:37 PM",
           "price": 707.87,
           "replacedOn": "2026-09-28"
+        },
+        {
+          "type": "low",
+          "date": "2026-10-02",
+          "time": "Saturn 9:49-10:47 AM; Mars 11:46-12:44 PM",
+          "price": 714.76,
+          "replacedOn": "2026-10-08"
         }
       ],
       "exitPlan": "Agreed with user 10/1 10:21am ET: replace the $1.00 GTC with $0.50 GTC (75%, +$300); if unfilled by the 10/14 projected low (Saturn 9:30-9:53am or 3:29-4:00pm, ~717.77), close at market then; do not hold past 10/14. Order change is the user's to make in the app (still $1.00 as of 10:21am). REVISED 10/1 10:34am ET: app refresh now projects a QQQ LOW on 10/02 (Saturn 9:49-10:47am, ~726.66) then a HIGH on 10/14 (~748.65). The 10/02 low is now the exit turn; close there (spread ~$1.50 at 10:34am) rather than wait for $0.50, since the next leg runs up against the call spread. REVISED AGAIN 10/1 12:16pm ET: the app's 10/02 QQQ turn has flipped high/low several times today (high to 10:11am, low 10:25am, high 10:36-10:45am, low 11:10-11:46am, high 12:10pm). Latest: HIGH 10/02 (~749.85, Saturn 9:49-10:47am / Jupiter 10:47-11:46am) then LOW 10/14 (~717.6). Hold, keep the $1.00 GTC; do not act on the 10/02 label until it is stable. Every version keeps QQQ below the 770 short strike."
@@ -573,9 +580,9 @@
       "lossExitDebit": 2.1,
       "plannedExitTurn": {
         "type": "high",
-        "date": "2026-10-15",
-        "time": "Venus 9:54-10:49 AM; Saturn 12:41-1:37 PM",
-        "price": 119.91
+        "date": "2026-10-19",
+        "time": "Venus 11:45-12:40 PM; Saturn 2:30-3:25 PM",
+        "price": 121.2
       },
       "fillCredit": 1.05,
       "opened": "2026-10-05T14:45 ET",
@@ -604,6 +611,13 @@
           "time": "",
           "price": 128.62,
           "replacedOn": "2026-10-07"
+        },
+        {
+          "type": "high",
+          "date": "2026-10-15",
+          "time": "Venus 9:54-10:49 AM; Saturn 12:41-1:37 PM",
+          "price": 119.91,
+          "replacedOn": "2026-10-08"
         }
       ]
     }
@@ -1579,8 +1593,60 @@
         "plannedExit": "close at the 10/21 projected low or at 50% of credit ($1.00); stop $4.00 debit or 775 breached",
         "taken": false,
         "reason": "pushed; awaiting user",
+        "outcome": "void",
+        "note": "780C (+0.192) nearest 0.20: 780/790 fails; next strike closer 775C (+0.257) 3.625 (3.61/3.64), 785C 1.59; credit/width 0.2035; OI 3792. Stacks on trade 7 (770/780 x2, same expiry, same bet). 1 contract = 7.3%; total open risk 32.6% (over 25%). Timing method scored 37% direction-right in the 10/7 backtest; recommended skip. | Void 10/8 9:35am ET: app moved the QQQ high to 10/09 and the low to 10/22, so expiry rolls to 10/30; superseded by 39."
+      },
+      {
+        "id": 38,
+        "date": "2026-10-08",
+        "time": "9:35 ET",
+        "symbol": "HOOD",
+        "spread": "10/23 100/95 put credit",
+        "midAtAlert": 1.015,
+        "suggestedLimit": 1.0,
+        "shortDelta": -0.243,
+        "spot": 107.06,
+        "contracts": 3,
+        "maxLoss": 1200,
+        "breakeven": 99.0,
+        "legType": "next leg up (current leg down to 10/09 LOW; resting GTC to place at the turn)",
+        "entryTurnDate": "2026-10-09",
+        "entryTurnTime": "Sun 12:42-1:39 PM",
+        "entryTurnPrice": 103.97,
+        "turnDate": "2026-10-19",
+        "turnTime": "Venus 11:45-12:40 PM; Saturn 2:30-3:25 PM",
+        "turnPrice": 121.2,
+        "plannedExit": "close at the 10/19 projected high or at 50% of credit ($0.50); stop $2.00 debit or 100 breached",
+        "taken": false,
+        "reason": "pushed; awaiting user",
         "outcome": "pending",
-        "note": "780C (+0.192) nearest 0.20: 780/790 fails; next strike closer 775C (+0.257) 3.625 (3.61/3.64), 785C 1.59; credit/width 0.2035; OI 3792. Stacks on trade 7 (770/780 x2, same expiry, same bet). 1 contract = 7.3%; total open risk 32.6% (over 25%). Timing method scored 37% direction-right in the 10/7 backtest; recommended skip."
+        "note": "100P (-0.243) 1.71 (1.67/1.75), 95P 0.695; credit/width 0.203; OI 1689. 3% rule: lowest projected low before expiry 103.97 -> short <=100.85. Expiry 10/23 before 11/04 earnings. 3x = 10.9%; doubles the HOOD bet in trade 8; total open risk 36.2% (over 25%). Timing method scored 37% direction-right; recommended skip."
+      },
+      {
+        "id": 39,
+        "date": "2026-10-08",
+        "time": "9:35 ET",
+        "symbol": "QQQ",
+        "spread": "10/30 775/785 call credit",
+        "midAtAlert": 2.425,
+        "suggestedLimit": 2.4,
+        "shortDelta": 0.279,
+        "spot": 753.99,
+        "contracts": 1,
+        "maxLoss": 760,
+        "breakeven": 777.4,
+        "legType": "next leg down (current leg up to 10/09 HIGH; resting GTC to place at the turn)",
+        "entryTurnDate": "2026-10-09",
+        "entryTurnTime": "Saturn 9:51-10:48 AM; Jupiter 10:48-11:45 AM",
+        "entryTurnPrice": 764.39,
+        "turnDate": "2026-10-22",
+        "turnTime": "Saturn 12:40-1:34 PM; Jupiter 1:34-2:28 PM",
+        "turnPrice": 735.32,
+        "plannedExit": "close at the 10/22 projected low or at 50% of credit ($1.20); stop $4.80 debit or 775 breached",
+        "taken": false,
+        "reason": "pushed; awaiting user",
+        "outcome": "pending",
+        "note": "780C (+0.224) nearest 0.20: 780/790 1.85 (0.185, fails); next closer 775C (+0.279) 5.175 (5.14/5.21), 785C 2.75; credit/width 0.2425; OI 7930. Expiry 10/30 (first listed >=2 trading days after 10/22). 1x = 6.9% (2x 13.8% over 13%). Stacks on trade 7. Total open risk with 38: 43.1%. Recommended skip."
       }
     ]
   }

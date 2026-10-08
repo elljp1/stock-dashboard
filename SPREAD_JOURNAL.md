@@ -30,7 +30,7 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 3 | 9/16 11:34am | HOOD | 10/23 $100/$95 put credit spread x2 | $1.85 | $630 | $98.15 | 72% | 5.7% | $0.90 | 9/18 10:20am at $0.90 | **+$190** (30% on risk, 2 days) |
 | 6 | 9/23 11:27am | GOOGL | 10/23 $325/$320 put credit spread x3 | $1.25 | $1,125 | $323.75 | 76% | 10.2% | $1.20 GTC (replaced $0.60 9/24) | 9/24 12:41pm at $1.20 | **+$15** (break-even; exited against the app's leg) |
 | 7 | 9/24 3:53pm | QQQ | 10/23 $770/$780 call credit spread x2 | $2.00 | $1,600 | $772.00 | ~82% | 14.5% (user accepted) | $1.00 GTC resting since 9/24; 10/1: app flipped the 10/02 turn high/low several times; latest (12:10pm) is a 10/02 HIGH then 10/14 LOW, so hold and keep the $1.00 GTC until the label settles (stop $4.00 / QQQ above $770) | | open |
-| 8 | 10/5 2:45pm | HOOD | 10/30 $101/$96 put credit spread x3 | $1.05 | $1,185 | $99.95 | ~78% | 10.8% (25.3% total with #7, user accepted) | $0.53 or the 10/15 projected high (~120; app turn moved 10/22 → 10/09 → 10/19 on 10/6 → 10/15 on 10/7, low 10/07 ~104 first); stop $2.10 / HOOD close below $101 | | open |
+| 8 | 10/5 2:45pm | HOOD | 10/30 $101/$96 put credit spread x3 | $1.05 | $1,185 | $99.95 | ~78% | 10.8% (25.3% total with #7, user accepted) | $0.53 or the 10/19 projected high (~121; app turn moved 10/22 → 10/09 → 10/19 → 10/15 → 10/19 on 10/8, low 10/09 ~104 first); stop $2.10 / HOOD close below $101 | | open |
 
 ## Monthly results
 | Month | Start | Deposits | Realized P&L | Growth | Trades | W/L |
@@ -86,7 +86,9 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 34 | 10/6 3:46pm | HOOD 10/23 104/99 put (timing: place at the 10/07 low, leg up to 10/19 high; over 25% risk cap, duplicates trade 8) | $1.01 (limit $1.00, 3x) | Pushed, open | void (10/7: app low moved to 99.47, 104 short fails 3% rule) |
 | 35 | 10/7 9:35am | META 10/23 770/780 call (timing: leg down to 10/19 low ~653; over 25% risk cap) | $2.025 (limit $2.00, 1x) | Pushed, open | void (10/7 10:34am: superseded by 36) |
 | 36 | 10/7 10:34am | META 10/23 760/770 call (timing: leg down to 10/19 low ~642; over 25% risk cap) | $2.00 (limit $2.00, 1x); re-pushed 11:47am at $2.125 (limit $2.10) | Pushed, open | pending |
-| 37 | 10/7 2:34pm | QQQ 10/23 775/785 call (timing: place at the 10/07 high ~763, leg down to 10/21 low ~735; stacks on trade 7, over 25% risk cap) | $2.035 (limit $2.00, 1x) | Pushed, open | pending |
+| 37 | 10/7 2:34pm | QQQ 10/23 775/785 call (timing: place at the 10/07 high ~763, leg down to 10/21 low ~735; stacks on trade 7, over 25% risk cap) | $2.035 (limit $2.00, 1x) | Pushed, open | void (10/8: turns moved, superseded by 39) |
+| 38 | 10/8 9:35am | HOOD 10/23 100/95 put (timing: place at the 10/09 low ~104, leg up to 10/19 high ~121; doubles trade 8, over 25% risk cap) | $1.015 (limit $1.00, 3x) | Pushed, open | pending |
+| 39 | 10/8 9:35am | QQQ 10/30 775/785 call (timing: place at the 10/09 high ~764, leg down to 10/22 low ~735; stacks on trade 7, over 25% risk cap) | $2.425 (limit $2.40, 1x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
