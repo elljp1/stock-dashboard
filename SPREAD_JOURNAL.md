@@ -22,7 +22,35 @@ Ticker, structure, expiry and DTE, spot, spread mid vs. limit, short delta and I
 breakeven, max profit, max loss, collateral held, probability of profit,
 return on risk at expiry and at target, % of account at risk, earnings date, fees.
 
-## Trades
+## Executed trades (all accounts, numbered in fill order)
+Only filled trades get a number. Old internal ids are in the Ref column.
+| # | Date | Account | Trade | In | Out | Closed | Result |
+|---|---|---|---|---|---|---|---|
+| 1 | 9/16 | Agentic | HOOD 10/23 100/95 put credit spread x2 | $1.85 | $0.90 | 9/18 | **+$190** |
+| 2 | 9/23 | Agentic | GOOGL 10/23 325/320 put credit spread x3 | $1.25 | $1.20 | 9/24 | **+$15** |
+| 3 | 9/24 | Agentic | QQQ 10/23 770/780 call credit spread x2 | $2.00 | $1.48 | 10/8 | **+$104** |
+| 4 | 9/30 | Individual | TSLA 10/30 330 put x2 (short) | $10.00 | $8.00 / $7.00 | 10/1 | **+$500** |
+| 5 | 9/30 | Joint | TSLA 10/30 330 put x3 (short) | $10.00 | $8.00 x2 / $7.00 | 10/1 | **+$700** |
+| 6 | 10/5 | Agentic | HOOD 10/30 101/96 put credit spread x3 | $1.05 | | | open |
+| 7 | 10/8 | Individual | META 10/30 700 put x1 (short) | $24.43 | | | open |
+| 8 | 10/8 | Joint | META 10/30 700 put x1 (short) | $24.00 | | | open |
+
+Closed: 5 trades, 5 wins, **+$1,509** (Agentic +$309, Individual +$500, Joint +$700).
+
+## Orders that never filled (not counted)
+| # | Date | Account | Order | Result |
+|---|---|---|---|---|
+| U1 | 9/10 | Agentic | GOOGL 10/23 305/300 put spread x1 @ $1.20 | cancelled 9/10 |
+| U2 | 9/10 | Agentic | GOOGL 10/23 310/305 put spread x1 @ $1.20 | cancelled 9/12 (broker) |
+| U3 | 9/10 | Individual | GOOGL 10/9 325 put x1 @ $10.00 | cancelled 9/14 |
+| U4 | 9/10 | Joint | GOOGL 10/9 325 put x1 @ $10.00 | cancelled 9/14 |
+| U5 | 9/16 | Agentic | HOOD 10/23 100/95 put spread x2 (second order) | cancelled 9/16 |
+| U6 | 9/16 | Agentic | QQQ 10/23 685/680 put spread x2 @ $1.55 | cancelled 9/18 |
+| U7 | 9/21 | Individual | HOOD 10/23 140 covered call x2 @ $5.00 | cancelled 9/28 |
+| U8 | 10/8 | Individual | JPM 10/30 330 put x1 @ $10.00 | resting |
+| U9 | 10/8 | Joint | JPM 10/30 330 put x1 @ $10.00 | resting |
+
+## Agentic order log (internal ids; see numbered list above)
 | # | Opened | Ticker | Structure | Credit | Max loss | BE | POP | % acct | Exit target | Closed | P&L |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | 1 | cancelled 9/10 2:13pm, never filled | GOOGL | 10/23 $305/$300 put credit spread x1 | $1.20 limit (mid $0.93) | $380 | $303.80 | 81% | 3.5% | $0.60 | | |

@@ -289,7 +289,8 @@
       "pnlNet": 189.68,
       "returnOnRisk": 0.3,
       "daysHeld": 2,
-      "exitReason": "50% profit target hit; GTC close at 0.90 filled"
+      "exitReason": "50% profit target hit; GTC close at 0.90 filled",
+      "tradeNo": 1
     },
     {
       "id": 4,
@@ -469,7 +470,8 @@
           "cancelledAt": "2026-09-24T12:28 ET"
         },
         "filledAt": "2026-09-24T12:41 ET"
-      }
+      },
+      "tradeNo": 2
     },
     {
       "id": 7,
@@ -550,7 +552,8 @@
           "replacedOn": "2026-10-08"
         }
       ],
-      "exitPlan": "Agreed with user 10/1 10:21am ET: replace the $1.00 GTC with $0.50 GTC (75%, +$300); if unfilled by the 10/14 projected low (Saturn 9:30-9:53am or 3:29-4:00pm, ~717.77), close at market then; do not hold past 10/14. Order change is the user's to make in the app (still $1.00 as of 10:21am). REVISED 10/1 10:34am ET: app refresh now projects a QQQ LOW on 10/02 (Saturn 9:49-10:47am, ~726.66) then a HIGH on 10/14 (~748.65). The 10/02 low is now the exit turn; close there (spread ~$1.50 at 10:34am) rather than wait for $0.50, since the next leg runs up against the call spread. REVISED AGAIN 10/1 12:16pm ET: the app's 10/02 QQQ turn has flipped high/low several times today (high to 10:11am, low 10:25am, high 10:36-10:45am, low 11:10-11:46am, high 12:10pm). Latest: HIGH 10/02 (~749.85, Saturn 9:49-10:47am / Jupiter 10:47-11:46am) then LOW 10/14 (~717.6). Hold, keep the $1.00 GTC; do not act on the 10/02 label until it is stable. Every version keeps QQQ below the 770 short strike."
+      "exitPlan": "Agreed with user 10/1 10:21am ET: replace the $1.00 GTC with $0.50 GTC (75%, +$300); if unfilled by the 10/14 projected low (Saturn 9:30-9:53am or 3:29-4:00pm, ~717.77), close at market then; do not hold past 10/14. Order change is the user's to make in the app (still $1.00 as of 10:21am). REVISED 10/1 10:34am ET: app refresh now projects a QQQ LOW on 10/02 (Saturn 9:49-10:47am, ~726.66) then a HIGH on 10/14 (~748.65). The 10/02 low is now the exit turn; close there (spread ~$1.50 at 10:34am) rather than wait for $0.50, since the next leg runs up against the call spread. REVISED AGAIN 10/1 12:16pm ET: the app's 10/02 QQQ turn has flipped high/low several times today (high to 10:11am, low 10:25am, high 10:36-10:45am, low 11:10-11:46am, high 12:10pm). Latest: HIGH 10/02 (~749.85, Saturn 9:49-10:47am / Jupiter 10:47-11:46am) then LOW 10/14 (~717.6). Hold, keep the $1.00 GTC; do not act on the 10/02 label until it is stable. Every version keeps QQQ below the 770 short strike.",
+      "tradeNo": 3
     },
     {
       "id": 8,
@@ -633,7 +636,8 @@
           "price": 119.91,
           "replacedOn": "2026-10-08"
         }
-      ]
+      ],
+      "tradeNo": 6
     }
   ],
   "otherAccountOrders": [
@@ -1760,6 +1764,184 @@
         "outcome": "void",
         "note": "785C (+0.194) nearest 0.20: 785/795 fails; next closer 780C (+0.245) 4.30 (4.28/4.32), 790C 2.26; credit/width 0.204; OI 8805. Expiry 10/30. 1x = 7.3%. Stacks on trade 7; total open risk 32.6% (over 25%). Recommended skip.",
         "voidReason": "10/8 2:34pm: app dropped the QQQ 10/09 high; next turn is a 10/16 low, so the place-at-the-turn GTC has no turn"
+      }
+    ]
+  },
+  "executedTrades": {
+    "note": "Numbered 1..N in fill order, all accounts. Only filled trades get a number. Internal trade ids and alert ids are kept as 'ref'.",
+    "list": [
+      {
+        "no": 1,
+        "date": "2026-09-16",
+        "account": "Agentic",
+        "trade": "HOOD 10/23 100/95 put credit spread x2",
+        "in": 1.85,
+        "out": 0.9,
+        "closed": "2026-09-18",
+        "pnl": 190,
+        "status": "closed",
+        "ref": "trades id 3"
+      },
+      {
+        "no": 2,
+        "date": "2026-09-23",
+        "account": "Agentic",
+        "trade": "GOOGL 10/23 325/320 put credit spread x3",
+        "in": 1.25,
+        "out": 1.2,
+        "closed": "2026-09-24",
+        "pnl": 15,
+        "status": "closed",
+        "ref": "trades id 6"
+      },
+      {
+        "no": 3,
+        "date": "2026-09-24",
+        "account": "Agentic",
+        "trade": "QQQ 10/23 770/780 call credit spread x2",
+        "in": 2.0,
+        "out": 1.48,
+        "closed": "2026-10-08",
+        "pnl": 104,
+        "status": "closed",
+        "ref": "trades id 7"
+      },
+      {
+        "no": 4,
+        "date": "2026-09-30",
+        "account": "Individual",
+        "trade": "TSLA 10/30 330 put x2 (short)",
+        "in": 10.0,
+        "out": "8.00 / 7.00",
+        "closed": "2026-10-01",
+        "pnl": 500,
+        "status": "closed",
+        "ref": "otherAccountOrders TSLA Individual"
+      },
+      {
+        "no": 5,
+        "date": "2026-09-30",
+        "account": "Joint",
+        "trade": "TSLA 10/30 330 put x3 (short)",
+        "in": 10.0,
+        "out": "8.00 x2 / 7.00",
+        "closed": "2026-10-01",
+        "pnl": 700,
+        "status": "closed",
+        "ref": "otherAccountOrders TSLA Joint"
+      },
+      {
+        "no": 6,
+        "date": "2026-10-05",
+        "account": "Agentic",
+        "trade": "HOOD 10/30 101/96 put credit spread x3",
+        "in": 1.05,
+        "out": null,
+        "closed": null,
+        "pnl": null,
+        "status": "open",
+        "ref": "trades id 8"
+      },
+      {
+        "no": 7,
+        "date": "2026-10-08",
+        "account": "Individual",
+        "trade": "META 10/30 700 put x1 (short)",
+        "in": 24.43,
+        "out": null,
+        "closed": null,
+        "pnl": null,
+        "status": "open",
+        "ref": "otherAccountOrders META Individual"
+      },
+      {
+        "no": 8,
+        "date": "2026-10-08",
+        "account": "Joint",
+        "trade": "META 10/30 700 put x1 (short)",
+        "in": 24.0,
+        "out": null,
+        "closed": null,
+        "pnl": null,
+        "status": "open",
+        "ref": "otherAccountOrders META Joint"
+      }
+    ]
+  },
+  "unfilledOrders": {
+    "note": "Orders placed but never filled (U-numbers). Not counted in results.",
+    "list": [
+      {
+        "no": "U1",
+        "date": "2026-09-10",
+        "account": "Agentic",
+        "order": "GOOGL 10/23 305/300 put credit spread x1 @1.20",
+        "result": "cancelled 9/10, never filled",
+        "ref": "trades id 1"
+      },
+      {
+        "no": "U2",
+        "date": "2026-09-10",
+        "account": "Agentic",
+        "order": "GOOGL 10/23 310/305 put credit spread x1 @1.20",
+        "result": "cancelled 9/12 by broker, never filled",
+        "ref": "trades id 2"
+      },
+      {
+        "no": "U3",
+        "date": "2026-09-10",
+        "account": "Individual",
+        "order": "GOOGL 10/9 325 put x1 @10.00",
+        "result": "cancelled 9/14, never filled",
+        "ref": "otherAccountOrders"
+      },
+      {
+        "no": "U4",
+        "date": "2026-09-10",
+        "account": "Joint",
+        "order": "GOOGL 10/9 325 put x1 @10.00",
+        "result": "cancelled 9/14, never filled",
+        "ref": "otherAccountOrders"
+      },
+      {
+        "no": "U5",
+        "date": "2026-09-16",
+        "account": "Agentic",
+        "order": "HOOD 10/23 100/95 put credit spread x2 (second order)",
+        "result": "cancelled 9/16, never filled",
+        "ref": "trades id 4"
+      },
+      {
+        "no": "U6",
+        "date": "2026-09-16",
+        "account": "Agentic",
+        "order": "QQQ 10/23 685/680 put credit spread x2 @1.55",
+        "result": "cancelled 9/18, never filled",
+        "ref": "trades id 5"
+      },
+      {
+        "no": "U7",
+        "date": "2026-09-21",
+        "account": "Individual",
+        "order": "HOOD 10/23 140 covered call x2 @5.00",
+        "result": "cancelled 9/28, never filled",
+        "ref": "otherAccountOrders"
+      },
+      {
+        "no": "U8",
+        "date": "2026-10-08",
+        "account": "Individual",
+        "order": "JPM 10/30 330 put x1 @10.00",
+        "result": "resting",
+        "ref": "otherAccountOrders"
+      },
+      {
+        "no": "U9",
+        "date": "2026-10-08",
+        "account": "Joint",
+        "order": "JPM 10/30 330 put x1 @10.00",
+        "result": "resting",
+        "ref": "otherAccountOrders"
       }
     ]
   }
