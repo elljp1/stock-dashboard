@@ -88,7 +88,8 @@ return on risk at expiry and at target, % of account at risk, earnings date, fee
 | 36 | 10/7 10:34am | META 10/23 760/770 call (timing: leg down to 10/19 low ~642; over 25% risk cap) | $2.00 (limit $2.00, 1x); re-pushed 11:47am at $2.125 (limit $2.10) | Pushed, open | pending |
 | 37 | 10/7 2:34pm | QQQ 10/23 775/785 call (timing: place at the 10/07 high ~763, leg down to 10/21 low ~735; stacks on trade 7, over 25% risk cap) | $2.035 (limit $2.00, 1x) | Pushed, open | void (10/8: turns moved, superseded by 39) |
 | 38 | 10/8 9:35am | HOOD 10/23 100/95 put (timing: place at the 10/09 low ~104, leg up to 10/19 high ~121; doubles trade 8, over 25% risk cap) | $1.015 (limit $1.00, 3x) | Pushed, open | pending |
-| 39 | 10/8 9:35am | QQQ 10/30 775/785 call (timing: place at the 10/09 high ~764, leg down to 10/22 low ~735; stacks on trade 7, over 25% risk cap) | $2.425 (limit $2.40, 1x) | Pushed, open | pending |
+| 39 | 10/8 9:35am | QQQ 10/30 775/785 call (timing: place at the 10/09 high ~764, leg down to 10/22 low ~735; stacks on trade 7, over 25% risk cap) | $2.425 (limit $2.40, 1x) | Pushed, open | void (10/8 10:34am: superseded by 40) |
+| 40 | 10/8 10:34am | QQQ 10/30 780/790 call (timing: place at the 10/09 high ~764, leg down to 10/22 low ~735; stacks on trade 7, over 25% risk cap) | $2.04 (limit $2.00, 1x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
