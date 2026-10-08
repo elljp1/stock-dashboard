@@ -2908,3 +2908,34 @@ Honesty features, ledgers, and the coherence gate are untouched; `tickers.txt` w
 **Watch next:** whether HOOD's hit rate holds or slips as a third session confirms the 1.15 ceiling
 is genuinely the right call; whether NVDA/AMZN/SPY/VOO/META ever produce a qualifying swing to grade;
 and the open alerts (26, 31, 32, 36, 37) and open trades (7, 8).
+
+## 2026-10-08 (Thu) — daily review: grades steady, no code change
+
+**Build status:** this session's own `fetch_data.py` was blocked again — all 11 tickers failed with
+the same "Tunnel connection failed: 403 Forbidden" error seen on recent days, a sandbox network
+restriction, not a Yahoo-side block. With no fresh CSVs, `analyze.py` correctly refused to rebuild
+("Incomplete analysis; retaining last published dashboard") and left the current build untouched.
+The separate cloud refresh workflow had already run today with real market access — `data.js` is
+stamped generated 10/08 6:05 PM ET across all 11 tickers. `coherence_check.py` passes clean (11/11
+tickers), `anomaly_audit.py` reports no anomalies, the full Python test suite passes all 98 tests,
+and all 4 Node tests (pin, smoke, reliability, scheduler) pass too.
+
+**Grades reviewed:** TSLA n=13 (31%/38% within 2/3 days), HOOD n=58 (19%/28%, `priceCalibHigh` still
+holding at the owner's deliberate 1.15 ceiling — one more day of confirmation that the 10/5 revert
+was the right call), QQQ n=44 (30%/34%, still the strongest timing name), JPM n=27 (15%/22%), GOOGL
+n=34 (21%/24%), GC=F n=19 (21%/21%); NVDA/AMZN/SPY/VOO/META still n=0 on swing grading (quiet/too-new
+names, confirmed not a bug). All of these match yesterday's reading almost exactly, just one extra
+graded day for most names — no slippage, no improvement, no 3+-day pattern. The separate walk-forward
+horizon scoreboard (`horizon_scoreboard.json`) also looks healthy across the board: every name's
+timed within-hour hit rate is far above its random-control baseline (e.g. HOOD 76% vs 21% random),
+and median price error beats the naive baseline for almost every name/direction pair — the one
+exception, AMZN lows (model 1.04% vs naive 0.86%), is a single small gap on a single name, not a
+repeated pattern, so it's one to watch rather than fix today.
+
+**What changed and why:** nothing. No bug found, metrics are stable and consistent with the last
+several days, and no pattern has crossed the 3+-day change bar. Honesty features, ledgers, and the
+coherence gate are untouched; `tickers.txt` wasn't touched.
+
+**Watch next:** whether HOOD's 1.15 calibration ceiling keeps holding as more days confirm it; the
+small AMZN-low price-error gap, in case it recurs; whether NVDA/AMZN/SPY/VOO/META ever produce a
+qualifying swing to grade; and the open alerts/trades in the paper journal.
