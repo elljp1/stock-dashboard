@@ -78,6 +78,18 @@
       "wins": 2,
       "losses": 0,
       "note": "Opened at 1,000; 10,000 deposit landed 2026-09-09 before any trade. Growth measured from 11,000."
+    },
+    {
+      "month": "2026-10",
+      "startValue": 11205,
+      "deposits": 0,
+      "realizedPnl": 104,
+      "fees": 0,
+      "growthPct": 0.93,
+      "trades": 1,
+      "wins": 1,
+      "losses": 0,
+      "note": "Growth measured from 11,205 (11,000 + September realized)."
     }
   ],
   "trades": [
@@ -461,7 +473,7 @@
     },
     {
       "id": 7,
-      "status": "open",
+      "status": "closed",
       "account": "••••2831 Agentic",
       "orderId": "6ab57776-6f28-4d8a-a7a4-8e3b0c4d6a11",
       "ticker": "QQQ",
@@ -507,18 +519,20 @@
       },
       "fillCredit": 2.0,
       "opened": "2026-09-24T15:53 ET",
-      "closed": null,
-      "closeCost": null,
-      "pnl": null,
-      "notes": "Timing-led: app projects a QQQ high 9/24 (~748.65) then a low 10/15 (~707.87). Suggested 1 contract ($800 risk, 7.3%); user placed 2 and accepted ~15% of account at risk (above the 13% per-trade cap, user's call). Limit $2.00 sits above the 1.91/1.99 quote, so it rests until QQQ rises toward the projected high. Filled 3:53pm ET 9/24: sold 770C at 4.86, bought 780C at 2.86 ($2.00 credit, $400 total). 9/28: app's QQQ legs moved; next turn is now a LOW on Fri 10/02 (~714.76), followed by a HIGH 10/14 (~745). Timing exit moved to the 10/02 low, since the leg after it runs up against a call spread. 10/6 9:34am: app now projects a QQQ HIGH Wed 10/07 (~760.45) before the 10/14 low; spread against the app's leg until then (mid 3.35, stop 4.00).",
+      "closed": "2026-10-08T13:04 ET",
+      "closeCost": 1.48,
+      "pnl": 104,
+      "notes": "Timing-led: app projects a QQQ high 9/24 (~748.65) then a low 10/15 (~707.87). Suggested 1 contract ($800 risk, 7.3%); user placed 2 and accepted ~15% of account at risk (above the 13% per-trade cap, user's call). Limit $2.00 sits above the 1.91/1.99 quote, so it rests until QQQ rises toward the projected high. Filled 3:53pm ET 9/24: sold 770C at 4.86, bought 780C at 2.86 ($2.00 credit, $400 total). 9/28: app's QQQ legs moved; next turn is now a LOW on Fri 10/02 (~714.76), followed by a HIGH 10/14 (~745). Timing exit moved to the 10/02 low, since the leg after it runs up against a call spread. 10/6 9:34am: app now projects a QQQ HIGH Wed 10/07 (~760.45) before the 10/14 low; spread against the app's leg until then (mid 3.35, stop 4.00). 10/8 1:04pm ET: user closed at $1.48 debit (limit $1.50; bought 770C at 2.33, sold 780C at 0.85), +$104 (26% of max) with QQQ ~750. App's next QQQ turn at 2:34pm is a LOW 10/16 (~735), so the call spread was with the leg when closed.",
       "exitOrder": {
-        "orderId": "6ab58080-b38f-42a0-b557-b872ce9482fe",
+        "orderId": "6ac7cd02-85fd-4c34-af1d-a76c5daeaa61",
         "type": "buy to close, limit",
-        "limitDebit": 1.0,
+        "limitDebit": 1.5,
         "timeInForce": "gtc",
-        "placedAt": "2026-09-24T15:56 ET",
+        "placedAt": "2026-10-08T13:04 ET",
         "placedBy": "user in app",
-        "state": "resting"
+        "state": "filled",
+        "fillDebit": 1.48,
+        "replaced": "$1.00 GTC (6ab58080) cancelled by user"
       },
       "plannedExitTurnHistory": [
         {
@@ -750,6 +764,42 @@
       "closedQty": 3,
       "realizedPnl": 700,
       "openQty": 0
+    },
+    {
+      "order": "sell to open META $700 put 10/30 x1",
+      "limit": 24.0,
+      "tif": "gtc",
+      "status": "open (filled 10/8 1:07pm ET at $24.43)",
+      "placed": "2026-10-08T13:07 ET",
+      "filled": "2026-10-08T13:07 ET",
+      "fillPrice": 24.43,
+      "breakeven": 675.57,
+      "placedAgent": "user",
+      "account": "Individual ••••8549",
+      "quantity": 1,
+      "premium": 2443,
+      "collateral": 70000,
+      "orderId": "6ac7cdc5-40a2-442b-bd70-07fdad19e5ae",
+      "note": "Cash-secured short put placed by the user, META ~719. META earnings 10/28 fall before the 10/30 expiry; app projects a META low ~643 on 10/19. Not part of the Agentic spread P&L.",
+      "openQty": 1
+    },
+    {
+      "order": "sell to open META $700 put 10/30 x1",
+      "limit": 24.0,
+      "tif": "gtc",
+      "status": "open (filled 10/8 1:08pm ET at $24.00)",
+      "placed": "2026-10-08T13:08 ET",
+      "filled": "2026-10-08T13:08 ET",
+      "fillPrice": 24.0,
+      "breakeven": 676.0,
+      "placedAgent": "user",
+      "account": "Joint ••••6540",
+      "quantity": 1,
+      "premium": 2400,
+      "collateral": 70000,
+      "orderId": "6ac7ce04-1899-4667-a9e9-85bccb97db32",
+      "note": "Same trade as Individual (2 contracts total). Not part of the Agentic spread P&L.",
+      "openQty": 1
     }
   ],
   "alerts": {
@@ -1063,7 +1113,7 @@
         "plannedExit": "close at the 10/15 projected low or at 50% of credit ($1.00); stop 2x credit ($4.00) or 770 breached",
         "taken": true,
         "reason": "user asked 'if you had to make a trade'; placed in app 3:18pm ET, 2 contracts (user accepted ~15% risk); filled 3:53pm ET at $2.00",
-        "outcome": "pending",
+        "outcome": "taken: closed 10/8 1:04pm at $1.48, +$104",
         "note": "Answer to a direct question, not a scan alert: mid credit/width 0.19 (just under 0.20); $2.00 limit meets 0.20. 760/770 excluded (short delta 0.33)."
       },
       {
@@ -1671,8 +1721,9 @@
         "plannedExit": "close at the 10/22 projected low or at 50% of credit ($1.00); stop $4.00 debit or 780 breached",
         "taken": false,
         "reason": "pushed; awaiting user",
-        "outcome": "pending",
-        "note": "785C (+0.194) nearest 0.20: 785/795 fails; next closer 780C (+0.245) 4.30 (4.28/4.32), 790C 2.26; credit/width 0.204; OI 8805. Expiry 10/30. 1x = 7.3%. Stacks on trade 7; total open risk 32.6% (over 25%). Recommended skip."
+        "outcome": "void",
+        "note": "785C (+0.194) nearest 0.20: 785/795 fails; next closer 780C (+0.245) 4.30 (4.28/4.32), 790C 2.26; credit/width 0.204; OI 8805. Expiry 10/30. 1x = 7.3%. Stacks on trade 7; total open risk 32.6% (over 25%). Recommended skip.",
+        "voidReason": "10/8 2:34pm: app dropped the QQQ 10/09 high; next turn is a 10/16 low, so the place-at-the-turn GTC has no turn"
       }
     ]
   }
