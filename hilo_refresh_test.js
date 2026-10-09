@@ -9,7 +9,8 @@ const { JSDOM } = require("jsdom");
 
 const template = fs.readFileSync("dashboard.html", "utf8");
 const dataRaw = fs.readFileSync("data.js", "utf8").split("\n").filter(l => !l.startsWith("const HILO = ")).join("\n");
-const withHilo = h => "const HILO = " + JSON.stringify(h) + ";\n" + dataRaw;
+// HILO is written last, as analyze.py does
+const withHilo = h => dataRaw.replace(/\n*$/, "\n") + "const HILO = " + JSON.stringify(h) + ";\n";
 
 function ctx() {
   return new Proxy({}, { get(_t, k) {

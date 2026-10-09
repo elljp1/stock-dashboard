@@ -2595,27 +2595,28 @@ except Exception:
     HILO = None
 
 with open("data.js", "w", encoding="utf-8") as f:
-    f.write("const HILO = " + json.dumps(HILO) + ";\n"
-            + "const DATA_ALL = " + json.dumps(all_out) + ";\n"
+    f.write("const DATA_ALL = " + json.dumps(all_out) + ";\n"
             + "const TRADES = " + json.dumps(TRADES) + ";\n"
             + "const REALTRADES = " + json.dumps(REAL_TRADES) + ";\n"
             + "const IMPROVELOG = " + json.dumps(IMPROVE_TXT) + ";\n"
             + "const BACKFILL = " + json.dumps(BACKFILL) + ";\n"
-            + "const BENCHMARK = " + json.dumps(BENCHMARK) + ";\n")
+            + "const BENCHMARK = " + json.dumps(BENCHMARK) + ";\n"
+            # last: coherence_check.py and anomaly_audit.py expect data.js to start with DATA_ALL
+            + "const HILO = " + json.dumps(HILO) + ";\n")
 
 # single self-contained file (data inlined) - works on phones via OneDrive,
 # email, or a simple web upload, with no companion data.js needed
 try:
     with open("dashboard.html", encoding="utf-8") as f:
         html = f.read()
-    inline = ("<script>const HILO = " + json.dumps(HILO) + ";\n"
-              + "const DATA_ALL = " + json.dumps(all_out) + ";\n"
+    inline = ("<script>const DATA_ALL = " + json.dumps(all_out) + ";\n"
               + "const TRADES = " + json.dumps(TRADES) + ";\n"
               + "const REALTRADES = " + json.dumps(REAL_TRADES) + ";\n"
               + "const IMPROVELOG = " + json.dumps(IMPROVE_TXT) + ";\n"
               + "const BACKFILL = " + json.dumps(BACKFILL) + ";\n"
               + "const BENCHMARK = " + json.dumps(BENCHMARK) + ";" + chr(10)
-              + "const WEEKPLAN = " + json.dumps(WEEKPLAN) + ";</script>")
+              + "const WEEKPLAN = " + json.dumps(WEEKPLAN) + ";\n"
+              + "const HILO = " + json.dumps(HILO) + ";</script>")
     html = html.replace('<script src="data.js"></script>', inline)
     with open("dashboard_single.html", "w", encoding="utf-8") as f:
         f.write(html)
