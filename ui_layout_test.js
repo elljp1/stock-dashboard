@@ -41,7 +41,7 @@ setTimeout(() => {
   check(d.getElementById("sectionTabs").children.length > 0, "Details tabs did not build");
   const head = d.getElementById("hiloHead").textContent, tag = d.getElementById("chartTag").textContent;
   check(/2026-10-12/.test(head) && /2026-10-12/.test(tag), "chart and cards do not name the same session");
-  check(!/confluence forecast/.test(tag), "legacy projected path still described on the chart");
+  check(/next 5 projected highs\/lows/.test(tag), "next 5 projected highs/lows not shown on the chart");
   check(/Oct 12/.test(d.getElementById("hiloTitle").textContent), "title does not name the target session: " + d.getElementById("hiloTitle").textContent);
   const after = (a, b) => !!(a.compareDocumentPosition(b) & dom.window.Node.DOCUMENT_POSITION_FOLLOWING);
   check(after(d.getElementById("chart"), d.getElementById("btnUpdate")), "Update controls should come after the chart");
