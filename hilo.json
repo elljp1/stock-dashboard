@@ -1,0 +1,2071 @@
+{
+ "generatedAt": "2026-10-09T20:09:01+00:00",
+ "model": "hilo-1",
+ "targetSession": "2026-10-12",
+ "kind": "premarket",
+ "method": "Price: prior close x (1 + median move to the high/low over the last 20 sessions); 80% band = 10th-90th percentile of that move over up to 60 sessions. Time: the modal 15-minute bar of past highs/lows (up to 60 sessions) with its probability; separately, the centre of the +/-60 min window holding the most probability (a window centre, not the likeliest time). Intraday revisions forecast the FINAL full-session high/low, including what already traded, from exactly the bars up to a fixed checkpoint, by replaying the rest of each earlier session from the same bar. Regular session only; NYSE holidays and half-days applied.",
+ "latest": {
+  "TSLA": {
+   "premarket": {
+    "target": "full-session high and low of 2026-10-12",
+    "anchor": 382.71,
+    "anchorKind": "prior close",
+    "high": {
+     "price": 387.85,
+     "lo": 382.11,
+     "hi": 399.64,
+     "time": "09:30",
+     "pBar": 0.39,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.39
+      },
+      {
+       "time": "10:00",
+       "p": 0.085
+      },
+      {
+       "time": "15:45",
+       "p": 0.085
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.678,
+      "p30": 0.203
+     }
+    },
+    "low": {
+     "price": 377.8,
+     "lo": 369.03,
+     "hi": 385.24,
+     "time": "09:30",
+     "pBar": 0.424,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.424
+      },
+      {
+       "time": "15:45",
+       "p": 0.085
+      },
+      {
+       "time": "10:00",
+       "p": 0.068
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.712,
+      "p30": 0.169
+     }
+    },
+    "history": {
+     "n": 59,
+     "from": "2026-07-20",
+     "to": "2026-10-09"
+    },
+    "dataCutoff": "2026-10-09T16:00:00-04:00",
+    "lastBar": "2026-10-09 15:45",
+    "v": 1,
+    "model": "hilo-1",
+    "ticker": "TSLA",
+    "session": "2026-10-12",
+    "kind": "premarket",
+    "issuedAt": "2026-10-09T20:09:01+00:00",
+    "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
+    "id": "cf2841e93381cd08"
+   }
+  },
+  "HOOD": {
+   "premarket": {
+    "target": "full-session high and low of 2026-10-12",
+    "anchor": 109.05,
+    "anchorKind": "prior close",
+    "high": {
+     "price": 111.42,
+     "lo": 108.47,
+     "hi": 117.35,
+     "time": "09:30",
+     "pBar": 0.492,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.492
+      },
+      {
+       "time": "09:45",
+       "p": 0.102
+      },
+      {
+       "time": "10:00",
+       "p": 0.085
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.797,
+      "p30": 0.169
+     }
+    },
+    "low": {
+     "price": 107.31,
+     "lo": 103.64,
+     "hi": 110.62,
+     "time": "09:30",
+     "pBar": 0.407,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.407
+      },
+      {
+       "time": "15:45",
+       "p": 0.153
+      },
+      {
+       "time": "09:45",
+       "p": 0.068
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.627,
+      "p30": 0.102
+     }
+    },
+    "history": {
+     "n": 59,
+     "from": "2026-07-20",
+     "to": "2026-10-09"
+    },
+    "dataCutoff": "2026-10-09T16:00:00-04:00",
+    "lastBar": "2026-10-09 15:45",
+    "v": 1,
+    "model": "hilo-1",
+    "ticker": "HOOD",
+    "session": "2026-10-12",
+    "kind": "premarket",
+    "issuedAt": "2026-10-09T20:09:01+00:00",
+    "prevHash": "163a066ee712a24f83b1d00ff8295d99e5055d9be1b2d6675a960027ea596947",
+    "id": "81db695359652252"
+   }
+  },
+  "QQQ": {
+   "premarket": {
+    "target": "full-session high and low of 2026-10-12",
+    "anchor": 751.24,
+    "anchorKind": "prior close",
+    "high": {
+     "price": 756.29,
+     "lo": 748.29,
+     "hi": 764.77,
+     "time": "09:30",
+     "pBar": 0.237,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.237
+      },
+      {
+       "time": "15:45",
+       "p": 0.136
+      },
+      {
+       "time": "09:45",
+       "p": 0.102
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.542,
+      "p30": 0.153
+     }
+    },
+    "low": {
+     "price": 749.56,
+     "lo": 738.43,
+     "hi": 756.58,
+     "time": "09:30",
+     "pBar": 0.254,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.254
+      },
+      {
+       "time": "10:15",
+       "p": 0.136
+      },
+      {
+       "time": "15:45",
+       "p": 0.119
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.695,
+      "p30": 0.288
+     }
+    },
+    "history": {
+     "n": 59,
+     "from": "2026-07-20",
+     "to": "2026-10-09"
+    },
+    "dataCutoff": "2026-10-09T16:00:00-04:00",
+    "lastBar": "2026-10-09 15:45",
+    "v": 1,
+    "model": "hilo-1",
+    "ticker": "QQQ",
+    "session": "2026-10-12",
+    "kind": "premarket",
+    "issuedAt": "2026-10-09T20:09:01+00:00",
+    "prevHash": "1a801484818ef9f038ea4d82df7e5d44dc5b9d84a1c5a004799a9f9ea0a48d9a",
+    "id": "1a8f6bfd605e05ba"
+   }
+  },
+  "JPM": {
+   "premarket": {
+    "target": "full-session high and low of 2026-10-12",
+    "anchor": 333.02,
+    "anchorKind": "prior close",
+    "high": {
+     "price": 334.62,
+     "lo": 332.99,
+     "hi": 339.0,
+     "time": "09:30",
+     "pBar": 0.424,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.424
+      },
+      {
+       "time": "10:00",
+       "p": 0.085
+      },
+      {
+       "time": "15:30",
+       "p": 0.085
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.678,
+      "p30": 0.169
+     }
+    },
+    "low": {
+     "price": 329.26,
+     "lo": 326.53,
+     "hi": 333.36,
+     "time": "09:30",
+     "pBar": 0.305,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.305
+      },
+      {
+       "time": "10:00",
+       "p": 0.102
+      },
+      {
+       "time": "15:45",
+       "p": 0.068
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.644,
+      "p30": 0.22
+     }
+    },
+    "history": {
+     "n": 59,
+     "from": "2026-07-20",
+     "to": "2026-10-09"
+    },
+    "dataCutoff": "2026-10-09T16:00:00-04:00",
+    "lastBar": "2026-10-09 15:45",
+    "v": 1,
+    "model": "hilo-1",
+    "ticker": "JPM",
+    "session": "2026-10-12",
+    "kind": "premarket",
+    "issuedAt": "2026-10-09T20:09:01+00:00",
+    "prevHash": "5923933183839e64760b2d438f0e0b9897dcdbe6a068d7c5175e809993b48b03",
+    "id": "68cb5cb6899836c8"
+   }
+  },
+  "GOOGL": {
+   "premarket": {
+    "target": "full-session high and low of 2026-10-12",
+    "anchor": 351.63,
+    "anchorKind": "prior close",
+    "high": {
+     "price": 357.58,
+     "lo": 350.63,
+     "hi": 363.38,
+     "time": "09:30",
+     "pBar": 0.458,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.458
+      },
+      {
+       "time": "10:15",
+       "p": 0.102
+      },
+      {
+       "time": "15:45",
+       "p": 0.068
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.695,
+      "p30": 0.169
+     }
+    },
+    "low": {
+     "price": 349.69,
+     "lo": 342.69,
+     "hi": 354.65,
+     "time": "09:30",
+     "pBar": 0.39,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.39
+      },
+      {
+       "time": "09:45",
+       "p": 0.102
+      },
+      {
+       "time": "15:45",
+       "p": 0.102
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.712,
+      "p30": 0.169
+     }
+    },
+    "history": {
+     "n": 59,
+     "from": "2026-07-20",
+     "to": "2026-10-09"
+    },
+    "dataCutoff": "2026-10-09T16:00:00-04:00",
+    "lastBar": "2026-10-09 15:45",
+    "v": 1,
+    "model": "hilo-1",
+    "ticker": "GOOGL",
+    "session": "2026-10-12",
+    "kind": "premarket",
+    "issuedAt": "2026-10-09T20:09:01+00:00",
+    "prevHash": "5a4e73399e62731d6b7c3a8cef20f6c88b69f427b5a916ef6ef41a5ad86f4c5b",
+    "id": "3df84ef977865145"
+   }
+  },
+  "NVDA": {
+   "premarket": {
+    "target": "full-session high and low of 2026-10-12",
+    "anchor": 229.32,
+    "anchorKind": "prior close",
+    "high": {
+     "price": 233.03,
+     "lo": 229.0,
+     "hi": 237.4,
+     "time": "09:30",
+     "pBar": 0.424,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.424
+      },
+      {
+       "time": "15:45",
+       "p": 0.085
+      },
+      {
+       "time": "10:00",
+       "p": 0.068
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.644,
+      "p30": 0.153
+     }
+    },
+    "low": {
+     "price": 228.67,
+     "lo": 222.04,
+     "hi": 231.94,
+     "time": "09:30",
+     "pBar": 0.305,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.305
+      },
+      {
+       "time": "15:45",
+       "p": 0.169
+      },
+      {
+       "time": "10:15",
+       "p": 0.068
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.525,
+      "p30": 0.169
+     }
+    },
+    "history": {
+     "n": 59,
+     "from": "2026-07-20",
+     "to": "2026-10-09"
+    },
+    "dataCutoff": "2026-10-09T16:00:00-04:00",
+    "lastBar": "2026-10-09 15:45",
+    "v": 1,
+    "model": "hilo-1",
+    "ticker": "NVDA",
+    "session": "2026-10-12",
+    "kind": "premarket",
+    "issuedAt": "2026-10-09T20:09:01+00:00",
+    "prevHash": "a4b7e186d20b97d1497674f7b1817bdf9761283b8f8f160b69436929838f8dff",
+    "id": "ce2940ad6c2cf4d3"
+   }
+  },
+  "AMZN": {
+   "premarket": {
+    "target": "full-session high and low of 2026-10-12",
+    "anchor": 262.48,
+    "anchorKind": "prior close",
+    "high": {
+     "price": 265.33,
+     "lo": 260.45,
+     "hi": 269.55,
+     "time": "09:30",
+     "pBar": 0.407,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.407
+      },
+      {
+       "time": "15:45",
+       "p": 0.085
+      },
+      {
+       "time": "09:45",
+       "p": 0.068
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.644,
+      "p30": 0.119
+     }
+    },
+    "low": {
+     "price": 259.8,
+     "lo": 256.01,
+     "hi": 264.12,
+     "time": "09:30",
+     "pBar": 0.373,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.373
+      },
+      {
+       "time": "09:45",
+       "p": 0.102
+      },
+      {
+       "time": "15:45",
+       "p": 0.102
+      }
+     ],
+     "window": {
+      "centre": "10:15",
+      "p60": 0.644,
+      "p30": 0.22
+     }
+    },
+    "history": {
+     "n": 59,
+     "from": "2026-07-20",
+     "to": "2026-10-09"
+    },
+    "dataCutoff": "2026-10-09T16:00:00-04:00",
+    "lastBar": "2026-10-09 15:45",
+    "v": 1,
+    "model": "hilo-1",
+    "ticker": "AMZN",
+    "session": "2026-10-12",
+    "kind": "premarket",
+    "issuedAt": "2026-10-09T20:09:01+00:00",
+    "prevHash": "3eb505efa6d24058f02b12c8a386628d4bfd54862041b18fc90793359f84e50c",
+    "id": "f0b23a1aa78592ed"
+   }
+  },
+  "SPY": {
+   "premarket": {
+    "target": "full-session high and low of 2026-10-12",
+    "anchor": 778.53,
+    "anchorKind": "prior close",
+    "high": {
+     "price": 780.98,
+     "lo": 777.1,
+     "hi": 787.37,
+     "time": "09:30",
+     "pBar": 0.237,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.237
+      },
+      {
+       "time": "15:45",
+       "p": 0.119
+      },
+      {
+       "time": "11:00",
+       "p": 0.068
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.508,
+      "p30": 0.186
+     }
+    },
+    "low": {
+     "price": 775.06,
+     "lo": 771.51,
+     "hi": 781.48,
+     "time": "09:30",
+     "pBar": 0.153,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.153
+      },
+      {
+       "time": "15:45",
+       "p": 0.119
+      },
+      {
+       "time": "09:45",
+       "p": 0.102
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.627,
+      "p30": 0.271
+     }
+    },
+    "history": {
+     "n": 59,
+     "from": "2026-07-20",
+     "to": "2026-10-09"
+    },
+    "dataCutoff": "2026-10-09T16:00:00-04:00",
+    "lastBar": "2026-10-09 15:45",
+    "v": 1,
+    "model": "hilo-1",
+    "ticker": "SPY",
+    "session": "2026-10-12",
+    "kind": "premarket",
+    "issuedAt": "2026-10-09T20:09:01+00:00",
+    "prevHash": "1276a99af9c981d0ee76a261bb3168e85bbfc3056738ad04218e63d9c5a0ec31",
+    "id": "2014a951b8f4a86b"
+   }
+  },
+  "VOO": {
+   "premarket": {
+    "target": "full-session high and low of 2026-10-12",
+    "anchor": 715.65,
+    "anchorKind": "prior close",
+    "high": {
+     "price": 717.92,
+     "lo": 714.33,
+     "hi": 723.8,
+     "time": "09:30",
+     "pBar": 0.237,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.237
+      },
+      {
+       "time": "15:45",
+       "p": 0.119
+      },
+      {
+       "time": "11:00",
+       "p": 0.068
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.508,
+      "p30": 0.203
+     }
+    },
+    "low": {
+     "price": 712.89,
+     "lo": 709.29,
+     "hi": 718.35,
+     "time": "09:30",
+     "pBar": 0.153,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.153
+      },
+      {
+       "time": "15:45",
+       "p": 0.119
+      },
+      {
+       "time": "09:45",
+       "p": 0.102
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.627,
+      "p30": 0.271
+     }
+    },
+    "history": {
+     "n": 59,
+     "from": "2026-07-20",
+     "to": "2026-10-09"
+    },
+    "dataCutoff": "2026-10-09T16:00:00-04:00",
+    "lastBar": "2026-10-09 15:45",
+    "v": 1,
+    "model": "hilo-1",
+    "ticker": "VOO",
+    "session": "2026-10-12",
+    "kind": "premarket",
+    "issuedAt": "2026-10-09T20:09:01+00:00",
+    "prevHash": "38d9f75d3c7ba353b4ab55dc1ede0fe05998ceaad6492b88e3f5701eed7a58a9",
+    "id": "4321d78c5cac334d"
+   }
+  },
+  "META": {
+   "premarket": {
+    "target": "full-session high and low of 2026-10-12",
+    "anchor": 718.6,
+    "anchorKind": "prior close",
+    "high": {
+     "price": 730.97,
+     "lo": 717.77,
+     "hi": 746.21,
+     "time": "09:30",
+     "pBar": 0.39,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.39
+      },
+      {
+       "time": "15:45",
+       "p": 0.136
+      },
+      {
+       "time": "09:45",
+       "p": 0.068
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.661,
+      "p30": 0.153
+     }
+    },
+    "low": {
+     "price": 713.63,
+     "lo": 692.78,
+     "hi": 720.27,
+     "time": "09:30",
+     "pBar": 0.441,
+     "topBins": [
+      {
+       "time": "09:30",
+       "p": 0.441
+      },
+      {
+       "time": "15:45",
+       "p": 0.169
+      },
+      {
+       "time": "09:45",
+       "p": 0.051
+      }
+     ],
+     "window": {
+      "centre": "10:30",
+      "p60": 0.559,
+      "p30": 0.051
+     }
+    },
+    "history": {
+     "n": 59,
+     "from": "2026-07-20",
+     "to": "2026-10-09"
+    },
+    "dataCutoff": "2026-10-09T16:00:00-04:00",
+    "lastBar": "2026-10-09 15:45",
+    "v": 1,
+    "model": "hilo-1",
+    "ticker": "META",
+    "session": "2026-10-12",
+    "kind": "premarket",
+    "issuedAt": "2026-10-09T20:09:01+00:00",
+    "prevHash": "deae4401ab991d94e8d527405750cdc446291d9898859f8805464fab0dccf641",
+    "id": "3a85c52e8567343f"
+   }
+  }
+ },
+ "notes": {},
+ "excluded": {
+  "GC=F": "futures session calendar not implemented"
+ },
+ "ledger": {
+  "ok": true,
+  "records": 10
+ },
+ "otherModelRecords": 0,
+ "lateIntradayRecords": 0,
+ "storedSessions": {
+  "TSLA": 60,
+  "HOOD": 60,
+  "QQQ": 60,
+  "JPM": 60,
+  "GOOGL": 60,
+  "NVDA": 60,
+  "AMZN": 60,
+  "SPY": 60,
+  "VOO": 60,
+  "META": 60
+ },
+ "forward": {
+  "premarket": {
+   "high": {
+    "n": 0
+   },
+   "low": {
+    "n": 0
+   }
+  },
+  "intraday": {
+   "high": {
+    "n": 0
+   },
+   "low": {
+    "n": 0
+   }
+  },
+  "intradayByCheckpoint": {
+   "2": {
+    "high": {
+     "n": 0
+    },
+    "low": {
+     "n": 0
+    }
+   },
+   "4": {
+    "high": {
+     "n": 0
+    },
+    "low": {
+     "n": 0
+    }
+   },
+   "8": {
+    "high": {
+     "n": 0
+    },
+    "low": {
+     "n": 0
+    }
+   },
+   "13": {
+    "high": {
+     "n": 0
+    },
+    "low": {
+     "n": 0
+    }
+   },
+   "18": {
+    "high": {
+     "n": 0
+    },
+    "low": {
+     "n": 0
+    }
+   },
+   "22": {
+    "high": {
+     "n": 0
+    },
+    "low": {
+     "n": 0
+    }
+   }
+  }
+ },
+ "status": {
+  "highPrice": {
+   "sessions": 0,
+   "records": 0,
+   "note": "observational; not proof of an edge",
+   "price": {
+    "model": null,
+    "strongestComparator": null,
+    "comparison": null
+   }
+  },
+  "highTime": {
+   "sessions": 0,
+   "records": 0,
+   "note": "observational; not proof of an edge",
+   "timeBar": {
+    "model": null,
+    "strongestComparator": null,
+    "comparison": null
+   },
+   "timeNear": {
+    "model": null,
+    "strongestComparator": null,
+    "comparison": null
+   }
+  },
+  "lowPrice": {
+   "sessions": 0,
+   "records": 0,
+   "note": "observational; not proof of an edge",
+   "price": {
+    "model": null,
+    "strongestComparator": null,
+    "comparison": null
+   }
+  },
+  "lowTime": {
+   "sessions": 0,
+   "records": 0,
+   "note": "observational; not proof of an edge",
+   "timeBar": {
+    "model": null,
+    "strongestComparator": null,
+    "comparison": null
+   },
+   "timeNear": {
+    "model": null,
+    "strongestComparator": null,
+    "comparison": null
+   }
+  }
+ },
+ "retrospective": {
+  "premarket": {
+   "high": {
+    "n": 390,
+    "sessions": 39,
+    "from": "2026-08-17",
+    "to": "2026-10-09",
+    "price": {
+     "model": 0.722,
+     "within05": 36.2,
+     "within1": 62.8,
+     "bandCoverage": 73.8,
+     "comparators": {
+      "prior-day extreme": {
+       "n": 390,
+       "comparator": 0.723,
+       "modelSameRows": 0.722,
+       "diffCI": [
+        -0.097,
+        0.04
+       ]
+      }
+     },
+     "strongest": "prior-day extreme"
+    },
+    "timeBar": {
+     "model": 36.7,
+     "within30": 46.9,
+     "within60": 52.3,
+     "comparators": {
+      "opening bar": {
+       "n": 390,
+       "comparator": 36.7,
+       "modelSameRows": 36.7,
+       "diffCI": [
+        0.0,
+        0.0
+       ]
+      }
+     },
+     "strongest": "opening bar"
+    },
+    "timeNear": {
+     "model": 52.3,
+     "comparators": {
+      "prior-60 best fixed window": {
+       "n": 390,
+       "comparator": 61.0,
+       "modelSameRows": 52.3,
+       "diffCI": [
+        -13.077,
+        -5.128
+       ]
+      },
+      "the open +/-60": {
+       "n": 390,
+       "comparator": 52.3,
+       "modelSameRows": 52.3
+      }
+     },
+     "strongest": "prior-60 best fixed window"
+    },
+    "timeWindow": {
+     "model": 61.0,
+     "comparators": {
+      "prior-60 best fixed window": {
+       "n": 390,
+       "comparator": 61.0,
+       "modelSameRows": 61.0
+      },
+      "the open +/-60": {
+       "n": 390,
+       "comparator": 52.3,
+       "modelSameRows": 61.0,
+       "diffCI": [
+        5.128,
+        13.077
+       ]
+      }
+     },
+     "strongest": "the open +/-60"
+    }
+   },
+   "low": {
+    "n": 390,
+    "sessions": 39,
+    "from": "2026-08-17",
+    "to": "2026-10-09",
+    "price": {
+     "model": 0.716,
+     "within05": 39.5,
+     "within1": 64.1,
+     "bandCoverage": 76.9,
+     "comparators": {
+      "prior-day extreme": {
+       "n": 390,
+       "comparator": 0.754,
+       "modelSameRows": 0.716,
+       "diffCI": [
+        -0.137,
+        -0.016
+       ]
+      }
+     },
+     "strongest": "prior-day extreme"
+    },
+    "timeBar": {
+     "model": 31.0,
+     "within30": 42.6,
+     "within60": 50.3,
+     "comparators": {
+      "opening bar": {
+       "n": 390,
+       "comparator": 31.5,
+       "modelSameRows": 31.0,
+       "diffCI": [
+        -1.538,
+        0.0
+       ]
+      }
+     },
+     "strongest": "opening bar"
+    },
+    "timeNear": {
+     "model": 50.3,
+     "comparators": {
+      "prior-60 best fixed window": {
+       "n": 390,
+       "comparator": 63.3,
+       "modelSameRows": 50.3,
+       "diffCI": [
+        -18.462,
+        -8.205
+       ]
+      },
+      "the open +/-60": {
+       "n": 390,
+       "comparator": 51.3,
+       "modelSameRows": 50.3
+      }
+     },
+     "strongest": "prior-60 best fixed window"
+    },
+    "timeWindow": {
+     "model": 63.3,
+     "comparators": {
+      "prior-60 best fixed window": {
+       "n": 390,
+       "comparator": 63.3,
+       "modelSameRows": 63.3
+      },
+      "the open +/-60": {
+       "n": 390,
+       "comparator": 51.3,
+       "modelSameRows": 63.3,
+       "diffCI": [
+        7.179,
+        17.436
+       ]
+      }
+     },
+     "strongest": "the open +/-60"
+    }
+   }
+  },
+  "intraday": {
+   "high": {
+    "n": 2400,
+    "sessions": 40,
+    "from": "2026-08-14",
+    "to": "2026-10-09",
+    "price": {
+     "model": 0.0,
+     "within05": 91.0,
+     "within1": 97.5,
+     "bandCoverage": 85.6,
+     "comparators": {
+      "extreme so far stands": {
+       "n": 2400,
+       "comparator": 0.0,
+       "modelSameRows": 0.0,
+       "diffCI": [
+        0.0,
+        0.0
+       ]
+      }
+     },
+     "strongest": "extreme so far stands"
+    },
+    "timeBar": {
+     "model": 64.7,
+     "within30": 68.2,
+     "within60": 71.2,
+     "comparators": {
+      "extreme so far stands": {
+       "n": 2400,
+       "comparator": 64.6,
+       "modelSameRows": 64.7,
+       "diffCI": [
+        -0.833,
+        1.083
+       ]
+      }
+     },
+     "strongest": "extreme so far stands"
+    },
+    "timeNear": {
+     "model": 71.2,
+     "comparators": {
+      "extreme so far stands": {
+       "n": 2400,
+       "comparator": 70.1,
+       "modelSameRows": 71.2,
+       "diffCI": [
+        -0.417,
+        2.667
+       ]
+      }
+     },
+     "strongest": "extreme so far stands"
+    },
+    "timeWindow": {
+     "model": 76.5,
+     "comparators": {
+      "extreme so far stands": {
+       "n": 2400,
+       "comparator": 70.1,
+       "modelSameRows": 76.5,
+       "diffCI": [
+        4.458,
+        8.167
+       ]
+      }
+     },
+     "strongest": "extreme so far stands"
+    }
+   },
+   "low": {
+    "n": 2400,
+    "sessions": 40,
+    "from": "2026-08-14",
+    "to": "2026-10-09",
+    "price": {
+     "model": 0.01,
+     "within05": 89.5,
+     "within1": 96.4,
+     "bandCoverage": 80.8,
+     "comparators": {
+      "extreme so far stands": {
+       "n": 2400,
+       "comparator": 0.0,
+       "modelSameRows": 0.01,
+       "diffCI": [
+        0.0,
+        0.0
+       ]
+      }
+     },
+     "strongest": "extreme so far stands"
+    },
+    "timeBar": {
+     "model": 62.7,
+     "within30": 65.8,
+     "within60": 69.0,
+     "comparators": {
+      "extreme so far stands": {
+       "n": 2400,
+       "comparator": 62.5,
+       "modelSameRows": 62.7,
+       "diffCI": [
+        -1.792,
+        2.083
+       ]
+      }
+     },
+     "strongest": "extreme so far stands"
+    },
+    "timeNear": {
+     "model": 69.0,
+     "comparators": {
+      "extreme so far stands": {
+       "n": 2400,
+       "comparator": 68.6,
+       "modelSameRows": 69.0,
+       "diffCI": [
+        -1.792,
+        2.667
+       ]
+      }
+     },
+     "strongest": "extreme so far stands"
+    },
+    "timeWindow": {
+     "model": 73.3,
+     "comparators": {
+      "extreme so far stands": {
+       "n": 2400,
+       "comparator": 68.6,
+       "modelSameRows": 73.3,
+       "diffCI": [
+        1.917,
+        7.708
+       ]
+      }
+     },
+     "strongest": "extreme so far stands"
+    }
+   }
+  },
+  "intradayByCheckpoint": {
+   "2": {
+    "high": {
+     "n": 400,
+     "sessions": 40,
+     "from": "2026-08-14",
+     "to": "2026-10-09",
+     "price": {
+      "model": 0.169,
+      "within05": 79.8,
+      "within1": 92.2,
+      "bandCoverage": 83.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 0.075,
+        "modelSameRows": 0.169,
+        "diffCI": [
+         0.0,
+         0.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeBar": {
+      "model": 44.2,
+      "within30": 50.5,
+      "within60": 55.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 42.0,
+        "modelSameRows": 44.2,
+        "diffCI": [
+         0.25,
+         4.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeNear": {
+      "model": 55.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 54.2,
+        "modelSameRows": 55.5,
+        "diffCI": [
+         0.0,
+         2.75
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeWindow": {
+      "model": 64.2,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 54.2,
+        "modelSameRows": 64.2,
+        "diffCI": [
+         5.25,
+         15.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     }
+    },
+    "low": {
+     "n": 400,
+     "sessions": 40,
+     "from": "2026-08-14",
+     "to": "2026-10-09",
+     "price": {
+      "model": 0.166,
+      "within05": 79.8,
+      "within1": 93.2,
+      "bandCoverage": 83.2,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 0.126,
+        "modelSameRows": 0.166,
+        "diffCI": [
+         -0.023,
+         0.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeBar": {
+      "model": 38.2,
+      "within30": 45.0,
+      "within60": 51.0,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 38.2,
+        "modelSameRows": 38.2,
+        "diffCI": [
+         -2.75,
+         2.75
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeNear": {
+      "model": 51.0,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 51.8,
+        "modelSameRows": 51.0,
+        "diffCI": [
+         -4.5,
+         3.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeWindow": {
+      "model": 63.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 51.8,
+        "modelSameRows": 63.5,
+        "diffCI": [
+         6.75,
+         17.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     }
+    }
+   },
+   "4": {
+    "high": {
+     "n": 400,
+     "sessions": 40,
+     "from": "2026-08-14",
+     "to": "2026-10-09",
+     "price": {
+      "model": 0.089,
+      "within05": 84.0,
+      "within1": 95.8,
+      "bandCoverage": 85.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 0.0,
+        "modelSameRows": 0.089,
+        "diffCI": [
+         0.0,
+         0.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeBar": {
+      "model": 49.2,
+      "within30": 53.2,
+      "within60": 57.8,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 51.0,
+        "modelSameRows": 49.2,
+        "diffCI": [
+         -3.75,
+         -0.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeNear": {
+      "model": 57.8,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 56.2,
+        "modelSameRows": 57.8,
+        "diffCI": [
+         -1.0,
+         4.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeWindow": {
+      "model": 65.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 56.2,
+        "modelSameRows": 65.5,
+        "diffCI": [
+         5.25,
+         13.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     }
+    },
+    "low": {
+     "n": 400,
+     "sessions": 40,
+     "from": "2026-08-14",
+     "to": "2026-10-09",
+     "price": {
+      "model": 0.112,
+      "within05": 85.0,
+      "within1": 95.5,
+      "bandCoverage": 81.8,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 0.033,
+        "modelSameRows": 0.112,
+        "diffCI": [
+         0.0,
+         0.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeBar": {
+      "model": 47.8,
+      "within30": 51.5,
+      "within60": 57.8,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 48.5,
+        "modelSameRows": 47.8,
+        "diffCI": [
+         -4.75,
+         2.75
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeNear": {
+      "model": 57.8,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 56.5,
+        "modelSameRows": 57.8,
+        "diffCI": [
+         -2.5,
+         5.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeWindow": {
+      "model": 63.8,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 56.5,
+        "modelSameRows": 63.8,
+        "diffCI": [
+         2.5,
+         12.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     }
+    }
+   },
+   "8": {
+    "high": {
+     "n": 400,
+     "sessions": 40,
+     "from": "2026-08-14",
+     "to": "2026-10-09",
+     "price": {
+      "model": 0.008,
+      "within05": 90.8,
+      "within1": 97.5,
+      "bandCoverage": 86.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 0.0,
+        "modelSameRows": 0.008,
+        "diffCI": [
+         0.0,
+         0.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeBar": {
+      "model": 60.5,
+      "within30": 62.5,
+      "within60": 65.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 61.8,
+        "modelSameRows": 60.5,
+        "diffCI": [
+         -3.0,
+         0.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeNear": {
+      "model": 65.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 66.8,
+        "modelSameRows": 65.5,
+        "diffCI": [
+         -3.5,
+         0.5
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeWindow": {
+      "model": 68.0,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 66.8,
+        "modelSameRows": 68.0,
+        "diffCI": [
+         -2.5,
+         4.5
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     }
+    },
+    "low": {
+     "n": 400,
+     "sessions": 40,
+     "from": "2026-08-14",
+     "to": "2026-10-09",
+     "price": {
+      "model": 0.022,
+      "within05": 88.5,
+      "within1": 95.5,
+      "bandCoverage": 80.0,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 0.0,
+        "modelSameRows": 0.022,
+        "diffCI": [
+         0.0,
+         0.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeBar": {
+      "model": 59.8,
+      "within30": 62.5,
+      "within60": 64.0,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 61.0,
+        "modelSameRows": 59.8,
+        "diffCI": [
+         -4.75,
+         2.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeNear": {
+      "model": 64.0,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 65.5,
+        "modelSameRows": 64.0,
+        "diffCI": [
+         -5.75,
+         2.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeWindow": {
+      "model": 68.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 65.5,
+        "modelSameRows": 68.5,
+        "diffCI": [
+         -3.5,
+         8.75
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     }
+    }
+   },
+   "13": {
+    "high": {
+     "n": 400,
+     "sessions": 40,
+     "from": "2026-08-14",
+     "to": "2026-10-09",
+     "price": {
+      "model": 0.0,
+      "within05": 95.0,
+      "within1": 99.2,
+      "bandCoverage": 87.8,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 0.0,
+        "modelSameRows": 0.0,
+        "diffCI": [
+         0.0,
+         0.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeBar": {
+      "model": 71.2,
+      "within30": 75.0,
+      "within60": 76.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 72.0,
+        "modelSameRows": 71.2,
+        "diffCI": [
+         -2.0,
+         0.5
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeNear": {
+      "model": 76.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 75.5,
+        "modelSameRows": 76.5,
+        "diffCI": [
+         -1.25,
+         3.5
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeWindow": {
+      "model": 78.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 75.5,
+        "modelSameRows": 78.5,
+        "diffCI": [
+         -1.0,
+         7.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     }
+    },
+    "low": {
+     "n": 400,
+     "sessions": 40,
+     "from": "2026-08-14",
+     "to": "2026-10-09",
+     "price": {
+      "model": 0.001,
+      "within05": 91.2,
+      "within1": 97.0,
+      "bandCoverage": 80.0,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 0.0,
+        "modelSameRows": 0.001,
+        "diffCI": [
+         0.0,
+         0.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeBar": {
+      "model": 69.8,
+      "within30": 70.8,
+      "within60": 72.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 68.0,
+        "modelSameRows": 69.8,
+        "diffCI": [
+         -2.25,
+         5.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeNear": {
+      "model": 72.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 70.8,
+        "modelSameRows": 72.5,
+        "diffCI": [
+         -2.75,
+         5.75
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeWindow": {
+      "model": 71.8,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 70.8,
+        "modelSameRows": 71.8,
+        "diffCI": [
+         -6.0,
+         7.5
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     }
+    }
+   },
+   "18": {
+    "high": {
+     "n": 400,
+     "sessions": 40,
+     "from": "2026-08-14",
+     "to": "2026-10-09",
+     "price": {
+      "model": 0.0,
+      "within05": 97.5,
+      "within1": 100.0,
+      "bandCoverage": 85.0,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 0.0,
+        "modelSameRows": 0.0,
+        "diffCI": [
+         0.0,
+         0.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeBar": {
+      "model": 79.5,
+      "within30": 81.8,
+      "within60": 83.0,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 78.0,
+        "modelSameRows": 79.5,
+        "diffCI": [
+         -0.25,
+         3.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeNear": {
+      "model": 83.0,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 80.2,
+        "modelSameRows": 83.0,
+        "diffCI": [
+         -1.0,
+         7.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeWindow": {
+      "model": 88.0,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 80.2,
+        "modelSameRows": 88.0,
+        "diffCI": [
+         3.75,
+         12.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     }
+    },
+    "low": {
+     "n": 400,
+     "sessions": 40,
+     "from": "2026-08-14",
+     "to": "2026-10-09",
+     "price": {
+      "model": 0.0,
+      "within05": 95.0,
+      "within1": 97.8,
+      "bandCoverage": 80.8,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 0.0,
+        "modelSameRows": 0.0,
+        "diffCI": [
+         0.0,
+         0.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeBar": {
+      "model": 75.8,
+      "within30": 77.0,
+      "within60": 78.2,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 76.8,
+        "modelSameRows": 75.8,
+        "diffCI": [
+         -4.5,
+         2.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeNear": {
+      "model": 78.2,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 78.5,
+        "modelSameRows": 78.2,
+        "diffCI": [
+         -4.25,
+         3.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeWindow": {
+      "model": 81.2,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 78.5,
+        "modelSameRows": 81.2,
+        "diffCI": [
+         -2.0,
+         7.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     }
+    }
+   },
+   "22": {
+    "high": {
+     "n": 400,
+     "sessions": 40,
+     "from": "2026-08-14",
+     "to": "2026-10-09",
+     "price": {
+      "model": 0.0,
+      "within05": 99.0,
+      "within1": 100.0,
+      "bandCoverage": 85.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 0.0,
+        "modelSameRows": 0.0,
+        "diffCI": [
+         0.0,
+         0.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeBar": {
+      "model": 83.5,
+      "within30": 86.5,
+      "within60": 88.8,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 82.8,
+        "modelSameRows": 83.5,
+        "diffCI": [
+         -2.5,
+         3.5
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeNear": {
+      "model": 88.8,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 87.8,
+        "modelSameRows": 88.8,
+        "diffCI": [
+         -2.0,
+         3.5
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeWindow": {
+      "model": 94.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 87.8,
+        "modelSameRows": 94.5,
+        "diffCI": [
+         4.0,
+         10.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     }
+    },
+    "low": {
+     "n": 400,
+     "sessions": 40,
+     "from": "2026-08-14",
+     "to": "2026-10-09",
+     "price": {
+      "model": 0.0,
+      "within05": 97.2,
+      "within1": 99.2,
+      "bandCoverage": 78.8,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 0.0,
+        "modelSameRows": 0.0,
+        "diffCI": [
+         0.0,
+         0.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeBar": {
+      "model": 84.8,
+      "within30": 87.8,
+      "within60": 90.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 82.5,
+        "modelSameRows": 84.8,
+        "diffCI": [
+         -1.75,
+         6.25
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeNear": {
+      "model": 90.5,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 88.5,
+        "modelSameRows": 90.5,
+        "diffCI": [
+         -1.5,
+         5.5
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     },
+     "timeWindow": {
+      "model": 91.2,
+      "comparators": {
+       "extreme so far stands": {
+        "n": 400,
+        "comparator": 88.5,
+        "modelSameRows": 91.2,
+        "diffCI": [
+         -1.5,
+         7.0
+        ]
+       }
+      },
+      "strongest": "extreme so far stands"
+     }
+    }
+   }
+  }
+ },
+ "build": {
+  "commit": "4403d104c092944b09d841385aa1afc72f7c4370",
+  "run": "37984901194"
+ }
+}
