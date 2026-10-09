@@ -25,6 +25,19 @@ low time.
   rewritten. A later provider change is counted, not applied.
 - Futures (GC=F) are excluded until a futures session calendar exists.
 
+## Time outputs
+- `time` is the **centre of the best ±60-minute window**. It is the point
+  that maximises the chance the extreme falls within an hour either side
+  (`p60`). It is not the most likely exact bar.
+- `topBins[0]` is the **likeliest single 15-minute bar** (the mode), with its
+  own probability. The panel shows the mode as the headline and the window
+  centre beside it.
+- The window centre is the prior-60-session best fixed clock, so on time
+  `hilo-1` equals that comparator by construction. Retrospective and forward
+  results compare it against the open, and against the legacy app where its
+  calls exist. A model that changes timing must also be reported against
+  this fixed-clock comparator.
+
 ## Scoring
 - A record is scored only after its session is complete.
 - A record is excluded when its data cutoff is after its issue time.

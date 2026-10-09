@@ -693,14 +693,18 @@ function renderHilo(t){
     for(const side of ["high","low"]){
       const b = rec[side], name = side === "high" ? "High" : "Low";
       cells.push(hiloCell(`${name} price`, fmt$(b.price), `80% range ${fmt$(b.lo)} to ${fmt$(b.hi)}` + (obs ? ` · so far ${fmt$(obs[side])}` : "")));
-      cells.push(hiloCell(`${name} time (ET, 15-min bar)`, hiloEsc(b.time),
-        `chance within ±60 min: ${hiloPct(b.p60)}` + (b.topBins && b.topBins[0] ? ` · likeliest bar ${hiloEsc(b.topBins[0].time)} (${hiloPct(b.topBins[0].p)})` : "") + (b.pAlreadySet!==undefined ? ` · already set: ${hiloPct(b.pAlreadySet)}` : "")));
+      const mode = b.topBins && b.topBins[0];
+      cells.push(hiloCell(`${name} time (ET)`, mode ? `${hiloEsc(mode.time)} bar` : hiloEsc(b.time),
+        (mode ? `likeliest single 15-min bar: ${hiloPct(mode.p)} chance · ` : "")
+        + `best 2-hour window ${hiloEsc(b.time)} ±60 min: ${hiloPct(b.p60)} chance (a window centre, not the likeliest exact time)`
+        + (b.pAlreadySet!==undefined ? ` · already set: ${hiloPct(b.pAlreadySet)}` : "")));
     }
     $("hiloCards").innerHTML = cells.join("");
   }
   const rows = Object.entries(HILO.latest || {}).map(([tk, s2])=>{
     const r = s2.intraday || s2.premarket;
-    return `<tr><td>${hiloEsc(nice(tk))}</td><td>${r.kind}</td><td>${fmt$(r.high.price)} @ ${r.high.time}</td><td>${fmt$(r.high.lo)}–${fmt$(r.high.hi)}</td><td>${fmt$(r.low.price)} @ ${r.low.time}</td><td>${fmt$(r.low.lo)}–${fmt$(r.low.hi)}</td></tr>`;
+    const tm = b => `${b.topBins && b.topBins[0] ? b.topBins[0].time + " bar" : b.time} (window ${b.time}±60)`;
+    return `<tr><td>${hiloEsc(nice(tk))}</td><td>${r.kind}</td><td>${fmt$(r.high.price)} @ ${tm(r.high)}</td><td>${fmt$(r.high.lo)}–${fmt$(r.high.hi)}</td><td>${fmt$(r.low.price)} @ ${tm(r.low)}</td><td>${fmt$(r.low.lo)}–${fmt$(r.low.hi)}</td></tr>`;
   }).join("");
   const sb = (blk, label) => ["premarket","intraday"].map(k=>["high","low"].map(sd=>
     `<li><b>${label}, ${k}, ${sd}:</b> ${hiloStat((blk||{})[k] && blk[k][sd], k)}</li>`).join("")).join("");
