@@ -199,8 +199,7 @@
 </script>
 
 <h1><span id="tkr"></span> <span class="px" id="price"></span> <span class="sub" id="updated"></span></h1>
-<div class="sub">Timing dashboard — when highs &amp; lows tend to happen, with Gann, Hurst, astro &amp; Fibonacci
-  methods backtested per stock.</div>
+<div class="sub">Daily high and low: price and time, with uncertainty. Experimental baseline; no proven edge.</div>
 <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
   <button id="btnUpdate" style="padding:9px 20px; font-size:15px; font-weight:700; border:1px solid var(--blue);
     background:var(--blue); color:#fff; border-radius:8px; cursor:pointer">Update</button>
@@ -254,7 +253,18 @@
   </details>
 </div>
 
-<div class="panel" id="timingPanel" style="border:2px solid var(--blue)">
+<div class="panel" id="chartPanel">
+  <h2>Price chart with today's high/low forecast</h2>
+  <div class="chartwrap"><canvas id="chart" width="1140" height="360"></canvas></div>
+  <div class="tag" id="chartTag"></div>
+  <div class="tag" id="reviewStatus" style="margin-top:8px"></div>
+</div>
+
+
+<details id="detailsAll" class="panel" style="margin-top:18px">
+<summary style="font-weight:700; cursor:pointer">Details: past forecasts, actual results, accuracy, trades and research</summary>
+<div id="sectionTabs" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px"></div>
+<div class="panel" id="timingPanel" data-tab="Accuracy">
   <h2>Timing first — original forecast scorecard</h2>
   <div id="timingSummary" class="sub"></div>
   <div id="timingCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-top:12px"></div>
@@ -263,25 +273,12 @@
   </details>
 </div>
 
-<div class="panel">
-  <h2>Price, detected swings (H/L), and projected path</h2>
-  <div class="chartwrap"><canvas id="chart" width="1140" height="360"></canvas></div>
-  <div class="tag" id="chartTag"></div>
-  <div class="tag" id="reviewStatus" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" id="weekPanel" style="border-width:2px; border-color:var(--accent)">
+<div class="panel" id="weekPanel" data-tab="Forecast">
   <h2>The week ahead — what to do each session</h2>
   <div class="sub" id="wkSub"></div>
   <div id="wkBody" style="margin-top:8px"></div>
 </div>
 
-
-
-
-
-
-<div id="sectionTabs" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:18px"></div>
 <div class="panel" data-tab="Forecast">
   <h2>Next 5 projected highs / lows — multi-method confluence</h2>
   <div class="sub" id="basis"></div>
@@ -464,6 +461,8 @@
   <h2>Legacy turning-point playbook for <span class="tkr2"></span> (secondary; not the daily high/low forecast above)</h2>
   <ol class="play" id="playbook"></ol>
 </div>
+
+</details>
 
 <div class="foot" id="foot"></div>
 
@@ -735,6 +734,10 @@ function renderHilo(t){
   $("hiloDetails").innerHTML = `<div class="tblwrap"><table><tr><th>Stock</th><th>Kind</th><th>High · likeliest bar</th><th>High 80% range</th><th>Low · likeliest bar</th><th>Low 80% range</th></tr>${rows}</table></div>
     <p class="sub">${hiloEsc(HILO.method)}</p>
     <p><b>Forward results</b> (frozen ledger records, scored only after a complete session; observational, not proof):</p><ul>${sb(HILO.forward, "Forward")}</ul>
+    <p><b>Past forecasts vs actual</b> (latest 60 scored, frozen before the outcome):</p>
+    <div class="tblwrap"><table><tr><th>Session</th><th>Stock</th><th>Kind</th><th>Side</th><th>Forecast</th><th>Actual</th><th>Error</th><th>In 80% range</th><th>Bar forecast</th><th>Bar actual</th></tr>${(HILO.history||[]).map(r=>`<tr><td>${hiloEsc(r.session)}</td><td>${hiloEsc(nice(r.ticker))}</td><td>${hiloEsc(r.kind)}${r.checkpoint ? " cp" + r.checkpoint : ""}</td><td>${hiloEsc(r.side)}</td><td>${fmt$(r.pred)}</td><td>${fmt$(r.actual)}</td><td>${hiloEsc(r.err)}%</td><td>${r.inBand ? "yes" : "no"}</td><td>${hiloEsc(r.predTime)}</td><td>${hiloEsc(r.actualTime)}</td></tr>`).join("") || '<tr><td colspan="10">No complete sessions scored yet.</td></tr>'}</table></div>
+    <p><b>Model versions</b> (each scored only on its own frozen records; a new version runs alongside and is compared on the same future sessions; nothing is promoted automatically):</p>
+    <ul>${Object.entries(HILO.forwardByModel||{}).map(([m,b])=>`<li><b>${hiloEsc(m)}:</b> ${hiloStat(b.premarket && b.premarket.high)}</li>`).join("") || "<li>none yet</li>"}</ul>
     <p><b>Retrospective replay</b> (walk-forward on stored sessions; not frozen in advance, not proof):</p><ul>${sb(HILO.retrospective, "Replay")}</ul>
     <p class="sub">Excluded: ${hiloEsc(Object.keys(HILO.excluded||{}).join(", ") || "none")} (${hiloEsc(Object.values(HILO.excluded||{})[0] || "")}). Late intraday records: ${HILO.lateIntradayRecords||0}. Generated ${hiloEt(HILO.generatedAt)}, build ${hiloEsc(String((HILO.build||{}).commit||"").slice(0,7))}.</p>`;
 }
@@ -1105,9 +1108,13 @@ function renderAll(D){
       fit(c, 1140, 0.316);
     }
     x.clearRect(0,0,cw(c),ch(c));
-    const dates = D.chart.dates, closes = D.chart.closes, preds = D.predictions;
-    const allDates = dates.concat(preds.map(p=>p.isoDate));
-    const allPx = closes.concat(preds.map(p=>p.price));
+    const dates = D.chart.dates, closes = D.chart.closes;
+    // the forecast drawn here is the same record the high/low cards show
+    const hslot = (HILO_LIVE && !HILO_LIVE.failed && (HILO_LIVE.latest || {})[D.ticker]) || {};
+    const hrec = hslot.intraday || hslot.premarket || null;
+    const fcDate = hrec ? hrec.session : null;
+    const allDates = (fcDate && fcDate > dates[dates.length-1]) ? dates.concat([fcDate]) : dates.slice();
+    const allPx = closes.concat(hrec ? [hrec.high.hi, hrec.high.lo, hrec.low.hi, hrec.low.lo] : []);
     const t0 = new Date(allDates[0]).getTime(), t1 = new Date(allDates[allDates.length-1]).getTime();
     const pMin = Math.min(...allPx)*0.96, pMax = Math.max(...allPx)*1.04;
     const W=cw(c), H=ch(c), L=64, R=62, T=18, B=34;
@@ -1146,18 +1153,6 @@ function renderAll(D){
       x.fillStyle = "#8250df"; x.font = "700 11px Segoe UI";
       x.fillText("today", tx, T + 11);
     }
-    if(D.levels){
-      x.setLineDash([2,3]); x.lineWidth=1; x.textAlign="left"; x.font="10px Segoe UI";
-      for(const [arr,color] of [[D.levels.resistance,"#cf222e"],[D.levels.support,"#1a7f37"]]){
-        for(const l of arr){
-          if(l.price < pMin || l.price > pMax) continue;
-          x.strokeStyle=color; x.beginPath();
-          x.moveTo(L, Y(l.price)); x.lineTo(W-R, Y(l.price)); x.stroke();
-          x.fillStyle=color; x.fillText("$"+Math.round(l.price), L+4, Y(l.price)-3);
-        }
-      }
-      x.setLineDash([]); x.textAlign="center";
-    }
     x.strokeStyle="#0969da"; x.lineWidth=2.2; x.lineJoin="round"; x.beginPath();
     dates.forEach((d,i)=>{ const px=X(d), py=Y(closes[i]); i?x.lineTo(px,py):x.moveTo(px,py); });
     x.stroke();
@@ -1168,32 +1163,26 @@ function renderAll(D){
       x.fillStyle="#1f2328"; x.font="700 12px Segoe UI";
       x.fillText(p.type==="high"?"H":"L", X(p.date), Y(p.price) + (p.type==="high"?-9:18));
     }
-    x.strokeStyle="#8250df"; x.setLineDash([6,5]); x.lineWidth=1.4; x.beginPath();
-    x.moveTo(X(dates[dates.length-1]), Y(closes[closes.length-1]));
-    for(const p of preds) x.lineTo(X(p.isoDate), Y(p.price));
-    x.stroke(); x.setLineDash([]);
-    for(const p of preds){
-      const px = X(p.isoDate), py = Y(p.price);
-      x.fillStyle = p.type==="high" ? "#1a7f37" : "#cf222e";
-      x.beginPath(); x.arc(px, py, 5, 0, 7); x.fill();
-      x.strokeStyle="#8250df"; x.lineWidth=1.5; x.beginPath(); x.arc(px, py, 8, 0, 7); x.stroke();
-      x.fillStyle="#1f2328"; x.textAlign="center";
-      const lbl = "$" + (p.price < 100 ? p.price.toFixed(2) : Math.round(p.price).toLocaleString());
-      const dlbl = p.date.split(" ")[1];
-      x.font = "700 13px Segoe UI";
-      const wLbl = Math.max(x.measureText(lbl).width, x.measureText(dlbl).width) + 10;
-      const boxY = p.type==="high" ? py-40 : py+10;
-      x.fillStyle = "rgba(255,255,255,0.88)";
-      x.fillRect(px - wLbl/2, boxY, wLbl, 30);
-      x.fillStyle = p.type==="high" ? "#1a7f37" : "#cf222e";
-      x.fillText(lbl, px, boxY + 13);
-      x.fillStyle = "#57606a"; x.font = "600 11px Segoe UI";
-      x.fillText(dlbl, px, boxY + 25);
+    if(hrec){
+      const fx = X(fcDate);
+      for(const side of ["high","low"]){
+        const f = hrec[side], color = side==="high" ? "#1a7f37" : "#cf222e";
+        x.strokeStyle = color; x.lineWidth = 2;
+        x.beginPath(); x.moveTo(fx, Y(f.hi)); x.lineTo(fx, Y(f.lo)); x.stroke();          // 80% range
+        x.beginPath(); x.moveTo(fx-6, Y(f.hi)); x.lineTo(fx+6, Y(f.hi)); x.moveTo(fx-6, Y(f.lo)); x.lineTo(fx+6, Y(f.lo)); x.stroke();
+        x.fillStyle = color; x.beginPath(); x.arc(fx, Y(f.price), 5, 0, 7); x.fill();
+        const lbl = (side==="high" ? "High " : "Low ") + "$" + (f.price < 100 ? f.price.toFixed(2) : Math.round(f.price).toLocaleString()) + " · " + f.time;
+        x.font = "700 12px Segoe UI"; x.textAlign = "right";
+        const wl = x.measureText(lbl).width + 8, by = Y(f.price) + (side==="high" ? -22 : 8);
+        x.fillStyle = "rgba(255,255,255,0.9)"; x.fillRect(fx - 10 - wl, by, wl, 16);
+        x.fillStyle = color; x.fillText(lbl, fx - 14, by + 12);
+      }
+      x.textAlign = "center";
     }
     // Rebind on every render so ticker switches and resize never retain stale points.
     const points = dates.map((date, i) => ({date, price: closes[i], kind: "Actual daily close"}))
-      .concat(preds.map(p => ({date: p.isoDate, price: p.price, time: p.planetHour || p.time,
-                              kind: "Predicted " + p.type})))
+      .concat(hrec ? ["high","low"].map(side => ({date: fcDate, price: hrec[side].price, time: hrec[side].time,
+                              kind: "Forecast " + side + " (" + hrec.kind + ", 80% range " + fmt$(hrec[side].lo) + "–" + fmt$(hrec[side].hi) + ")"})) : [])
       .concat(D.chart.pivots.filter(p => new Date(p.date).getTime() >= t0)
         .map(p => ({date:p.date, price:p.price, kind:"Confirmed historical " + p.type})));
     const base = document.createElement("canvas");
@@ -1236,7 +1225,10 @@ function renderAll(D){
       const r=c.getBoundingClientRect();inspect(points[keyIndex],r.left+X(points[keyIndex].date)*r.width/W,r.top+Y(points[keyIndex].price)*r.height/H);
     };
     if (mob) wrap.scrollLeft = wrap.scrollWidth;   // land on the newest data
-    $("chartTag").textContent = `Hover or tap a point for date and price. Solid line: actual daily closes (9 months). Dots: confirmed ${D.swing.thresholdPct}% swing pivots. Dashed: the confluence forecast with date & price at each marker — an illustration of rhythm, not a promise.` + (mob ? " Swipe the chart left/right to see history; pinch to zoom." : "");
+    $("chartTag").textContent = `Solid line: actual daily closes (9 months). Dots: confirmed ${D.swing.thresholdPct}% swing pivots. `
+      + (hrec ? `At the right edge: the ${hrec.kind} high/low forecast for ${hrec.session} (same as the cards above), dot = forecast, bar = 80% range, label = most likely 15-minute bar ET.`
+              : "No current high/low forecast to draw.")
+      + " Hover or tap a point for details." + (mob ? " Swipe the chart left/right to see history." : "");
   })();
 
   /* track record */

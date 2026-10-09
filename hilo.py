@@ -412,6 +412,8 @@ def score_rows(ledger, store, legacy=None, model=MODEL):
             f = rec[side]
             a_p, a_t = actual[side], minutes(actual[side + 'Time'])
             row = {'ticker': rec['ticker'], 'session': rec['session'], 'kind': rec['kind'], 'side': side,
+                   'model': rec.get('model'), 'issuedAt': rec['issuedAt'], 'pred': f['price'], 'actual': a_p,
+                   'predTime': f['time'], 'actualTime': actual[side + 'Time'],
                    'checkpoint': rec.get('checkpoint'), 'halfDay': cal.expected_bars(day) < 26,
                    'err': _err(f['price'], a_p), 'inBand': f['lo'] <= a_p <= f['hi'],
                    'barHit': minutes(f['time']) == a_t, 'tErr': abs(minutes(f['time']) - a_t),
@@ -644,7 +646,17 @@ def run(now=None, root='.'):
             if rec['kind'] == 'intraday' or 'premarket' not in slot:
                 slot[rec['kind']] = rec              # first premarket call, latest intraday checkpoint
     check = verify_ledger(ledger_path)
-    fwd = board(score_rows(ledger, store, legacy_calls(root / 'horizons_log.json'))) if check['ok'] else None
+    legacy = legacy_calls(root / 'horizons_log.json')
+    fwd_rows = score_rows(ledger, store, legacy) if check['ok'] else []
+    fwd = board(fwd_rows) if check['ok'] else None
+    # every model version in the ledger is scored on its own frozen records, so a new candidate
+    # logged alongside hilo-1 can be compared on the same future sessions; nothing is promoted here
+    by_model = {m: board(score_rows(ledger, store, legacy, model=m))
+                for m in sorted({r.get('model') for r in ledger if r.get('model')})} if check['ok'] else None
+    keep = ('ticker', 'session', 'kind', 'side', 'model', 'checkpoint', 'issuedAt', 'pred', 'actual',
+            'err', 'inBand', 'predTime', 'actualTime', 'tErr', 'barHit')
+    history = [{k: (round(r[k], 3) if isinstance(r.get(k), float) else r.get(k)) for k in keep}
+               for r in sorted(fwd_rows, key=lambda r: (r['session'], r['issuedAt']), reverse=True)[:60]]
     report = {
         'generatedAt': issued, 'model': MODEL, 'targetSession': day.isoformat(), 'kind': kind,
         'method': METHOD, 'latest': latest, 'notes': notes,
@@ -653,6 +665,7 @@ def run(now=None, root='.'):
         'lateIntradayRecords': sum(1 for r in ledger if r.get('late')),
         'storedSessions': {t: len(v) for t, v in store.items()},
         'forward': fwd, 'status': forward_status(fwd) if fwd else None,
+        'forwardByModel': by_model, 'history': history,
         'retrospective': retrospective(store),
         'build': {'commit': os.environ.get('GITHUB_SHA', 'local'), 'run': os.environ.get('GITHUB_RUN_ID')},
     }

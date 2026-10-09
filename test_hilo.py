@@ -352,5 +352,25 @@ class ReviewFixTests(unittest.TestCase):
             self.assertNotIn('2026-10-08', store['X'])
 
 
+class HistoryTests(unittest.TestCase):
+    def test_scored_history_and_per_model_results(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / 'tickers.txt').write_text('TST\n')
+            day = date(2026, 10, 9)
+            days = sessions_before(day, 30)
+            bars = {d: synthetic_bars(d, 100 + i * 0.1) for i, d in enumerate(days)}
+            bars[day] = synthetic_bars(day, 103)
+            write_csv(root / 'TST_15m.csv', bars)
+            hilo.run(now=et(2026, 10, 9, 8, 0), root=root)
+            r = hilo.run(now=et(2026, 10, 9, 17, 0), root=root)
+            self.assertEqual(len(r['history']), 2)                   # high and low of one premarket record
+            row = r['history'][0]
+            for k in ('pred', 'actual', 'predTime', 'actualTime', 'err', 'model'):
+                self.assertIn(k, row)
+            self.assertEqual(list(r['forwardByModel']), ['hilo-1'])
+            self.assertEqual(r['forwardByModel']['hilo-1']['premarket']['high']['n'], 1)
+
+
 if __name__ == '__main__':
     unittest.main()

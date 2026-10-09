@@ -73,6 +73,7 @@ jobs:
       - run: node smoke_test.js
       - run: node reliability_test.js
       - run: node hilo_refresh_test.js
+      - run: node ui_layout_test.js
       - run: python -m unittest test_reliability.py test_scoring.py test_schedule_gate.py test_data_freshness.py test_horizon_ledger.py test_quote_selection.py test_timing_review.py test_gann_lab.py test_horizon_scoreboard.py test_anomaly_audit.py test_trades_scan.py test_hilo.py
       - name: Publish only validated artifacts
         run: |
