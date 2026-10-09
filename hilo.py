@@ -649,8 +649,8 @@ def run(now=None, root='.'):
     legacy = legacy_calls(root / 'horizons_log.json')
     fwd_rows = score_rows(ledger, store, legacy) if check['ok'] else []
     fwd = board(fwd_rows) if check['ok'] else None
-    # every model version in the ledger is scored on its own frozen records, so a new candidate
-    # logged alongside hilo-1 can be compared on the same future sessions; nothing is promoted here
+    # every model version in the ledger is scored separately on its own frozen records; a matched
+    # parallel-candidate comparison is not implemented yet, and nothing is promoted here
     by_model = {m: board(score_rows(ledger, store, legacy, model=m))
                 for m in sorted({r.get('model') for r in ledger if r.get('model')})} if check['ok'] else None
     keep = ('ticker', 'session', 'kind', 'side', 'model', 'checkpoint', 'issuedAt', 'pred', 'actual',
