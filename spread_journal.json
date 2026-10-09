@@ -773,7 +773,7 @@
       "order": "sell to open META $700 put 10/30 x1",
       "limit": 24.0,
       "tif": "gtc",
-      "status": "open (filled 10/8 1:07pm ET at $24.43)",
+      "status": "open (filled 10/8 1:07pm ET at $24.43); buy-to-close $19.00 GTC resting (placed 10/9 09:35)",
       "placed": "2026-10-08T13:07 ET",
       "filled": "2026-10-08T13:07 ET",
       "fillPrice": 24.43,
@@ -785,13 +785,23 @@
       "collateral": 70000,
       "orderId": "6ac7cdc5-40a2-442b-bd70-07fdad19e5ae",
       "note": "Cash-secured short put placed by the user, META ~719. META earnings 10/28 fall before the 10/30 expiry; app projects a META low ~643 on 10/19. Not part of the Agentic spread P&L.",
-      "openQty": 1
+      "openQty": 1,
+      "closeOrders": [
+        {
+          "qty": 1,
+          "limit": 19.0,
+          "tif": "gtc",
+          "placed": "2026-10-09T09:35 ET",
+          "orderId": "6ac8edb0-2ad0-4344-8504-7aec50d3b095",
+          "status": "resting"
+        }
+      ]
     },
     {
       "order": "sell to open META $700 put 10/30 x1",
       "limit": 24.0,
       "tif": "gtc",
-      "status": "open (filled 10/8 1:08pm ET at $24.00)",
+      "status": "open (filled 10/8 1:08pm ET at $24.00); buy-to-close $19.00 GTC resting (placed 10/9 09:36)",
       "placed": "2026-10-08T13:08 ET",
       "filled": "2026-10-08T13:08 ET",
       "fillPrice": 24.0,
@@ -803,7 +813,17 @@
       "collateral": 70000,
       "orderId": "6ac7ce04-1899-4667-a9e9-85bccb97db32",
       "note": "Same trade as Individual (2 contracts total). Not part of the Agentic spread P&L.",
-      "openQty": 1
+      "openQty": 1,
+      "closeOrders": [
+        {
+          "qty": 1,
+          "limit": 19.0,
+          "tif": "gtc",
+          "placed": "2026-10-09T09:36 ET",
+          "orderId": "6ac8edcd-66ff-4463-969e-efc4c9b9747c",
+          "status": "resting"
+        }
+      ]
     },
     {
       "order": "sell to open JPM $330 put 10/30 x1",

@@ -75,8 +75,8 @@ Closed: 5 trades, 5 wins, **+$1,509** (Agentic +$309, Individual +$500, Joint +$
 
 | Individual | Sell to open TSLA $330 put 10/30 x2 | $10.00 GTC | filled 9/30 9:44am at $10.00 ($2,000); closed: 1 at $8.00 on 9/30 1:41pm (+$200), 1 at $7.00 on 10/1 9:30am (+$300); +$500 total | $66,000 | 9/30 9:43am |
 | Joint | Sell to open TSLA $330 put 10/30 x3 | $10.00 GTC | filled 9/30 9:44am at $10.00 ($3,000); closed: 2 at $8.00 on 9/30 1:41pm (+$400), 1 at $7.00 on 10/1 9:30am (+$300); +$700 total | $99,000 | 9/30 9:43am |
-| Individual | Sell to open META $700 put 10/30 x1 | $24.00 GTC | filled 10/8 1:07pm at $24.43 ($2,443); open (earnings 10/28 before expiry) | $70,000 | 10/8 1:07pm |
-| Joint | Sell to open META $700 put 10/30 x1 | $24.00 GTC | filled 10/8 1:08pm at $24.00 ($2,400); open | $70,000 | 10/8 1:08pm |
+| Individual | Sell to open META $700 put 10/30 x1 | $24.00 GTC | filled 10/8 1:07pm at $24.43 ($2,443); open (earnings 10/28 before expiry); buy-to-close $19.00 GTC resting (placed 10/9 9:35am) | $70,000 | 10/8 1:07pm |
+| Joint | Sell to open META $700 put 10/30 x1 | $24.00 GTC | filled 10/8 1:08pm at $24.00 ($2,400); open; buy-to-close $19.00 GTC resting (placed 10/9 9:36am) | $70,000 | 10/8 1:08pm |
 | Individual | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | resting (placed 10/8 2:53pm) | $33,000 | 10/8 2:53pm |
 | Joint | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | resting (placed 10/8 2:53pm) | $33,000 | 10/8 2:53pm |
 
