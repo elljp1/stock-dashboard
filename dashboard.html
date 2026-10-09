@@ -200,6 +200,26 @@
 
 <h1><span id="tkr"></span> <span class="px" id="price"></span> <span class="sub" id="updated"></span></h1>
 <div class="sub">Daily high and low: price and time, with uncertainty. Experimental baseline; no proven edge.</div>
+<div class="tabs" id="tabs"></div>
+
+<div class="panel" id="hiloPanel" style="border:2px solid var(--green)">
+  <h2 id="hiloTitle">High and low: price and time</h2>
+  <div id="hiloHead" class="sub"></div>
+  <div id="hiloCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:12px"></div>
+  <details style="margin-top:12px"><summary>All stocks, scoring and status</summary>
+    <div id="hiloDetails" style="margin-top:8px"></div>
+  </details>
+</div>
+
+<div class="panel" id="chartPanel">
+  <h2 id="chartTitle">Price chart with the high/low forecast</h2>
+  <div class="chartwrap"><canvas id="chart" width="1140" height="360"></canvas></div>
+  <div class="tag" id="chartTag"></div>
+  <div class="tag" id="reviewStatus" style="margin-top:8px"></div>
+</div>
+
+
+<div id="controls" style="margin-top:12px">
 <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
   <button id="btnUpdate" style="padding:9px 20px; font-size:15px; font-weight:700; border:1px solid var(--blue);
     background:var(--blue); color:#fff; border-radius:8px; cursor:pointer">Update</button>
@@ -212,12 +232,14 @@
      Run fresh prices on GitHub &#8599;</a>
   <span class="tag" id="updStatus"></span>
 </div>
+<details style="margin-top:6px; max-width:760px"><summary class="tag">How Update works</summary>
 <div class="tag" style="margin-top:6px; max-width:760px">
   <b>Update</b> = load the newest finished analysis (instant, no sign-in).
   <b>Run fresh prices on GitHub</b> = no setup needed: it opens GitHub, you tap the grey
   <b>Run workflow</b> button, wait about 90 seconds, then press <b>Update</b> here.
   <b>Reanalyze &amp; Predict</b> = the same thing in one press, once you have saved a token on this device.
 </div>
+</details>
 <div id="setupBox" style="display:none; margin-top:10px; padding:12px; border:1px solid var(--border);
   border-radius:10px; background:var(--panel2); max-width:760px">
   <b>One-time setup for live re-analysis</b>
@@ -241,25 +263,7 @@
       background:var(--panel); border-radius:8px; cursor:pointer">Cancel</button>
   </div>
 </div>
-
-<div class="tabs" id="tabs"></div>
-
-<div class="panel" id="hiloPanel" style="border:2px solid var(--green)">
-  <h2>Today's high and low: price and time</h2>
-  <div id="hiloHead" class="sub"></div>
-  <div id="hiloCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:12px"></div>
-  <details style="margin-top:12px"><summary>All stocks, scoring and status</summary>
-    <div id="hiloDetails" style="margin-top:8px"></div>
-  </details>
 </div>
-
-<div class="panel" id="chartPanel">
-  <h2>Price chart with today's high/low forecast</h2>
-  <div class="chartwrap"><canvas id="chart" width="1140" height="360"></canvas></div>
-  <div class="tag" id="chartTag"></div>
-  <div class="tag" id="reviewStatus" style="margin-top:8px"></div>
-</div>
-
 
 <details id="detailsAll" class="panel" style="margin-top:18px">
 <summary style="font-weight:700; cursor:pointer">Details: past forecasts, actual results, accuracy, trades and research</summary>
@@ -690,6 +694,11 @@ function hiloTime(b){ return `${hiloEsc(b.time)} bar (${hiloPct(b.pBar)})`; }
 function renderHilo(t){
   const head = $("hiloHead"), cards = $("hiloCards");
   const HILO = HILO_LIVE;
+  const sessTxt = iso => new Date(iso + "T12:00:00").toLocaleDateString("en-US", {weekday:"short", month:"short", day:"numeric"});
+  const tSlot = HILO && !HILO.failed ? ((HILO.latest || {})[t] || {}) : {};
+  const tRec = tSlot.intraday || tSlot.premarket;
+  const tSess = tRec ? tRec.session : (HILO && /^\d{4}-\d{2}-\d{2}$/.test(HILO.targetSession || "") ? HILO.targetSession : null);
+  $("hiloTitle").textContent = tSess ? `High and low for ${sessTxt(tSess)}: price and time` : "High and low: price and time";
   if(!HILO){ head.textContent = "Daily high/low forecasts appear after the next scheduled run."; cards.innerHTML = ""; $("hiloDetails").innerHTML = ""; return; }
   if(HILO.failed){
     head.innerHTML = `<b style="color:var(--red)">UNAVAILABLE.</b> The forecaster failed at ${hiloEt(HILO.failed.at)}: ${hiloEsc(HILO.failed.reason)}. No forecast is shown. The last successful run was ${hiloEt(HILO.generatedAt)}, for session ${hiloEsc(HILO.targetSession)}.`;
@@ -1112,9 +1121,13 @@ function renderAll(D){
     // the forecast drawn here is the same record the high/low cards show
     const hslot = (HILO_LIVE && !HILO_LIVE.failed && (HILO_LIVE.latest || {})[D.ticker]) || {};
     const hrec = hslot.intraday || hslot.premarket || null;
+    $("chartTitle").textContent = hrec ? "Price chart with the high/low forecast for " + new Date(hrec.session + "T12:00:00").toLocaleDateString("en-US", {weekday:"short", month:"short", day:"numeric"}) : "Price chart";
     const fcDate = hrec ? hrec.session : null;
-    const allDates = (fcDate && fcDate > dates[dates.length-1]) ? dates.concat([fcDate]) : dates.slice();
-    const allPx = closes.concat(hrec ? [hrec.high.hi, hrec.high.lo, hrec.low.hi, hrec.low.lo] : []);
+    // the next 5 projected turning points (multi-day forecast) stay on the chart too
+    const preds = (D.predictions || []).slice(0, 5);
+    const extra = preds.map(p=>p.isoDate).concat(fcDate ? [fcDate] : []).filter(d => d > dates[dates.length-1]);
+    const allDates = dates.concat([...new Set(extra)].sort());
+    const allPx = closes.concat(preds.map(p=>p.price)).concat(hrec ? [hrec.high.hi, hrec.high.lo, hrec.low.hi, hrec.low.lo] : []);
     const t0 = new Date(allDates[0]).getTime(), t1 = new Date(allDates[allDates.length-1]).getTime();
     const pMin = Math.min(...allPx)*0.96, pMax = Math.max(...allPx)*1.04;
     const W=cw(c), H=ch(c), L=64, R=62, T=18, B=34;
@@ -1163,6 +1176,25 @@ function renderAll(D){
       x.fillStyle="#1f2328"; x.font="700 12px Segoe UI";
       x.fillText(p.type==="high"?"H":"L", X(p.date), Y(p.price) + (p.type==="high"?-9:18));
     }
+    if(preds.length){
+      x.strokeStyle="#8250df"; x.setLineDash([6,5]); x.lineWidth=1.4; x.beginPath();
+      x.moveTo(X(dates[dates.length-1]), Y(closes[closes.length-1]));
+      for(const p of preds) x.lineTo(X(p.isoDate), Y(p.price));
+      x.stroke(); x.setLineDash([]);
+      for(const p of preds){
+        const px = X(p.isoDate), py = Y(p.price);
+        x.fillStyle = p.type==="high" ? "#1a7f37" : "#cf222e";
+        x.beginPath(); x.arc(px, py, 4, 0, 7); x.fill();
+        x.strokeStyle="#8250df"; x.lineWidth=1.5; x.beginPath(); x.arc(px, py, 7, 0, 7); x.stroke();
+        const lbl = "$" + (p.price < 100 ? p.price.toFixed(2) : Math.round(p.price).toLocaleString()), dlbl = p.date.split(" ")[1] || p.isoDate;
+        x.font = "700 11px Segoe UI"; x.textAlign = "center";
+        const wLbl = Math.max(x.measureText(lbl).width, x.measureText(dlbl).width) + 8;
+        const boxY = p.type==="high" ? py-36 : py+10;
+        x.fillStyle = "rgba(255,255,255,0.88)"; x.fillRect(px - wLbl/2, boxY, wLbl, 26);
+        x.fillStyle = p.type==="high" ? "#1a7f37" : "#cf222e"; x.fillText(lbl, px, boxY + 11);
+        x.fillStyle = "#57606a"; x.font = "600 10px Segoe UI"; x.fillText(dlbl, px, boxY + 23);
+      }
+    }
     if(hrec){
       const fx = X(fcDate);
       for(const side of ["high","low"]){
@@ -1181,6 +1213,8 @@ function renderAll(D){
     }
     // Rebind on every render so ticker switches and resize never retain stale points.
     const points = dates.map((date, i) => ({date, price: closes[i], kind: "Actual daily close"}))
+      .concat(preds.map(p => ({date: p.isoDate, price: p.price, time: p.planetHour || p.time,
+                              kind: "Projected " + p.type + " (next 5 turns, multi-day forecast)"})))
       .concat(hrec ? ["high","low"].map(side => ({date: fcDate, price: hrec[side].price, time: hrec[side].time,
                               kind: "Forecast " + side + " (" + hrec.kind + ", 80% range " + fmt$(hrec[side].lo) + "–" + fmt$(hrec[side].hi) + ")"})) : [])
       .concat(D.chart.pivots.filter(p => new Date(p.date).getTime() >= t0)
@@ -1226,7 +1260,8 @@ function renderAll(D){
     };
     if (mob) wrap.scrollLeft = wrap.scrollWidth;   // land on the newest data
     $("chartTag").textContent = `Solid line: actual daily closes (9 months). Dots: confirmed ${D.swing.thresholdPct}% swing pivots. `
-      + (hrec ? `At the right edge: the ${hrec.kind} high/low forecast for ${hrec.session} (same as the cards above), dot = forecast, bar = 80% range, label = most likely 15-minute bar ET.`
+      + (preds.length ? "Purple dashed: the next 5 projected highs/lows (multi-day turning-point forecast, a separate method from the daily cards; listed under Details). " : "")
+      + (hrec ? `Range bars: the ${hrec.kind} daily high/low forecast for ${hrec.session} (same as the cards above), dot = forecast, bar = 80% range, label = most likely 15-minute bar ET. Each time is that extreme's own most likely bar, not an exact time, an order, or a certainty that both happen then.`
               : "No current high/low forecast to draw.")
       + " Hover or tap a point for details." + (mob ? " Swipe the chart left/right to see history." : "");
   })();
