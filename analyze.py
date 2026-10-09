@@ -2587,8 +2587,16 @@ except Exception as e:
     print("week plan failed:", e)
     WEEKPLAN = {}
 
+# daily high/low forecasts (hilo.py runs first in the refresh workflow)
+try:
+    with open("hilo.json", encoding="utf-8") as f:
+        HILO = json.load(f)
+except Exception:
+    HILO = None
+
 with open("data.js", "w", encoding="utf-8") as f:
-    f.write("const DATA_ALL = " + json.dumps(all_out) + ";\n"
+    f.write("const HILO = " + json.dumps(HILO) + ";\n"
+            + "const DATA_ALL = " + json.dumps(all_out) + ";\n"
             + "const TRADES = " + json.dumps(TRADES) + ";\n"
             + "const REALTRADES = " + json.dumps(REAL_TRADES) + ";\n"
             + "const IMPROVELOG = " + json.dumps(IMPROVE_TXT) + ";\n"
@@ -2600,7 +2608,8 @@ with open("data.js", "w", encoding="utf-8") as f:
 try:
     with open("dashboard.html", encoding="utf-8") as f:
         html = f.read()
-    inline = ("<script>const DATA_ALL = " + json.dumps(all_out) + ";\n"
+    inline = ("<script>const HILO = " + json.dumps(HILO) + ";\n"
+              + "const DATA_ALL = " + json.dumps(all_out) + ";\n"
               + "const TRADES = " + json.dumps(TRADES) + ";\n"
               + "const REALTRADES = " + json.dumps(REAL_TRADES) + ";\n"
               + "const IMPROVELOG = " + json.dumps(IMPROVE_TXT) + ";\n"

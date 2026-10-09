@@ -245,6 +245,15 @@
 
 <div class="tabs" id="tabs"></div>
 
+<div class="panel" id="hiloPanel" style="border:2px solid var(--green)">
+  <h2>Today's high and low: price and time</h2>
+  <div id="hiloHead" class="sub"></div>
+  <div id="hiloCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:12px"></div>
+  <details style="margin-top:12px"><summary>All stocks, scoring and status</summary>
+    <div id="hiloDetails" style="margin-top:8px"></div>
+  </details>
+</div>
+
 <div class="panel" id="timingPanel" style="border:2px solid var(--blue)">
   <h2>Timing first — original forecast scorecard</h2>
   <div id="timingSummary" class="sub"></div>
@@ -644,8 +653,67 @@ function renderTimingReview(T){
     <p class="tag">Next research gate: compare fixed Gann, cycle and astro rules separately against simple calendar/rhythm controls on unseen sessions. Keep sample size, false alarms and missed turns visible. A separate trade simulation must include costs, slippage and drawdown before any strategy promotion.</p>`;
 }
 
+/* ---------- daily high/low (primary) ---------- */
+const hiloEsc=v=>String(v == null ? "—" : v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+function hiloEt(iso){
+  return iso ? new Date(iso).toLocaleString("en-US",{timeZone:"America/New_York",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}) + " ET" : "n/a";
+}
+function hiloPct(v){ return (v===null||v===undefined) ? "n/a" : Math.round(v*100) + "%"; }
+function hiloCell(label, main, sub){
+  return `<div style="border:1px solid var(--border);border-radius:10px;padding:10px"><div class="sub">${label}</div>
+    <div class="num" style="font-size:20px;font-weight:700">${main}</div><div class="sub">${sub}</div></div>`;
+}
+function hiloStat(s, kind){
+  if(!s || !s.n) return "no complete sessions scored yet";
+  const p = s.price || {}, t = s.time || {};
+  return `${s.n} calls, ${s.sessions} sessions (${s.from} to ${s.to}). Price: median error ${p.model}% vs ${kind==="intraday"?"extreme-so-far":"prior-day extreme"} ${p.naive==null?"n/a":p.naive}% `
+    + `(paired diff CI ${p.diffCI ? p.diffCI.join(" to ") : "n/a"}); within 0.5% ${p.within05}%, within 1% ${p.within1}%; 80% band held the actual ${p.bandCoverage}% of the time. `
+    + `Time within 60 min: ${t.within60}% vs ${kind==="intraday"?"time-so-far":"the open"} ${t.baseline60==null?"n/a":t.baseline60}% (diff CI ${t.diffCI ? t.diffCI.join(" to ") : "n/a"} pts); within 30 min ${t.within30}%.`;
+}
+function renderHilo(t){
+  if(typeof HILO === "undefined" || !HILO){ $("hiloHead").textContent = "Daily high/low forecasts appear after the next scheduled run."; return; }
+  const slot = (HILO.latest || {})[t] || {};
+  const rec = slot.intraday || slot.premarket;
+  const st = HILO.status || {};
+  const proven = Object.values(st).filter(x=>x.proven).length;
+  const fwdN = Object.values(st).reduce((m,x)=>Math.max(m, x.sessions||0), 0);
+  const state = `Model ${hiloEsc(HILO.model)} · candidate baseline, not a proven edge · forward-proven ${proven}/4 outputs (${fwdN}/${(Object.values(st)[0]||{}).needed||20} forward sessions scored) · ledger ${HILO.ledger && HILO.ledger.ok ? "chain verified, " + HILO.ledger.records + " records" : "CHAIN CHECK FAILED"}`;
+  if(!rec){
+    $("hiloHead").innerHTML = `No forecast for ${hiloEsc(nice(t))} on ${hiloEsc(HILO.targetSession)}: ${hiloEsc((HILO.notes||{})[t] || (HILO.excluded||{})[t] || "not available")}.<br>${state}`;
+    $("hiloCards").innerHTML = "";
+  } else {
+    const kindTxt = rec.kind === "intraday"
+      ? `Intraday revision for the rest of ${hiloEsc(rec.session)}, using bars through ${hiloEsc(rec.lastBar.slice(11))} ET`
+      : `Premarket forecast for ${hiloEsc(rec.session)}, from completed sessions through ${hiloEsc(rec.lastBar.slice(0,10))}`;
+    $("hiloHead").innerHTML = `${kindTxt} · issued ${hiloEt(rec.issuedAt)} · data cutoff ${hiloEt(rec.dataCutoff)}`
+      + (slot.intraday && slot.premarket ? ` · original premarket call: high ${fmt$(slot.premarket.high.price)} at ${slot.premarket.high.time}, low ${fmt$(slot.premarket.low.price)} at ${slot.premarket.low.time}` : "")
+      + `<br>${state}`;
+    const obs = rec.observed;
+    const cells = [];
+    for(const side of ["high","low"]){
+      const b = rec[side], name = side === "high" ? "High" : "Low";
+      cells.push(hiloCell(`${name} price`, fmt$(b.price), `80% range ${fmt$(b.lo)} to ${fmt$(b.hi)}` + (obs ? ` · so far ${fmt$(obs[side])}` : "")));
+      cells.push(hiloCell(`${name} time (ET, 15-min bar)`, hiloEsc(b.time),
+        `chance within ±60 min: ${hiloPct(b.p60)}` + (b.topBins && b.topBins[0] ? ` · likeliest bar ${hiloEsc(b.topBins[0].time)} (${hiloPct(b.topBins[0].p)})` : "") + (b.pAlreadySet!==undefined ? ` · already set: ${hiloPct(b.pAlreadySet)}` : "")));
+    }
+    $("hiloCards").innerHTML = cells.join("");
+  }
+  const rows = Object.entries(HILO.latest || {}).map(([tk, s2])=>{
+    const r = s2.intraday || s2.premarket;
+    return `<tr><td>${hiloEsc(nice(tk))}</td><td>${r.kind}</td><td>${fmt$(r.high.price)} @ ${r.high.time}</td><td>${fmt$(r.high.lo)}–${fmt$(r.high.hi)}</td><td>${fmt$(r.low.price)} @ ${r.low.time}</td><td>${fmt$(r.low.lo)}–${fmt$(r.low.hi)}</td></tr>`;
+  }).join("");
+  const sb = (blk, label) => ["premarket","intraday"].map(k=>["high","low"].map(sd=>
+    `<li><b>${label}, ${k}, ${sd}:</b> ${hiloStat((blk||{})[k] && blk[k][sd], k)}</li>`).join("")).join("");
+  $("hiloDetails").innerHTML = `<div class="tblwrap"><table><tr><th>Stock</th><th>Kind</th><th>High</th><th>High 80% range</th><th>Low</th><th>Low 80% range</th></tr>${rows}</table></div>
+    <p class="sub">${hiloEsc(HILO.method)}</p>
+    <p><b>Forward results</b> (frozen ledger records, scored only after a complete session):</p><ul>${sb(HILO.forward, "Forward")}</ul>
+    <p><b>Retrospective replay</b> (walk-forward on stored sessions; not frozen in advance, so it is not proof):</p><ul>${sb(HILO.retrospective, "Replay")}</ul>
+    <p class="sub">Excluded: ${hiloEsc(Object.keys(HILO.excluded||{}).join(", ") || "none")} (${hiloEsc(Object.values(HILO.excluded||{})[0] || "")}). Generated ${hiloEt(HILO.generatedAt)}, build ${hiloEsc(String((HILO.build||{}).commit||"").slice(0,7))}.</p>`;
+}
+
 /* ---------- main render ---------- */
 function renderAll(D){
+  try { renderHilo(D.ticker); } catch(e) { $("hiloHead").textContent = "Daily high/low panel failed to render: " + e.message; }
   const pb = D.predictionBasis;
   $("tkr").textContent = nice(D.ticker);
   document.querySelectorAll(".tkr2").forEach(e=>e.textContent=nice(D.ticker));
