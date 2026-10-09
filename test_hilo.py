@@ -107,7 +107,8 @@ class ModelTests(unittest.TestCase):
             self.assertLessEqual(b['lo'], b['price'])
             self.assertLessEqual(b['price'], b['hi'])
             self.assertIn('time', b)
-            self.assertGreaterEqual(b['p60'], 0)
+            self.assertGreaterEqual(b['pBar'], 0)
+            self.assertGreaterEqual(b['window']['p60'], b['pBar'])
         self.assertEqual(f['high']['time'], '10:00')                 # synthetic highs sit at bar 2
         self.assertEqual(f['dataCutoff'], et(2026, 10, 8, 16, 0).isoformat())
 
@@ -144,12 +145,19 @@ class ModelTests(unittest.TestCase):
         self.assertIsNone(f)
 
 
+def ledger_rec(n):
+    side = {'price': 100.0 + n, 'lo': 99.0 + n, 'hi': 101.0 + n, 'time': '09:30', 'window': {'centre': '10:30'}}
+    return {'model': 'test', 'kind': 'premarket', 'ticker': 'A', 'session': '2026-10-09', 'n': n,
+            'issuedAt': '2026-10-09T12:00:00+00:00', 'dataCutoff': '2026-10-08T16:00:00-04:00',
+            'high': dict(side), 'low': dict(side)}
+
+
 class LedgerTests(unittest.TestCase):
     def test_chain_detects_edits(self):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / 'ledger.jsonl'
-            hilo.append_record({'ticker': 'A', 'n': 1}, path)
-            hilo.append_record({'ticker': 'B', 'n': 2}, path)
+            hilo.append_record(ledger_rec(1), path)
+            hilo.append_record(ledger_rec(2), path)
             self.assertEqual(hilo.verify_ledger(path), {'ok': True, 'records': 2})
             lines = path.read_text().splitlines()
             path.write_text(lines[0].replace('"n": 1', '"n": 9') + '\n' + lines[1] + '\n')
@@ -159,7 +167,7 @@ class LedgerTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / 'ledger.jsonl'
             for n in range(3):
-                hilo.append_record({'ticker': 'A', 'n': n}, path)
+                hilo.append_record(ledger_rec(n), path)
             lines = path.read_text().splitlines()
             path.write_text('\n'.join([lines[0], lines[2]]) + '\n')          # middle record deleted
             self.assertFalse(hilo.verify_ledger(path)['ok'])
@@ -212,6 +220,136 @@ class RunTests(unittest.TestCase):
             late = dict(hilo.read_ledger(root / hilo.LEDGER)[0], issuedAt=et(2026, 10, 9, 9, 45).isoformat())
             store = json.loads((root / hilo.SESSIONS).read_text())
             self.assertEqual(hilo.score_rows([late], store), [])          # issued after the open
+
+
+class ReviewFixTests(unittest.TestCase):
+    """Cases from the 2026-10-09 review of 89c4934."""
+
+    def root(self, tmp, day=date(2026, 10, 9), today=None, n=30):
+        root = Path(tmp)
+        (root / 'tickers.txt').write_text('TST\n')
+        days = sessions_before(day, n)
+        bars = {d: synthetic_bars(d, 100 + i * 0.1) for i, d in enumerate(days)}
+        if today:
+            bars[day] = today
+        write_csv(root / 'TST_15m.csv', bars)
+        return root
+
+    def intraday(self, root):
+        return [x for x in hilo.read_ledger(root / hilo.LEDGER) if x['kind'] == 'intraday']
+
+    def test_late_checkpoint_freezes_exact_bars_and_is_not_scored(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.root(tmp, today=synthetic_bars(date(2026, 10, 9), 103))
+            hilo.run(now=et(2026, 10, 9, 10, 55), root=root)      # five bars done, checkpoint 4
+            rec = self.intraday(root)[0]
+            self.assertEqual((rec['checkpoint'], rec['observed']['bars']), (4, 4))
+            self.assertEqual(rec['lastBar'], '2026-10-09 10:15')
+            self.assertEqual(rec['dataCutoff'], et(2026, 10, 9, 10, 30).isoformat())
+            self.assertTrue(rec['late'])                          # issued 25 min after its cutoff
+            r = hilo.run(now=et(2026, 10, 9, 17, 0), root=root)
+            self.assertEqual(r['forward']['intraday']['high']['n'], 0)
+            self.assertEqual(r['lateIntradayRecords'], 1)
+
+    def test_skipped_checkpoints_are_not_backfilled(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.root(tmp, today=synthetic_bars(date(2026, 10, 9), 103))
+            hilo.run(now=et(2026, 10, 9, 11, 35), root=root)      # first run after 11:30
+            self.assertEqual([x['checkpoint'] for x in self.intraday(root)], [8])
+
+    def test_timely_checkpoint_is_scored(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.root(tmp, today=synthetic_bars(date(2026, 10, 9), 103))
+            hilo.run(now=et(2026, 10, 9, 10, 31), root=root)
+            self.assertFalse(self.intraday(root)[0]['late'])
+            r = hilo.run(now=et(2026, 10, 9, 17, 0), root=root)
+            self.assertEqual(r['forward']['intraday']['high']['n'], 1)
+
+    def test_half_day_checkpoint_uses_same_bar_count(self):
+        day = date(2026, 11, 27)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.root(tmp, day=day, today=synthetic_bars(day, 103))
+            hilo.run(now=et(2026, 11, 27, 12, 50), root=root)     # 13 bars done of 14
+            rec = self.intraday(root)[0]
+            self.assertEqual((rec['checkpoint'], rec['observed']['bars']), (13, 13))
+            r = hilo.run(now=et(2026, 11, 27, 17, 0), root=root)
+            self.assertEqual(r['forward']['intradayByCheckpoint']['13']['high']['n'], 0)   # half days kept apart
+            self.assertEqual(r['forward']['intraday']['high']['n'], 1)
+
+    def test_invalid_chain_blocks_append_and_scoring(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.root(tmp)
+            hilo.run(now=et(2026, 10, 9, 8, 0), root=root)
+            path = root / hilo.LEDGER
+            line = path.read_text().splitlines()[0]
+            rec = json.loads(line)
+            rec['high']['price'] = rec['high']['price'] + 1             # parseable but altered
+            path.write_text(json.dumps(rec, sort_keys=True) + '\n')
+            r = hilo.run(now=et(2026, 10, 12, 8, 0), root=root)
+            self.assertTrue(r['failed'])
+            self.assertEqual(len(path.read_text().splitlines()), 1)     # nothing appended
+            self.assertNotIn('forward', r)
+            with self.assertRaises(ValueError):
+                hilo.append_record({'ticker': 'X'}, path)
+
+    def test_failure_marks_page_state_stale(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.root(tmp)
+            hilo.run(now=et(2026, 10, 9, 8, 0), root=root)
+            hilo.mark_failed('boom', root=root)
+            out = json.loads((root / hilo.OUT).read_text())
+            self.assertTrue(out['stale'])
+            self.assertEqual(out['failed']['reason'], 'boom')
+
+    def test_other_model_records_are_not_mixed_in(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.root(tmp, today=synthetic_bars(date(2026, 10, 9), 103))
+            hilo.run(now=et(2026, 10, 9, 8, 0), root=root)
+            first = hilo.read_ledger(root / hilo.LEDGER)[0]
+            other = {k: v for k, v in first.items() if k not in ('id', 'prevHash')}
+            other['model'] = 'hilo-0'
+            hilo.append_record(other, root / hilo.LEDGER)
+            r = hilo.run(now=et(2026, 10, 9, 17, 0), root=root)
+            self.assertEqual(r['otherModelRecords'], 1)
+            self.assertEqual(r['forward']['premarket']['high']['n'], 1)
+
+    def test_multimodal_time_reports_mode_and_window_separately(self):
+        bins = list(range(570, 960, 15))
+        b = hilo.time_block([570] * 10 + [945] * 10, bins)
+        self.assertEqual(b['time'], '09:30')                       # tie goes to the earliest bar
+        self.assertEqual(b['pBar'], 0.5)
+        self.assertEqual(b['window']['p60'], 0.5)
+        self.assertEqual({x['time'] for x in b['topBins']}, {'09:30', '15:45'})
+
+    def test_intraday_time_distribution_includes_already_set_mass(self):
+        day = date(2026, 10, 9)
+        store = build_store(sessions_before(day, 30))
+        today = synthetic_bars(day, 103, hi_bar=1, lo_bar=3)[:4]
+        f, _ = hilo.intraday_forecast(store['TST'], day, today)
+        for side in ('high', 'low'):
+            blk = f[side]
+            total = sum(x['p'] for x in blk['topBins'])
+            self.assertLessEqual(total, 1.0001)
+            obs_t = f['observed'][side + 'Time']
+            got = next((x['p'] for x in blk['topBins'] if x['time'] == obs_t), 0)
+            self.assertGreaterEqual(got + 1e-9, blk['pAlreadySet'] if blk['time'] == obs_t else 0)
+            self.assertLessEqual(blk['window']['p60'], 1)
+
+    def test_malformed_bars_leave_session_incomplete(self):
+        day = date(2026, 10, 8)
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'X_15m.csv'
+            bars = synthetic_bars(day, 100)
+            write_csv(path, {day: bars})
+            lines = path.read_text().splitlines()
+            lines[3] = lines[3].rsplit(',', 4)[0] + ',nan,99,100,0'     # non-finite high
+            lines[5] = lines[5].rsplit(',', 4)[0] + ',101,90,110,0'     # low above high
+            path.write_text('\n'.join(lines) + '\n')
+            days = hilo.read_bars_csv(path)
+            self.assertEqual(len(days[day]), len(bars) - 2)
+            store = {}
+            hilo.update_store(store, 'X', days, et(2026, 10, 9, 9, 0))
+            self.assertNotIn('2026-10-08', store['X'])
 
 
 if __name__ == '__main__':

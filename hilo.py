@@ -4,8 +4,9 @@ High price, high time, low price and low time, each with its uncertainty.
 
 Two kinds of record are written, and both are frozen once written:
 - premarket: issued before the target session opens, from completed sessions only;
-- intraday: a revision for the rest of today's session, from today's completed
-  15-minute bars so far plus earlier completed sessions.
+- intraday: a revision of today's FINAL full-session high and low (including what
+  has already traded), frozen at fixed checkpoints from exactly the first N
+  completed 15-minute bars plus earlier completed sessions.
 
 Records go to an append-only, hash-chained ledger (hilo_ledger.jsonl) with the
 issue time and the data cutoff. They are scored only after the session is
@@ -19,6 +20,7 @@ improve on, not a claimed edge.
 import csv
 import hashlib
 import json
+import math
 import os
 import random
 from datetime import datetime, timedelta, timezone
@@ -37,10 +39,11 @@ MEDIAN_SESSIONS = 20      # price point: median move over the last 20 sessions
 HISTORY_SESSIONS = 60     # bands and time distribution: up to the last 60
 MIN_HISTORY = 20
 WINDOW_MIN = 60           # "near" for time: within +/- 60 minutes
-FORWARD_SESSIONS_NEEDED = 20
+MAX_LAG_MIN = 20           # intraday records issued later than this after their cutoff are "late"
 BOOT = 2000
-# Intraday revisions are frozen at these completed-bar counts (10:00, 10:30, 11:30,
-# 12:45, 14:00 and 15:00 on a full day) to keep the public ledger small.
+# Intraday revisions are frozen at these completed-bar counts. On a full day the data
+# cutoffs are 10:00, 10:30, 11:30, 12:45, 14:00 and 15:00. A record for checkpoint N
+# uses exactly the first N bars, whatever time the run happens.
 CHECKPOINTS = (2, 4, 8, 13, 18, 22)
 
 
@@ -55,6 +58,14 @@ def hhmm(mins):
     return f'{mins // 60:02d}:{mins % 60:02d}'
 
 
+def valid_bar(bar):
+    """Finite, positive OHLC with low <= close <= high."""
+    _, h, l, c = bar
+    if not all(math.isfinite(v) and v > 0 for v in (h, l, c)):
+        return False
+    return l <= h and l - 1e-9 <= c <= h + 1e-9
+
+
 def read_bars_csv(path):
     """15-minute bars from fetch_data.py's CSV -> {date: [(HH:MM, high, low, close)]}."""
     days = {}
@@ -63,8 +74,10 @@ def read_bars_csv(path):
             try:
                 ts = datetime.fromisoformat(row['Datetime']).astimezone(EASTERN)
                 bar = (ts.strftime('%H:%M'), float(row['High']), float(row['Low']), float(row['Close']))
-            except (KeyError, ValueError):
+            except (KeyError, ValueError, TypeError):
                 continue
+            if not valid_bar(bar):
+                continue        # a dropped bar leaves its session incomplete, so it is never scored
             days.setdefault(ts.date(), []).append(bar)
     return {d: sorted(b) for d, b in days.items()}
 
@@ -179,11 +192,23 @@ def price_block(point, lo, hi, digits=2):
     return {'price': round(point, digits), 'lo': round(lo, digits), 'hi': round(hi, digits)}
 
 
-def time_block(point, times, bins):
-    within = lambda w: round(sum(abs(point - m) <= w for m in times) / len(times), 3) if times else None
-    top = sorted(((sum(1 for m in times if b <= m < b + BAR_MIN), b) for b in bins), reverse=True)[:3]
-    return {'time': hhmm(point), 'p60': within(WINDOW_MIN), 'p30': within(30),
-            'topBins': [{'time': hhmm(b), 'p': round(c / len(times), 3)} for c, b in top if c]}
+def time_block(times, bins):
+    """Whole distribution of the extreme's 15-minute bar over `times` (one entry per scenario).
+
+    time   = the modal bar: the single most likely bar (ties: earliest), with pBar.
+    window = a separate output: the centre of the +/-60 minute window that holds the
+             most probability, with p60 (and p30 around that same centre). It is a
+             window centre, not the most likely time.
+    """
+    n = len(times)
+    counts = {b: sum(1 for m in times if b <= m < b + BAR_MIN) for b in bins}
+    mode = max(bins, key=lambda b: (counts[b], -b))
+    centre = best_time(times, bins)
+    share = lambda c, w: round(sum(abs(c - m) <= w for m in times) / n, 3)
+    top = sorted(((c, -b) for b, c in counts.items() if c), reverse=True)[:3]
+    return {'time': hhmm(mode), 'pBar': round(counts[mode] / n, 3),
+            'topBins': [{'time': hhmm(-b), 'p': round(c / n, 3)} for c, b in top],
+            'window': {'centre': hhmm(centre), 'p60': share(centre, WINDOW_MIN), 'p30': share(centre, 30)}}
 
 
 def premarket_forecast(store_t, day):
@@ -199,35 +224,34 @@ def premarket_forecast(store_t, day):
     recent = moves[-MEDIAN_SESSIONS:]
     bins = session_bins(day)
     ups, dns = [m[1] for m in moves], [m[2] for m in moves]
-    hi_t, lo_t = [m[3] for m in moves], [m[4] for m in moves]
-    hi_point = anchor * (1 + median(m[1] for m in recent))
-    lo_point = anchor * (1 + median(m[2] for m in recent))
-    high = price_block(hi_point, anchor * (1 + quantile(ups, 0.1)), anchor * (1 + quantile(ups, 0.9)))
-    low = price_block(lo_point, anchor * (1 + quantile(dns, 0.1)), anchor * (1 + quantile(dns, 0.9)))
-    high.update(time_block(best_time(hi_t, bins), hi_t, bins))
-    low.update(time_block(best_time(lo_t, bins), lo_t, bins))
+    high = price_block(anchor * (1 + median(m[1] for m in recent)),
+                       anchor * (1 + quantile(ups, 0.1)), anchor * (1 + quantile(ups, 0.9)))
+    low = price_block(anchor * (1 + median(m[2] for m in recent)),
+                      anchor * (1 + quantile(dns, 0.1)), anchor * (1 + quantile(dns, 0.9)))
+    high.update(time_block([m[3] for m in moves], bins))
+    low.update(time_block([m[4] for m in moves], bins))
     cutoff = cal.session_bounds(cal.as_date(prev))[1]
-    return {'anchor': round(anchor, 4), 'anchorKind': 'prior close', 'high': high, 'low': low,
+    return {'target': f'full-session high and low of {day.isoformat()}',
+            'anchor': round(anchor, 4), 'anchorKind': 'prior close', 'high': high, 'low': low,
             'history': {'n': len(moves), 'from': moves[0][0], 'to': moves[-1][0]},
             'dataCutoff': cutoff.isoformat(), 'lastBar': f'{prev} {store_t[prev]["bars"][-1][0]}'}, None
 
 
 def intraday_forecast(store_t, day, today_bars):
-    """Rest-of-session revision after len(today_bars) completed bars, or (None, reason)."""
+    """Today's final full-session high/low given exactly `today_bars`, or (None, reason)."""
     k = len(today_bars)
     exp = cal.expected_bars(day, BAR_MIN)
     if k == 0 or k >= exp:
         return None, 'no completed bars yet' if k == 0 else 'session complete'
     if contiguous_from_open(day, today_bars) != k:
         return None, 'gap in today\'s bars'
-    keys, all_keys = history_before(store_t, day)
+    keys, _ = history_before(store_t, day)
     if len(keys) < MIN_HISTORY:
         return None, f'only {len(keys)} history sessions (need {MIN_HISTORY})'
     close_min = minutes(cal.session_bounds(day)[1].strftime('%H:%M'))
     seen = extremes(today_bars)
     last = today_bars[-1][3]
-    last_min = minutes(today_bars[-1][0])
-    r_up, r_dn, up_t, dn_t = [], [], [], []
+    scen = []                    # (rest-up move, rest-down move, rest-high bar, rest-low bar) per earlier session
     for key in keys:
         bars = [b for b in store_t[key]['bars'] if minutes(b[0]) < close_min]
         if len(bars) <= k:
@@ -235,32 +259,26 @@ def intraday_forecast(store_t, day, today_bars):
         ref, rest = bars[k - 1][3], bars[k:]
         hi_b = max(rest, key=lambda b: b[1])
         lo_b = min(rest, key=lambda b: b[2])
-        r_up.append(hi_b[1] / ref - 1)
-        r_dn.append(lo_b[2] / ref - 1)
-        up_t.append(minutes(hi_b[0]))
-        dn_t.append(minutes(lo_b[0]))
-    if len(r_up) < MIN_HISTORY:
-        return None, f'only {len(r_up)} history sessions reach bar {k}'
-    bins = [b for b in session_bins(day) if b > last_min]
-    out = {'anchor': round(last, 4), 'anchorKind': 'last completed bar close',
+        scen.append((hi_b[1] / ref - 1, lo_b[2] / ref - 1, minutes(hi_b[0]), minutes(lo_b[0])))
+    if len(scen) < MIN_HISTORY:
+        return None, f'only {len(scen)} history sessions reach bar {k}'
+    bins = session_bins(day)
+    out = {'target': f'final full-session high and low of {day.isoformat()}, including bars already traded',
+           'anchor': round(last, 4), 'anchorKind': 'last completed bar close',
            'observed': {'high': seen['high'], 'highTime': seen['highTime'],
                         'low': seen['low'], 'lowTime': seen['lowTime'], 'bars': k},
-           'history': {'n': len(r_up), 'from': keys[0], 'to': keys[-1]}}
-    for side, rs, ts, obs, obs_t, better in (
-            ('high', r_up, up_t, seen['high'], seen['highTime'], max),
-            ('low', r_dn, dn_t, seen['low'], seen['lowTime'], min)):
-        cands = [better(obs, last * (1 + r)) for r in rs]
-        p_set = sum(c == obs for c in cands) / len(cands)
+           'history': {'n': len(scen), 'from': keys[0], 'to': keys[-1]}}
+    for side, idx, obs, obs_t, better in (('high', 0, seen['high'], seen['highTime'], max),
+                                          ('low', 1, seen['low'], seen['lowTime'], min)):
+        cands, times = [], []
+        for sc in scen:
+            c = better(obs, last * (1 + sc[idx]))
+            cands.append(c)
+            # one scenario = one final extreme: either the one already traded, or a later one
+            times.append(minutes(obs_t) if c == obs else sc[idx + 2])
         block = price_block(median(cands), quantile(cands, 0.1), quantile(cands, 0.9))
-        later_t = [t for t, c in zip(ts, cands) if c != obs]
-        if p_set >= 0.5 or not later_t:
-            block.update({'time': obs_t, 'p60': round(p_set, 3), 'p30': round(p_set, 3), 'topBins': []})
-        else:
-            tb = time_block(best_time(later_t, bins), later_t, bins)
-            tb['p60'] = round((1 - p_set) * tb['p60'], 3)
-            tb['p30'] = round((1 - p_set) * tb['p30'], 3)
-            block.update(tb)
-        block['pAlreadySet'] = round(p_set, 3)
+        block.update(time_block(times, bins))
+        block['pAlreadySet'] = round(sum(c == obs for c in cands) / len(cands), 3)
         out[side] = block
     end = datetime.combine(day, datetime.strptime(today_bars[-1][0], '%H:%M').time(), EASTERN) + timedelta(minutes=BAR_MIN)
     out['dataCutoff'] = end.isoformat()
@@ -274,44 +292,74 @@ def _sha(text):
     return hashlib.sha256(text.encode('utf-8')).hexdigest()
 
 
-def read_ledger(path=LEDGER):
+def _lines(path):
     p = Path(path)
-    if not p.exists():
-        return []
-    return [json.loads(line) for line in p.read_text(encoding='utf-8').splitlines() if line.strip()]
+    return [line for line in p.read_text(encoding='utf-8').splitlines() if line.strip()] if p.exists() else []
+
+
+def valid_record(rec):
+    """Schema and sanity check for one ledger record."""
+    try:
+        if rec['kind'] not in ('premarket', 'intraday') or not rec.get('model'):
+            return False
+        issued = datetime.fromisoformat(rec['issuedAt'])
+        cutoff = datetime.fromisoformat(rec['dataCutoff'])
+        if issued.tzinfo is None or cutoff.tzinfo is None or cutoff > issued:
+            return False
+        cal.as_date(rec['session'])
+        for side in ('high', 'low'):
+            b = rec[side]
+            vals = (b['price'], b['lo'], b['hi'])
+            if not all(isinstance(v, (int, float)) and math.isfinite(v) and v > 0 for v in vals):
+                return False
+            if not b['lo'] <= b['price'] <= b['hi']:
+                return False
+            minutes(b['time'])
+            minutes(b['window']['centre'])
+        if rec['kind'] == 'intraday' and rec.get('checkpoint') not in CHECKPOINTS:
+            return False
+        return True
+    except (KeyError, TypeError, ValueError, AttributeError):
+        return False
 
 
 def verify_ledger(path=LEDGER):
-    """Check the hash chain: each line names the hash of the line before it."""
-    p = Path(path)
-    if not p.exists():
-        return {'ok': True, 'records': 0}
+    """Chain and schema check. Catches edits, deletions (except of the newest lines) and
+    reordering. A whole-file rewrite with a fresh chain needs an external anchor (Git)."""
     prev = '0' * 64
-    lines = [line for line in p.read_text(encoding='utf-8').splitlines() if line.strip()]
+    lines = _lines(path)
     for i, line in enumerate(lines):
-        rec = json.loads(line)
+        try:
+            rec = json.loads(line)
+        except ValueError:
+            return {'ok': False, 'records': len(lines), 'firstBad': i, 'why': 'unparseable line'}
         if rec.get('prevHash') != prev:
-            return {'ok': False, 'records': len(lines), 'firstBad': i}
+            return {'ok': False, 'records': len(lines), 'firstBad': i, 'why': 'chain broken'}
         body = {k: v for k, v in rec.items() if k != 'id'}
         if rec.get('id') != _sha(json.dumps(body, sort_keys=True))[:16]:
-            return {'ok': False, 'records': len(lines), 'firstBad': i}
+            return {'ok': False, 'records': len(lines), 'firstBad': i, 'why': 'record altered'}
+        if not valid_record(rec):
+            return {'ok': False, 'records': len(lines), 'firstBad': i, 'why': 'invalid record'}
         prev = _sha(line)
     return {'ok': True, 'records': len(lines)}
 
 
+def read_ledger(path=LEDGER):
+    return [json.loads(line) for line in _lines(path)]
+
+
 def append_record(rec, path=LEDGER):
-    """Append one record, chained to the previous line. Never edits existing lines."""
-    p = Path(path)
-    prev = '0' * 64
-    if p.exists():
-        lines = [line for line in p.read_text(encoding='utf-8').splitlines() if line.strip()]
-        if lines:
-            prev = _sha(lines[-1])
-    rec = dict(rec, prevHash=prev)
+    """Append one record, chained to the previous line. Refuses to write onto an invalid ledger."""
+    check = verify_ledger(path)
+    if not check['ok']:
+        raise ValueError(f'ledger invalid at line {check["firstBad"]}: {check["why"]}')
+    lines = _lines(path)
+    rec = dict(rec, prevHash=_sha(lines[-1]) if lines else '0' * 64)
     rec['id'] = _sha(json.dumps(rec, sort_keys=True))[:16]
-    line = json.dumps(rec, sort_keys=True)
-    with open(p, 'a', encoding='utf-8') as f:
-        f.write(line + '\n')
+    if not valid_record(rec):
+        raise ValueError('refusing to append an invalid record')
+    with open(path, 'a', encoding='utf-8') as f:
+        f.write(json.dumps(rec, sort_keys=True) + '\n')
     return rec
 
 
@@ -324,48 +372,69 @@ def checkpoint(k):
     return passed[-1] if passed else None
 
 
+def lag_minutes(rec):
+    return (datetime.fromisoformat(rec['issuedAt']) - datetime.fromisoformat(rec['dataCutoff'])).total_seconds() / 60
+
+
 # ---------------------------------------------------------------- evaluation
 
 def _err(pred, actual):
     return abs(pred - actual) / actual * 100
 
 
-def score_rows(ledger, store, legacy=None):
-    """One row per ledger record per side whose session is complete, with paired baselines."""
+def score_rows(ledger, store, legacy=None, model=MODEL):
+    """One row per record and side once its session is complete, with paired comparators.
+
+    Only records of `model` that pass the issue/cutoff gates are scored. Intraday records
+    issued more than MAX_LAG_MIN after their cutoff are kept in the ledger but not scored.
+    """
     rows = []
     for rec in ledger:
+        if rec.get('model') != model:
+            continue
         st = store.get(rec['ticker'], {})
         sess = st.get(rec['session'])
         if not sess:
             continue
+        day = cal.as_date(rec['session'])
+        open_ = cal.session_bounds(day)[0]
         issued = datetime.fromisoformat(rec['issuedAt'])
-        cutoff = datetime.fromisoformat(rec['dataCutoff'])
-        open_ = cal.session_bounds(cal.as_date(rec['session']))[0]
-        if cutoff > issued or (rec['kind'] == 'premarket' and issued >= open_):
-            continue                                  # fails the issue/cutoff gate
+        if datetime.fromisoformat(rec['dataCutoff']) > issued:
+            continue
+        if rec['kind'] == 'premarket' and issued >= open_:
+            continue
+        if rec['kind'] == 'intraday' and lag_minutes(rec) > MAX_LAG_MIN:
+            continue
         actual = extremes(sess['bars'])
         keys = sorted(k for k in st if k < rec['session'])
-        prev = st[keys[-1]] if keys else None
+        prior_ok = bool(keys) and keys[-1] == cal.previous_session(day).isoformat()
         for side in ('high', 'low'):
             f = rec[side]
             a_p, a_t = actual[side], minutes(actual[side + 'Time'])
             row = {'ticker': rec['ticker'], 'session': rec['session'], 'kind': rec['kind'], 'side': side,
+                   'checkpoint': rec.get('checkpoint'), 'halfDay': cal.expected_bars(day) < 26,
                    'err': _err(f['price'], a_p), 'inBand': f['lo'] <= a_p <= f['hi'],
-                   'tErr': abs(minutes(f['time']) - a_t)}
+                   'barHit': minutes(f['time']) == a_t, 'tErr': abs(minutes(f['time']) - a_t),
+                   'near60': abs(minutes(f['time']) - a_t) <= WINDOW_MIN,
+                   'winHit': abs(minutes(f['window']['centre']) - a_t) <= WINDOW_MIN}
             if rec['kind'] == 'premarket':
-                if prev and keys[-1] == cal.previous_session(cal.as_date(rec['session'])).isoformat():
-                    row['naiveErr'] = _err(extremes(prev['bars'])[side], a_p)
-                row['openTErr'] = abs(minutes(cal.session_bounds(cal.as_date(rec['session']))[0].strftime('%H:%M')) - a_t)
+                if prior_ok:
+                    row['cmpErr'] = {'prior-day extreme': _err(extremes(st[keys[-1]]['bars'])[side], a_p)}
+                o = minutes(open_.strftime('%H:%M'))
+                # time comparators: the opening bar, and the best fixed +/-60 window over prior sessions
+                row['cmpBar'] = {'opening bar': o == a_t}
+                row['cmpWin'] = {'the open +/-60': abs(o - a_t) <= WINDOW_MIN,
+                                 'prior-60 best fixed window': row['winHit']}
                 lg = (legacy or {}).get((rec['ticker'], rec['session'], side))
                 if lg:
-                    row['legacyErr'] = _err(lg['price'], a_p)
+                    row.setdefault('cmpErr', {})['legacy app'] = _err(lg['price'], a_p)
                     if lg.get('min') is not None:
-                        row['legacyTErr'] = abs(lg['min'] - a_t)
+                        row['cmpWin']['legacy app'] = abs(lg['min'] - a_t) <= WINDOW_MIN
             else:
                 obs = rec['observed']
-                row['naiveErr'] = _err(obs[side], a_p)          # "the extreme so far stands"
-                row['openTErr'] = abs(minutes(obs[side + 'Time']) - a_t)
-                row['hour'] = rec['lastBar'][-5:-3]
+                row['cmpErr'] = {'extreme so far stands': _err(obs[side], a_p)}
+                row['cmpBar'] = {'extreme so far stands': minutes(obs[side + 'Time']) == a_t}
+                row['cmpWin'] = {'extreme so far stands': abs(minutes(obs[side + 'Time']) - a_t) <= WINDOW_MIN}
             rows.append(row)
     return rows
 
@@ -382,38 +451,53 @@ def _boot_ci(rows, fn, seed=1):
     return [round(vals[int(0.025 * BOOT)], 3), round(vals[int(0.975 * BOOT)], 3)]
 
 
+def _rate(rs, pred):
+    return round(100 * sum(1 for r in rs if pred(r)) / len(rs), 1) if rs else None
+
+
 def summarize(rows):
-    """Paired summary: model and baselines on exactly the same rows."""
+    """Model and every comparator on exactly the same rows; the strongest comparator is named."""
     if not rows:
         return {'n': 0}
-    pr = [r for r in rows if 'naiveErr' in r]
-    med = lambda k, rs: round(median(r[k] for r in rs), 3) if rs else None
-    rate = lambda pred, rs: round(100 * sum(1 for r in rs if pred(r)) / len(rs), 1) if rs else None
+    med = lambda vals: round(median(vals), 3)
     out = {'n': len(rows), 'sessions': len({r['session'] for r in rows}),
            'from': min(r['session'] for r in rows), 'to': max(r['session'] for r in rows),
-           'price': {'model': med('err', rows), 'within05': rate(lambda r: r['err'] <= 0.5, rows),
-                     'within1': rate(lambda r: r['err'] <= 1, rows), 'bandCoverage': rate(lambda r: r['inBand'], rows)},
-           'time': {'within30': rate(lambda r: r['tErr'] <= 30, rows), 'within60': rate(lambda r: r['tErr'] <= 60, rows),
-                    'medianMin': med('tErr', rows)}}
-    if pr:
-        mean = lambda k, rs: round(sum(r[k] for r in rs) / len(rs), 3)
-        out['price'].update(pairedN=len(pr), naive=med('naiveErr', pr), modelSameRows=med('err', pr),
-                            meanModel=mean('err', pr), meanNaive=mean('naiveErr', pr),
-                            diffCI=_boot_ci(pr, lambda s: median(r['err'] - r['naiveErr'] for r in s)),
-                            meanDiffCI=_boot_ci(pr, lambda s: sum(r['err'] - r['naiveErr'] for r in s) / len(s)))
-    tr = [r for r in rows if 'openTErr' in r]
-    if tr:
-        out['time'].update(pairedN=len(tr), baseline60=rate(lambda r: r['openTErr'] <= 60, tr),
-                           model60SameRows=rate(lambda r: r['tErr'] <= 60, tr),
-                           diffCI=_boot_ci(tr, lambda s: 100 * (sum(r['tErr'] <= 60 for r in s)
-                                                                - sum(r['openTErr'] <= 60 for r in s)) / len(s)))
-    lg = [r for r in rows if 'legacyErr' in r]
-    if lg:
-        out['legacy'] = {'n': len(lg), 'legacyPrice': med('legacyErr', lg), 'modelPrice': med('err', lg)}
-        lt = [r for r in lg if 'legacyTErr' in r]
-        if lt:
-            out['legacy'].update(timeN=len(lt), legacy60=rate(lambda r: r['legacyTErr'] <= 60, lt),
-                                 model60=rate(lambda r: r['tErr'] <= 60, lt))
+           'price': {'model': med([r['err'] for r in rows]), 'within05': _rate(rows, lambda r: r['err'] <= 0.5),
+                     'within1': _rate(rows, lambda r: r['err'] <= 1), 'bandCoverage': _rate(rows, lambda r: r['inBand'])},
+           'timeBar': {'model': _rate(rows, lambda r: r['barHit']),
+                       'within30': _rate(rows, lambda r: r['tErr'] <= 30), 'within60': _rate(rows, lambda r: r['tErr'] <= 60)},
+           'timeNear': {'model': _rate(rows, lambda r: r['near60'])},
+           'timeWindow': {'model': _rate(rows, lambda r: r['winHit'])}}
+    names = sorted({k for r in rows for k, v in (r.get('cmpErr') or {}).items() if v is not None})
+    cmp_p = {}
+    for name in names:
+        rs = [r for r in rows if (r.get('cmpErr') or {}).get(name) is not None]
+        cmp_p[name] = {'n': len(rs), 'comparator': med([r['cmpErr'][name] for r in rs]),
+                       'modelSameRows': med([r['err'] for r in rs])}
+    if cmp_p:
+        best = min(cmp_p, key=lambda k: cmp_p[k]['comparator'])
+        rs = [r for r in rows if (r.get('cmpErr') or {}).get(best) is not None]
+        cmp_p[best]['diffCI'] = _boot_ci(rs, lambda s: median(r['err'] - r['cmpErr'][best] for r in s))
+        out['price'].update(comparators=cmp_p, strongest=best)
+    # timeBar: modal bar exactly right; timeNear: modal bar within +/-60 min (fixed-window comparator
+    # included); timeWindow: the separate window-centre output against the other comparators.
+    for block, key, model_hit in (('timeBar', 'cmpBar', 'barHit'), ('timeNear', 'cmpWin', 'near60'),
+                                  ('timeWindow', 'cmpWin', 'winHit')):
+        names = sorted({k for r in rows for k in (r.get(key) or {})})
+        cmp_t = {}
+        for name in names:
+            rs = [r for r in rows if name in (r.get(key) or {})]
+            cmp_t[name] = {'n': len(rs), 'comparator': _rate(rs, lambda r: r[key][name]),
+                           'modelSameRows': _rate(rs, lambda r: r[model_hit])}
+        others = {k: v for k, v in cmp_t.items() if not (block == 'timeWindow' and k == 'prior-60 best fixed window')}
+        if others:
+            best = max(others, key=lambda k: others[k]['comparator'])
+            rs = [r for r in rows if best in (r.get(key) or {})]
+            cmp_t[best]['diffCI'] = _boot_ci(rs, lambda s: 100 * (sum(r[model_hit] for r in s)
+                                                                  - sum(r[key][best] for r in s)) / len(s))
+            out[block].update(comparators=cmp_t, strongest=best)
+        elif cmp_t:
+            out[block]['comparators'] = cmp_t
     return out
 
 
@@ -421,26 +505,30 @@ def board(rows):
     out = {}
     for kind in ('premarket', 'intraday'):
         out[kind] = {s: summarize([r for r in rows if r['kind'] == kind and r['side'] == s]) for s in ('high', 'low')}
+    out['intradayByCheckpoint'] = {
+        str(cp): {s: summarize([r for r in rows if r['kind'] == 'intraday' and r['checkpoint'] == cp
+                                and r['side'] == s and not r['halfDay']]) for s in ('high', 'low')}
+        for cp in CHECKPOINTS}
     return out
 
 
 def forward_status(fwd):
-    """Per output: forward-proven only with enough sessions and a paired interval that excludes zero."""
+    """Observed prospective results per output. Observational only: no sample size proves an edge."""
     st = {}
     for side in ('high', 'low'):
         s = fwd['premarket'][side]
-        n = s.get('sessions', 0)
-        p_ci = s.get('price', {}).get('diffCI')
-        t_ci = s.get('time', {}).get('diffCI')
-        st[f'{side}Price'] = {'sessions': n, 'needed': FORWARD_SESSIONS_NEEDED,
-                              'proven': bool(n >= FORWARD_SESSIONS_NEEDED and p_ci and p_ci[1] < 0
-                                             and (s['price'].get('meanDiffCI') or [0, 0])[1] < 0)}
-        st[f'{side}Time'] = {'sessions': n, 'needed': FORWARD_SESSIONS_NEEDED,
-                             'proven': bool(n >= FORWARD_SESSIONS_NEEDED and t_ci and t_ci[0] > 0)}
+        for name, blocks in ((f'{side}Price', ('price',)), (f'{side}Time', ('timeBar', 'timeNear'))):
+            st[name] = {'sessions': s.get('sessions', 0), 'records': s.get('n', 0),
+                        'note': 'observational; not proof of an edge'}
+            for block in blocks:
+                b = s.get(block, {})
+                best = b.get('strongest')
+                st[name][block] = {'model': b.get('model'), 'strongestComparator': best,
+                                   'comparison': (b.get('comparators') or {}).get(best)}
     return st
 
 
-def retrospective(store, checkpoints=(4, 8, 13, 18)):
+def retrospective(store):
     """Walk-forward replay over stored sessions. Not frozen in advance: labeled retrospective."""
     recs = []
     for ticker, st in store.items():
@@ -449,13 +537,13 @@ def retrospective(store, checkpoints=(4, 8, 13, 18)):
             sub = {k: v for k, v in st.items() if k < key}
             f, _ = premarket_forecast(sub, day)
             if f:
-                recs.append(dict(f, ticker=ticker, session=key, kind='premarket',
+                recs.append(dict(f, model=MODEL, ticker=ticker, session=key, kind='premarket',
                                  issuedAt=f['dataCutoff']))
-            for k in checkpoints:
-                bars = [tuple(b) for b in st[key]['bars'][:k]]
-                g, _ = intraday_forecast(sub, day, bars)
+            for cp in CHECKPOINTS:
+                g, _ = intraday_forecast(sub, day, [tuple(b) for b in st[key]['bars'][:cp]])
                 if g:
-                    recs.append(dict(g, ticker=ticker, session=key, kind='intraday', issuedAt=g['dataCutoff']))
+                    recs.append(dict(g, model=MODEL, ticker=ticker, session=key, kind='intraday',
+                                     checkpoint=cp, issuedAt=g['dataCutoff']))
     return board(score_rows(recs, store))
 
 
@@ -463,9 +551,9 @@ def legacy_calls(path='horizons_log.json'):
     """First logged legacy daily call per ticker/session/side, logged before the session."""
     try:
         entries = json.loads(Path(path).read_text(encoding='utf-8'))['entries']
+        from horizon_scoreboard import clock_minutes
     except Exception:
         return {}
-    from horizon_scoreboard import clock_minutes
     out = {}
     for e in sorted(entries, key=lambda e: e['logged']):
         if e['logged'] >= e['session']:
@@ -480,6 +568,15 @@ def legacy_calls(path='horizons_log.json'):
 
 # ---------------------------------------------------------------- run
 
+METHOD = (f'Price: prior close x (1 + median move to the high/low over the last {MEDIAN_SESSIONS} sessions); '
+          f'80% band = 10th-90th percentile of that move over up to {HISTORY_SESSIONS} sessions. Time: the modal '
+          f'15-minute bar of past highs/lows (up to {HISTORY_SESSIONS} sessions) with its probability; separately, '
+          f'the centre of the +/-{WINDOW_MIN} min window holding the most probability (a window centre, not the '
+          'likeliest time). Intraday revisions forecast the FINAL full-session high/low, including what already '
+          'traded, from exactly the bars up to a fixed checkpoint, by replaying the rest of each earlier session '
+          'from the same bar. Regular session only; NYSE holidays and half-days applied.')
+
+
 def tickers(path='tickers.txt'):
     names = [t.strip().upper() for t in Path(path).read_text().splitlines() if t.strip()]
     return [t for t in names if '=' not in t], [t for t in names if '=' in t]
@@ -488,14 +585,22 @@ def tickers(path='tickers.txt'):
 def run(now=None, root='.'):
     now = now or datetime.now(timezone.utc)
     root = Path(root)
+    ledger_path = root / LEDGER
+    issued = now.astimezone(timezone.utc).isoformat(timespec='seconds')
+    day, kind = cal.target_session(now)
+    check = verify_ledger(ledger_path)
+    if not check['ok']:
+        # fail closed: nothing appended, nothing scored, page shows the failure
+        report = {'generatedAt': issued, 'model': MODEL, 'targetSession': day.isoformat(), 'kind': kind,
+                  'failed': {'at': issued, 'reason': f'ledger check failed: {check}'}, 'stale': True,
+                  'ledger': check, 'latest': {}}
+        (root / OUT).write_text(json.dumps(report, indent=1) + '\n')
+        return report
     store_path = root / SESSIONS
     store = json.loads(store_path.read_text()) if store_path.exists() else {}
-    ledger_path = root / LEDGER
     ledger = read_ledger(ledger_path)
     have = {record_key(r) for r in ledger}
     equities, excluded = tickers(root / 'tickers.txt')
-    day, kind = cal.target_session(now)
-    issued = now.astimezone(timezone.utc).isoformat(timespec='seconds')
     notes, latest = {}, {}
     for t in equities:
         path = root / f'{t}_15m.csv'
@@ -512,54 +617,75 @@ def run(now=None, root='.'):
             done = [b for b in reg if datetime.combine(day, datetime.strptime(b[0], '%H:%M').time(), EASTERN)
                     + timedelta(minutes=BAR_MIN) <= now.astimezone(EASTERN)]
             cp = checkpoint(len(done))
-            f, why = intraday_forecast(st, day, done) if cp else (None, 'before the first intraday checkpoint')
-            if f:
-                f['checkpoint'] = cp
+            if cp is None:
+                f, why = None, 'before the first intraday checkpoint'
+            elif (t, day.isoformat(), 'intraday', cp) in have:
+                f, why = None, f'checkpoint {cp} already recorded'
+            else:
+                # freeze exactly the first cp bars; skipped earlier checkpoints are not backfilled
+                f, why = intraday_forecast(st, day, done[:cp])
+                if f:
+                    f['checkpoint'] = cp
         if not f:
             notes[t] = why
             continue
         rec = dict(f, v=1, model=MODEL, ticker=t, session=day.isoformat(), kind=kind, issuedAt=issued)
-        if datetime.fromisoformat(rec['dataCutoff']) > now:
-            notes[t] = 'data cutoff after issue time; not recorded'
-            continue
+        if kind == 'intraday':
+            rec['lagMin'] = round(lag_minutes(rec), 1)
+            rec['late'] = rec['lagMin'] > MAX_LAG_MIN
         if record_key(rec) not in have:
             rec = append_record(rec, ledger_path)
             ledger.append(rec)
             have.add(record_key(rec))
     store_path.write_text(json.dumps(store, separators=(',', ':')) + '\n')
     for rec in ledger:
-        if rec['session'] == day.isoformat():
+        if rec['session'] == day.isoformat() and rec.get('model') == MODEL:
             slot = latest.setdefault(rec['ticker'], {})
             if rec['kind'] == 'intraday' or 'premarket' not in slot:
-                slot[rec['kind']] = rec              # first premarket call, latest intraday revision
-    fwd = board(score_rows(ledger, store, legacy_calls(root / 'horizons_log.json')))
+                slot[rec['kind']] = rec              # first premarket call, latest intraday checkpoint
+    check = verify_ledger(ledger_path)
+    fwd = board(score_rows(ledger, store, legacy_calls(root / 'horizons_log.json'))) if check['ok'] else None
     report = {
         'generatedAt': issued, 'model': MODEL, 'targetSession': day.isoformat(), 'kind': kind,
-        'method': (f'Price: prior close x (1 + median move to the high/low over the last {MEDIAN_SESSIONS} '
-                   f'sessions); band = 10th-90th percentile of that move over up to {HISTORY_SESSIONS} sessions. '
-                   f'Time: the 15-minute bar whose +/-{WINDOW_MIN} min window held the most highs/lows over up to '
-                   f'{HISTORY_SESSIONS} sessions; p60 = share of those sessions inside that window. Intraday '
-                   'revisions condition on the bars so far: they replay the rest of each earlier session from the '
-                   'same bar. Regular session only; NYSE holidays and half-days applied.'),
-        'latest': latest, 'notes': notes,
+        'method': METHOD, 'latest': latest, 'notes': notes,
         'excluded': {t: 'futures session calendar not implemented' for t in excluded},
-        'ledger': verify_ledger(ledger_path),
+        'ledger': check, 'otherModelRecords': sum(1 for r in ledger if r.get('model') != MODEL),
+        'lateIntradayRecords': sum(1 for r in ledger if r.get('late')),
         'storedSessions': {t: len(v) for t, v in store.items()},
-        'forward': fwd, 'status': forward_status(fwd),
+        'forward': fwd, 'status': forward_status(fwd) if fwd else None,
         'retrospective': retrospective(store),
         'build': {'commit': os.environ.get('GITHUB_SHA', 'local'), 'run': os.environ.get('GITHUB_RUN_ID')},
     }
+    if not check['ok']:
+        report.update(failed={'at': issued, 'reason': f'ledger check failed: {check}'}, stale=True, latest={})
     (root / OUT).write_text(json.dumps(report, indent=1) + '\n')
     return report
 
 
-def main():
+def mark_failed(reason, root='.'):
+    """After a crash: keep the old file for the record but flag it so the page shows no forecast."""
+    path = Path(root) / OUT
+    try:
+        report = json.loads(path.read_text())
+    except Exception:
+        report = {}
+    now = datetime.now(timezone.utc).isoformat(timespec='seconds')
+    report.update(failed={'at': now, 'reason': reason}, stale=True)
+    path.write_text(json.dumps(report, indent=1) + '\n')
+
+
+def main(argv=None):
+    import sys
+    argv = sys.argv[1:] if argv is None else argv
+    if argv[:1] == ['--mark-failed']:
+        mark_failed(' '.join(argv[1:]) or 'forecaster failed')
+        print('hilo: marked failed')
+        return
     report = run()
     print('hilo:', report['kind'], report['targetSession'], 'ledger', report['ledger'],
-          'notes', report['notes'] or 'none')
-    for kind in ('premarket', 'intraday'):
-        for side in ('high', 'low'):
-            print('retrospective', kind, side, json.dumps(report['retrospective'][kind][side])[:300])
+          'notes', report.get('notes') or 'none')
+    if report.get('failed'):
+        sys.exit('hilo: ' + report['failed']['reason'])
 
 
 if __name__ == '__main__':

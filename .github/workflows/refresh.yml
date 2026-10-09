@@ -55,7 +55,11 @@ jobs:
           done
           exit 1
       - name: Daily high/low forecasts (append-only ledger)
-        run: python hilo.py || echo "::warning::High/low forecaster failed; previous forecasts retained"
+        run: |
+          if ! python hilo.py; then
+            python hilo.py --mark-failed "forecaster failed in run $GITHUB_RUN_ID; no forecast shown"
+            echo "::warning::High/low forecaster failed; page shows it as unavailable"
+          fi
       - run: python backfill.py
       - run: python benchmark.py
       - run: python astro_lab.py || echo "::warning::Astro enrichment unavailable; retaining previous lab"

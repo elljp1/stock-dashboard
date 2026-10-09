@@ -15,28 +15,43 @@ low time.
   tamper-proof.
 - **Premarket**: a forecast issued before the target session opens, built from
   completed sessions only. Only the first one per stock and session is kept.
-- **Intraday**: a revision for the rest of today's session. It uses only
-  15-minute bars that have finished before the issue time, plus earlier
-  sessions. It is frozen at six checkpoints per session (10:00, 10:30, 11:30,
-  12:45, 14:00 and 15:00 on a full day).
+- **Intraday**: a revision of today's FINAL full-session high and low,
+  including what has already traded. It is frozen at fixed bar-count
+  checkpoints: 2, 4, 8, 13, 18 and 22 completed bars (data cutoffs 10:00,
+  10:30, 11:30, 12:45, 14:00 and 15:00 on a full day). A checkpoint-N record
+  uses exactly the first N bars, whenever the run happens.
+  - Missed earlier checkpoints are never backfilled.
+  - A record issued more than 20 minutes after its cutoff is flagged `late`.
+    It stays in the ledger but is not scored.
+  - Half-day sessions are kept out of the per-checkpoint comparison.
 - `hilo_sessions.json` stores each completed session once. A completed session
   has closed and has every expected bar, per the NYSE calendar in
   `market_calendar.py`, including 1:00 PM half-days. Stored sessions are never
   rewritten. A later provider change is counted, not applied.
 - Futures (GC=F) are excluded until a futures session calendar exists.
+- Bars with non-finite, non-positive or inconsistent OHLC values are dropped.
+  That leaves their session incomplete, so it is never stored or scored.
+- Fail closed: if the chain or any record fails validation, nothing is
+  appended and nothing is scored, and the page shows "unavailable". If the
+  forecaster crashes, the workflow marks the old output as failed, so it is
+  not shown as current. Output older than 3 hours is shown as STALE, with
+  its session date.
 
 ## Time outputs
-- `time` is the **centre of the best ±60-minute window**. It is the point
-  that maximises the chance the extreme falls within an hour either side
-  (`p60`). It is not the most likely exact bar.
-- `topBins[0]` is the **likeliest single 15-minute bar** (the mode), with its
-  own probability. The panel shows the mode as the headline and the window
-  centre beside it.
-- The window centre is the prior-60-session best fixed clock, so on time
-  `hilo-1` equals that comparator by construction. Retrospective and forward
-  results compare it against the open, and against the legacy app where its
-  calls exist. A model that changes timing must also be reported against
-  this fixed-clock comparator.
+- `time` is the **modal 15-minute bar**, the single most likely bar (ties go to
+  the earliest), with its probability `pBar`. This is the primary time output.
+- `window.centre` is a **separate output**. It is the centre of the
+  ±60-minute window that holds the most probability, with `window.p60` (and
+  `p30` around the same centre). It is a window centre, not the most likely
+  time. It equals the prior-60-session best fixed clock.
+- Both are scored separately:
+  - modal bar exactly right (`timeBar`)
+  - modal bar within ±60 minutes (`timeNear`), against the opening bar, the
+    open ±60, the prior-60-session best fixed window, and the legacy app
+  - window centre within ±60 minutes (`timeWindow`)
+- Intraday times come from the whole distribution. In each replayed scenario
+  the final extreme is either the one already traded (at its observed bar) or
+  a later one, so every window sums all of that probability.
 
 ## Scoring
 - A record is scored only after its session is complete.
@@ -55,12 +70,15 @@ low time.
 ## States
 These are reported separately and never merged:
 1. **Candidate**: code on a branch.
-2. **Tested**: the unit gate passes in CI before publication.
+2. **Tested**: the unit gate passes (in CI before publication once merged).
 3. **Committed / deployed**: merged to main and published by the refresh
    workflow (build commit shown on the page).
-4. **Forward-proven**: assessed per output. It needs at least 20 complete
-   forward sessions of premarket records, and a paired interval that beats
-   its baseline and excludes zero.
+4. **Forward record**: an observational report per output. It gives the
+   number of complete forward sessions, the model, the strongest comparator
+   on the same rows, and a session-bootstrap interval. No sample size, by
+   itself, establishes an edge, and the page never labels an output "proven".
 
 The retrospective replay is labelled as such and is never proof. Model hilo-1
-is a baseline to improve on, not a claimed edge.
+is a baseline to improve on, not a claimed edge. Legacy turning-point
+sections on the page remain, labelled secondary. The refocus does not remove
+them.
