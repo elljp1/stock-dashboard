@@ -656,6 +656,16 @@ function renderTimingReview(T){
 /* ---------- daily high/low (primary) ---------- */
 const hiloEsc=v=>String(v == null ? "—" : v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 const HILO_STALE_MS = 3 * 3600 * 1000;
+/* The page data defines HILO once; refreshes replace this live copy (see swapIn). */
+let HILO_LIVE = (typeof HILO === "undefined") ? null : HILO;
+function hiloValid(h){
+  if(h === null) return true;
+  if(typeof h !== "object" || typeof h.generatedAt !== "string" || isNaN(Date.parse(h.generatedAt))) return false;
+  if(h.failed) return typeof h.failed === "object";
+  if(typeof h.targetSession !== "string" || !h.latest || typeof h.latest !== "object") return false;
+  return Object.values(h.latest).every(slot => slot && Object.values(slot).every(r => r && ["high","low"].every(sd =>
+    r[sd] && [r[sd].price, r[sd].lo, r[sd].hi].every(v => Number.isFinite(v) && v > 0) && typeof r[sd].time === "string")));
+}
 function hiloEt(iso){
   return iso ? new Date(iso).toLocaleString("en-US",{timeZone:"America/New_York",weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}) + " ET" : "n/a";
 }
@@ -680,7 +690,8 @@ function hiloStat(s){
 function hiloTime(b){ return `${hiloEsc(b.time)} bar (${hiloPct(b.pBar)})`; }
 function renderHilo(t){
   const head = $("hiloHead"), cards = $("hiloCards");
-  if(typeof HILO === "undefined" || !HILO){ head.textContent = "Daily high/low forecasts appear after the next scheduled run."; cards.innerHTML = ""; return; }
+  const HILO = HILO_LIVE;
+  if(!HILO){ head.textContent = "Daily high/low forecasts appear after the next scheduled run."; cards.innerHTML = ""; $("hiloDetails").innerHTML = ""; return; }
   if(HILO.failed){
     head.innerHTML = `<b style="color:var(--red)">UNAVAILABLE.</b> The forecaster failed at ${hiloEt(HILO.failed.at)}: ${hiloEsc(HILO.failed.reason)}. No forecast is shown. The last successful run was ${hiloEt(HILO.generatedAt)}, for session ${hiloEsc(HILO.targetSession)}.`;
     cards.innerHTML = ""; $("hiloDetails").innerHTML = ""; return;
@@ -1876,15 +1887,31 @@ function renderAll(D){
       return m ? m[1]+" "+String((Number(m[2])%12)+(m[4]==="PM"?12:0)).padStart(2,"0")+":"+m[3] : "";
     };
     if(Object.keys(DATA_ALL).some(t=>stamp(fresh[t].generated)<stamp(DATA_ALL[t].generated)))throw new Error("older snapshot rejected");
+    // high/low forecasts refresh with the rest of the data, validated first and rolled back on failure
+    let nextHilo;
+    if(txt.indexOf("const HILO = ") < 0){
+      nextHilo = {failed:{at:new Date().toISOString(), reason:"refreshed data has no high/low forecasts"}, stale:true,
+                  generatedAt:new Date().toISOString(), targetSession:"unknown"};
+    } else {
+      nextHilo = grab("HILO");
+      const raw = txt.slice(txt.indexOf("const HILO = ") + 13).split(String.fromCharCode(10))[0].trim();
+      if(nextHilo === null && raw !== "null;" && raw !== "null") throw new Error("high/low forecast data unreadable; keeping previous data");
+      if(!hiloValid(nextHilo)) throw new Error("high/low forecast data invalid; keeping previous data");
+      if(nextHilo && HILO_LIVE && !nextHilo.failed && !HILO_LIVE.failed &&
+         Date.parse(nextHilo.generatedAt) < Date.parse(HILO_LIVE.generatedAt)) throw new Error("older high/low snapshot rejected");
+    }
     const pairs=[[DATA_ALL,fresh],[TRADES,grab("TRADES")],[BENCHMARK,grab("BENCHMARK")],
       [BACKFILL,grab("BACKFILL")],[REALTRADES,grab("REALTRADES")],[WEEKPLAN,grab("WEEKPLAN")]];
     const backups=pairs.map(([obj])=>JSON.parse(JSON.stringify(obj)));
+    const hiloBackup=HILO_LIVE;
     const assign=(obj,value)=>{Object.keys(obj).forEach(k=>delete obj[k]);if(Array.isArray(obj))obj.length=0;Object.assign(obj,value);};
     try {
       pairs.forEach(([obj,value])=>{if(value)assign(obj,value);});
+      HILO_LIVE=nextHilo;
       renderTabs(); renderAll(DATA_ALL[CUR]);
     } catch(e) {
       pairs.forEach(([obj],i)=>assign(obj,backups[i]));
+      HILO_LIVE=hiloBackup;
       renderTabs(); renderAll(DATA_ALL[CUR]); throw e;
     }
   }
