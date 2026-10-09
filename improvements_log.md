@@ -2939,3 +2939,37 @@ coherence gate are untouched; `tickers.txt` wasn't touched.
 **Watch next:** whether HOOD's 1.15 calibration ceiling keeps holding as more days confirm it; the
 small AMZN-low price-error gap, in case it recurs; whether NVDA/AMZN/SPY/VOO/META ever produce a
 qualifying swing to grade; and the open alerts/trades in the paper journal.
+
+## 2026-10-09 (Fri) — daily review: grades steady, no code change
+
+**Build status:** `fetch_data.py` was blocked again today — all 11 tickers failed with "Tunnel
+connection failed: 403 Forbidden," the same sandbox network restriction (not a Yahoo-side block)
+seen on several recent days. With no fresh price files, `analyze.py` correctly refused to rebuild
+("Incomplete analysis; retaining last published dashboard") and left the build untouched. The
+separate cloud refresh workflow had already run today with real market access — `data.js` is
+stamped generated 10/09 5:45 PM ET across all 11 tickers. `coherence_check.py` passes clean (11/11
+tickers), `anomaly_audit.py` reports no anomalies, the full Python test suite passes all 123 tests
+(14 subtests), and all 5 Node UI tests (pin, smoke, reliability, hilo refresh, layout) pass too.
+
+**Grades reviewed:** over the last 10 graded sessions, every ticker's daily high/low forecast still
+shows the same mild, familiar lean — predicted highs a touch above what actually printed and
+predicted lows a touch below (e.g. QQQ/JPM/GOOGL around ±0.5-1%, HOOD/TSLA a bit wider, META largest
+at roughly ±3.3% but its calibration only just reached the 8-session minimum needed to start
+correcting, so it's expected to tighten over the next several sessions, not a new problem). This is
+the exact bias the existing `calibHigh`/`calibLow` self-correction already targets, and it's doing
+so — TSLA/HOOD/QQQ/JPM/GOOGL/GC=F are all sitting at calibration factors in the 0.97-0.995 /
+1.007-1.03 range built from 41-52 graded sessions each, consistent with yesterday's reading, not a
+new or worsening pattern. Confluence-chain (next 5 highs/lows) hit rates: TSLA n=13 (31%/38% within
+2/3 days), HOOD n=30 (23%/37%), QQQ n=30 (27%/30%), JPM n=27 (15%/22%), GOOGL n=30 (17%/20%), GC=F
+n=19 (21%/21%); NVDA/AMZN/SPY/VOO/META still n=0 — confirmed on past reviews as too-quiet/too-new
+names rather than a bug, unchanged again today. Trade cards in `trades_log.json` ride the same daily
+forecast engine, so their timing premise carries the same small, already-calibrated lean; nothing
+distinct to flag there today.
+
+**What changed and why:** nothing. No bug found, no 3+-day pattern crossed the change bar, and
+today's network block is the same known sandbox limitation as recent days, not an app bug. Honesty
+features, ledgers, and the coherence gate are untouched; `tickers.txt` wasn't touched.
+
+**Watch next:** META's calibration as it gets more sessions under its belt (just crossed the n=8
+minimum, so expect the ±3.3% daily-band lean to shrink); whether NVDA/AMZN/SPY/VOO/META ever produce
+a qualifying swing to grade; and the open alerts/trades in the paper journal.
