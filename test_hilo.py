@@ -155,6 +155,19 @@ class LedgerTests(unittest.TestCase):
             path.write_text(lines[0].replace('"n": 1', '"n": 9') + '\n' + lines[1] + '\n')
             self.assertFalse(hilo.verify_ledger(path)['ok'])
 
+    def test_chain_detects_deletion_and_reordering(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'ledger.jsonl'
+            for n in range(3):
+                hilo.append_record({'ticker': 'A', 'n': n}, path)
+            lines = path.read_text().splitlines()
+            path.write_text('\n'.join([lines[0], lines[2]]) + '\n')          # middle record deleted
+            self.assertFalse(hilo.verify_ledger(path)['ok'])
+            path.write_text('\n'.join(lines[1:]) + '\n')                     # first record deleted
+            self.assertFalse(hilo.verify_ledger(path)['ok'])
+            path.write_text('\n'.join([lines[1], lines[0], lines[2]]) + '\n')  # reordered
+            self.assertFalse(hilo.verify_ledger(path)['ok'])
+
 
 class RunTests(unittest.TestCase):
     def make_root(self, tmp, today_bars=None):

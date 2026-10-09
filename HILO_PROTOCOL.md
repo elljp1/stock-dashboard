@@ -8,7 +8,11 @@ low time.
 - `hilo_ledger.jsonl` is append-only. Each line carries `issuedAt` (UTC),
   `dataCutoff` (end of the last bar used, Eastern) and `lastBar`. Each line
   also carries the hash of the previous line, so an edit anywhere breaks the
-  chain (`hilo.verify_ledger`).
+  chain (`hilo.verify_ledger`). Edits, deletions and reordering are caught.
+  Dropping the newest lines, or rewriting the whole file with a fresh chain,
+  is not caught by the chain itself. Only an external anchor catches that:
+  today the Git history and its bot commit times, which are evidence but not
+  tamper-proof.
 - **Premarket**: a forecast issued before the target session opens, built from
   completed sessions only. Only the first one per stock and session is kept.
 - **Intraday**: a revision for the rest of today's session. It uses only
