@@ -42,6 +42,10 @@ setTimeout(() => {
   const head = d.getElementById("hiloHead").textContent, tag = d.getElementById("chartTag").textContent;
   check(/2026-10-12/.test(head) && /2026-10-12/.test(tag), "chart and cards do not name the same session");
   check(!/confluence forecast/.test(tag), "legacy projected path still described on the chart");
+  check(/Oct 12/.test(d.getElementById("hiloTitle").textContent), "title does not name the target session: " + d.getElementById("hiloTitle").textContent);
+  const after = (a, b) => !!(a.compareDocumentPosition(b) & dom.window.Node.DOCUMENT_POSITION_FOLLOWING);
+  check(after(d.getElementById("chart"), d.getElementById("btnUpdate")), "Update controls should come after the chart");
+  check(after(d.getElementById("hiloCards"), d.getElementById("chart")), "cards should come before the chart");
   if (fails.length) { console.error("UI LAYOUT TEST FAILED:\n - " + fails.join("\n - ")); process.exit(1); }
   console.log("ui layout test OK: chart + 4 cards in main view, legacy panels behind Details, same session");
   process.exit(0);
