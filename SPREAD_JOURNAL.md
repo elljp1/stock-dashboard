@@ -32,10 +32,10 @@ Only filled trades get a number. Old internal ids are in the Ref column.
 | 4 | 9/30 | Individual | TSLA 10/30 330 put x2 (short) | $10.00 | $8.00 / $7.00 | 10/1 | **+$500** |
 | 5 | 9/30 | Joint | TSLA 10/30 330 put x3 (short) | $10.00 | $8.00 x2 / $7.00 | 10/1 | **+$700** |
 | 6 | 10/5 | Agentic | HOOD 10/30 101/96 put credit spread x3 | $1.05 | | | open |
-| 7 | 10/8 | Individual | META 10/30 700 put x1 (short) | $24.43 | | | open |
-| 8 | 10/8 | Joint | META 10/30 700 put x1 (short) | $24.00 | | | open |
+| 7 | 10/8 | Individual | META 10/30 700 put x1 (short) | $24.43 | $19.00 | 10/9 | **+$543** |
+| 8 | 10/8 | Joint | META 10/30 700 put x1 (short) | $24.00 | $19.00 | 10/9 | **+$500** |
 
-Closed: 5 trades, 5 wins, **+$1,509** (Agentic +$309, Individual +$500, Joint +$700).
+Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint +$1,200).
 
 ## Orders that never filled (not counted)
 | # | Date | Account | Order | Result |
@@ -75,8 +75,8 @@ Closed: 5 trades, 5 wins, **+$1,509** (Agentic +$309, Individual +$500, Joint +$
 
 | Individual | Sell to open TSLA $330 put 10/30 x2 | $10.00 GTC | filled 9/30 9:44am at $10.00 ($2,000); closed: 1 at $8.00 on 9/30 1:41pm (+$200), 1 at $7.00 on 10/1 9:30am (+$300); +$500 total | $66,000 | 9/30 9:43am |
 | Joint | Sell to open TSLA $330 put 10/30 x3 | $10.00 GTC | filled 9/30 9:44am at $10.00 ($3,000); closed: 2 at $8.00 on 9/30 1:41pm (+$400), 1 at $7.00 on 10/1 9:30am (+$300); +$700 total | $99,000 | 9/30 9:43am |
-| Individual | Sell to open META $700 put 10/30 x1 | $24.00 GTC | filled 10/8 1:07pm at $24.43 ($2,443); open (earnings 10/28 before expiry); buy-to-close $19.00 GTC resting (placed 10/9 9:35am) | $70,000 | 10/8 1:07pm |
-| Joint | Sell to open META $700 put 10/30 x1 | $24.00 GTC | filled 10/8 1:08pm at $24.00 ($2,400); open; buy-to-close $19.00 GTC resting (placed 10/9 9:36am) | $70,000 | 10/8 1:08pm |
+| Individual | Sell to open META $700 put 10/30 x1 | $24.00 GTC | filled 10/8 1:07pm at $24.43 ($2,443); closed 10/9 12:45pm: bought back at $19.00, **+$543** | $70,000 | 10/8 1:07pm |
+| Joint | Sell to open META $700 put 10/30 x1 | $24.00 GTC | filled 10/8 1:08pm at $24.00 ($2,400); closed 10/9 12:45pm: bought back at $19.00, **+$500** | $70,000 | 10/8 1:08pm |
 | Individual | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | resting (placed 10/8 2:53pm) | $33,000 | 10/8 2:53pm |
 | Joint | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | resting (placed 10/8 2:53pm) | $33,000 | 10/8 2:53pm |
 
