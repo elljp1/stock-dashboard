@@ -245,6 +245,15 @@
 
 <div class="tabs" id="tabs"></div>
 
+<div class="panel" id="hiloPanel" style="border:2px solid var(--green)">
+  <h2>Today's high and low: price and time</h2>
+  <div id="hiloHead" class="sub"></div>
+  <div id="hiloCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:12px"></div>
+  <details style="margin-top:12px"><summary>All stocks, scoring and status</summary>
+    <div id="hiloDetails" style="margin-top:8px"></div>
+  </details>
+</div>
+
 <div class="panel" id="timingPanel" style="border:2px solid var(--blue)">
   <h2>Timing first — original forecast scorecard</h2>
   <div id="timingSummary" class="sub"></div>
@@ -452,7 +461,7 @@
 </div>
 
 <div class="panel" data-tab="Research">
-  <h2>How to act on this — the playbook for <span class="tkr2"></span></h2>
+  <h2>Legacy turning-point playbook for <span class="tkr2"></span> (secondary; not the daily high/low forecast above)</h2>
   <ol class="play" id="playbook"></ol>
 </div>
 
@@ -644,8 +653,95 @@ function renderTimingReview(T){
     <p class="tag">Next research gate: compare fixed Gann, cycle and astro rules separately against simple calendar/rhythm controls on unseen sessions. Keep sample size, false alarms and missed turns visible. A separate trade simulation must include costs, slippage and drawdown before any strategy promotion.</p>`;
 }
 
+/* ---------- daily high/low (primary) ---------- */
+const hiloEsc=v=>String(v == null ? "—" : v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const HILO_STALE_MS = 3 * 3600 * 1000;
+/* The page data defines HILO once; refreshes replace this live copy (see swapIn). */
+let HILO_LIVE = (typeof HILO === "undefined") ? null : HILO;
+function hiloValid(h){
+  if(h === null) return true;
+  if(typeof h !== "object" || typeof h.generatedAt !== "string" || isNaN(Date.parse(h.generatedAt))) return false;
+  if(h.failed) return typeof h.failed === "object";
+  if(typeof h.targetSession !== "string" || !h.latest || typeof h.latest !== "object") return false;
+  return Object.values(h.latest).every(slot => slot && Object.values(slot).every(r => r && ["high","low"].every(sd =>
+    r[sd] && [r[sd].price, r[sd].lo, r[sd].hi].every(v => Number.isFinite(v) && v > 0) && typeof r[sd].time === "string")));
+}
+function hiloEt(iso){
+  return iso ? new Date(iso).toLocaleString("en-US",{timeZone:"America/New_York",weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}) + " ET" : "n/a";
+}
+function hiloPct(v){ return (v===null||v===undefined) ? "n/a" : Math.round(v*100) + "%"; }
+function hiloCell(label, main, sub){
+  return `<div style="border:1px solid var(--border);border-radius:10px;padding:10px"><div class="sub">${label}</div>
+    <div class="num" style="font-size:20px;font-weight:700">${main}</div><div class="sub">${sub}</div></div>`;
+}
+function hiloCmp(b, unit){
+  if(!b || b.model===undefined || b.model===null) return "n/a";
+  const best = b.strongest, c = best && b.comparators ? b.comparators[best] : null;
+  return `${b.model}${unit}` + (c ? ` vs strongest comparator "${hiloEsc(best)}" ${c.comparator}${unit} on the same ${c.n} rows`
+    + (c.diffCI ? ` (model minus comparator, 95% CI ${c.diffCI.join(" to ")})` : "") : "");
+}
+function hiloStat(s){
+  if(!s || !s.n) return "no complete sessions scored yet";
+  return `${s.n} calls, ${s.sessions} sessions (${s.from} to ${s.to}). Price median error ${hiloCmp(s.price, "%")}; `
+    + `within 0.5% ${s.price.within05}%, within 1% ${s.price.within1}%, 80% band held ${s.price.bandCoverage}%. `
+    + `Modal bar exactly right ${hiloCmp(s.timeBar, "%")}. Modal bar within ±60 min ${hiloCmp(s.timeNear, "%")}. `
+    + `Window-centre output within ±60 min ${hiloCmp(s.timeWindow, "%")}.`;
+}
+function hiloTime(b){ return `${hiloEsc(b.time)} bar (${hiloPct(b.pBar)})`; }
+function renderHilo(t){
+  const head = $("hiloHead"), cards = $("hiloCards");
+  const HILO = HILO_LIVE;
+  if(!HILO){ head.textContent = "Daily high/low forecasts appear after the next scheduled run."; cards.innerHTML = ""; $("hiloDetails").innerHTML = ""; return; }
+  if(HILO.failed){
+    head.innerHTML = `<b style="color:var(--red)">UNAVAILABLE.</b> The forecaster failed at ${hiloEt(HILO.failed.at)}: ${hiloEsc(HILO.failed.reason)}. No forecast is shown. The last successful run was ${hiloEt(HILO.generatedAt)}, for session ${hiloEsc(HILO.targetSession)}.`;
+    cards.innerHTML = ""; $("hiloDetails").innerHTML = ""; return;
+  }
+  const age = Date.now() - new Date(HILO.generatedAt).getTime();
+  const stale = !(age < HILO_STALE_MS);
+  const slot = (HILO.latest || {})[t] || {};
+  const rec = slot.intraday || slot.premarket;
+  const fwd = Object.values(HILO.status || {})[0] || {};
+  const state = `Model ${hiloEsc(HILO.model)}: a baseline candidate, not a proven edge · forward record: ${fwd.sessions||0} complete sessions observed (observational only) · ledger ${HILO.ledger && HILO.ledger.ok ? "chain verified, " + HILO.ledger.records + " records" : "CHECK FAILED"}`;
+  const staleTxt = stale ? `<b style="color:var(--red)">STALE:</b> generated ${hiloEt(HILO.generatedAt)}, for session ${hiloEsc(HILO.targetSession)}. Not a current forecast.<br>` : "";
+  if(!rec){
+    head.innerHTML = staleTxt + `No forecast for ${hiloEsc(nice(t))} on ${hiloEsc(HILO.targetSession)}: ${hiloEsc((HILO.notes||{})[t] || (HILO.excluded||{})[t] || "not available")}.<br>${state}`;
+    cards.innerHTML = "";
+  } else {
+    const kindTxt = rec.kind === "intraday"
+      ? `Intraday revision of the FINAL full-session high and low for ${hiloEsc(rec.session)} (includes what already traded), frozen at checkpoint ${rec.checkpoint}: bars through ${hiloEsc(rec.lastBar.slice(11))} ET`
+      : `Premarket forecast of the full-session high and low for ${hiloEsc(rec.session)}, from completed sessions through ${hiloEsc(rec.lastBar.slice(0,10))}`;
+    head.innerHTML = staleTxt + `${kindTxt} · issued ${hiloEt(rec.issuedAt)} · data cutoff ${hiloEt(rec.dataCutoff)}`
+      + (rec.late ? ` · <b>late record</b> (${rec.lagMin} min after cutoff; not scored)` : "")
+      + (slot.intraday && slot.premarket ? ` · original premarket call: high ${fmt$(slot.premarket.high.price)} (${hiloTime(slot.premarket.high)}), low ${fmt$(slot.premarket.low.price)} (${hiloTime(slot.premarket.low)})` : "")
+      + `<br>${state}`;
+    const obs = rec.observed, out = [];
+    for(const side of ["high","low"]){
+      const b = rec[side], name = side === "high" ? "High" : "Low", w = b.window || {};
+      out.push(hiloCell(`${name} price`, fmt$(b.price), `80% range ${fmt$(b.lo)} to ${fmt$(b.hi)}` + (obs ? ` · so far ${fmt$(obs[side])}` : "")));
+      out.push(hiloCell(`${name} time: most likely 15-min bar (ET)`, hiloEsc(b.time),
+        `${hiloPct(b.pBar)} chance this exact bar`
+        + ` · separately, best ±60-min window centred ${hiloEsc(w.centre)} holds ${hiloPct(w.p60)} (a window centre, not the likeliest time)`
+        + (b.pAlreadySet!==undefined ? ` · already set: ${hiloPct(b.pAlreadySet)}` : "")));
+    }
+    cards.innerHTML = out.join("");
+    cards.style.opacity = stale ? "0.5" : "1";
+  }
+  const rows = Object.entries(HILO.latest || {}).map(([tk, s2])=>{
+    const r = s2.intraday || s2.premarket;
+    return `<tr><td>${hiloEsc(nice(tk))}</td><td>${r.kind}${r.checkpoint ? " cp" + r.checkpoint : ""}</td><td>${fmt$(r.high.price)} · ${hiloTime(r.high)}</td><td>${fmt$(r.high.lo)}–${fmt$(r.high.hi)}</td><td>${fmt$(r.low.price)} · ${hiloTime(r.low)}</td><td>${fmt$(r.low.lo)}–${fmt$(r.low.hi)}</td></tr>`;
+  }).join("");
+  const sb = (blk, label) => blk ? ["premarket","intraday"].map(k=>["high","low"].map(sd=>
+    `<li><b>${label}, ${k}, ${sd}:</b> ${hiloStat(blk[k] && blk[k][sd])}</li>`).join("")).join("") : "<li>not available</li>";
+  $("hiloDetails").innerHTML = `<div class="tblwrap"><table><tr><th>Stock</th><th>Kind</th><th>High · likeliest bar</th><th>High 80% range</th><th>Low · likeliest bar</th><th>Low 80% range</th></tr>${rows}</table></div>
+    <p class="sub">${hiloEsc(HILO.method)}</p>
+    <p><b>Forward results</b> (frozen ledger records, scored only after a complete session; observational, not proof):</p><ul>${sb(HILO.forward, "Forward")}</ul>
+    <p><b>Retrospective replay</b> (walk-forward on stored sessions; not frozen in advance, not proof):</p><ul>${sb(HILO.retrospective, "Replay")}</ul>
+    <p class="sub">Excluded: ${hiloEsc(Object.keys(HILO.excluded||{}).join(", ") || "none")} (${hiloEsc(Object.values(HILO.excluded||{})[0] || "")}). Late intraday records: ${HILO.lateIntradayRecords||0}. Generated ${hiloEt(HILO.generatedAt)}, build ${hiloEsc(String((HILO.build||{}).commit||"").slice(0,7))}.</p>`;
+}
+
 /* ---------- main render ---------- */
 function renderAll(D){
+  try { renderHilo(D.ticker); } catch(e) { $("hiloHead").textContent = "Daily high/low panel failed to render: " + e.message; }
   const pb = D.predictionBasis;
   $("tkr").textContent = nice(D.ticker);
   document.querySelectorAll(".tkr2").forEach(e=>e.textContent=nice(D.ticker));
@@ -1791,15 +1887,31 @@ function renderAll(D){
       return m ? m[1]+" "+String((Number(m[2])%12)+(m[4]==="PM"?12:0)).padStart(2,"0")+":"+m[3] : "";
     };
     if(Object.keys(DATA_ALL).some(t=>stamp(fresh[t].generated)<stamp(DATA_ALL[t].generated)))throw new Error("older snapshot rejected");
+    // high/low forecasts refresh with the rest of the data, validated first and rolled back on failure
+    let nextHilo;
+    if(txt.indexOf("const HILO = ") < 0){
+      nextHilo = {failed:{at:new Date().toISOString(), reason:"refreshed data has no high/low forecasts"}, stale:true,
+                  generatedAt:new Date().toISOString(), targetSession:"unknown"};
+    } else {
+      nextHilo = grab("HILO");
+      const raw = txt.slice(txt.indexOf("const HILO = ") + 13).split(String.fromCharCode(10))[0].trim();
+      if(nextHilo === null && raw !== "null;" && raw !== "null") throw new Error("high/low forecast data unreadable; keeping previous data");
+      if(!hiloValid(nextHilo)) throw new Error("high/low forecast data invalid; keeping previous data");
+      if(nextHilo && HILO_LIVE && !nextHilo.failed && !HILO_LIVE.failed &&
+         Date.parse(nextHilo.generatedAt) < Date.parse(HILO_LIVE.generatedAt)) throw new Error("older high/low snapshot rejected");
+    }
     const pairs=[[DATA_ALL,fresh],[TRADES,grab("TRADES")],[BENCHMARK,grab("BENCHMARK")],
       [BACKFILL,grab("BACKFILL")],[REALTRADES,grab("REALTRADES")],[WEEKPLAN,grab("WEEKPLAN")]];
     const backups=pairs.map(([obj])=>JSON.parse(JSON.stringify(obj)));
+    const hiloBackup=HILO_LIVE;
     const assign=(obj,value)=>{Object.keys(obj).forEach(k=>delete obj[k]);if(Array.isArray(obj))obj.length=0;Object.assign(obj,value);};
     try {
       pairs.forEach(([obj,value])=>{if(value)assign(obj,value);});
+      HILO_LIVE=nextHilo;
       renderTabs(); renderAll(DATA_ALL[CUR]);
     } catch(e) {
       pairs.forEach(([obj],i)=>assign(obj,backups[i]));
+      HILO_LIVE=hiloBackup;
       renderTabs(); renderAll(DATA_ALL[CUR]); throw e;
     }
   }

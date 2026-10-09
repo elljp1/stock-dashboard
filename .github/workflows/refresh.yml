@@ -54,6 +54,12 @@ jobs:
             if [ "$attempt" -lt 3 ]; then sleep 10; fi
           done
           exit 1
+      - name: Daily high/low forecasts (append-only ledger)
+        run: |
+          if ! python hilo.py; then
+            python hilo.py --mark-failed "forecaster failed in run $GITHUB_RUN_ID; no forecast shown"
+            echo "::warning::High/low forecaster failed; page shows it as unavailable"
+          fi
       - run: python backfill.py
       - run: python benchmark.py
       - run: python astro_lab.py || echo "::warning::Astro enrichment unavailable; retaining previous lab"
@@ -66,12 +72,13 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: node smoke_test.js
       - run: node reliability_test.js
-      - run: python -m unittest test_reliability.py test_scoring.py test_schedule_gate.py test_data_freshness.py test_horizon_ledger.py test_quote_selection.py test_timing_review.py test_gann_lab.py test_horizon_scoreboard.py test_anomaly_audit.py test_trades_scan.py
+      - run: node hilo_refresh_test.js
+      - run: python -m unittest test_reliability.py test_scoring.py test_schedule_gate.py test_data_freshness.py test_horizon_ledger.py test_quote_selection.py test_timing_review.py test_gann_lab.py test_horizon_scoreboard.py test_anomaly_audit.py test_trades_scan.py test_hilo.py
       - name: Publish only validated artifacts
         run: |
           git config user.name "dashboard-bot"
           git config user.email "dashboard-bot@users.noreply.github.com"
-          git add index.html dashboard_single.html data.js predictions_log.json daily_extremes.json trades.json trades_log.json horizons_log.json real_trades.json improvements_log.md backfill.json benchmark.json week_plan.json week_plan_log.json revisions_log.json astro_lab.json gann_lab.json horizon_scoreboard.json forecast_ledger.json daily_review.json completed_session_cache.json
+          git add index.html dashboard_single.html data.js predictions_log.json daily_extremes.json trades.json trades_log.json horizons_log.json real_trades.json improvements_log.md backfill.json benchmark.json week_plan.json week_plan_log.json revisions_log.json astro_lab.json gann_lab.json horizon_scoreboard.json forecast_ledger.json daily_review.json completed_session_cache.json hilo.json hilo_ledger.jsonl hilo_sessions.json
           python test_sensitive_data.py --staged
           if ! git diff --cached --quiet; then git commit -m "auto refresh and review (cloud)"; fi
           # Never resolve code/data races by discarding another writer's work.
