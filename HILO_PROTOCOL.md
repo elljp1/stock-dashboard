@@ -69,8 +69,13 @@ low time.
 ## Periods on the page (D / W / M / Y)
 - One function, `periodView()`, gives the chart and the result rows the same
   forecast points for the selected period. Those points are the day forecast
-  for the target session plus the next projected turns that fall inside the
-  period, at most five.
+  for the target session plus the next projected turns (at most five, only
+  those the data has, dated after the last completed session). D plots every
+  such turn but its results stay the day forecast; W/M/Y keep the turns inside
+  the period.
+- The chart opens on a window that holds the recent closes and every plotted
+  forecast. Drag pans, pinch / wheel / +/- zooms, double-tap, Reset or 0
+  restores it; the page itself never scrolls.
 - These are **projected points over a partial horizon**, not a forecast of the
   full period's extremes. The page labels them "proj. pt" and says
   "partial: day + N turns".

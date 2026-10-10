@@ -55,15 +55,20 @@ setTimeout(() => {
       check(Number(res.querySelector(`[data-side="${s}"]`).dataset.price) === v[s].price, per + " " + s + " result differs from the plotted point");
       check(v.fc.includes(v[s]) && v[s].src !== "set", per + " " + s + " result must be a plotted forecast point");
     }
-    check(v.fc.filter(p => p.src === "turn").every(p => p.date > v.S && p.date <= v.span[1]), per + ": turns outside the selected period");
+    const turns = v.fc.filter(p => p.src === "turn"), supported = ALL[T].predictions.filter(p => p.isoDate > v.lastClose).slice(0, 5);
+    check(turns.every(p => p.date > v.lastClose && (per === "D" || p.date <= v.span[1])), per + ": turns outside the selected period");
+    check(turns.every(p => supported.some(q => q.isoDate === p.date && q.price === p.price && q.type === p.type)), per + ": every turn must be a supported prediction");
     check(v.fc.filter(p => p.src === "turn").length <= 5, per + ": more than five turns");
-    if (per === "D") check(v.fc.every(p => p.src === "day"), "day view must plot only the day forecast");
+    if (per === "D") {
+      check(turns.length === supported.length, "day view must plot every supported future turn: " + turns.length + " of " + supported.length);
+      check(v.high.src === "day" && v.low.src === "day", "day results must stay the day forecast, not a multi-day turn");
+    }
     // the chart itself carries every prediction: same price as the summary, plus a time (D) or date (W/M/Y)
     const labs = w.__gLabels || [];
     check(labs.length === v.fc.length && v.fc.every(p => labs.some(l => l.point === p)), per + ": every plotted prediction needs a chart label");
     for (const l of labs) {
       check(l.text.startsWith("$" + l.point.price.toFixed(2)), per + ": label price differs from the point: " + l.text);
-      if (per === "D") check(/ 9:30a\/3:45p\?$/.test(l.text), "unresolved day label must show the two-bar window with ?, not one exact time: " + l.text);
+      if (per === "D" && l.point.src === "day") check(/ 9:30a\/3:45p\?$/.test(l.text), "unresolved day label must show the two-bar window with ?, not one exact time: " + l.text);
       else check(l.text.endsWith(" " + Number(l.point.date.slice(5, 7)) + "/" + Number(l.point.date.slice(8, 10))), per + ": label must carry its date: " + l.text);
     }
     check(labs.filter(l => l.main).length === 2, per + ": the two summary numbers must be the emphasised labels");
@@ -76,7 +81,7 @@ setTimeout(() => {
   res = d.getElementById("gRes");
   const whens = [...res.querySelectorAll(".when")].map(e => e.textContent.trim());
   check(whens[0] === "9:30a" && whens[1] === "3:45p" && !/order \?/.test(res.textContent), "resolved order must time high and low: " + whens);
-  const rl = Object.fromEntries((dom.window.__gLabels || []).map(l => [l.point.type, l.text]));
+  const rl = Object.fromEntries((dom.window.__gLabels || []).filter(l => l.point.src === "day").map(l => [l.point.type, l.text]));
   check(rl.high === "$110.00 9:30a" && rl.low === "$100.00 3:45p", "resolved day labels must carry each side's time: " + JSON.stringify(rl));
   // one click on a stock button switches chart and results to it, every period
   {
