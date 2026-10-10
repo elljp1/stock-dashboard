@@ -2,96 +2,49 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Stock Timing Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Stock High/Low</title>
 <script src="data.js"></script>
 <style>
-  :root{
-    --bg:#f6f8fa; --panel:#ffffff; --panel2:#f0f3f6; --border:#d0d7de;
-    --text:#1f2328; --dim:#57606a; --green:#1a7f37; --red:#cf222e;
-    --amber:#9a6700; --blue:#0969da; --accent:#8250df;
-  }
+  :root{--bg:#f6f8fa; --panel:#fff; --border:#d0d7de; --text:#1f2328; --dim:#57606a;
+    --green:#1a7f37; --red:#cf222e; --amber:#9a6700; --blue:#0969da; --accent:#8250df; --pad:16px}
+  @media(max-width:700px){:root{--pad:6px}}
   *{box-sizing:border-box; margin:0; padding:0}
-  body{background:var(--bg); color:var(--text);
-    font-family:"Segoe UI",system-ui,-apple-system,sans-serif; padding:24px; max-width:1200px; margin:0 auto}
-  h1{font-size:26px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap}
-  h1 .px{color:var(--green); font-variant-numeric:tabular-nums}
-  h2{font-size:17px; margin-bottom:10px; color:var(--blue)}
-  h3{font-size:14px; color:var(--dim); font-weight:600; margin-bottom:6px}
-  .sub{color:var(--dim); font-size:13px; margin-top:4px}
-  .tabs{display:flex; gap:8px; margin-top:16px; flex-wrap:wrap}
-  .tab{padding:8px 22px; border:1px solid var(--border); border-radius:8px; background:var(--panel);
-    font-size:15px; font-weight:700; cursor:pointer; color:var(--dim)}
-  .tab:hover{border-color:var(--blue); color:var(--blue)}
-  .tab.on{background:var(--blue); border-color:var(--blue); color:#fff}
-  .tab .tp{display:block; font-size:11px; font-weight:400}
-  .panel{background:var(--panel); border:1px solid var(--border); border-radius:10px;
-    padding:18px; margin-top:18px; box-shadow:0 1px 3px rgba(31,35,40,.05)}
-  .warn{background:#fff8c5; border-color:#d4a72c; color:#7d4e00; font-size:13px; line-height:1.55}
-  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px}
-  @media(max-width:800px){.grid2{grid-template-columns:1fr}}
-  table{width:100%; border-collapse:collapse; font-size:14px}
-  th{color:var(--dim); text-align:left; font-weight:600; padding:8px 10px; border-bottom:1px solid var(--border); font-size:12px; text-transform:uppercase; letter-spacing:.04em}
-  td{padding:10px; border-bottom:1px solid #eaeef2; vertical-align:top}
-  tr:last-child td{border-bottom:none}
-  .badge{display:inline-block; padding:3px 10px; border-radius:20px; font-weight:700; font-size:12px}
-  .bH{background:#dafbe1; color:var(--green); border:1px solid #aceebb}
-  .bL{background:#ffebe9; color:var(--red); border:1px solid #ffcecb}
-  .chip{display:inline-block; background:var(--panel2); border:1px solid var(--border);
-    border-radius:12px; padding:2px 9px; font-size:11px; color:var(--dim); margin:2px 2px 0 0}
-  .num{font-variant-numeric:tabular-nums}
-  .big{font-size:17px; font-weight:700}
-  .conf{height:7px; background:#eaeef2; border-radius:4px; overflow:hidden; margin-top:5px; width:110px}
-  .conf i{display:block; height:100%; background:var(--amber)}
-  canvas{width:100%; height:auto; display:block}
-  .rangebar{margin:14px 0}
-  .rb-track{position:relative; height:12px; background:linear-gradient(90deg,#ffd8d3,#eaeef2 50%,#c8f0d2); border-radius:6px}
-  .rb-mark{position:absolute; top:-4px; width:3px; height:20px; background:var(--blue); border-radius:2px}
-  .rb-lbl{display:flex; justify-content:space-between; font-size:12px; color:var(--dim); margin-top:5px}
-  .rb-title{display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px}
-  .good{color:var(--green)} .bad{color:var(--red)} .mid{color:var(--amber)}
-  .play li{margin:10px 0 10px 18px; line-height:1.5; font-size:14px}
-  .play b{color:var(--blue)}
-  .foot{color:var(--dim); font-size:12px; line-height:1.6; margin-top:18px}
-  .tag{font-size:11px; color:var(--dim)}
-  .verdict-good{font-weight:700; color:var(--green)}
-  .verdict-none{font-weight:700; color:var(--red)}
-  .verdict-weak{font-weight:700; color:var(--amber)}
-  .cal td{padding:6px 10px; font-size:13px}
-  .tblwrap{overflow-x:auto; -webkit-overflow-scrolling:touch}
-  .tblwrap table{min-width:560px}
-  .chartwrap{overflow-x:auto; -webkit-overflow-scrolling:touch}
-
-  /* ---------- mobile ---------- */
-  @media(max-width:640px){
-    body{padding:10px}
-    h1{font-size:21px; gap:8px}
-    .panel{padding:12px; margin-top:12px}
-    h2{font-size:15px}
-    .tabs{position:sticky; top:0; z-index:9; background:var(--bg); padding:8px 0; gap:6px}
-    .tab{padding:8px 12px; font-size:13px; flex:1; min-width:60px; text-align:center}
-    .tab .tp{font-size:10px}
-    .big{font-size:15px}
-    /* predictions table becomes stacked cards */
-    #predTable tr:first-child{display:none}
-    #predTable, #predTable tbody, #predTable tr, #predTable td{display:block; width:100%}
-    #predTable tr{border:1px solid var(--border); border-radius:10px; margin:10px 0; padding:6px 4px; background:var(--panel2)}
-    #predTable td{border:none; padding:3px 10px}
-    #predTable td[data-l]::before{content:attr(data-l) ": "; font-size:11px; color:var(--dim); text-transform:uppercase; letter-spacing:.03em}
-    #predTable td:first-child{display:none}
-    #predTable td[data-l="date"], #predTable td[data-l="target"]{display:none}
-    .mobonly{display:inline}
-    /* timing scorecard becomes stacked cards too */
-    #scoreTable{min-width:0}
-    #scoreTable tr:first-child{display:none}
-    #scoreTable, #scoreTable tbody, #scoreTable tr, #scoreTable td{display:block; width:100%}
-    #scoreTable tr{border:1px solid var(--border); border-radius:10px; margin:10px 0; padding:6px 4px; background:var(--panel2)}
-    #scoreTable td{border:none; padding:3px 10px}
-    #scoreTable td[data-l]::before{content:attr(data-l) ": "; font-size:11px; color:var(--dim); text-transform:uppercase; letter-spacing:.03em}
-    /* signal calendar fits naturally on phones */
-    #calTable{min-width:0}
-  }
-  @media(min-width:641px){ .mobonly{display:none} }
+  html,body{background:var(--bg); color:var(--text); font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+  body{padding:var(--pad); max-width:1100px; margin:0 auto}
+  #glance{display:flex; flex-direction:column; gap:6px; height:calc(100vh - 2*var(--pad)); height:calc(100svh - 2*var(--pad)); max-height:900px}
+  #gTop{display:flex; align-items:center; gap:6px}
+  #gTicker{font:700 15px system-ui,-apple-system,sans-serif; padding:6px 4px; border:1px solid var(--border);
+    border-radius:8px; background:var(--panel); color:var(--text); min-width:0; flex:1 1 auto; max-width:190px}
+  #gPeriod{display:flex; border:1px solid var(--border); border-radius:8px; overflow:hidden}
+  #gPeriod button{font:700 13px system-ui,-apple-system,sans-serif; width:34px; padding:7px 0; border:0;
+    background:var(--panel); color:var(--dim); cursor:pointer}
+  #gPeriod button.on{background:var(--blue); color:#fff}
+  #gUpd{font:600 12px system-ui,-apple-system,sans-serif; padding:7px 8px; border:1px solid var(--border); border-radius:8px;
+    background:var(--panel); color:var(--dim); cursor:pointer; white-space:nowrap; margin-left:auto}
+  #gUpd .dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--green); margin-right:4px; vertical-align:1px}
+  #gUpd.old .dot{background:var(--amber)} #gUpd.bad .dot{background:var(--red)}
+  #gChartWrap{flex:1 1 auto; min-height:140px; background:var(--panel); border:1px solid var(--border); border-radius:10px; overflow:hidden}
+  #chart{display:block; width:100%; height:100%; touch-action:pan-y}
+  #gRes{display:grid; grid-template-columns:auto 1fr auto; column-gap:10px; row-gap:1px; align-items:baseline;
+    background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:7px 12px; font-variant-numeric:tabular-nums}
+  #gRes .lbl{font-weight:700; font-size:13px; color:var(--dim)}
+  #gRes .val{font-weight:800; font-size:21px}
+  #gRes .val small,#gRes .when small{font-weight:600; font-size:12px; color:var(--dim); margin-left:5px; white-space:nowrap}
+  #gRes .when small{margin-left:0}
+  #gRes .when{font-weight:700; font-size:15px; text-align:right}
+  #gRes .hi{color:var(--green)} #gRes .lo{color:var(--red)}
+  #gMeta{display:flex; justify-content:space-between; align-items:center; gap:8px; font-size:12px; color:var(--dim)}
+  #gMeta b{color:var(--red)}
+  #gHist summary{cursor:pointer; list-style:none; font-weight:600; color:var(--blue); white-space:nowrap}
+  #gHist summary::-webkit-details-marker{display:none}
+  #gHistBody{position:fixed; inset:8% 3% 3% 3%; z-index:60; background:var(--panel); border:1px solid var(--border);
+    border-radius:12px; padding:12px; overflow:auto; box-shadow:0 8px 30px rgba(0,0,0,.25)}
+  #gHistBody table{border-collapse:collapse; width:100%; font-size:12px; font-variant-numeric:tabular-nums}
+  #gHistBody th,#gHistBody td{padding:4px 6px; border-bottom:1px solid #eaeef2; text-align:left}
+  #gHistBody button{float:right; font-size:14px; border:1px solid var(--border); background:var(--panel); border-radius:6px; padding:2px 10px}
+  #chartTooltip{position:fixed; z-index:1000; pointer-events:none; white-space:pre-line; background:#14233b; color:#fff;
+    padding:8px 12px; border-radius:8px; font-size:13px; line-height:1.45; display:none; max-width:240px}
 </style>
 </head>
 <body>
@@ -198,469 +151,43 @@
 })();
 </script>
 
-<h1><span id="tkr"></span> <span class="px" id="price"></span> <span class="sub" id="updated"></span></h1>
-<div class="sub">Daily high and low: price and time, with uncertainty. Experimental baseline; no proven edge.</div>
-<div class="tabs" id="tabs"></div>
-
-<div class="panel" id="hiloPanel" style="border:2px solid var(--green)">
-  <h2 id="hiloTitle">High and low: price and time</h2>
-  <div id="hiloHead" class="sub"></div>
-  <div id="hiloCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:12px"></div>
-  <details style="margin-top:12px"><summary>All stocks, scoring and status</summary>
-    <div id="hiloDetails" style="margin-top:8px"></div>
-  </details>
-</div>
-
-<div class="panel" id="chartPanel">
-  <h2 id="chartTitle">Price chart with the high/low forecast</h2>
-  <div class="chartwrap"><canvas id="chart" width="1140" height="360"></canvas></div>
-  <div class="tag" id="chartTag"></div>
-  <div class="tag" id="reviewStatus" style="margin-top:8px"></div>
-</div>
-
-
-<div id="controls" style="margin-top:12px">
-<div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
-  <button id="btnUpdate" style="padding:9px 20px; font-size:15px; font-weight:700; border:1px solid var(--blue);
-    background:var(--blue); color:#fff; border-radius:8px; cursor:pointer">Update</button>
-  <button id="btnReanalyze" style="padding:9px 20px; font-size:15px; font-weight:700; border:1px solid var(--accent);
-    background:var(--accent); color:#fff; border-radius:8px; cursor:pointer">Reanalyze &amp; Predict</button>
-  <a id="runLink" href="https://github.com/elljp1/stock-dashboard/actions/workflows/refresh.yml"
-     target="_blank" rel="noopener"
-     style="padding:9px 16px; font-size:14px; font-weight:600; border:1px solid var(--border);
-     background:var(--panel); color:var(--text); border-radius:8px; text-decoration:none">
-     Run fresh prices on GitHub &#8599;</a>
-  <span class="tag" id="updStatus"></span>
-</div>
-<details style="margin-top:6px; max-width:760px"><summary class="tag">How Update works</summary>
-<div class="tag" style="margin-top:6px; max-width:760px">
-  <b>Update</b> = load the newest finished analysis (instant, no sign-in).
-  <b>Run fresh prices on GitHub</b> = no setup needed: it opens GitHub, you tap the grey
-  <b>Run workflow</b> button, wait about 90 seconds, then press <b>Update</b> here.
-  <b>Reanalyze &amp; Predict</b> = the same thing in one press, once you have saved a token on this device.
-</div>
-</details>
-<div id="setupBox" style="display:none; margin-top:10px; padding:12px; border:1px solid var(--border);
-  border-radius:10px; background:var(--panel2); max-width:760px">
-  <b>One-time setup for live re-analysis</b>
-  <div style="font-size:13px; margin-top:6px">
-    "Reanalyze &amp; Predict" downloads fresh prices and re-runs the whole engine on GitHub's servers.
-    That needs permission, granted once per device:
-    <ol style="margin:6px 0 6px 18px; line-height:1.6">
-      <li>Open <a href="https://github.com/settings/personal-access-tokens/new" target="_blank"><b>this token page</b></a> (you must be signed in as <b>elljp1</b>)</li>
-      <li>Repository access &rarr; <b>Only select repositories</b> &rarr; pick <b>stock-dashboard</b></li>
-      <li>Permissions &rarr; Repository permissions &rarr; <b>Actions</b> &rarr; set to <b>Read and write</b></li>
-      <li>Generate, copy it, paste below</li>
-    </ol>
-    Stored only in this browser. Never in the page, never in the repository.
+<div id="glance">
+  <div id="gTop">
+    <select id="gTicker" aria-label="Stock"></select>
+    <div id="gPeriod" role="group" aria-label="Period"><button data-p="D">D</button><button data-p="W">W</button><button data-p="M">M</button><button data-p="Y">Y</button></div>
+    <button id="gUpd" title="Update"><span class="dot"></span><span id="gUpdTime">update</span></button>
   </div>
-  <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap">
-    <input id="tokIn" type="password" placeholder="paste token here" style="flex:1; min-width:240px;
-      padding:8px 10px; border:1px solid var(--border); border-radius:8px">
-    <button id="tokSave" style="padding:8px 16px; font-weight:700; border:1px solid var(--green);
-      background:var(--green); color:#fff; border-radius:8px; cursor:pointer">Save</button>
-    <button id="tokCancel" style="padding:8px 16px; border:1px solid var(--border);
-      background:var(--panel); border-radius:8px; cursor:pointer">Cancel</button>
-  </div>
+  <div id="gChartWrap"><canvas id="chart" aria-label="Price chart with forecast high and low" tabindex="0"></canvas></div>
+  <div id="gRes"></div>
+  <div id="gMeta"><span id="gAsOf"></span>
+    <details id="gHist"><summary>&#9656; History</summary><div id="gHistBody"></div></details></div>
 </div>
-</div>
-
-<details id="detailsAll" class="panel" style="margin-top:18px">
-<summary style="font-weight:700; cursor:pointer">Details: past forecasts, actual results, accuracy, trades and research</summary>
-<div id="sectionTabs" style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px"></div>
-<div class="panel" id="timingPanel" data-tab="Accuracy">
-  <h2>Timing first — original forecast scorecard</h2>
-  <div id="timingSummary" class="sub"></div>
-  <div id="timingCards" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-top:12px"></div>
-  <details style="margin-top:12px"><summary>Results and scoring rules</summary>
-    <div id="timingDetails" style="margin-top:8px"></div>
-  </details>
-</div>
-
-<div class="panel" id="weekPanel" data-tab="Forecast">
-  <h2>The week ahead — what to do each session</h2>
-  <div class="sub" id="wkSub"></div>
-  <div id="wkBody" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" data-tab="Forecast">
-  <h2>Next 5 projected highs / lows — multi-method confluence</h2>
-  <div class="sub" id="basis"></div>
-  <table id="predTable"></table>
-  <div class="sub" style="margin-top:8px" id="hitnote"></div>
-</div>
-
-<div class="panel" data-tab="Forecast">
-  <h2>Pick any date — projected high &amp; low for that day</h2>
-  <div class="sub">Choose a date and see the projected high and low, with the most likely time for each.</div>
-  <div style="margin-top:10px; display:flex; gap:10px; align-items:center; flex-wrap:wrap">
-    <input type="date" id="dpInput" style="padding:8px 10px; font-size:15px; border:1px solid var(--border); border-radius:8px; background:var(--panel)">
-    <button id="dpGo" style="padding:8px 18px; font-size:15px; font-weight:700; border:1px solid var(--blue); background:var(--blue); color:#fff; border-radius:8px; cursor:pointer">Forecast</button>
-  </div>
-  <div id="dpBody" style="margin-top:10px"></div>
-</div>
-
-<div class="panel" data-tab="Forecast">
-  <h2>Chart targets and period ranges</h2>
-  <div class="sub" id="hzSub"></div>
-  <div id="hzBody" class="tblwrap" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" data-tab="Trades">
-  <h2>Recommended option trades — <span class="tkr2"></span></h2>
-  <div class="sub" id="trdSub"></div>
-  <div id="trdBody" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" data-tab="Trades">
-  <h2>Support &amp; resistance — <span class="tkr2"></span></h2>
-  <div class="sub">Price levels where <span class="tkr2"></span>'s swing turns have clustered over 2 years.
-    More touches = stronger level. They're also drawn on the chart below (green = support, red = resistance).</div>
-  <div id="srBody" style="margin-top:8px"></div>
-</div>
-
-
-
-<div class="panel" data-tab="Accuracy">
-  <h2>Prediction track record — graded daily</h2>
-  <div class="sub" id="trSub"></div>
-  <div id="trBody" class="tblwrap" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" data-tab="Accuracy">
-  <h2>Call revisions — every time a published date/time moved</h2>
-  <div class="sub" id="rvSub"></div>
-  <div id="rvBody" class="tblwrap" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" data-tab="Research" id="vibPanel">
-  <h2>Vibration finder — which Gann, planetary and cycle tools are in play for <span class="tkr2"></span></h2>
-  <div class="sub" id="vibSub"></div>
-  <div id="vibNext" style="margin-top:8px"></div>
-  <div class="tblwrap"><table id="vibTable" style="margin-top:8px"></table></div>
-</div>
-
-<div class="panel" data-tab="Research" id="hsPanel">
-  <h2>High/low calls vs simple baselines — <span class="tkr2"></span></h2>
-  <div class="sub" id="hsSub"></div>
-  <div class="tblwrap"><table id="hsTable" style="margin-top:8px"></table></div>
-  <div class="sub" id="hsSimpleSub" style="margin-top:12px"></div>
-  <div class="tblwrap"><table id="hsSimpleTable" style="margin-top:8px"></table></div>
-</div>
-
-<div class="panel" data-tab="Research">
-  <h2>Timing-school scorecard — what actually tested out on <span class="tkr2"></span></h2>
-  <div class="sub" id="scoreSub"></div>
-  <div class="tblwrap"><table id="scoreTable" style="margin-top:8px"></table></div>
-</div>
-
-<div class="panel" data-tab="Accuracy">
-  <h2>Backtested track record — every swing in 5 years</h2>
-  <div class="sub" id="bfSub"></div>
-  <div id="bfBody" class="tblwrap" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" data-tab="Accuracy">
-  <h2>Self-correction — what the misses taught it</h2>
-  <div class="sub" id="blSub"></div>
-  <div id="blBody" class="tblwrap" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" data-tab="Accuracy">
-  <h2>Time-of-day accuracy — the primary goal</h2>
-  <div class="sub" id="taSub"></div>
-  <div id="taBody" class="tblwrap" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" data-tab="Accuracy">
-  <h2>Forecast audit — every version ever made, graded</h2>
-  <div class="sub" id="faSub"></div>
-  <div id="faBody" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" data-tab="Accuracy">
-  <h2>Full prediction history — <span class="tkr2"></span></h2>
-  <div class="sub" id="fhSub"></div>
-  <div id="fhBody" class="tblwrap" style="margin-top:8px; max-height:420px; overflow-y:auto"></div>
-</div>
-
-<div class="panel" data-tab="Accuracy">
-  <h2>Actual daily highs &amp; lows — <span class="tkr2"></span> (recorded ground truth)</h2>
-  <div id="exBody" class="tblwrap" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" data-tab="Accuracy">
-  <h2>The bar to beat — buy &amp; hold benchmarks</h2>
-  <div class="sub" id="bmSub"></div>
-  <div id="bmBody" class="tblwrap" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" data-tab="Trades">
-  <h2>Real executed trades (your account)</h2>
-  <div class="sub" id="rtSub"></div>
-  <div id="rtBody" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" data-tab="System">
-  <h2>System improvement diary</h2>
-  <div class="sub">What the daily reviews found and changed — the machine's own logbook.</div>
-  <pre id="imBody" style="white-space:pre-wrap; font-family:inherit; font-size:13px; margin-top:8px; max-height:340px; overflow-y:auto; background:var(--panel2); border-radius:8px; padding:12px"></pre>
-</div>
-
-<div class="panel" data-tab="Research">
-  <h2>Vibration lab — <span class="tkr2"></span>'s own astro &amp; numerology signature</h2>
-  <div class="sub" id="vibSub"></div>
-  <div id="vibBody" style="margin-top:8px"></div>
-</div>
-
-<div class="panel" data-tab="Research">
-  <h2>Upcoming signal calendar (next ~60 days)</h2>
-  <div class="sub">Every date each school flags, merged chronologically — exact times where the method gives one.</div>
-  <div class="tblwrap"><table class="cal" id="calTable" style="margin-top:8px"></table></div>
-</div>
-
-<div class="panel" data-tab="Research">
-  <h2>Current price vs. its ranges</h2>
-  <div id="ranges"></div>
-</div>
-
-<div class="grid2">
-  <div class="panel" data-tab="Research">
-    <h2>What time of day do highs &amp; lows happen?</h2>
-    <div class="sub" id="todSub"></div>
-    <h3 style="margin-top:12px">Day's HIGH set at this time (% of days)</h3>
-    <canvas id="todHigh" width="540" height="150"></canvas>
-    <h3 style="margin-top:12px">Day's LOW set at this time (% of days)</h3>
-    <canvas id="todLow" width="540" height="150"></canvas>
-  </div>
-
-  <div class="panel" data-tab="Research">
-    <h2>Which weekday sets the week's high / low?</h2>
-    <div class="sub" id="wdSub"></div>
-    <h3 style="margin-top:12px">Week's HIGH lands on… (%)</h3>
-    <canvas id="wdHigh" width="540" height="150"></canvas>
-    <h3 style="margin-top:12px">Week's LOW lands on… (%)</h3>
-    <canvas id="wdLow" width="540" height="150"></canvas>
-  </div>
-
-  <div class="panel" data-tab="Research">
-    <h2>Where in the month do highs / lows land?</h2>
-    <div class="sub" id="domSub"></div>
-    <div id="domTable" style="margin-top:10px"></div>
-  </div>
-
-  <div class="panel" data-tab="Research">
-    <h2>Monthly seasonality (avg return, <span id="seasYears"></span> years)</h2>
-    <canvas id="seas" width="540" height="180"></canvas>
-    <div class="tag">Green: month historically up on average. Number = average return that month.</div>
-  </div>
-</div>
-
-<div class="panel" data-tab="Research">
-  <h2>Strategy backtests — what actually made money on <span class="tkr2"></span></h2>
-  <div class="tblwrap"><table id="btTable"></table></div>
-</div>
-
-<div class="panel" data-tab="Research">
-  <h2>Legacy turning-point playbook for <span class="tkr2"></span> (secondary; not the daily high/low forecast above)</h2>
-  <ol class="play" id="playbook"></ol>
-</div>
-
-</details>
-
-<div class="foot" id="foot"></div>
-
+<div id="chartTooltip" role="status"></div>
 <script>
+/* Stock High/Low: one screen with the chart and the high/low results.
+   The chart and the result rows are both drawn from periodView(), so they always
+   show the same forecast points; actual (already traded) extremes are marked apart. */
 const safeStorage = {
   getItem(k){try{return localStorage.getItem(k);}catch(e){return null;}},
-  setItem(k,v){try{localStorage.setItem(k,v);}catch(e){throw new Error("Browser storage is unavailable; scheduled refresh still works.");}},
-  removeItem(k){try{localStorage.removeItem(k);}catch(e){}}
+  setItem(k,v){try{localStorage.setItem(k,v);}catch(e){}}
 };
 const $ = id => document.getElementById(id);
-const fmt$ = v => "$" + v.toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
-const pct = v => (v===null||v===undefined) ? "n/a" : v + "%";
-const argmax = obj => Object.keys(obj).reduce((a,b)=>obj[a]>=obj[b]?a:b);
-const TICKERS = Object.keys(DATA_ALL);
-const NICE = {"GC=F": "GOLD/oz"};
+const fmt$ = v => "$" + Number(v).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2});
+const esc = v => String(v == null ? "" : v).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const NICE = {"GC=F": "GOLD"};
 const nice = t => NICE[t] || t;
-let CUR = safeStorage.getItem("tkr");
-if(!TICKERS.includes(CUR)) CUR = TICKERS[0];
-
-/* ---------- ticker tabs ---------- */
-function renderTabs(){
-  $("tabs").innerHTML = TICKERS.map(t=>{
-    const d = DATA_ALL[t];
-    return `<button class="tab${t===CUR?' on':''}" onclick="switchTo('${t}')">${nice(t)}
-      <span class="tp num">${fmt$(d.price)}</span></button>`;
-  }).join("");
-}
-function switchTo(t){
-  CUR = t; safeStorage.setItem("tkr", t);
-  renderTabs(); renderAll(DATA_ALL[t]);
-  window.scrollTo({top:0, behavior:"smooth"});
-}
-
-/* size a canvas to its container so charts fit phone screens */
-function fit(c, maxW, ratio){
-  const dpr = window.devicePixelRatio || 1;
-  const w = Math.max(300, Math.min(maxW, (c.parentElement.clientWidth || maxW) - 4));
-  const hh = Math.round(w * (w < 600 ? Math.max(ratio, 0.42) : ratio));
-  c.width = Math.round(w * dpr);        // real pixels - kills the blur
-  c.height = Math.round(hh * dpr);
-  c.style.width = w + "px";             // logical size on screen
-  c.style.height = hh + "px";
-  c.getContext("2d").setTransform(dpr, 0, 0, dpr, 0, 0);
-  c.__w = w; c.__h = hh;                // drawing math stays in logical units
-}
-function cw(c){ return c.__w || c.width; }
-function ch(c){ return c.__h || c.height; }
-
-/* ---------- bar chart helper ---------- */
-function bars(id, labels, values, opts={}){
-  const c=$(id);
-  fit(c, 540, opts.tall ? 0.333 : 0.278);
-  // logical dimensions - c.width is the DPR-scaled backing store, using it
-  // here drew every bar at double size and pushed most of them off-canvas
-  const x=c.getContext("2d"), W=cw(c), H=ch(c), B=22, T=16;
-  x.clearRect(0,0,W,H);
-  const vmax = Math.max(...values.map(Math.abs))*1.15 || 1;
-  const bw = (W-10)/values.length;
-  const maxI = values.indexOf(Math.max(...values));
-  values.forEach((v,i)=>{
-    const h=(Math.abs(v)/vmax)*(H-B-T), bx=5+i*bw, by=H-B-h;
-    x.fillStyle = i===maxI ? (opts.hot||"#bf8700") : (opts.color||"#7aa7d4");
-    if(opts.signed) x.fillStyle = v>=0 ? "#2da44e" : "#cf222e";
-    x.fillRect(bx+1, by, bw-3, h);
-    if(Math.abs(v)>=vmax*0.10 || opts.allVals){
-      x.fillStyle="#1f2328"; x.font="10px Segoe UI"; x.textAlign="center";
-      x.fillText((opts.valFmt||(n=>n))(v), bx+bw/2, by-3);
-    }
-    if(labels[i]!==""){
-      x.fillStyle="#57606a"; x.font="10px Segoe UI"; x.textAlign="center";
-      x.fillText(labels[i], bx+bw/2, H-6);
-    }
-  });
-}
-
-function renderHorizonScore(H, ticker){
-  if(!H || !H.all){
-    $("hsSub").textContent = "The high/low scoreboard will appear after the next refresh.";
-    $("hsTable").innerHTML = ""; return;
-  }
-  const S = H.mine || H.all;
-  const who = H.mine ? nice(ticker) : "all tickers";
-  const v = (x, suf) => x == null ? "—" : x + suf;
-  const rows = [];
-  ["daily","weekly","monthly"].forEach(h => ["high","low"].forEach(side => {
-    const r = S[h] && S[h][side];
-    if(!r || !r.n) return;
-    const better = (a, b) => a == null || b == null ? "" : (a < b ? " ✓" : "");
-    const beats = (a, b) => a == null || b == null ? "" : (a > b ? " ✓" : "");
-    rows.push(`<tr><td>${h} ${side}</td><td class="num">${r.n}</td>
-      <td class="num">${v(r.medianPriceErrPct,"%")}${better(r.medianPriceErrPct, r.medianNaivePriceErrPct)}</td>
-      <td class="num">${v(r.medianNaivePriceErrPct,"%")}</td>
-      <td class="num">${h === "daily" ? "—" : v(r.dayHitPct,"%") + beats(r.dayHitPct, r.randomDayPct)}</td>
-      <td class="num">${h === "daily" ? "—" : v(r.randomDayPct,"%")}</td>
-      <td class="num">${r.timed ? v(r.withinHourPct,"%") + beats(r.withinHourPct, Math.max(r.randomWithinHourPct, r.openWithinHourPct, r.fixedWithinHourPct == null ? 0 : r.fixedWithinHourPct)) : "—"}</td>
-      <td class="num">${r.timed ? v(r.randomWithinHourPct,"%") : "—"}</td>
-      <td class="num">${r.timed ? v(r.openWithinHourPct,"%") : "—"}</td>
-      <td class="num">${r.timed ? v(r.fixedWithinHourPct,"%") : "—"}</td></tr>`);
-  }));
-  $("hsSub").innerHTML = `Graded calls for ${who}: the first call made for each day, week and month, compared with simple guesses.
-    <b>Price</b>: typical miss vs using last period's actual high/low. <b>Day</b>: right session vs a random session.
-    <b>Time</b>: within 1 hour (only when the day was right) vs a random time, "the open", and the best fixed time of day
-    from the prior 60 sessions (the fair bar: a call at 10:30 covers 9:30–11:30, a call at the open covers only one hour). ✓ = the app beat every simple guess.
-    Hourly and yearly calls are not graded yet.`;
-  $("hsTable").innerHTML = `<tr><th>Call</th><th>Graded</th><th>Price miss</th><th>Last period</th><th>Right day</th><th>Random day</th><th>Time ±1 hr</th><th>Random time</th><th>The open</th><th>Best fixed time</th></tr>` +
-    (rows.join("") || `<tr><td colspan="10">No graded calls yet.</td></tr>`);
-  renderSimpleForecast(H.simple, ticker);
-}
-
-function renderSimpleForecast(P, ticker){
-  if(!P || !P.all){ $("hsSimpleSub").textContent = ""; $("hsSimpleTable").innerHTML = ""; return; }
-  const S = P.mine || P.all;
-  const v = (x, suf) => x == null ? "—" : x + suf;
-  const clock = m => { if(m == null) return "—"; const h = Math.floor(m / 60), mm = m % 60;
-    return ((h + 11) % 12 + 1) + ":" + (mm < 10 ? "0" : "") + mm + (h < 12 ? "am" : "pm"); };
-  const N = P.next;
-  const nextLine = N ? ["high", "low"].map(side => { const c = N[side] || {};
-      return `${side} ~$${v(c.price, "")}${c.time == null ? "" : `, best 2-hour window ${clock(Math.max(570, c.time - 60))}–${clock(Math.min(960, c.time + 60))} (caught ${v(c.timeSharePct, "%")} of the last 60 days)`}`; }).join("; ")
-    : "not enough history yet";
-  $("hsSimpleSub").innerHTML = `<b>Simple forecast from ${nice(ticker)}'s own history</b> (no app model): price = last close × the typical move to the
-    high/low over the last 20 sessions; time = the clock time whose ±1 hour window caught the most highs/lows over the last 60 sessions.
-    Graded one session at a time using only earlier sessions. This is the bar the app's daily calls have to beat.
-    <br><b>Next session (from the ${N ? N.basis : "latest"} close):</b> ${nextLine}.`;
-  const rows = ["high", "low"].map(side => { const r = S[side];
-    if(!r || !r.n) return "";
-    const ok = (a, b) => a == null || b == null ? "" : (a < b ? " ✓" : "");
-    const up = (a, b) => a == null || b == null ? "" : (a > b ? " ✓" : "");
-    return `<tr><td>daily ${side}</td><td class="num">${r.n}</td>
-      <td class="num">${v(r.medianPriceErrPct, "%")}${ok(r.medianPriceErrPct, r.medianNaivePriceErrPct)}</td>
-      <td class="num">${v(r.medianNaivePriceErrPct, "%")}</td>
-      <td class="num">${r.timed ? v(r.withinHourPct, "%") + up(r.withinHourPct, Math.max(r.randomWithinHourPct, r.openWithinHourPct)) : "—"}</td>
-      <td class="num">${r.timed ? v(r.randomWithinHourPct, "%") : "—"}</td>
-      <td class="num">${r.timed ? v(r.openWithinHourPct, "%") : "—"}</td></tr>`; }).join("");
-  $("hsSimpleTable").innerHTML = `<tr><th>Simple call</th><th>Graded</th><th>Price miss</th><th>Yesterday's</th><th>Time ±1 hr</th><th>Random time</th><th>The open</th></tr>` +
-    (rows || `<tr><td colspan="7">Not enough history yet.</td></tr>`);
-}
-
-function renderVibration(V, ticker){
-  const esc=v=>String(v == null ? "—" : v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  if(!V){
-    $("vibSub").textContent="The vibration finder runs weekly on the full price history; results appear after its first run.";
-    $("vibNext").innerHTML=""; $("vibTable").innerHTML=""; return;
-  }
-  const nulls=(V.nullInPlay||[]).join(", ");
-  $("vibSub").innerHTML=`Each tool is tested on its own against ${esc(ticker)}'s ${esc(V.turns)} swing turns since ${esc(V.history.from)}
-    (a call hits when a turn lands within ±2 sessions). Chance = the same tool with each call moved randomly by 10–60 sessions.
-    Tools are selected on the history before ${esc(V.split)} and must work again on the later part they were not selected on.
-    <b>${esc(V.inPlay)} of ${esc(V.tested)} tools are in play.</b> Luck check: the same test on ${esc(ticker)}'s own moves reshuffled
-    (no real cycles) put ${esc(nulls)} tools in play. Computed ${esc(V.computed)}; calls logged from now on are the unseen test.`;
-  const up=(V.upcoming||[]).slice(0,10);
-  $("vibNext").innerHTML = up.length
-    ? `<b>Next dates from in-play tools:</b><div class="tblwrap"><table><tr><th>Date</th><th>Tools agreeing</th><th>Which</th></tr>${up.map(u=>`<tr><td class="num">${esc(u.date)}</td><td class="num">${esc(u.count)}</td><td>${u.tools.map(esc).join("<br>")}</td></tr>`).join("")}</table></div>`
-    : `<span class="tag">No in-play tool projects a date in the next 45 sessions.</span>`;
-  const cell=x=>x && x.n ? `${x.hitPct}% vs ${x.chancePct}% <span class="tag">(${x.lift == null ? "—" : x.lift}×, n=${x.n})</span>` : "—";
-  const badge=v=>`<span class="badge" style="${v==="IN PLAY"?"background:#dafbe1;color:#1a7f37":v==="FAILED HOLDOUT"?"background:#fff8c5;color:#7d4e00":"background:#eee;color:#777"}">${esc(v)}</span>`;
-  $("vibTable").innerHTML=`<tr><th>Tool</th><th>Family</th><th>Selection history</th><th>Later history</th><th>Verdict</th></tr>`+
-    (V.tools||[]).map(r=>`<tr><td>${esc(r.tool)}</td><td>${esc(r.family)}</td><td class="num">${cell(r.sel)}</td><td class="num">${cell(r.hold)}</td><td>${badge(r.verdict)}</td></tr>`).join("");
-}
-function renderTimingReview(T){
-  if(!T){
-    $("timingSummary").textContent="Timing scorecard will appear after the next validated refresh.";
-    $("timingCards").innerHTML=""; $("timingDetails").innerHTML=""; return;
-  }
-  const H=T.historicalAudit, F=T.forward;
-  // Older published payloads lack per-cohort coverage; never show combined
-  // coverage under a cohort label.
-  const HC=T.historicalCoverage, FC=T.forwardCoverage;
-  const esc=v=>String(v == null ? "—" : v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-  $("timingSummary").textContent=`Daily-close reversal dates · ±2 trading sessions · ${T.historicalAudit.scored} historical audit calls · ${T.forward.scored} forward-test calls. ${T.pending} await completed windows. The two groups are scored separately and never pooled. Price-target error is scored separately.${T.chanceHitPct == null ? "" : ` Random-date baseline: the same calls with their dates moved at random hit ${T.chanceHitPct}%; ${T.summary.hits}/${T.summary.scored} real calls hit.`}`;
-  const hits=s=>s.scored ? `${s.hits}/${s.scored}` : "Pending";
-  const cov=c=>!c ? "—" : c.turns ? `${c.missedTurns}/${c.turns}` : "Pending";
-  const miss=s=>s.medianAbsErrorSessions === null ? "—" : `${s.medianAbsErrorSessions} sessions`;
-  const cards=[
-    ["Calls near a turn", hits(H), hits(F), "One actual turn credits one call per group"],
-    ["False alarms", H.scored ? H.falseAlarms : "—", F.scored ? F.falseAlarms : "—", "No unclaimed matching turn in the window"],
-    ["Missed confirmed turns", cov(HC), cov(FC), HC && HC.through ? `Historical coverage through ${HC.through}` : "Coverage pending"],
-    ["Typical timing miss", miss(H), miss(F), "Matched calls only; misses remain above"]
-  ];
-  $("timingCards").innerHTML=cards.map(([title,h,f,sub])=>`<div style="border:1px solid var(--border);border-radius:8px;padding:12px;background:var(--panel2)"><b>${esc(title)}</b><div style="margin-top:4px"><span class="tag">Historical audit</span> <span style="font-size:22px;font-weight:750">${esc(h)}</span></div><div><span class="tag">Forward test</span> <span style="font-size:22px;font-weight:750">${esc(f)}</span></div><div class="tag">${esc(sub)}</div></div>`).join("");
-  $("timingDetails").innerHTML=`<p><b>Historical audit: ${H.early} early · ${H.exact} exact · ${H.late} late</b>; <b>forward test: ${F.early} early · ${F.exact} exact · ${F.late} late</b> among matched calls. Early/late describes the called date versus the actual turn date.</p>
-    <p>A turn is a strict daily closing high or low relative to the two sessions on each side. It is confirmed only after two later sessions close. Calls mature only after their full ±2-session window can be confirmed. This does not measure the minute of an intraday high/low.</p>
-    <p>Each ticker/date/type uses its earliest logged forecast. Same-day and retrospective calls are excluded; revisions cannot improve the original. Earlier-issued calls claim matching turns first, within each group; a historical call can never use up a turn that a forward call needs. Historical missed-turn coverage stops before September 24; forward coverage starts after the first forward call is logged. Coverage ends earlier so later calls have time to mature. ${T.excludedCount} originals excluded.</p>
-    <p><b>Historical audit ≠ unseen validation.</b> Forward testing begins with originals logged on/after September 24, 2026 (Eastern). ${T.forward.scored} forward calls scored so far. No method weights change from this scorecard. Timing accuracy does not establish net trading profitability.</p>
-    <div class="tblwrap"><table><tr><th>Called date</th><th>Group</th><th>Turn</th><th>Actual date</th><th>Timing result</th></tr>${T.recent.map(r=>`<tr><td>${esc(r.targetDate)}</td><td>${r.cohort==='forward'?'Forward test':'Historical audit'}</td><td>${esc(r.type)}</td><td>${esc(r.actualDate)}</td><td>${r.status==='hit' ? (r.errorSessions===0 ? 'Exact session' : `${Math.abs(r.errorSessions)} session(s) ${r.errorSessions<0?'early':'late'}`) : 'False alarm'}</td></tr>`).join("")}</table></div>
-    <p><b>Methods present in blended calls</b> (all originals, one global matching) — overlapping groups, not proof that a method caused success:</p>
-    <div class="tblwrap"><table><tr><th>Method tag</th><th>Matched / scored</th></tr>${Object.entries(T.methodTags).map(([name,v])=>`<tr><td>${esc(name)}</td><td>${v.hits}/${v.scored}</td></tr>`).join("")}</table></div>
-    <p class="tag">Next research gate: compare fixed Gann, cycle and astro rules separately against simple calendar/rhythm controls on unseen sessions. Keep sample size, false alarms and missed turns visible. A separate trade simulation must include costs, slippage and drawdown before any strategy promotion.</p>`;
-}
-
-/* ---------- daily high/low (primary) ---------- */
-const hiloEsc=v=>String(v == null ? "—" : v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-const HILO_STALE_MS = 3 * 3600 * 1000;
-/* The page data defines HILO once; refreshes replace this live copy (see swapIn). */
+const PERIODS = ["D","W","M","Y"];
+let TICKERS = Object.keys(DATA_ALL);
+let CUR = safeStorage.getItem("tkr"); if(!TICKERS.includes(CUR)) CUR = TICKERS[0];
+let PERIOD = safeStorage.getItem("period"); if(!PERIODS.includes(PERIOD)) PERIOD = "D";
 let HILO_LIVE = (typeof HILO === "undefined") ? null : HILO;
+let LAST_PULL_FAILED = false;
+
+const dayLbl = iso => new Date(iso + "T12:00:00").toLocaleDateString("en-US", {weekday:"short", month:"numeric", day:"numeric"});
+const md = iso => Number(iso.slice(5,7)) + "/" + Number(iso.slice(8,10));
+const t12 = hhmm => { const h = Number(hhmm.slice(0,2)), m = hhmm.slice(3); return ((h % 12) || 12) + ":" + m + (h < 12 ? "a" : "p"); };
+const etToday = () => new Date().toLocaleDateString("en-CA", {timeZone:"America/New_York"});
+
 function hiloValid(h){
   if(h === null) return true;
   if(typeof h !== "object" || typeof h.generatedAt !== "string" || isNaN(Date.parse(h.generatedAt))) return false;
@@ -669,1471 +196,250 @@ function hiloValid(h){
   return Object.values(h.latest).every(slot => slot && Object.values(slot).every(r => r && ["high","low"].every(sd =>
     r[sd] && [r[sd].price, r[sd].lo, r[sd].hi].every(v => Number.isFinite(v) && v > 0) && typeof r[sd].time === "string")));
 }
-function hiloEt(iso){
-  return iso ? new Date(iso).toLocaleString("en-US",{timeZone:"America/New_York",weekday:"short",month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}) + " ET" : "n/a";
+function hiloRec(t){
+  const H = HILO_LIVE;
+  if(!H || H.failed) return null;
+  const slot = (H.latest || {})[t] || {};
+  return slot.intraday || slot.premarket || null;
 }
-function hiloPct(v){ return (v===null||v===undefined) ? "n/a" : Math.round(v*100) + "%"; }
-function hiloCell(label, main, sub){
-  return `<div style="border:1px solid var(--border);border-radius:10px;padding:10px"><div class="sub">${label}</div>
-    <div class="num" style="font-size:20px;font-weight:700">${main}</div><div class="sub">${sub}</div></div>`;
-}
-function hiloCmp(b, unit){
-  if(!b || b.model===undefined || b.model===null) return "n/a";
-  const best = b.strongest, c = best && b.comparators ? b.comparators[best] : null;
-  return `${b.model}${unit}` + (c ? ` vs strongest comparator "${hiloEsc(best)}" ${c.comparator}${unit} on the same ${c.n} rows`
-    + (c.diffCI ? ` (model minus comparator, 95% CI ${c.diffCI.join(" to ")})` : "") : "");
-}
-function hiloStat(s){
-  if(!s || !s.n) return "no complete sessions scored yet";
-  return `${s.n} calls, ${s.sessions} sessions (${s.from} to ${s.to}). Price median error ${hiloCmp(s.price, "%")}; `
-    + `within 0.5% ${s.price.within05}%, within 1% ${s.price.within1}%, 80% band held ${s.price.bandCoverage}%. `
-    + `Modal bar exactly right ${hiloCmp(s.timeBar, "%")}. Modal bar within ±60 min ${hiloCmp(s.timeNear, "%")}. `
-    + `Window-centre output within ±60 min ${hiloCmp(s.timeWindow, "%")}.`;
-}
-function hiloTime(b){ return `${hiloEsc(b.time)} bar (${hiloPct(b.pBar)})`; }
-function renderHilo(t){
-  const head = $("hiloHead"), cards = $("hiloCards");
-  const HILO = HILO_LIVE;
-  const sessTxt = iso => new Date(iso + "T12:00:00").toLocaleDateString("en-US", {weekday:"short", month:"short", day:"numeric"});
-  const tSlot = HILO && !HILO.failed ? ((HILO.latest || {})[t] || {}) : {};
-  const tRec = tSlot.intraday || tSlot.premarket;
-  const tSess = tRec ? tRec.session : (HILO && /^\d{4}-\d{2}-\d{2}$/.test(HILO.targetSession || "") ? HILO.targetSession : null);
-  $("hiloTitle").textContent = tSess ? `High and low for ${sessTxt(tSess)}: price and time` : "High and low: price and time";
-  if(!HILO){ head.textContent = "Daily high/low forecasts appear after the next scheduled run."; cards.innerHTML = ""; $("hiloDetails").innerHTML = ""; return; }
-  if(HILO.failed){
-    head.innerHTML = `<b style="color:var(--red)">UNAVAILABLE.</b> The forecaster failed at ${hiloEt(HILO.failed.at)}: ${hiloEsc(HILO.failed.reason)}. No forecast is shown. The last successful run was ${hiloEt(HILO.generatedAt)}, for session ${hiloEsc(HILO.targetSession)}.`;
-    cards.innerHTML = ""; $("hiloDetails").innerHTML = ""; return;
+
+/* the single source for chart and results */
+function periodView(D, per){
+  const rec = hiloRec(D.ticker);
+  if(!rec) return {rec:null, per:per, fc:[]};
+  const S = rec.session;
+  const ps = ((HILO_LIVE.periods || {})[D.ticker] || {})[per] || null;
+  const span = per === "D" ? [S, S] : (ps ? [ps.start, ps.end] : [S, S]);
+  const resolved = !!(rec.timing && rec.timing.resolved);
+  const fc = ["high","low"].map(side => ({src:"day", type:side, date:S, price:rec[side].price, lo:rec[side].lo,
+    hi:rec[side].hi, time: resolved ? rec[side].time : null}));
+  if(per !== "D"){
+    (D.predictions || []).filter(p => p.isoDate > S).slice(0, 5)
+      .filter(p => p.isoDate <= span[1])
+      .forEach(p => fc.push({src:"turn", type:p.type, date:p.isoDate, price:p.price}));
   }
-  const age = Date.now() - new Date(HILO.generatedAt).getTime();
-  const stale = !(age < HILO_STALE_MS);
-  const slot = (HILO.latest || {})[t] || {};
-  const rec = slot.intraday || slot.premarket;
-  const fwd = Object.values(HILO.status || {})[0] || {};
-  const state = `Model ${hiloEsc(HILO.model)}: a baseline candidate, not a proven edge · forward record: ${fwd.sessions||0} complete sessions observed (observational only) · ledger ${HILO.ledger && HILO.ledger.ok ? "chain verified, " + HILO.ledger.records + " records" : "CHECK FAILED"}`;
-  const staleTxt = stale ? `<b style="color:var(--red)">STALE:</b> generated ${hiloEt(HILO.generatedAt)}, for session ${hiloEsc(HILO.targetSession)}. Not a current forecast.<br>` : "";
-  if(!rec){
-    head.innerHTML = staleTxt + `No forecast for ${hiloEsc(nice(t))} on ${hiloEsc(HILO.targetSession)}: ${hiloEsc((HILO.notes||{})[t] || (HILO.excluded||{})[t] || "not available")}.<br>${state}`;
-    cards.innerHTML = "";
-  } else {
-    const kindTxt = rec.kind === "intraday"
-      ? `Intraday revision of the FINAL full-session high and low for ${hiloEsc(rec.session)} (includes what already traded), frozen at checkpoint ${rec.checkpoint}: bars through ${hiloEsc(rec.lastBar.slice(11))} ET`
-      : `Premarket forecast of the full-session high and low for ${hiloEsc(rec.session)}, from completed sessions through ${hiloEsc(rec.lastBar.slice(0,10))}`;
-    head.innerHTML = staleTxt + `${kindTxt} · issued ${hiloEt(rec.issuedAt)} · data cutoff ${hiloEt(rec.dataCutoff)}`
-      + (rec.late ? ` · <b>late record</b> (${rec.lagMin} min after cutoff; not scored)` : "")
-      + (slot.intraday && slot.premarket ? ` · original premarket call: high ${fmt$(slot.premarket.high.price)} (${hiloTime(slot.premarket.high)}), low ${fmt$(slot.premarket.low.price)} (${hiloTime(slot.premarket.low)})` : "")
-      + `<br>${state}`;
-    const obs = rec.observed, out = [];
-    for(const side of ["high","low"]){
-      const b = rec[side], name = side === "high" ? "High" : "Low", w = b.window || {};
-      out.push(hiloCell(`${name} price`, fmt$(b.price), `80% range ${fmt$(b.lo)} to ${fmt$(b.hi)}` + (obs ? ` · so far ${fmt$(obs[side])}` : "")));
-      out.push(hiloCell(`${name} time: most likely 15-min bar (ET)`, hiloEsc(b.time),
-        `${hiloPct(b.pBar)} chance this exact bar`
-        + ` · separately, best ±60-min window centred ${hiloEsc(w.centre)} holds ${hiloPct(w.p60)} (a window centre, not the likeliest time)`
-        + (b.pAlreadySet!==undefined ? ` · already set: ${hiloPct(b.pAlreadySet)}` : "")));
-    }
-    cards.innerHTML = out.join("");
-    cards.style.opacity = stale ? "0.5" : "1";
-  }
-  const rows = Object.entries(HILO.latest || {}).map(([tk, s2])=>{
-    const r = s2.intraday || s2.premarket;
-    return `<tr><td>${hiloEsc(nice(tk))}</td><td>${r.kind}${r.checkpoint ? " cp" + r.checkpoint : ""}</td><td>${fmt$(r.high.price)} · ${hiloTime(r.high)}</td><td>${fmt$(r.high.lo)}–${fmt$(r.high.hi)}</td><td>${fmt$(r.low.price)} · ${hiloTime(r.low)}</td><td>${fmt$(r.low.lo)}–${fmt$(r.low.hi)}</td></tr>`;
-  }).join("");
-  const sb = (blk, label) => blk ? ["premarket","intraday"].map(k=>["high","low"].map(sd=>
-    `<li><b>${label}, ${k}, ${sd}:</b> ${hiloStat(blk[k] && blk[k][sd])}</li>`).join("")).join("") : "<li>not available</li>";
-  $("hiloDetails").innerHTML = `<div class="tblwrap"><table><tr><th>Stock</th><th>Kind</th><th>High · likeliest bar</th><th>High 80% range</th><th>Low · likeliest bar</th><th>Low 80% range</th></tr>${rows}</table></div>
-    <p class="sub">${hiloEsc(HILO.method)}</p>
-    <p><b>Forward results</b> (frozen ledger records, scored only after a complete session; observational, not proof):</p><ul>${sb(HILO.forward, "Forward")}</ul>
-    <p><b>Past forecasts vs actual</b> (latest 60 scored, frozen before the outcome):</p>
-    <div class="tblwrap"><table><tr><th>Session</th><th>Stock</th><th>Kind</th><th>Side</th><th>Forecast</th><th>Actual</th><th>Error</th><th>In 80% range</th><th>Bar forecast</th><th>Bar actual</th></tr>${(HILO.history||[]).map(r=>`<tr><td>${hiloEsc(r.session)}</td><td>${hiloEsc(nice(r.ticker))}</td><td>${hiloEsc(r.kind)}${r.checkpoint ? " cp" + r.checkpoint : ""}</td><td>${hiloEsc(r.side)}</td><td>${fmt$(r.pred)}</td><td>${fmt$(r.actual)}</td><td>${hiloEsc(r.err)}%</td><td>${r.inBand ? "yes" : "no"}</td><td>${hiloEsc(r.predTime)}</td><td>${hiloEsc(r.actualTime)}</td></tr>`).join("") || '<tr><td colspan="10">No complete sessions scored yet.</td></tr>'}</table></div>
-    <p><b>Model versions</b> (each version is scored separately, on its own frozen records only; running a candidate in parallel and comparing it on matched future sessions is not built yet; nothing improves or is promoted automatically):</p>
-    <ul>${Object.entries(HILO.forwardByModel||{}).map(([m,b])=>`<li><b>${hiloEsc(m)}:</b> ${hiloStat(b.premarket && b.premarket.high)}</li>`).join("") || "<li>none yet</li>"}</ul>
-    <p><b>Retrospective replay</b> (walk-forward on stored sessions; not frozen in advance, not proof):</p><ul>${sb(HILO.retrospective, "Replay")}</ul>
-    <p class="sub">Excluded: ${hiloEsc(Object.keys(HILO.excluded||{}).join(", ") || "none")} (${hiloEsc(Object.values(HILO.excluded||{})[0] || "")}). Late intraday records: ${HILO.lateIntradayRecords||0}. Generated ${hiloEt(HILO.generatedAt)}, build ${hiloEsc(String((HILO.build||{}).commit||"").slice(0,7))}.</p>`;
+  const best = (type, better) => fc.filter(p => p.type === type).reduce((a, b) => (!a || better(b.price, a.price)) ? b : a, null);
+  return {rec:rec, per:per, S:S, span:span, fc:fc, timing:rec.timing || null, resolved:resolved,
+          high:best("high", (x, y) => x > y), low:best("low", (x, y) => x < y),
+          actual: per === "D" ? null : (ps ? {high:ps.high, low:ps.low} : null)};
 }
 
-/* ---------- main render ---------- */
-function renderAll(D){
-  try { renderHilo(D.ticker); } catch(e) { $("hiloHead").textContent = "Daily high/low panel failed to render: " + e.message; }
-  const pb = D.predictionBasis;
-  $("tkr").textContent = nice(D.ticker);
-  document.querySelectorAll(".tkr2").forEach(e=>e.textContent=nice(D.ticker));
-  $("price").textContent = fmt$(D.price);
-  const quoteStamp=D.priceAsOf ? new Date(D.priceAsOf).toLocaleString("en-US",{
-    timeZone:"America/New_York",month:"short",day:"numeric",year:"numeric",
-    hour:"numeric",minute:"2-digit",second:"2-digit",timeZoneName:"short"
-  }) : null;
-  $("updated").textContent = quoteStamp
-    ? "price as of " + quoteStamp + " · " + (D.priceSource || "latest available quote")
-    : "analysis generated " + D.generated + " · exact quote time unavailable";
-
-  const review=D.dailyReview;
-  $("reviewStatus").textContent=review ? "Automatic review: " + new Date(review.reviewedAt).toLocaleString("en-US",{timeZone:"America/New_York"}) + " ET · " + review.snapshotCount + " saved forecast snapshots · " + review.scoredOriginals + " original targets scored. Learning adjusts estimates; improvement is not guaranteed." : "Automatic review will appear after the next scheduled run.";
-  renderTimingReview(D.timingReview);
-  renderVibration(D.gannLab, D.ticker);
-  renderHorizonScore(D.horizonScore, D.ticker);
-  /* predictions */
-  const p1 = D.predictions[0];
-  const tn = D.turnFormed;
-  const nr = D.nextReversal;
-  const stateCopy = {
-    "extending": ["#dafbe1", "#1a7f37", "STILL EXTENDING",
-      "price has not reached the target and the turn date is ahead - the move is intact"],
-    "target-hit-early": ["#fff8c5", "#7d4e00", "TARGET HIT EARLY - WATCHING",
-      "price reached the target ahead of its date but has not pulled back decisively. It may reverse here OR extend into the projected date - this is a re-analyse state, not a confirmed turn"],
-    "turned": ["#ffebe9", "#cf222e", "REVERSAL CONFIRMED",
-      "the extreme is in - the forecast below is for the opposite leg"]};
-  if(nr){
-    const sc = stateCopy[nr.state] || stateCopy["extending"];
-    $("basis").innerHTML = `
-      <div style="border:2px solid var(--blue); border-radius:10px; padding:12px; margin-bottom:10px; background:var(--panel)">
-        <div class="tag" style="letter-spacing:.08em">NEXT REVERSAL EXPECTED</div>
-        <div style="font-size:20px; font-weight:700; margin:2px 0">
-          <span class="badge ${nr.type==="high"?"bH":"bL"}">${nr.type.toUpperCase()}</span>
-          ${nr.date} &nbsp;<span class="num">${nr.planetHour || nr.time}</span>
-        </div>
-        <div class="num" style="font-size:14px">window ${nr.window} &nbsp;·&nbsp; price target ${fmt$(nr.price)}
-          ${nr.altTime && nr.altTime !== nr.time ? ` ·&nbsp; 2nd time ${nr.altTime}` : ""}</div>
-        ${(function(){
-          const st = D.stability;
-          if(!st || !st.call || st.call.isoDate !== nr.isoDate) return "";
-          if(st.stoodDays >= 1) return `<div style="margin-top:5px"><span class="badge" style="background:#dafbe1; color:#1a7f37; border-color:#1a7f3733">CALL UNCHANGED ${st.stoodDays === 1 ? "since yesterday" : "for " + st.stoodDays + " days"}</span></div>`;
-          const rv = (st.recentRevisions || [])[st.recentRevisions.length - 1];
-          return rv && rv.when === new Date().toISOString().slice(0,10)
-            ? `<div style="margin-top:5px"><span class="badge" style="background:#fff8c5; color:#7d4e00; border-color:#7d4e0033">REVISED TODAY</span> <span class="tag">was ${rv.from.isoDate.slice(5)} ${rv.from.time || ""} → now ${rv.to.isoDate.slice(5)} · ${rv.reason}</span></div>`
-            : `<div style="margin-top:5px"><span class="badge chip">NEW CALL</span> <span class="tag">first published today</span></div>`;
-        })()}
-        ${(function(){
-          const T = D.timingReview, v = T && T.useVerdict;
-          if(!v) return "";
-          const st = D.stability;
-          const held = st && st.call && st.call.isoDate === nr.isoDate ? st.stoodDays : 0;
-          const s = T.summary, blind = T.chanceHitPct == null ? "—" : T.chanceHitPct + "%";
-          const rate = s.scored ? Math.round(100 * s.hits / s.scored) + "%" : "—";
-          let look, head, body;
-          if(v.status === "beatsChance" && held >= 2){
-            look = ["#dafbe1", "#1a7f37"]; head = "USE THIS DATE";
-            body = `dated calls on ${nice(D.ticker)} beat random dates (worst case ${v.lowerBoundPct}% vs ${blind}), and this call has held ${held} days.`;
-          } else if(v.status === "beatsChance"){
-            look = ["#fff8c5", "#7d4e00"]; head = "WAIT FOR IT TO HOLD";
-            body = `the track record beats random dates, but this call ${held ? "has held only 1 day" : "is new or just moved"}. Act once it holds 2 days.`;
-          } else if(v.status === "notAboveChance"){
-            look = ["#ffebe9", "#cf222e"]; head = "DON'T TRADE THE DATE";
-            body = `dated calls on ${nice(D.ticker)} hit ${rate} of the time; the same calls on random dates hit ${blind}.`;
-          } else {
-            look = ["#f6f8fa", "#57606a"]; head = "NOT PROVEN YET";
-            body = `${s.scored} of ${v.needed} dated calls graded so far (${s.hits} hit, ${rate}); random dates would hit ${blind}. Treat the date as a guess and size small.`;
-          }
-          return `<div style="margin-top:6px; padding:6px 10px; border-radius:8px; background:${look[0]}; border:1px solid ${look[1]}33; color:${look[1]}; font-size:13px"><b>${head}:</b> ${body}</div>`;
-        })()}
-        <div class="tag" style="margin-top:4px">Timing is the primary call; the price target is secondary.
-          Backtested date accuracy on ${nice(D.ticker)}: ${pct(nr.hit2)} within ±2 days, ${pct(nr.hit3)} within ±3 days.
-          A call only moves when the model decisively disagrees (>1 session or >1.5% price) - small wobble keeps the published date.</div>
-      </div>` + (tn ? `<div style="font-size:13px; margin-bottom:8px; padding:8px 12px; border-radius:8px;
-        background:${sc[0]}; border:1px solid ${sc[1]}33; color:${sc[1]}">
-        <b>Swing state: ${sc[2]}</b> - ${sc[3]}.<br>
-        <span class="num">${tn.extreme.toUpperCase()} so far ${fmt$(tn.price)} on ${tn.date} ·
-        pulled back ${tn.pullbackPct}% (a confirmed reversal needs ${tn.thresholdPct}%) ·
-        turn was due ${tn.dueDate}${tn.datePassed ? " (date passed)" : " (date still ahead)"}</span>
-      </div>` : "");
-  } else $("basis").innerHTML = (tn ? `<div style="font-size:14px; margin-bottom:8px; padding:8px 12px;
-     border-radius:8px; background:#fff8c5; border:1px solid #d4a72c; color:#7d4e00">
-     <b>Turn detected:</b> the ${tn.formed.toUpperCase()} formed on <b>${tn.date}</b> at
-     <b>${fmt$(tn.price)}</b> - price has moved ${tn.pullbackPct}% away from it, so that swing is treated as
-     complete and the forecast below is for the OPPOSITE leg.</div>` : "") + `<div style="font-size:15px; margin-bottom:8px; padding:8px 12px; border-radius:8px;
-   background:${p1.type==="low" ? "#ffebe9" : "#dafbe1"}">
-   <b>Right now:</b> ${nice(D.ticker)} is in a ${p1.type==="low" ? "falling" : "rising"} swing —
-   the first call below is where this move is projected to END:
-   <b>${p1.type.toUpperCase()} ${p1.date} near ${fmt$(p1.price)}</b>. The turn the other way comes after that.</div>
-   Forecast = the dates where the most methods stack up (swing rhythm, Gann counts,
-   Fibonacci counts, Hurst cycle turns, lunar events), weighted by how well each tested on ${D.ticker}.
-   Anchor: last confirmed swing ${pb.lastPivot.type.toUpperCase()} on ${pb.lastPivot.date} at
-   ${fmt$(pb.lastPivot.price)}; ${D.ticker} turns ≥${D.swing.thresholdPct}% about every
-   <b>${pb.medianSpacing} trading days</b> (up ~${pb.medianUpPct}% into highs, down ~${pb.medianDownPct}% into lows).`;
-  let rows = `<tr><th>#</th><th>Type</th><th>Date</th><th>Window</th><th>Time of day</th><th>Projected price</th><th>Signals agreeing</th><th>Strength</th></tr>`;
-  for (const p of D.predictions) {
-    const strength = Math.round(p.score / p.scoreMax * 100);
-    rows += `<tr>
-      <td>${p.n}</td>
-      <td><span class="badge ${p.type==="high"?"bH":"bL"}">${p.type.toUpperCase()}</span>
-          ${p.conf ? `<br><span class="badge" title="Lead-time band only, not a trade signal" style="${p.conf==="ACTIONABLE"
-            ? "background:#ddf4ff; color:#0550ae; border-color:#0550ae33"
-            : p.conf==="WATCH" ? "background:#fff8c5; color:#7d4e00; border-color:#7d4e0033"
-            : "background:#eee; color:#777; border-color:#ccc"}">${p.conf==="ACTIONABLE" ? "NEAR-TERM" : p.conf}</span>` : ""}
-          <span class="big num mobonly" style="margin-left:6px">${p.date} — ${fmt$(p.price)}</span></td>
-      <td class="big num" data-l="date">${p.date}</td>
-      <td class="num" data-l="window">${p.dateWindow}</td>
-      <td class="num" data-l="time">${p.time} <span class="tag">(${p.timePct}%)</span>
-          ${p.altTime !== p.time ? `<br><span class="tag">2nd: ${p.altTime} (${p.altTimePct}%)</span>` : ""}
-          ${p.astroTime ? `<br><span class="tag">🌙 exact lunar time: ${p.astroTime}</span>` : ""}
-          ${p.planetHour ? `<br><span class="tag">⏱ hot planetary hours: ${p.planetHour} ET</span>` : ""}</td>
-      <td class="big num" data-l="target">${fmt$(p.price)}</td>
-      <td data-l="signals">${p.reached ? '<span class="badge bH" style="margin-bottom:4px; display:inline-block">already reached - target raised to what price actually printed</span><br>' : ''}${p.methods.map(m=>`<span class="chip">${m}</span>`).join("")||"<span class='tag'>—</span>"}</td>
-      <td data-l="strength"><span class="num">${strength}%</span>
-          <div class="conf"><i style="width:${strength}%"></i></div></td>
-    </tr>`;
+function renderResults(v){
+  const box = $("gRes");
+  if(!v.rec){
+    const H = HILO_LIVE;
+    box.innerHTML = `<span class="lbl">&nbsp;</span><span class="val"><small>${H && H.failed ? "Forecast unavailable" : "No forecast yet"}</small></span><span></span>`;
+    return;
   }
-  $("predTable").innerHTML = rows;
-  const LE = D.leadEdge || {};
-  // Labels describe lead time only. The measured result is shown beside each
-  // band and can be below chance; no band is called an edge or a trade signal.
-  const leVs = e => e > 0 ? "above chance" : e < 0 ? "BELOW chance" : "equal to chance";
-  const leRow = (k,name) => LE[k] ? `${name}: model ${LE[k].model}% vs chance ${LE[k].chance}% (${LE[k].edge>0?"+":""}${LE[k].edge} pts, n=${LE[k].n}, ${leVs(LE[k].edge)})` : null;
-  const leTxt = [leRow("a","NEAR-TERM ≤3 sessions"), leRow("w","WATCH 4–7"), leRow("s","SKETCH 8+")].filter(Boolean).join(" · ");
-  const leBelow = Object.values(LE).some(v => v.edge <= 0);
-  $("hitnote").innerHTML = (leTxt ? `<b>What the labels mean:</b> they show how far ahead a call was made, not how reliable it is.
-   Measured on our own graded calls (±2 days, in-sample, overlapping calls, no costs): ${leTxt}.
-   ${leBelow ? "<b>At least one band currently scores at or below chance.</b> " : ""}No band has passed an unseen forward test, so none is a proven edge or an instruction to trade;
-   see the timing scorecard for the forward test. SKETCH dates are the most likely to move.<br>` : "") + `<b>Honesty check:</b> on ${D.swing.tested} past ${D.ticker} swings, the rhythm method
-   landed within ±2 trading days ${pct(pb.hitRate2d)} of the time (±3 days: ${pct(pb.hitRate3d)}). Stacking methods
-   narrows attention, it doesn't create certainty. The most reliable part is time-of-day: the open
-   (9:30–10:00 AM ET) sets the day's extreme far more often than any other slot.`;
-
-  /* date picker forecast */
-  (function(){
-    const F = D.dayForecasts || [];
-    const inp = $("dpInput"), body = $("dpBody");
-    if(!F.length){ body.innerHTML = "<span class='tag'>Refresh to compute.</span>"; return; }
-    inp.min = F[0].date; inp.max = F[F.length-1].date;
-    if(!inp.value) inp.value = F[0].date;
-    const show = () => {
-      const want = inp.value;
-      let r = F.find(x => x.date === want);
-      if(!r){
-        const wd = new Date(want + "T12:00:00").getDay();
-        body.innerHTML = `<div class="tag">${(wd===0||wd===6) ? "That's a weekend — markets are closed."
-          : "Outside the forecast window (next ~90 trading days)."}</div>`;
-        return;
-      }
-      const dt = new Date(r.date + "T12:00:00");
-      body.innerHTML = `
-        <div style="border:1px solid var(--border); border-radius:10px; padding:12px; background:var(--panel2)">
-          <b style="font-size:16px">${nice(D.ticker)} — ${dt.toLocaleDateString("en-US",{weekday:"long", month:"long", day:"numeric"})}</b>
-          <span class="tag">(${r.sessions} sessions out)</span>
-          ${r.event ? `<div><span class="badge ${r.event.startsWith("HIGH")?"bH":"bL"}">${r.event}</span></div>` : (function(){
-            const ps = (D.predictions||[]).slice().sort((a,b)=>a.isoDate<b.isoDate?-1:1);
-            const prev = ps.filter(p=>p.isoDate<want).pop(), next = ps.find(p=>p.isoDate>want);
-            if(prev && next) return `<div class="tag" style="margin-top:4px">This day sits mid-leg:
-              <b>${prev.type==="high"?"falling":"rising"}</b> from the projected ${prev.type.toUpperCase()}
-              ${fmt$(prev.price)} (${prev.date}) toward the ${next.type.toUpperCase()} ${fmt$(next.price)}
-              (${next.date}) — so even this day's HIGH can sit ${prev.type==="high"?"below":"above"} today's price.
-              The numbers below are that day's own expected range.</div>`;
-            if(next) return `<div class="tag" style="margin-top:4px">Heading toward the projected
-              ${next.type.toUpperCase()} ${fmt$(next.price)} on ${next.date}.</div>`;
-            return "";
-          })()}
-          <table style="margin-top:8px"><tr><th>Daily range estimate</th><th>Price</th><th>Timing context</th></tr>
-            <tr><td><span class="badge bH">UPPER</span></td>
-                <td class="big num">${fmt$(r.high)}</td><td class="num">${r.hiTime}</td></tr>
-            <tr><td><span class="badge bL">LOWER</span></td>
-                <td class="big num">${fmt$(r.low)}</td><td class="num">${r.loTime}</td></tr>
-            ${r.mid !== undefined ? `<tr><td class="tag">expected path</td>
-                <td class="num">${fmt$(r.mid)}</td>
-                <td class="tag">where the forecast has price sitting that day</td></tr>` : ""}
-          </table>
-          <div class="tag" style="margin-top:6px">Range edges can extend beyond the chart's turning-point
-          targets. They do not predict a reversal at that price or time. Range widens with distance (volatility grows with time),
-          snapped to real support/resistance where one is close. Times come from ${nice(D.ticker)}'s own
-          measured intraday pattern and hot planetary hours. Probability windows, not appointments.</div>
-        </div>`;
-    };
-    $("dpGo").onclick = show; inp.onchange = show;
-    show();
-  })();
-
-  /* call revisions */
-  (function(){
-    const st = D.stability;
-    if(!$("rvBody")) return;
-    $("rvSub").innerHTML = `A published call is a commitment: it only moves when the model decisively
-      disagrees (date off by more than 1 session, or price re-marked over 1.5%). Small wobble keeps the
-      published date. Every move is logged here with before → after, so revisions are visible, graded,
-      and learnable — never silent.`;
-    const rv = (st && st.recentRevisions) || [];
-    if(!rv.length){
-      $("rvBody").innerHTML = `<div class="tag" style="padding:8px 4px">No revisions recorded for ${nice(D.ticker)}
-        since tracking began — the current call has stood ${st && st.stoodDays ? st.stoodDays + " day(s)" : "since it was first published"}.</div>`;
-      return;
-    }
-    $("rvBody").innerHTML = `<table><tr><th>When</th><th>Call</th><th>Was</th><th>Now</th><th>Why</th></tr>` +
-      rv.slice().reverse().map(r => `<tr>
-        <td class="num">${r.when}</td>
-        <td><span class="badge ${r.type==="high"?"bH":"bL"}">${r.type.toUpperCase()}</span></td>
-        <td class="num">${r.from.isoDate.slice(5)} ${r.from.time || ""} ${r.from.price ? fmt$(r.from.price) : ""}</td>
-        <td class="num">${r.to.isoDate.slice(5)} ${r.to.time || ""} ${fmt$(r.to.price)}</td>
-        <td class="tag">${r.reason}</td>
-      </tr>`).join("") + `</table>`;
-  })();
-
-  /* period extremes (horizons) */
-  (function(){
-    const H = D.horizons;
-    if(!H){ $("hzSub").textContent = "Run a refresh to compute."; $("hzBody").innerHTML = ""; return; }
-    const g = D.horizonGrades;
-    $("hzSub").innerHTML = `Chart targets below match the plotted turning points exactly. Period rows may also
-     contain already-observed prices or statistical range estimates. Range edges are uncertainty estimates,
-     not additional turning-point predictions; longer-range estimates can extend beyond the chart.
-     Period estimates are logged and graded as each period completes` +
-     (g && g.n ? ` — <b>${g.n} daily calls graded so far</b> (recent errors: ` +
-       g.daily.slice(-3).map(r=>`${r.session.slice(5)}: high ${r.hiErrPct>0?"+":""}${r.hiErrPct}% / low ${r.loErrPct>0?"+":""}${r.loErrPct}%`).join(" · ") + ")" : " — first grades arrive as periods close") + ".";
-    /* a band edge is how far the range could stretch - it is NOT a projected
-       turn, so it shows as a footnote instead of replacing the dated call */
-    const edge = c => (c.bound ? `<div class="tag" style="margin-top:3px; color:#4b5563">
-        Range edge: ${fmt$(c.bound)}${c.boundDate ? " (band evaluated for " + c.boundDate + ")" : ""}.
-        This is not a turning-point target or date.</div>` : "") +
-      (c.note ? `<div class="tag" style="margin-top:3px; color:#4b5563">${c.note}</div>` : "");
-    const cell = (c, side) => {
-      const range = c.src === "stat" || (!c.src && c.range);
-      const label = c.src === "chain" ? "CHART TARGET" : c.src === "actual" ? "ALREADY OBSERVED" : range ? "RANGE ESTIMATE" : "CONTEXT ESTIMATE";
-      const when = range ? `Estimate context: ${c.date.replace(" (statistical est.)", "")} — not a turn date` : c.date;
-      // A band calculation's day/time is not evidence of a predicted reversal.
-      const timing = c.src === "stat" ? "" : c.time;
-      return `<td data-forecast-kind="${range ? "range" : c.src || "context"}">
-        <span class="badge ${side === "high" ? "bH" : "bL"}">${label}</span>
-        <span class="big num">${fmt$(c.price)}</span><br><span class="num">${when}</span>
-        ${timing ? ` · <span class="tag">${timing}</span>` : ""}${edge(c)}</td>`;
-    };
-    const row = (name, h, attrs="") => h ? `<tr ${attrs}>
-      <td><b>${name}</b></td>
-      ${cell(h.high,"high")}${cell(h.low,"low")}
-    </tr>` : "";
-    const preds = D.predictions || [];
-    const chart = {};
-    for(const side of ["high","low"]){
-      const candidates = preds.filter(p=>p.type === side);
-      const p = candidates.sort((a,b)=>side === "high" ? b.price-a.price : a.price-b.price)[0];
-      if(p) chart[side] = {price:p.price, date:p.isoDate, time:p.time, src:"chain"};
-    }
-    const through = preds.map(p=>p.isoDate).sort().pop();
-    $("hzBody").innerHTML = `<table><tr><th>Scope</th><th>High / upper estimate</th><th>Low / lower estimate</th></tr>` +
-      (chart.high && chart.low ? row(`Chart targets — through ${through}`,chart,'data-chart-targets="true"') : "") +
-      row("Daily", H.daily) + row("Weekly", H.weekly) +
-      row("Monthly", H.monthly) + row("Longer-range context — up to 12 months", H.yearly) + `</table>`;
-  })();
-
-  /* recommended trades */
-  (function(){
-    const T = (typeof TRADES !== "undefined" && TRADES) ? TRADES[D.ticker] : null;
-    if(!T || !T.trades || !T.trades.length){
-      $("trdSub").textContent = "No trade sheet from the latest run (option chains unreachable).";
-      $("trdBody").innerHTML = ""; return;
-    }
-    $("trdSub").innerHTML = `Built from live option chains + this page's own levels & forecasts,
-     as of <b>${T.asof}</b> (spot ${fmt$(T.spot)}). Exit discipline (backtested best): close at
-     <b>50% profit or ~1 week</b>, whichever comes first. Every sheet is logged and will be graded.
-     Research, not financial advice.`;
-    const KC = {INCOME: "good", DEFINED: "mid", BOUNCE: "bad", NOTE: "tag"};
-    $("trdBody").innerHTML = T.trades.map(tr => `
-      <div style="border:1px solid var(--border); border-radius:10px; padding:10px 12px; margin:8px 0; background:var(--panel2)">
-        <span class="badge ${tr.kind==="MODEL"?"bH":tr.kind==="INCOME"?"bH":tr.kind==="BOUNCE"?"bL":"chip"}" ${tr.kind==="MODEL"?'style="border-width:2px"':''}>${tr.kind}</span>
-        <b style="margin-left:6px">${tr.label}</b>
-        <div class="num" style="margin-top:4px; font-size:13px">${tr.detail}</div>
-        ${tr.execute ? `<div style="margin-top:4px; font-size:13px">⏱ <b>Execute:</b> <span class="num">${tr.execute}</span></div>` : ""}
-        ${tr.exitWin ? `<div style="font-size:13px">➡ <b>Exit:</b> <span class="num">${tr.exitWin}</span></div>` : ""}
-        ${tr.thesis ? `<div class="tag" style="margin-top:2px">${tr.thesis}</div>` : ""}
-      </div>`).join("");
-  })();
-
-  /* support & resistance */
-  (function(){
-    const Lv = D.levels;
-    if(!Lv){ $("srBody").innerHTML = "<div class='tag'>Run a data refresh to compute.</div>"; return; }
-    const row = (l, cls, name) => `<tr>
-      <td><b class="${cls}">${name}</b></td>
-      <td class="num big">${fmt$(l.price)}</td>
-      <td class="num">${l.distPct > 0 ? "+" : ""}${l.distPct}%</td>
-      <td class="num">${l.touches} touch${l.touches > 1 ? "es" : ""}</td></tr>`;
-    let h = `<table><tr><th>Level</th><th>Price</th><th>From current</th><th>Strength</th></tr>`;
-    const resis = Lv.resistance.slice().reverse();   // farthest first, R1 nearest
-    resis.forEach((l, i) => h += row(l, "bad", "R" + (resis.length - i)));
-    h += `<tr><td colspan="4" style="background:var(--panel2); text-align:center" class="num">
-      — current price <b>${fmt$(D.price)}</b> —</td></tr>`;
-    Lv.support.forEach((l, i) => h += row(l, "good", "S" + (i + 1)));
-    $("srBody").innerHTML = h + "</table>";
-  })();
-
-  /* the week ahead */
-  (function(){
-    const W = (typeof WEEKPLAN !== "undefined" && WEEKPLAN) ? WEEKPLAN[D.ticker] : null;
-    if(!W || !W.days){ $("wkSub").textContent = "Refresh to build the plan."; $("wkBody").innerHTML=""; return; }
-    const b = W.best;
-    const o = D.outlook;
-    const dirLine = o ? `<div style="padding:9px 12px; border-radius:10px; font-size:15px;
-        background:${o.direction==="rising"?"#dafbe1":"#ffebe9"}; margin-bottom:6px">
-        <b>${nice(D.ticker)} ${fmt$(D.price)} is ${o.direction.toUpperCase()}</b> -
-        next turn <b>${o.legs[0].type.toUpperCase()} ${o.legs[0].date}</b> near
-        <b>${fmt$(o.legs[0].price)}</b> (${o.legs[0].movePct>0?"+":""}${o.legs[0].movePct}%)
-        ${o.legs[0].time ? `<span class="num">· ${o.legs[0].time}</span>` : ""}
-        <div class="tag">then ${o.legs.slice(1).map(l=>`${l.type.toUpperCase()} ${l.date} ${fmt$(l.price)}`).join(" → ")}
-        · dates backtest ${pct(o.confidence3d)} within 3 days${o.warn?" · <b class='bad'>below chance on this name</b>":""}</div>
-      </div>` : "";
-    $("wkSub").innerHTML = dirLine + (b
-      ? `<div style="padding:10px 12px; border-radius:10px; background:${W.bestIsWeak?"#fff8c5":"#dafbe1"}; margin-bottom:4px">
-           <b>Best trade this week:</b> ${nice(b.ticker)} — ${b.headline} on <b>${b.dow} ${b.date.slice(5)}</b>
-           ${b.window ? `· <span class="num">${b.window}</span>` : ""}
-           <div class="tag" style="margin-top:2px">${b.detail || ""}</div>
-           ${W.bestIsWeak ? `<div class="bad" style="margin-top:3px"><b>Caution:</b> this is the only setup on the
-             board and its timing backtests below chance — the date is the weakest part of this plan.</div>` : ""}
-           <div class="tag" style="margin-top:3px">Model output for research, not an instruction to trade. Turn timing has not yet passed the unseen forward test in the timing scorecard.</div>
-         </div>`
-      : `<div style="padding:10px 12px; border-radius:10px; background:var(--panel2)">${W.verdict || ""}</div>`) +
-      `<div class="tag" style="margin-top:4px">Capital assumed available (100 shares of anything).
-       Every plan is logged and graded. ACTION = open · MANAGE = exit/take profit · WATCH = prepare · WAIT = do nothing.</div>`;
-    $("wkBody").innerHTML = W.days.map(d => {
-      const dt = new Date(d.date + "T12:00:00");
-      const head = `<div style="font-weight:700; font-size:15px; margin-top:10px">
-        ${dt.toLocaleDateString("en-US",{weekday:"long", month:"numeric", day:"numeric"})}
-        ${d.label ? '<span class="badge bH">TODAY</span>' : ""}</div>`;
-      if(!d.items.length)
-        return head + `<div style="padding:6px 12px; color:var(--dim)">WAIT — no setup this session</div>`;
-      return head + d.items.map(it => `
-        <div style="border:1px solid var(--border); border-radius:8px; padding:8px 12px; margin:5px 0;
-             background:${it.status==="ACTION"?"#f2fbf4":it.status==="MANAGE"?"#fff8f7":"var(--panel2)"}">
-          <span class="badge ${it.status==="ACTION"?"bH":it.status==="MANAGE"?"bL":"chip"}">${it.status}</span>
-          <b style="margin-left:6px">${nice(it.ticker)}</b> — ${it.headline}
-          ${it.window ? `<div class="num" style="font-size:13px">⏱ ${it.window}</div>` : ""}
-          ${it.detail ? `<div style="font-size:13px">${it.detail}</div>` : ""}
-          ${it.exit ? `<div class="tag">➡ exit: ${it.exit}</div>` : ""}
-          <div class="tag">timing reliability on ${nice(it.ticker)}: ${pct(it.confidence)} within 3 days
-            ${it.weak ? '· <b class="bad">below chance — use the level, not the date</b>' : ""}</div>
-          ${it.note ? `<div class="tag bad">${it.note}</div>` : ""}
-        </div>`).join("");
-    }).join("");
-  })();
-
-  /* chart */
-  (function(){
-    const c = $("chart"), x = c.getContext("2d");
-    const wrap = c.parentElement;
-    const mob = (wrap.clientWidth || 1140) < 600;
-    if (mob) {
-      // phones: draw at full width inside a swipeable strip, at real pixel density
-      const dpr = window.devicePixelRatio || 1;
-      c.width = Math.round(1000 * dpr); c.height = Math.round(360 * dpr);
-      c.style.width = "1000px"; c.style.height = "360px"; c.style.maxWidth = "none";
-      c.getContext("2d").setTransform(dpr, 0, 0, dpr, 0, 0);
-      c.__w = 1000; c.__h = 360;
+  const rows = [];
+  for(const side of ["high","low"]){
+    const f = v[side], cls = side === "high" ? "hi" : "lo", name = side === "high" ? "High" : "Low";
+    let val, when = "";
+    if(v.per === "D"){
+      val = `${fmt$(f.price)}<small>${Math.round(f.lo)}–${Math.round(f.hi)}</small>`;
+      when = f.time ? t12(f.time) : "";
     } else {
-      c.style.width = "100%"; c.style.maxWidth = "";
-      fit(c, 1140, 0.316);
+      val = `${fmt$(f.price)}<small>proj. pt ${esc(md(f.date))}</small>`;
+      const a = v.actual && v.actual[side];
+      when = a ? `<small>so far</small> ${fmt$(a.price)} <small>${md(a.date)}</small>` : "";
     }
-    x.clearRect(0,0,cw(c),ch(c));
-    const dates = D.chart.dates, closes = D.chart.closes;
-    // the forecast drawn here is the same record the high/low cards show
-    const hslot = (HILO_LIVE && !HILO_LIVE.failed && (HILO_LIVE.latest || {})[D.ticker]) || {};
-    const hrec = hslot.intraday || hslot.premarket || null;
-    $("chartTitle").textContent = hrec ? "Price chart with the high/low forecast for " + new Date(hrec.session + "T12:00:00").toLocaleDateString("en-US", {weekday:"short", month:"short", day:"numeric"}) : "Price chart";
-    const fcDate = hrec ? hrec.session : null;
-    // the next 5 projected turning points (multi-day forecast) stay on the chart too
-    const preds = (D.predictions || []).slice(0, 5);
-    const extra = preds.map(p=>p.isoDate).concat(fcDate ? [fcDate] : []).filter(d => d > dates[dates.length-1]);
-    const allDates = dates.concat([...new Set(extra)].sort());
-    const allPx = closes.concat(preds.map(p=>p.price)).concat(hrec ? [hrec.high.hi, hrec.high.lo, hrec.low.hi, hrec.low.lo] : []);
-    const t0 = new Date(allDates[0]).getTime(), t1 = new Date(allDates[allDates.length-1]).getTime();
-    const pMin = Math.min(...allPx)*0.96, pMax = Math.max(...allPx)*1.04;
-    const W=cw(c), H=ch(c), L=64, R=62, T=18, B=34;
-    const X = d => L + (new Date(d).getTime()-t0)/(t1-t0)*(W-L-R);
-    const Y = p => T + (1-(p-pMin)/(pMax-pMin))*(H-T-B);
-    // ---- price axis: 6 levels, bold and legible
-    x.lineWidth = 1;
-    x.font = "600 13px Segoe UI"; x.textAlign = "right";
-    for(let g=0; g<=6; g++){
-      const p = pMin + g*(pMax-pMin)/6, y = Y(p);
-      x.strokeStyle = "#e6ebf0"; x.beginPath(); x.moveTo(L,y); x.lineTo(W-R,y); x.stroke();
-      const plbl = "$" + (pMax-pMin < 40 ? p.toFixed(2) : Math.round(p).toLocaleString());
-      x.fillStyle = "#3d4650";
-      x.textAlign = "right"; x.fillText(plbl, L-7, y+4);
-      // repeat on the right edge: the strip auto-scrolls right on phones,
-      // which would otherwise hide the price scale entirely
-      x.textAlign = "left"; x.fillText(plbl, W-R+4, y+4);
-    }
-    // ---- date axis: real dates at even spacing, with tick marks
-    x.textAlign = "center"; x.font = "600 12px Segoe UI";
-    const step = Math.max(1, Math.round(allDates.length / (W < 700 ? 6 : 11)));
-    for(let i = 0; i < allDates.length; i += step){
-      const d = allDates[i], px = X(d), dt = new Date(d + "T12:00:00");
-      x.strokeStyle = "#eef2f6"; x.beginPath(); x.moveTo(px, T); x.lineTo(px, H-B); x.stroke();
-      x.strokeStyle = "#c8d1da"; x.beginPath(); x.moveTo(px, H-B); x.lineTo(px, H-B+5); x.stroke();
-      x.fillStyle = "#3d4650";
-      x.fillText(dt.toLocaleString("en", {month:"short", day:"numeric"}), px, H-B+18);
-    }
-    // today marker
-    const todayISO = new Date().toISOString().slice(0,10);
-    if(new Date(todayISO) >= new Date(allDates[0])){
-      const tx = X(todayISO);
-      x.strokeStyle = "#8250df"; x.setLineDash([3,3]); x.lineWidth = 1.5;
-      x.beginPath(); x.moveTo(tx, T); x.lineTo(tx, H-B); x.stroke();
-      x.setLineDash([]); x.lineWidth = 1;
-      x.fillStyle = "#8250df"; x.font = "700 11px Segoe UI";
-      x.fillText("today", tx, T + 11);
-    }
-    x.strokeStyle="#0969da"; x.lineWidth=2.2; x.lineJoin="round"; x.beginPath();
-    dates.forEach((d,i)=>{ const px=X(d), py=Y(closes[i]); i?x.lineTo(px,py):x.moveTo(px,py); });
-    x.stroke();
-    for(const p of D.chart.pivots){
-      if(new Date(p.date).getTime() < t0) continue;
-      x.fillStyle = p.type==="high" ? "#1a7f37" : "#cf222e";
-      x.beginPath(); x.arc(X(p.date), Y(p.price), 4.5, 0, 7); x.fill();
-      x.fillStyle="#1f2328"; x.font="700 12px Segoe UI";
-      x.fillText(p.type==="high"?"H":"L", X(p.date), Y(p.price) + (p.type==="high"?-9:18));
-    }
-    if(preds.length){
-      x.strokeStyle="#8250df"; x.setLineDash([6,5]); x.lineWidth=1.4; x.beginPath();
-      x.moveTo(X(dates[dates.length-1]), Y(closes[closes.length-1]));
-      for(const p of preds) x.lineTo(X(p.isoDate), Y(p.price));
-      x.stroke(); x.setLineDash([]);
-      for(const p of preds){
-        const px = X(p.isoDate), py = Y(p.price);
-        x.fillStyle = p.type==="high" ? "#1a7f37" : "#cf222e";
-        x.beginPath(); x.arc(px, py, 4, 0, 7); x.fill();
-        x.strokeStyle="#8250df"; x.lineWidth=1.5; x.beginPath(); x.arc(px, py, 7, 0, 7); x.stroke();
-        const lbl = "$" + (p.price < 100 ? p.price.toFixed(2) : Math.round(p.price).toLocaleString()), dlbl = p.date.split(" ")[1] || p.isoDate;
-        x.font = "700 11px Segoe UI"; x.textAlign = "center";
-        const wLbl = Math.max(x.measureText(lbl).width, x.measureText(dlbl).width) + 8;
-        const boxY = p.type==="high" ? py-36 : py+10;
-        x.fillStyle = "rgba(255,255,255,0.88)"; x.fillRect(px - wLbl/2, boxY, wLbl, 26);
-        x.fillStyle = p.type==="high" ? "#1a7f37" : "#cf222e"; x.fillText(lbl, px, boxY + 11);
-        x.fillStyle = "#57606a"; x.font = "600 10px Segoe UI"; x.fillText(dlbl, px, boxY + 23);
-      }
-    }
-    if(hrec){
-      const fx = X(fcDate);
-      for(const side of ["high","low"]){
-        const f = hrec[side], color = side==="high" ? "#1a7f37" : "#cf222e";
-        x.strokeStyle = color; x.lineWidth = 2;
-        x.beginPath(); x.moveTo(fx, Y(f.hi)); x.lineTo(fx, Y(f.lo)); x.stroke();          // 80% range
-        x.beginPath(); x.moveTo(fx-6, Y(f.hi)); x.lineTo(fx+6, Y(f.hi)); x.moveTo(fx-6, Y(f.lo)); x.lineTo(fx+6, Y(f.lo)); x.stroke();
-        x.fillStyle = color; x.beginPath(); x.arc(fx, Y(f.price), 5, 0, 7); x.fill();
-        const lbl = (side==="high" ? "High " : "Low ") + "$" + (f.price < 100 ? f.price.toFixed(2) : Math.round(f.price).toLocaleString()) + " · " + f.time;
-        x.font = "700 12px Segoe UI"; x.textAlign = "right";
-        const wl = x.measureText(lbl).width + 8, by = Y(f.price) + (side==="high" ? -22 : 8);
-        x.fillStyle = "rgba(255,255,255,0.9)"; x.fillRect(fx - 10 - wl, by, wl, 16);
-        x.fillStyle = color; x.fillText(lbl, fx - 14, by + 12);
-      }
-      x.textAlign = "center";
-    }
-    // Rebind on every render so ticker switches and resize never retain stale points.
-    const points = dates.map((date, i) => ({date, price: closes[i], kind: "Actual daily close"}))
-      .concat(preds.map(p => ({date: p.isoDate, price: p.price, time: p.planetHour || p.time,
-                              kind: "Projected " + p.type + " (next 5 turns, multi-day forecast)"})))
-      .concat(hrec ? ["high","low"].map(side => ({date: fcDate, price: hrec[side].price, time: hrec[side].time,
-                              kind: "Forecast " + side + " (" + hrec.kind + ", 80% range " + fmt$(hrec[side].lo) + "–" + fmt$(hrec[side].hi) + ")"})) : [])
-      .concat(D.chart.pivots.filter(p => new Date(p.date).getTime() >= t0)
-        .map(p => ({date:p.date, price:p.price, kind:"Confirmed historical " + p.type})));
-    const base = document.createElement("canvas");
-    base.width = c.width; base.height = c.height;
-    base.getContext("2d").drawImage(c, 0, 0);
-    let tip = document.getElementById("chartTooltip");
-    if (!tip) {
-      tip = document.createElement("div"); tip.id = "chartTooltip";
-      tip.setAttribute("role", "status");
-      tip.style.cssText = "position:fixed;z-index:1000;pointer-events:none;white-space:pre-line;background:#14233b;color:white;padding:10px 14px;border-radius:8px;font:14px/1.5 Segoe UI;box-shadow:0 4px 18px #0003;max-width:270px;display:none";
-      document.body.appendChild(tip);
-    }
-    tip.style.display = "none";
-    const restore = () => { x.save(); x.setTransform(1,0,0,1,0,0); x.clearRect(0,0,c.width,c.height); x.drawImage(base,0,0); x.restore(); };
-    const inspect = (point, clientX, clientY) => {
-      restore(); const px=X(point.date), py=Y(point.price);
-      x.save(); x.strokeStyle="#425a78"; x.lineWidth=1; x.setLineDash([3,3]);
-      x.beginPath(); x.moveTo(px,T); x.lineTo(px,H-B); x.moveTo(L,py); x.lineTo(W-R,py); x.stroke();
-      x.setLineDash([]); x.fillStyle="#0969da"; x.beginPath(); x.arc(px,py,5,0,Math.PI*2); x.fill(); x.restore();
-      tip.textContent = point.kind + "\n" + point.date + (point.time ? " · " + point.time + " ET (forecast)" : "") + "\n" + fmt$(point.price);
-      tip.style.display="block";
-      tip.style.left=Math.max(8,Math.min(clientX+14,window.innerWidth-tip.offsetWidth-8))+"px";
-      tip.style.top=Math.max(8,Math.min(clientY+14,window.innerHeight-tip.offsetHeight-8))+"px";
-    };
-    const move = e => {
-      const rect=c.getBoundingClientRect();
-      const px=(e.clientX-rect.left)*W/rect.width, py=(e.clientY-rect.top)*H/rect.height;
-      if(px<L || px>W-R || py<T || py>H-B){ restore(); tip.style.display="none"; return; }
-      const nearest=points.reduce((a,b) => Math.hypot(X(b.date)-px,Y(b.price)-py)<Math.hypot(X(a.date)-px,Y(a.price)-py)?b:a);
-      inspect(nearest,e.clientX,e.clientY);
-    };
-    c.onpointermove=move; c.onpointerdown=move;
-    c.onpointerleave=() => { restore(); tip.style.display="none"; };
-    c.tabIndex=0; c.setAttribute("aria-label","Price chart. Hover or tap to inspect; use left and right arrow keys for daily closes.");
-    let keyIndex=dates.length-1;
-    c.onkeydown=e => {
-      if(e.key==="Escape"){restore();tip.style.display="none";return;}
-      if(!["ArrowLeft","ArrowRight"].includes(e.key))return;
-      e.preventDefault();keyIndex=Math.max(0,Math.min(dates.length-1,keyIndex+(e.key==="ArrowLeft"?-1:1)));
-      const r=c.getBoundingClientRect();inspect(points[keyIndex],r.left+X(points[keyIndex].date)*r.width/W,r.top+Y(points[keyIndex].price)*r.height/H);
-    };
-    if (mob) wrap.scrollLeft = wrap.scrollWidth;   // land on the newest data
-    $("chartTag").textContent = `Solid line: actual daily closes (9 months). Dots: confirmed ${D.swing.thresholdPct}% swing pivots. `
-      + (preds.length ? "Purple dashed: the next 5 projected highs/lows (multi-day turning-point forecast, a separate method from the daily cards; listed under Details). " : "")
-      + (hrec ? `Range bars: the ${hrec.kind} daily high/low forecast for ${hrec.session} (same as the cards above), dot = forecast, bar = 80% range, label = most likely 15-minute bar ET. Each time is that extreme's own most likely bar, not an exact time, an order, or a certainty that both happen then.`
-              : "No current high/low forecast to draw.")
-      + " Hover or tap a point for details." + (mob ? " Swipe the chart left/right to see history." : "");
-  })();
-
-  /* track record */
-  (function(){
-    const tr = D.trackRecord;
-    if(!tr){ $("trSub").textContent = "Tracking starts with the next data refresh."; $("trBody").innerHTML=""; return; }
-    $("trSub").innerHTML = `Every refresh logs that day's 5 predictions for ${D.ticker}. Once enough time passes
-     to confirm what the market actually did, each one is graded: a <b>hit</b> means a real swing
-     ${""}turn of the predicted type happened within ±2 trading days. Methods that keep hitting earn extra weight
-     in future forecasts; methods that keep missing lose weight — the system recalibrates itself daily.
-     Logging since <b>${tr.since}</b>.`;
-    if(!tr.n){
-      $("trBody").innerHTML = `<div class="sub">No graded predictions yet — predictions need ~2–3 weeks to mature
-       before they can be scored honestly. Keep refreshing daily (or let the auto-refresh do it) and grades will
-       appear here.</div>`;
-      return;
-    }
-    let h = `<div class="kpiline" style="margin-bottom:8px"><b>${tr.n}</b> graded ·
-      <b>${pct(tr.hit2Rate)}</b> hit within ±2 days · <b>${pct(tr.hit3Rate)}</b> within ±3 days` +
-      (tr.priceMedErrPct !== null && tr.priceMedErrPct !== undefined ? ` · typical price miss <b>${tr.priceMedErrPct}%</b>` : "") +
-      ((tr.priceCalibHigh && tr.priceCalibHigh !== 1) || (tr.priceCalibLow && tr.priceCalibLow !== 1)
-        ? ` · <span class="chip">learned price calibration: highs ×${tr.priceCalibHigh}, lows ×${tr.priceCalibLow}</span>` : "");
-    const mf = Object.entries(tr.methodFactors||{});
-    if(mf.length) h += ` · learned weights: ` + mf.map(([f,v])=>`<span class="chip">${f} ×${v}</span>`).join(" ");
-    h += `</div><table><tr><th>Predicted on</th><th>Called for</th><th>Actual turn</th><th>Off by</th><th>Result</th></tr>`;
-    for(const r of tr.resolved.slice().reverse()){
-      h += `<tr>
-        <td class="num">${r.logged}</td>
-        <td class="num"><span class="badge ${r.type==="high"?"bH":"bL"}">${r.type.toUpperCase()}</span>
-            ${r.predDate} ${fmt$(r.predPrice)}</td>
-        <td class="num">${r.actualDate ? `${r.actualDate} ${fmt$(r.actualPrice)}` : "no turn within ±10 days"}</td>
-        <td class="num">${r.errDays===null?"—":(r.errDays>0?"+":"")+r.errDays+"d"}</td>
-        <td>${r.hit2?'<b class="good">HIT ±2d</b>':(r.hit3?'<b class="mid">near (±3d)</b>':'<b class="bad">miss</b>')}</td>
-      </tr>`;
-    }
-    $("trBody").innerHTML = h + "</table>";
-  })();
-
-  /* scorecard */
-  (function(){
-    const M = D.methods, H = M.hurst.cycles, bt = D.backtests;
-    $("scoreSub").textContent = `Every method tested against ${D.ticker}'s ${M.gann.pivots} real swing pivots
-     (5 years). "vs chance" compares to random-number controls — a method only has an edge if it beats its control.`;
-    const v = (cls,txt)=>`<span class="verdict-${cls}">${txt}</span>`;
-    const ovnEdge = bt.overnight && bt.intraday && bt.overnight.totalPct > Math.max(0, bt.intraday.totalPct);
-    const near = (a,b)=>Math.abs(a-b) <= Math.max(2, b*0.15);
-    const rows = [
-     ["<b>Statistics: overnight &amp; open effects</b>",
-      "Gains cluster overnight; the open sets the day's extreme",
-      `Overnight ${bt.overnight.totalPct>0?"+":""}${bt.overnight.totalPct}% vs day-session
-       ${bt.intraday.totalPct>0?"+":""}${bt.intraday.totalPct}% (5y)`,
-      ovnEdge ? v("good","OVERNIGHT LARGER (5y, before costs; not a trade signal)") : v("weak","MIXED on this stock")],
-     ["<b>Swing rhythm (zigzag)</b>",
-      `${D.ticker} turns ≥${D.swing.thresholdPct}% on a semi-regular beat`,
-      `Median ${pb.medianSpacing} trading days between turns; dates hit ±2d ${pct(pb.hitRate2d)} / ±3d ${pct(pb.hitRate3d)}`,
-      v("weak","MODEST — windows, not dates")],
-     ["<b>W.D. Gann time counts</b>",
-      "Turns come 30/45/60/90/144/180/270/360 days after prior turns",
-      `${M.gann.rate}% of pivot pairs matched vs ${M.gann.control}% for random control numbers`,
-      M.gann.rate > M.gann.control*1.25 ? v("weak","SLIGHT LEAN — verify before trusting") : v("none","NO EDGE on "+D.ticker)],
-     ["<b>Gann anniversary dates</b>",
-      "Markets turn near the same calendar dates each year",
-      `${M.gann.annivHits} of ${M.gann.pivots} pivots within ±3 days of a prior-year pivot — matches the pivot-density baseline`,
-      v("none","NOT DISTINGUISHABLE from chance")],
-     ["<b>Fibonacci day counts</b>",
-      "Turns come 8/13/21/34/55/89/144 bars after prior turns",
-      `${M.fib.rate}% matched vs ${M.fib.control}% for control numbers`,
-      M.fib.rate > M.fib.control*1.25 ? v("weak","SLIGHT LEAN — verify before trusting") : v("none","NO EDGE on "+D.ticker)],
-     ["<b>Hurst nominal cycles</b>",
-      "Nested 10/20/40/80-day cycles trough in sync",
-      `Lows aligned with modeled troughs: 10d ${pct(H["10"].lowsAlignedPct)} (chance ${pct(H["10"].chancePct)}),
-       20d ${pct(H["20"].lowsAlignedPct)} (${pct(H["20"].chancePct)}), 40d ${pct(H["40"].lowsAlignedPct)}
-       (${pct(H["40"].chancePct)}), 80d ${pct(H["80"].lowsAlignedPct)} (${pct(H["80"].chancePct)})`,
-      v("none","≈ CHANCE — useful only as a rhythm frame")],
-     ["<b>Lunar phases (astro)</b>",
-      "Highs/lows cluster near new &amp; full moons",
-      `Highs within ±1 day of a moon event ${pct(M.astro.moonHighPct)} vs ${pct(M.astro.moonChance)} chance; lows ${pct(M.astro.moonLowPct)}`,
-      Math.max(M.astro.moonHighPct,M.astro.moonLowPct) > M.astro.moonChance*1.4
-        ? v("weak","LEAN — small sample, be skeptical") : v("none","NO TRADABLE EDGE")],
-     ["<b>Mercury retrograde (astro)</b>",
-      "More turns during retrograde",
-      `${pct(M.astro.retroPivPct)} of pivots fell in retrograde vs ${pct(M.astro.retroChance)} of days being retrograde`,
-      near(M.astro.retroPivPct, M.astro.retroChance) ? v("none","≈ CHANCE") :
-        (M.astro.retroPivPct > M.astro.retroChance ? v("weak","LEAN — small sample") : v("none","BELOW chance"))],
-    ];
-    $("scoreTable").innerHTML = `<tr><th>Method</th><th>The claim</th><th>Test result on ${D.ticker}</th><th>Verdict</th></tr>` +
-      rows.map(r=>`<tr><td>${r[0]}</td><td data-l="claim">${r[1]}</td><td data-l="tested">${r[2]}</td><td data-l="verdict">${r[3]}</td></tr>`).join("");
-  })();
-
-  /* backtested track record */
-  (function(){
-    const B = (typeof BACKFILL !== "undefined") ? BACKFILL : null;
-    if(!B || !B.perTicker){ $("bfSub").textContent = "Run backfill to compute."; $("bfBody").innerHTML=""; return; }
-    $("bfSub").innerHTML = `Instead of waiting weeks for live predictions to grade, the engine was replayed across
-     <b>every day of the last 5 years</b> — predicting only from past bars, then graded on what actually happened.
-     <b>${B.totalGraded.toLocaleString()} graded predictions</b> total · overall
-     <b>${B.avgHit2}%</b> within ±2 days, <b>${B.avgHit3}%</b> within ±3 days.
-     This is the honest out-of-sample skill; the live grades above are the ongoing forward test.`;
-    const rows = Object.values(B.perTicker).sort((a,b)=>b.hit3Rate-a.hit3Rate);
-    $("bfBody").innerHTML = `<table><tr><th>Stock</th><th>Graded</th><th>±2 days</th><th>±3 days</th>
-      <th>Median price error</th><th>Bias</th><th>Swing size</th></tr>` +
-      rows.map(r=>`<tr>
-        <td><b>${nice(r.ticker)}</b></td>
-        <td class="num">${r.tested}</td>
-        <td class="num ${r.hit2Rate>=20?"good":r.hit2Rate>=12?"mid":"bad"}">${r.hit2Rate}%</td>
-        <td class="num ${r.hit3Rate>=30?"good":r.hit3Rate>=18?"mid":"bad"}">${r.hit3Rate}%</td>
-        <td class="num">${r.medPriceErrPct}%</td>
-        <td class="num">${r.priceBias>0?"+":""}${r.priceBias}%</td>
-        <td class="num tag">${r.thresholdPct}% zigzag</td>
-      </tr>`).join("") + `</table>
-      <div class="tag">±2/±3 days = share of predicted turns that landed within that many trading days of the real
-      swing. Random chance for a ±2-day window on a ~10-day rhythm ≈ 20%. Bias: negative = targets run slightly
-      shallow. Gold's tiny sample (few big swings) is not meaningful yet.</div>`;
-  })();
-
-  /* self-correction from early/late/overshoot errors */
-  (function(){
-    const b = D.biasLearning;
-    if(!b || !b.samples){ $("blSub").textContent =
-      "Not enough resolved targets on " + nice(D.ticker) + " yet - corrections begin once ~8 meaningful targets have been tested.";
-      $("blBody").innerHTML = ""; return; }
-    const early = b.rawTimingDays < 0;
-    $("blSub").innerHTML = `Every target is checked against the day price <b>actually</b> touched it. Hitting early,
-      late, or blowing past a level are all errors - and they feed straight back into the next forecast.
-      <div style="margin-top:6px; padding:8px 12px; border-radius:8px; background:var(--panel2)">
-        Across <b>${b.samples}</b> tested targets, ${nice(D.ticker)} reached them a median of
-        <b>${Math.abs(b.rawTimingDays)} trading days ${early ? "EARLIER" : "LATER"}</b> than predicted -
-        so the swing rhythm has been shortened by <b>${Math.abs(b.timingBiasDays)} days</b>
-        (now using <b>${b.spacingUsed}</b> days between turns).
-        Price came in <b>${Math.abs(b.rawMagnitudePct)}% ${b.rawMagnitudePct < 0 ? "short of" : "beyond"}</b> targets
-        on the predicted date, so target sizes are scaled by <b>${b.magnitudeBiasPct > 0 ? "+" : ""}${b.magnitudeBiasPct}%</b>.
-        <div class="tag" style="margin-top:3px">Only half of each measured error is applied per cycle - partial
-        adjustment converges instead of over-reacting to noise. Targets already within 1.5% of price when logged
-        are ignored (touching them proves nothing).</div>
-      </div>`;
-    if(b.recent && b.recent.length){
-      $("blBody").innerHTML = `<table><tr><th>Target</th><th>Predicted for</th><th>Actually touched</th><th>Off by</th></tr>` +
-        b.recent.map(r => `<tr>
-          <td><span class="badge ${r.type==="high"?"bH":"bL"}">${r.type[0].toUpperCase()}</span> ${fmt$(r.target)}</td>
-          <td class="num">${r.isoDate}</td><td class="num">${r.touched}</td>
-          <td class="num ${Math.abs(r.deltaDays)<=2?"good":Math.abs(r.deltaDays)<=5?"mid":"bad"}">${
-            r.deltaDays===0?"on time":(r.deltaDays<0?Math.abs(r.deltaDays)+"d early":r.deltaDays+"d late")}</td>
-        </tr>`).join("") + `</table>`;
-    }
-  })();
-
-  /* time-of-day accuracy */
-  (function(){
-    const A = D.timeAccuracy;
-    if(!A || !A.graded){
-      $("taSub").innerHTML = `The goal is the <b>date and time</b> of each turn, so predicted times are now
-        recorded alongside the actual intraday moment each high and low printed. Grading begins with the
-        forecasts logged from today - the earlier log kept dates and prices but not the time, so those calls
-        cannot be scored honestly and are excluded rather than guessed at.`;
-      $("taBody").innerHTML = "";
-      return;
-    }
-    $("taSub").innerHTML = `Predicted time vs the actual minute the extreme printed, for
-      <b>${A.graded}</b> graded calls on ${nice(D.ticker)}.
-      Within 30 minutes: <b class="${A.within30>A.chance30?"good":"bad"}">${A.within30}%</b>
-      (random chance ${A.chance30}%) - within an hour:
-      <b class="${A.within60>A.chance60?"good":"bad"}">${A.within60}%</b> (chance ${A.chance60}%).
-      Typical miss <b>${A.medianErrMin} minutes</b>.`;
-    $("taBody").innerHTML = `<table><tr><th>Date</th><th>Called</th><th>Predicted time</th>
-      <th>Actual time</th><th>Miss</th></tr>` +
-      A.recent.map(r => `<tr>
-        <td class="num">${r.isoDate}</td>
-        <td><span class="badge ${r.type==="high"?"bH":"bL"}">${r.type[0].toUpperCase()}</span></td>
-        <td class="num">${r.predicted}</td><td class="num">${r.actual}</td>
-        <td class="num ${Math.abs(r.errMin)<=30?"good":Math.abs(r.errMin)<=60?"mid":"bad"}">${
-          (r.errMin>0?"+":"")+r.errMin} min</td></tr>`).join("") + `</table>`;
-  })();
-
-  /* forecast audit: all versions graded + progress over time + revisions */
-  (function(){
-    const A = D.forecastAudit;
-    if(!A){ $("faSub").textContent = "Refresh to compute."; $("faBody").innerHTML=""; return; }
-    $("faSub").innerHTML = `Every time the forecast changes, the old version is kept and graded too - so a
-      revision can never quietly bury a bad call. For ${nice(D.ticker)}:
-      <b>${A.versionsLogged}</b> prediction versions across <b>${A.slots}</b> target dates,
-      <b>${A.graded}</b> old enough to judge -
-      <b>${pct(A.hit2Pct)}</b> landed within +/-2 days, <b>${pct(A.hit3Pct)}</b> within +/-3 days,
-      typical price miss <b>${A.medPriceErrPct}%</b>.`;
-    let h2 = "";
-    if(A.byWeek && A.byWeek.length){
-      h2 += `<h3 style="margin-top:6px">Is it getting better? (grouped by the week the forecast was made)</h3>
-        <div class="tblwrap"><table><tr><th>Week forecast made</th><th>Graded</th><th>Within 3 days</th><th>Typical price miss</th></tr>` +
-        A.byWeek.map(w => `<tr><td class="num">${w.week}</td><td class="num">${w.n}</td>
-          <td class="num ${w.hit3Pct>=40?"good":w.hit3Pct>=20?"mid":"bad"}">${pct(w.hit3Pct)}</td>
-          <td class="num ${w.medPriceErrPct<=3?"good":w.medPriceErrPct<=7?"mid":"bad"}">${w.medPriceErrPct}%</td></tr>`).join("") +
-        `</table></div><div class="tag">Small samples early on - read the trend, not any single week.</div>`;
-    }
-    if(A.revisions && A.revisions.length){
-      h2 += `<h3 style="margin-top:12px">How much each forecast moved before its date</h3>
-        <div class="tblwrap"><table><tr><th>Target</th><th>Versions</th><th>First called</th><th>Last called</th>
-        <th>Range</th><th>Actual</th></tr>` +
-        A.revisions.map(r => `<tr>
-          <td class="num"><span class="badge ${r.type==="high"?"bH":"bL"}">${r.type[0].toUpperCase()}</span> ${r.isoDate}</td>
-          <td class="num">${r.versions}</td>
-          <td class="num">${fmt$(r.first)}</td>
-          <td class="num">${fmt$(r.last)}</td>
-          <td class="num ${r.swingPct>10?"bad":r.swingPct>5?"mid":""}">${fmt$(r.lowP)}-${fmt$(r.highP)} (${r.swingPct}%)</td>
-          <td class="num">${r.actual ? fmt$(r.actual) : "-"}</td></tr>`).join("") +
-        `</table></div><div class="tag">A wide range means the forecast for that date kept changing - low
-        stability. Ideally the range narrows as the date approaches.</div>`;
-    }
-    if(A.recent && A.recent.length){
-      h2 += `<h3 style="margin-top:12px">Most recent graded versions</h3>
-        <div class="tblwrap" style="max-height:320px; overflow-y:auto"><table>
-        <tr><th>Made on</th><th>For date</th><th>Called</th><th>Actual</th><th>Price miss</th><th>Days off</th><th>Lead time</th></tr>` +
-        A.recent.map(r => `<tr>
-          <td class="num">${r.logged}</td><td class="num">${r.isoDate}</td>
-          <td class="num"><span class="badge ${r.type==="high"?"bH":"bL"}">${r.type[0].toUpperCase()}</span> ${fmt$(r.price)}</td>
-          <td class="num">${r.actual ? fmt$(r.actual) : "-"}</td>
-          <td class="num ${r.priceErrPct===null?"":Math.abs(r.priceErrPct)<=3?"good":Math.abs(r.priceErrPct)<=8?"mid":"bad"}">${
-            r.priceErrPct===null?"-":(r.priceErrPct>0?"+":"")+r.priceErrPct+"%"}</td>
-          <td class="num ${r.dayErr===null?"":Math.abs(r.dayErr)<=2?"good":Math.abs(r.dayErr)<=3?"mid":"bad"}">${
-            r.dayErr===null?"-":(r.dayErr>0?"+":"")+r.dayErr+"d"}</td>
-          <td class="num tag">${r.leadDays}d ahead</td></tr>`).join("") + `</table></div>`;
-    }
-    $("faBody").innerHTML = h2;
-  })();
-
-  /* full prediction history */
-  (function(){
-    const H = D.history;
-    if(!H){ $("fhSub").textContent = "Refresh to compute."; $("fhBody").innerHTML = ""; return; }
-    const isFinal = s => ["HIT","near","miss","miss (no turn)"].includes(s);
-    const isLive = s => s && s.startsWith("live-");
-    const done = H.preds.filter(r => isFinal(r.status));
-    const live = H.preds.filter(r => isLive(r.status));
-    const cnt = (arr, m) => arr.filter(r => r.status.replace("live-","") === m).length;
-    const scored = done.length + live.length;
-    const okAll = cnt(done,"HIT") + cnt(done,"near") + cnt(live,"HIT") + cnt(live,"near");
-    $("fhSub").innerHTML = `Every prediction ever logged for ${nice(D.ticker)} — <b>${H.preds.length} unique targets</b>
-     across <b>${H.daysLogged} logged days</b>. Because actual daily highs/lows are recorded, calls are scored
-     <b>the moment their window closes</b> (LIVE), then finalized when the swing confirms.
-     Scored so far: <b>${scored}</b> → <b class="good">${cnt(done,"HIT")+cnt(live,"HIT")} HIT</b> ·
-     <b class="mid">${cnt(done,"near")+cnt(live,"near")} near</b> ·
-     <b class="bad">${scored - okAll} miss</b>
-     ${scored ? `= <b>${Math.round(okAll / scored * 100)}%</b> within ±3 days (${live.length} of these still live)` : ""}.
-     Nothing is hidden — every call stays here forever.`;
-    const badge = s => {
-      const base = s.replace("live-","");
-      const cls = base === "HIT" ? "good" : base === "near" ? "mid" : base.startsWith("miss") ? "bad" : null;
-      if (s === "price hit early") return '<b class="mid">price hit early</b>';
-      return cls ? `<b class="${cls}">${s.startsWith("live-") ? "⏳" : ""}${base}</b>` : `<span class="tag">${s}</span>`;
-    };
-    $("fhBody").innerHTML = `<table><tr><th>Called for</th><th>Predicted</th><th>Actual (window H/L)</th>
-      <th>Price err</th><th>Turn</th><th>Result</th><th>Logged</th></tr>` +
-      H.preds.map(r => {
-        const act = r.actualDate ? `${r.actualDate} ${fmt$(r.actualPrice)}`
-          : r.winDate ? `${r.winDate} ${fmt$(r.winPrice)} <span class="tag">(recorded)</span>`
-          : r.winPrice !== undefined ? fmt$(r.winPrice) : "—";
-        const perr = r.priceErrPct !== undefined ? r.priceErrPct : r.winErrPct;
-        return `<tr>
-        <td class="num"><span class="badge ${r.type === "high" ? "bH" : "bL"}">${r.type[0].toUpperCase()}</span> ${r.isoDate}</td>
-        <td class="num">${fmt$(r.price)}</td>
-        <td class="num">${act}</td>
-        <td class="num">${perr === undefined ? "—" : (perr > 0 ? "+" : "") + perr + "%"}</td>
-        <td>${r.turn === "holding" ? '<span class="good">holding</span>' : r.turn === "broken" ? '<span class="bad">broken</span>' : "—"}</td>
-        <td>${badge(r.status)}</td>
-        <td class="tag num">${r.firstLogged.slice(5)}${r.times > 1 ? " ×" + r.times : ""}</td>
-      </tr>`;}).join("") + `</table>
-      <div class="tag">⏳ = live grade (window closed, swing not yet confirmed) · "recorded" actual = the real high/low
-      printed in the ±window from the daily record · Turn "broken" = price went beyond that extreme after the window.</div>`;
-  })();
-
-  /* actual daily extremes */
-  (function(){
-    const H = D.history;
-    if(!H || !H.extremes || !H.extremes.length){ $("exBody").innerHTML = "<span class='tag'>Accumulating…</span>"; return; }
-    $("exBody").innerHTML = `<table><tr><th>Date</th><th>High</th><th>Low</th><th>Close</th></tr>` +
-      H.extremes.slice().reverse().map(e => `<tr><td class="num">${e.date}</td>
-        <td class="num good">${fmt$(e.h)}</td><td class="num bad">${fmt$(e.l)}</td>
-        <td class="num">${fmt$(e.c)}</td></tr>`).join("") + `</table>
-      <div class="tag">Recorded permanently on every refresh — this is the ground truth all grading runs against.</div>`;
-  })();
-
-  /* buy & hold benchmarks */
-  (function(){
-    const B = (typeof BENCHMARK !== "undefined") ? BENCHMARK : null;
-    if(!B || !Object.keys(B).length){ $("bmSub").textContent = "Run benchmark.py to compute."; $("bmBody").innerHTML=""; return; }
-    $("bmSub").innerHTML = `What doing NOTHING would have earned — annualized (CAGR) if you had simply bought and
-     held. <b>Any active system must beat these after taxes and effort, or holding wins.</b> The goal line
-     (30%/yr) and our realized trading pace are judged against this table.`;
-    const spans = ["1","3","5","10","20"];
-    const order = Object.keys(B).filter(k=>k!=="SPY").concat(B.SPY?["SPY"]:[]);
-    $("bmBody").innerHTML = `<table><tr><th>Held</th>${spans.map(s=>`<th>${s} yr</th>`).join("")}</tr>` +
-      order.map(t=>`<tr><td><b>${t==="SPY"?"S&P 500 (SPY)":nice(t)}</b></td>` +
-        spans.map(s=>{
-          const d = B[t][s];
-          if(!d) return `<td class="tag">—</td>`;
-          const c = d.cagrPct;
-          return `<td class="num ${c>=30?"good":c>=10?"":"tag"}">${c>0?"+":""}${c}%/yr<br>
-            <span class="tag">${d.totalPct>0?"+":""}${d.totalPct}% total</span></td>`;
-        }).join("") + `</tr>`).join("") +
-      `<tr style="border-top:2px solid var(--border)"><td><b>Your goal</b></td>` +
-      spans.map(()=>`<td class="num mid">30%/yr</td>`).join("") + `</tr></table>
-      <div class="tag">Green = beats the 30%/yr goal · grey = under 10%/yr. CAGR = compound annual growth if held
-      the entire span. Notice how few names clear 30%/yr over long periods — that's why the goal is ambitious but
-      real, and why disciplined frequency beats big swings.</div>`;
-  })();
-
-  /* buy & hold benchmarks — the bar any active system must beat */
-  (function(){
-    const B = (typeof BENCHMARK !== "undefined") ? BENCHMARK : null;
-    if(!B || !Object.keys(B).length){ $("bmSub").textContent = "Run benchmark to compute."; $("bmBody").innerHTML=""; return; }
-    const spans = ["1","3","5","10","20"];
-    const spy = B["SPY"] || {};
-    $("bmSub").innerHTML = `What simply <b>holding</b> would have returned (annualised, %/yr). Active trading only
-      earns its keep if it beats these — after effort and taxes. <b>${nice(D.ticker)}</b> and <b>SPY</b> (the
-      S&P 500) are the benchmarks to beat; your realized trading return is shown in the panel below.`;
-    const row = (name, v, hi) => `<tr${hi ? ' style="background:var(--panel2)"' : ''}>
-      <td><b>${nice(name)}</b></td>` + spans.map(s => {
-        const c = v[s];
-        return `<td class="num ${c ? (c.cagrPct >= 30 ? "good" : c.cagrPct >= 0 ? "" : "bad") : "tag"}">${
-          c ? (c.cagrPct > 0 ? "+" : "") + c.cagrPct + "%" : "—"}</td>`;
-      }).join("") + `</tr>`;
-    const order = Object.keys(B).filter(k => k !== "SPY");
-    $("bmBody").innerHTML = `<table><tr><th>Hold since</th>` +
-      spans.map(s => `<th>${s}y ago</th>`).join("") + `</tr>` +
-      row("SPY", spy, true) +
-      order.map(k => row(k, B[k], k === D.ticker)).join("") + `</table>
-      <div class="tag">Figures are compound annual growth rate (CAGR) — price only, dividends excluded.
-      Green = beat the 30%/yr target. Note holding is nearly effortless and tax-deferred until you sell;
-      an active system must clear these by a wide margin to be worth running.</div>`;
-  })();
-
-  /* real executed trades */
-  (function(){
-    const R = (typeof REALTRADES !== "undefined") ? REALTRADES : [];
-    if(!R.length){ $("rtSub").textContent = "No real trades recorded yet — tell Claude when you execute one."; $("rtBody").innerHTML=""; return; }
-    const closed = R.filter(t => t.status === "closed");
-    const realized = closed.reduce((s, t) => s + (t.pnl || 0), 0);
-    // return on capital actually tied up, annualised by days held
-    let annu = null, capDays = 0, wRet = 0;
-    for (const t of closed) {
-      if (t.collateral && t.daysHeld) {
-        wRet += (t.pnl / t.collateral); capDays += t.daysHeld;
-      }
-    }
-    if (capDays > 0) annu = (wRet / capDays) * 365 * 100;
-    const monthly = annu !== null ? annu / 12 : null;
-    $("rtSub").innerHTML = `Trades you actually executed, tracked against the system's playbook.
-      Realized: <b class="${realized >= 0 ? "good" : "bad"}">${realized >= 0 ? "+" : ""}$${realized.toLocaleString()}</b>
-      across <b>${closed.length}</b> closed ${closed.length === 1 ? "trade" : "trades"}.
-      ${annu !== null ? `Return on capital deployed: <b>${monthly.toFixed(1)}%/month</b>
-        (~<b>${annu.toFixed(0)}%/yr</b> at this pace).` : ""}
-      <div style="margin-top:6px; padding:8px 12px; border-radius:8px; background:var(--panel2)">
-        <b>Goal:</b> 30%+ per year is the pass/fail line ·
-        ${annu !== null ? (annu >= 30
-          ? `<b class="good">PASSING</b> at ~${annu.toFixed(0)}%/yr on this (small, early) sample`
-          : `<b class="bad">below target</b> at ~${annu.toFixed(0)}%/yr`) : "awaiting closed trades"}
-        <div class="tag" style="margin-top:3px">Sample is tiny - two trades over ~3 weeks. Judge this after
-        20+ closed trades, not now. Annualising a short streak flatters or punishes unfairly.</div>
-      </div>`;
-    $("rtBody").innerHTML = R.map(t => `
-      <div style="border:1px solid var(--border); border-radius:10px; padding:10px 12px; margin:8px 0; background:var(--panel2)">
-        <b>${t.ticker}</b> — ${t.structure} <span class="badge ${t.status === "open" ? "bH" : "chip"}">${t.status.toUpperCase()}</span>
-        <div class="num" style="font-size:13px; margin-top:3px">opened ${t.opened}${t.closed ? " · closed " + t.closed : ""} ·
-          credit $${t.credit.toLocaleString()}${t.closeCost != null ? " · closed for $" + t.closeCost : ""}
-          ${t.pnl != null ? ` · <b class="${t.pnl >= 0 ? "good" : "bad"}">P&L ${t.pnl >= 0 ? "+" : ""}$${t.pnl.toLocaleString()}</b>` : ""}</div>
-        ${t.note ? `<div class="tag" style="margin-top:2px">${t.note}</div>` : ""}
-      </div>`).join("");
-  })();
-
-  /* improvement diary */
-  (function(){
-    const txt = (typeof IMPROVELOG !== "undefined") ? IMPROVELOG : "";
-    $("imBody").textContent = txt || "Diary starts with the next review run.";
-  })();
-
-  /* vibration lab */
-  (function(){
-    const V = D.vibration;
-    if(!V){ $("vibSub").textContent = "Run a data refresh to compute."; $("vibBody").innerHTML=""; return; }
-    $("vibSub").innerHTML = `Every planet pair (Sun→Pluto), every major aspect, every retrograde — tested against
-     ${D.ticker}'s actual swing highs &amp; lows (±1 day, 5 years). <b>Lift</b> = how much more often pivots fall on
-     those days than the aspect's normal frequency. <b>Honesty control:</b> random date-sets of the same size
-     typically show a best lift of <b>×${V.chanceLift}</b> just by luck across this many combinations — treat
-     anything below that as noise, and even winners as candidates to keep grading, not gospel.`;
-    const row = r => `<tr><td><b>${r.aspect}</b></td><td class="num">×${r.lift}</td>
-      <td class="num">${r.hits} of ${r.n} pivots</td><td class="num tag">${r.basePct}% of all days</td></tr>`;
-    let h = "";
-    const sec = (title, arr, empty) => {
-      h += `<h3 style="margin-top:10px">${title}</h3>`;
-      h += arr && arr.length
-        ? `<table><tr><th>Aspect</th><th>Lift</th><th>Hit rate</th><th>Baseline</th></tr>${arr.map(row).join("")}</table>`
-        : `<div class="tag">${empty}</div>`;
-    };
-    sec(`Aspects recurring at ${D.ticker} HIGHS`, V.high, "Nothing beat the ×1.5 lift bar for highs.");
-    sec(`Aspects recurring at ${D.ticker} LOWS`, V.low, "Nothing beat the ×1.5 lift bar for lows.");
-    if(V.retro && V.retro.length){
-      h += `<h3 style="margin-top:10px">Retrogrades</h3><table>` +
-        V.retro.map(r=>`<tr><td><b>${r.planet} retrograde</b></td><td class="num">×${r.lift}</td>
-        <td class="num">${r.hits} of ${r.n} pivots</td></tr>`).join("") + `</table>`;
-    }
-    /* astro correlation lab: the comprehensive factor scan */
-    const AL = D.astroLab;
-    if(AL){
-      h += `<h3 style="margin-top:14px">Astro correlation lab — ${AL.tested} factor tests, recomputed weekly (${AL.computed || ""})</h3>
-        <div class="tag" style="margin-bottom:6px">Every geo &amp; helio planet-pair aspect (11 angles), stations, ingresses,
-        lunar apogee/perigee/declination, out-of-bounds, declination parallels, Bradley siderograph turns, first-trade natal
-        transits and pivot anniversaries — each tested against ${nice(D.ticker)}'s own ${AL.turns} swing turns.
-        A factor must stay significant on BOTH the first 60% of history and the 40% it never saw (split-sample replication).
-        Expected false replications at this bar: ~${AL.expectedFalse} — so even survivors stay on probation and are
-        forward-graded before their weight can grow.</div>`;
-      if(AL.validated && AL.validated.length){
-        h += `<table><tr><th>Factor</th><th>For</th><th>Hit rate</th><th>Chance</th><th>Lift</th><th>Verdict</th></tr>` +
-          AL.validated.map(r=>`<tr><td><b>${r.factor}</b></td>
-            <td>${r.type==="any"?"turns":r.type.toUpperCase()+"s"}</td>
-            <td class="num">${r.hitPct}% (${r.hits}/${r.n})</td><td class="num tag">${r.chancePct}%</td>
-            <td class="num">×${r.lift}</td><td><span class="badge bH">${r.verdict}</span></td></tr>`).join("") + `</table>`;
-        const up = AL.upcoming || [];
-        if(up.length) h += `<div style="margin-top:6px; font-size:13px"><b>Upcoming dates from replicated factors:</b> ` +
-          up.slice(0,6).map(u=>`${u.date} (${u.factor}, ${u.type==="any"?"turn":u.type})`).join(" · ") + `</div>`;
-      } else {
-        h += `<div class="tag">VERDICT: none of the ${AL.tested} factor tests survived replication for ${nice(D.ticker)}
-          — at this stock's turn density, every astro factor tested performs at chance. The strongest raw
-          candidates below are shown for transparency; they are exactly what luck produces across this many tests
-          and do NOT feed the forecast.</div>`;
-      }
-      if(AL.candidates && AL.candidates.length){
-        h += `<h3 style="margin-top:8px">Strongest raw candidates (not above multiple-testing chance)</h3>
-          <table><tr><th>Factor</th><th>For</th><th>Hit rate</th><th>Chance</th><th>Lift</th></tr>` +
-          AL.candidates.slice(0,6).map(r=>`<tr><td>${r.factor}</td>
-            <td>${r.type==="any"?"turns":r.type.toUpperCase()+"s"}</td>
-            <td class="num">${r.hitPct}% (${r.hits}/${r.n})</td><td class="num tag">${r.chancePct}%</td>
-            <td class="num">×${r.lift}</td></tr>`).join("") + `</table>`;
-      }
-      if(AL.overrides && AL.overrides.length){
-        h += `<h3 style="margin-top:8px">Overrides — when factors collide</h3>` +
-          AL.overrides.slice(0,5).map(o=>`<div class="tag">${o.highFactor} (highs) vs ${o.lowFactor} (lows), ${o.n} collisions:
-            <b>${o.winner==="tie"?"no clear winner":o.winner.toUpperCase()+" side won "+(o.winner==="high"?o.highWon:o.lowWon)+" of "+o.n}</b></div>`).join("");
-      }
-    }
-    const N = V.numerology;
-    if(N && N.tickerNumber){
-      h += `<h3 style="margin-top:10px">Numerology</h3>
-        <div style="font-size:13px">${D.ticker}'s Pythagorean number is <b>${N.tickerNumber}</b>. Pivots on dates whose
-        digits reduce to ${N.tickerNumber}: <b>${N.hits} of ${N.n}</b> — lift <b>×${N.lift}</b>
-        (such dates are ${N.basePct}% of all days). ${N.lift >= 1.3 ? "Above chance — feeding it into the forecast with a small weight to earn its keep." : "≈ chance on this stock — tracked but not trusted."}</div>`;
-    }
-    const PH = D.planetHours;
-    if(PH && (PH.high.length || PH.low.length)){
-      h += `<h3 style="margin-top:10px">Planetary hours — which hour-ruler owns the day's turn (${PH.days} days)</h3>
-        <table><tr><th>At HIGHS</th><th>At LOWS</th></tr><tr><td>` +
-        (PH.high.map(r=>`${r.ruler} ×${r.lift} (${r.hits}/${r.n})`).join("<br>")||"—") + `</td><td>` +
-        (PH.low.map(r=>`${r.ruler} ×${r.lift} (${r.hits}/${r.n})`).join("<br>")||"—") + `</td></tr></table>
-        <div class="tag">Lift vs how much session time that planet's hours occupy. Rulers ≥×1.3 get their exact
-        clock-hours printed on matching predictions above (⏱).</div>`;
-    }
-    const S = V.sepharial;
-    if(S && S.rulingPlanet){
-      h += `<h3 style="margin-top:10px">Sepharial's techniques (Chaldean kabala, stations, Moon declination)</h3>
-        <div style="font-size:13px; margin-bottom:6px">By Sepharial's Chaldean kabala, ${D.ticker}'s name-number is
-        <b>${S.chaldeanNumber}</b>, ruled by <b>${S.rulingPlanet}</b>. His signal days, tested against ${D.ticker}'s
-        real pivots:</div>
-        <table><tr><th>Sepharial signal</th><th>Lift</th><th>Hit rate</th><th>Baseline</th></tr>` +
-        S.tests.map(t=>`<tr><td>${t.name}${t.lift>=1.3?' <b class="good">✓</b>':''}</td>
-          <td class="num">×${t.lift}</td><td class="num">${t.hits} of ${t.n}</td>
-          <td class="num tag">${t.basePct}% of days</td></tr>`).join("") + `</table>
-        <div class="tag" style="margin-top:4px">✓ = above ×1.3 lift → feeds the forecast with a small weight and
-        gets graded daily like everything else.</div>`;
-    }
-    if(V.upcoming && V.upcoming.length){
-      h += `<h3 style="margin-top:10px">Upcoming vibration dates (next 60 days)</h3><table>` +
-        V.upcoming.map(u=>{const dt=new Date(u.date+"T12:00:00");
-          return `<tr><td class="num"><b>${dt.toLocaleDateString("en-US",{weekday:"short",month:"numeric",day:"numeric"})}</b></td><td>${u.rule}</td></tr>`;}).join("") + `</table>`;
-    }
-    $("vibBody").innerHTML = h;
-  })();
-
-  /* signal calendar */
-  (function(){
-    const M = D.methods;
-    const items = [];
-    if(D.vibration && D.vibration.upcoming)
-      for(const v of D.vibration.upcoming) items.push({d:v.date, s:"Vibration", t:v.rule});
-    for(const g of M.gann.upcoming) items.push({d:g.date, s:"Gann", t:g.rule});
-    for(const f of M.fib.upcoming) items.push({d:f.date, s:"Fibonacci", t:f.rule});
-    for(const h of M.hurst.upcoming) items.push({d:h.date, s:"Hurst", t:`${h.cycle} cycle ${h.kind} (${h.kind==="trough"?"low":"high"} due)`});
-    for(const m of M.astro.moonsNext) items.push({d:m.date, s:"Astro", t:`${m.kind==="new"?"New":"Full"} moon at ${m.time}`});
-    for(const r of M.astro.retroRanges) items.push({d:r[0], s:"Astro", t:`Mercury retrograde ${r[0]} → ${r[1]} (tested: no effect)`});
-    items.sort((a,b)=>a.d.localeCompare(b.d));
-    $("calTable").innerHTML = `<tr><th>Date</th><th>School</th><th>Signal</th></tr>` +
-      items.map(i=>{
-        const dt = new Date(i.d+"T12:00:00");
-        return `<tr><td class="num"><b>${dt.toLocaleDateString("en-US",{weekday:"short",month:"numeric",day:"numeric"})}</b></td>
-          <td>${i.s}</td><td>${i.t}</td></tr>`;}).join("");
-  })();
-
-  /* ranges */
-  (function(){
-    const names = {daily:"Today", weekly:"This week", monthly:`This month (${D.monthName})`, yearly:"52 weeks"};
-    let html = "";
-    for(const k of ["daily","weekly","monthly","yearly"]){
-      const r = D.ranges[k]; if(!r) continue;
-      const pos = Math.min(99, Math.max(1, (D.price-r.low)/(r.high-r.low)*100));
-      html += `<div class="rangebar">
-        <div class="rb-title"><b>${names[k]}</b>
-          <span class="num tag">now ${fmt$(D.price)} — ${Math.round(pos)}% of range</span></div>
-        <div class="rb-track"><div class="rb-mark" style="left:${pos}%"></div></div>
-        <div class="rb-lbl"><span class="num">low ${fmt$(r.low)}</span><span class="num">high ${fmt$(r.high)}</span></div>
-      </div>`;
-    }
-    $("ranges").innerHTML = html;
-  })();
-
-  /* time-of-day */
-  (function(){
-    const buckets=[];
-    for(let h=9;h<16;h++)for(let m=0;m<60;m+=15){
-      if(h===9&&m<30)continue;
-      buckets.push(`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`);
-    }
-    const lbl = buckets.map(b=>["09:30","10:30","11:30","12:30","13:30","14:30","15:30"].includes(b)
-        ? b.replace(/^0/,"") : "");
-    bars("todHigh", lbl, buckets.map(b=>D.intraday15m.high[b]||0), {hot:"#2da44e"});
-    bars("todLow", lbl, buckets.map(b=>D.intraday15m.low[b]||0), {hot:"#cf222e"});
-    $("todSub").textContent = `Based on ${D.intraday15m.days} recent trading days of 15-minute data. Percentages = share of days whose high/low occurred in that 15-min slot.`;
-  })();
-
-  /* weekday */
-  (function(){
-    const lbl=["Mon","Tue","Wed","Thu","Fri"];
-    const days=["Monday","Tuesday","Wednesday","Thursday","Friday"];
-    bars("wdHigh", lbl, days.map(d=>D.weekday.high[d]), {hot:"#2da44e", allVals:true, valFmt:v=>v+"%"});
-    bars("wdLow", lbl, days.map(d=>D.weekday.low[d]), {hot:"#cf222e", allVals:true, valFmt:v=>v+"%"});
-    $("wdSub").textContent = `Based on ${D.weekday.weeks} weeks (5 years). Random chance would be ~20% per day.`;
-  })();
-
-  /* day of month */
-  (function(){
-    const k=Object.keys(D.dayOfMonth.high);
-    let h=`<table><tr><th></th>${k.map(x=>`<th>${x}</th>`).join("")}</tr>`;
-    h+=`<tr><td><b class="good">Month's HIGH</b></td>${k.map(x=>`<td class="num">${D.dayOfMonth.high[x]}%</td>`).join("")}</tr>`;
-    h+=`<tr><td><b class="bad">Month's LOW</b></td>${k.map(x=>`<td class="num">${D.dayOfMonth.low[x]}%</td>`).join("")}</tr></table>`;
-    $("domTable").innerHTML=h;
-    $("domSub").textContent=`Based on ${D.dayOfMonth.months} months (5 years). Random chance ≈33% per bucket.`;
-  })();
-
-  /* seasonality */
-  (function(){
-    const m=Object.keys(D.seasonality);
-    bars("seas", m, m.map(x=>D.seasonality[x].avgRet), {signed:true, allVals:true, valFmt:v=>v+"%", tall:true});
-    $("seasYears").textContent = D.seasonalityYears;
-  })();
-
-  /* backtests */
-  (function(){
-    const bt=D.backtests;
-    const ovnEdge = bt.overnight.totalPct > Math.max(0, bt.intraday.totalPct);
-    const row=(name,period,s,verdict)=>s?`<tr><td><b>${name}</b></td><td>${period}</td>
-      <td class="num">${s.n}</td><td class="num">${s.winRate}%</td>
-      <td class="num ${s.avgPct>=0?'good':'bad'}">${s.avgPct>0?'+':''}${s.avgPct}%</td>
-      <td class="num big ${s.totalPct>=0?'good':'bad'}">${s.totalPct>0?'+':''}${s.totalPct}%</td>
-      <td style="max-width:260px">${verdict}</td></tr>`:"";
-    let h=`<tr><th>Strategy</th><th>Period</th><th>Trades</th><th>Win rate</th><th>Avg/trade</th><th>Total return</th><th>Verdict</th></tr>`;
-    h+=row("Overnight hold (buy close → sell next open)","5 years",bt.overnight,
-      ovnEdge ? `<b class='good'>The strong session.</b> Most of ${D.ticker}'s gains happened while the market was closed.`
-              : `Overnight vs day split shown for comparison.`);
-    h+=row("Day hold (buy open → sell close)","5 years",bt.intraday,
-      bt.intraday.totalPct<0 ? `<b class='bad'>Money loser.</b> Holding only during market hours lost money over 5 years.`
-                             : `Regular-hours holding was ${bt.intraday.totalPct>bt.overnight.totalPct?"the stronger":"the weaker"} session for ${D.ticker}.`);
-    h+=row("Skip the first hour (buy 10:30 AM → sell close)","2 years",bt.buy1030SellClose,
-      bt.buy1030SellClose && bt.openToClose2y && bt.buy1030SellClose.totalPct>bt.openToClose2y.totalPct
-        ? `Beats buying at the open — the 9:30–10:30 chop is where day-buyers get hurt.`
-        : `Did not beat buying at the open on this stock.`);
-    h+=row("Buy at open → sell close (same 2 years)","2 years",bt.openToClose2y,
-      `Baseline for the row above.`);
-    $("btTable").innerHTML = h;
-  })();
-
-  /* playbook */
-  (function(){
-    const bt=D.backtests, wd=D.weekday, dm=D.dayOfMonth;
-    const ovnEdge = bt.overnight.totalPct > Math.max(0, bt.intraday.totalPct);
-    const loDay = argmax(wd.low), hiDay = argmax(wd.high);
-    const loBucket = argmax(dm.low), hiBucket = argmax(dm.high);
-    const items=[];
-    if(ovnEdge) items.push(
-     `<b>Buy late in the day, sell early in the day.</b> Over 5 years, ${D.ticker}'s net gains came
-      <i>overnight</i> (${bt.overnight.totalPct>0?"+":""}${bt.overnight.totalPct}% holding close→open) while
-      regular-hours holding returned ${bt.intraday.totalPct}%. Place buys near the close (3:45–4:00 PM ET);
-      take profits in the first half hour (9:30–10:00 AM ET).`);
-    else items.push(
-     `<b>Overnight vs day session.</b> On ${D.ticker} the overnight edge is ${bt.overnight.totalPct}% vs
-      ${bt.intraday.totalPct}% intraday over 5 years — check the backtest table before assuming either session is free money.`);
-    items.push(
-     `<b>The open sets the extreme.</b> The day's high or low is most often set right at 9:30–9:45 AM ET.
-      Have limit orders sitting before the open — don't chase with market orders at 9:30.`,
-     `<b>${loDay} & ${hiDay} matter.</b> The week's LOW lands on ${loDay} ${wd.low[loDay]}% of the time; the week's
-      HIGH on ${hiDay} ${wd.high[hiDay]}% (vs ~20% random).`,
-     `<b>Month rhythm.</b> Monthly lows cluster ${loBucket} (${dm.low[loBucket]}%), monthly highs ${hiBucket}
-      (${dm.high[hiBucket]}%).`,
-     `<b>Use Gann/astro/Fib dates as attention flags, not triggers.</b> Check the scorecard — where a school fails
-      its random control on ${D.ticker}, its dates only matter when they stack with the rhythm window (that's what
-      the confluence table scores). Watch the tape on those days; act on price, not the calendar.`,
-     `<b>Use windows and scale in.</b> ${D.ticker} turns roughly every ${pb.medianSpacing} trading days by
-      ~${pb.medianAmpPct}%, but dates hit ±2 days only ${pct(pb.hitRate2d)} of the time — enter in thirds across
-      the window instead of all-in on one day.`,
-     `<b>Check the calendar first.</b> Earnings, Fed meetings and product/delivery news override every pattern here.`,
-     `<b>Risk rule.</b> Median swing ~${pb.medianAmpPct}%. Decide the exit before you enter: stop below the
-      projected low, position sized so a full ${pb.medianAmpPct}% adverse swing is survivable.`);
-    $("playbook").innerHTML = items.map(i=>`<li>${i}</li>`).join("");
-  })();
-
-  $("foot").innerHTML = `Method: swing pivots via ${D.swing.thresholdPct}% zigzag on daily closes (5y, threshold
-   auto-scaled to ${D.ticker}'s volatility); Gann counts 30–360 calendar days with random-number controls; Fibonacci
-   8–144 trading-bar counts with controls; Hurst 10/20/40/80-day cycles fit by least squares; lunar/Mercury positions
-   via the <i>ephem</i> astronomy library; intraday timing from ${D.intraday15m.days} days of 15-min bars;
-   seasonality over ${D.seasonalityYears} years. Data: Yahoo Finance. Generated ${D.generated}.
-   Statistical research, not financial advice. Past patterns do not guarantee future results.`;
+    rows.push(`<span class="lbl">${name}</span><span class="val ${cls}" data-side="${side}" data-price="${f.price}">${val}</span><span class="when">${when}</span>`);
+  }
+  if(v.per === "D" && v.timing && !v.resolved){
+    const e = v.timing.early.time, l = v.timing.late.time;
+    const txt = v.timing.consistent === false ? "times unclear"
+      : (e === l ? `both ≈${t12(e)}` : `1st ≈${t12(e)} · 2nd ≈${t12(l)}`);
+    rows.push(`<span class="lbl">Time</span><span class="when" style="text-align:left">${txt}</span><span class="when"><small>${e === l || v.timing.consistent === false ? "" : "order ?"}</small></span>`);
+  }
+  box.innerHTML = rows.join("");
 }
 
-/* ---------- Update button ----------------------------------------------
-   Pulls the newest data straight from the repository (bypasses the page cache
-   AND any publishing delay), then re-renders in place. With a saved token it
-   first triggers a full fresh-price run before fetching.                    */
+function renderMeta(v){
+  const H = HILO_LIVE, el = $("gAsOf");
+  if(!H){ el.textContent = "forecast pending"; return; }
+  if(H.failed){ el.innerHTML = `<b>forecast unavailable</b>`; return; }
+  if(!v.rec){ el.textContent = nice(CUR) + ": " + (((H.notes || {})[CUR]) || "no forecast"); return; }
+  const stale = v.S < etToday();
+  const cut = new Date(v.rec.dataCutoff).toLocaleString("en-US", {timeZone:"America/New_York", weekday:"short", hour:"numeric", minute:"2-digit"}).replace(" AM","a").replace(" PM","p");
+  const span = v.per === "D" ? dayLbl(v.S) : md(v.span[0]) + "–" + md(v.span[1]);
+  const nt = v.fc.filter(p => p.src === "turn").length;
+  const part = v.per === "D" ? "" : ` · partial: day + ${nt} turn${nt === 1 ? "" : "s"}`;
+  el.innerHTML = `${esc(span)}${part} · ${v.rec.kind === "intraday" ? "live" : "premarket"} · data ${esc(cut)}` + (stale ? ` · <b>stale</b>` : "") + (v.per === "D" ? " · 80% range" : "");
+}
+
+function renderUpd(D){
+  const b = $("gUpd"), H = HILO_LIVE;
+  const g = H && H.generatedAt ? new Date(H.generatedAt) : null;
+  $("gUpdTime").textContent = g ? g.toLocaleTimeString("en-US", {timeZone:"America/New_York", hour:"numeric", minute:"2-digit"}).replace(" AM","a").replace(" PM","p") : "update";
+  b.className = LAST_PULL_FAILED ? "bad" : (g && Date.now() - g.getTime() > 3 * 3600e3 ? "old" : "");
+  b.title = LAST_PULL_FAILED ? "Last update failed; previous data kept" : "Update";
+}
+
+/* ---------- chart ---------- */
+function drawChart(D, v){
+  const c = $("chart"), wrap = c.parentElement, dpr = window.devicePixelRatio || 1;
+  const W = Math.max(260, wrap.clientWidth || 360), H = Math.max(140, wrap.clientHeight || 260);
+  c.width = Math.round(W * dpr); c.height = Math.round(H * dpr);
+  c.__w = W; c.__h = H;
+  const x = c.getContext("2d"); x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, W, H);
+  const allD = D.chart.dates, allC = D.chart.closes;
+  let start = Math.max(0, allD.length - ({D:22, W:30, M:45, Y:250}[v.per] || 30));
+  if(v.per === "Y" && v.span){ const i = allD.findIndex(d => d >= v.span[0]); if(i >= 0) start = Math.min(i, allD.length - 30); }
+  const dates = allD.slice(start), closes = allC.slice(start);
+  const fc = v.fc || [];
+  const act = [];
+  if(v.actual){ for(const side of ["high","low"]) if(v.actual[side]) act.push({type:side, date:v.actual[side].date, price:v.actual[side].price}); }
+  const actIn = act.filter(a => a.date >= dates[0]);
+  let lastDate = dates[dates.length - 1];
+  for(const p of fc) if(p.date > lastDate) lastDate = p.date;
+  if(v.per === "W" && v.span && v.span[1] > lastDate) lastDate = v.span[1];
+  const t0 = new Date(dates[0]).getTime(), t1 = Math.max(new Date(lastDate).getTime(), t0 + 864e5);
+  const pxs = closes.concat(fc.map(p => p.price), fc.filter(p => p.src === "day").map(p => [p.lo, p.hi]).flat(), actIn.map(a => a.price));
+  let pMin = Math.min.apply(null, pxs), pMax = Math.max.apply(null, pxs);
+  const padP = (pMax - pMin) * 0.06 || pMax * 0.01; pMin -= padP; pMax += padP;
+  const L = 6, R = 52, T = 8, B = 18;
+  const X = d => L + (new Date(d).getTime() - t0) / (t1 - t0) * (W - L - R);
+  const Y = p => T + (1 - (p - pMin) / (pMax - pMin)) * (H - T - B);
+  x.font = "600 11px system-ui,sans-serif"; x.textAlign = "left"; x.fillStyle = "#57606a";
+  for(let g = 0; g <= 3; g++){
+    const p = pMin + g * (pMax - pMin) / 3, y = Y(p);
+    x.strokeStyle = "#eef1f4"; x.beginPath(); x.moveTo(L, y); x.lineTo(W - R, y); x.stroke();
+    x.fillText("$" + (p < 100 ? p.toFixed(2) : Math.round(p).toLocaleString()), W - R + 4, y + 4);
+  }
+  if(v.span && v.per !== "D"){                                  // the selected period, lightly shaded
+    const a = Math.max(L, X(v.span[0])), b = Math.min(W - R, X(v.span[1]) + 2);
+    if(b > a){ x.fillStyle = "rgba(9,105,218,0.06)"; x.fillRect(a, T, b - a, H - T - B); }
+  }
+  x.textAlign = "center"; x.fillStyle = "#57606a";
+  for(const d of [dates[0], dates[Math.floor(dates.length / 2)], lastDate]) x.fillText(md(d), Math.min(Math.max(X(d), L + 16), W - R - 16), H - 4);
+  x.strokeStyle = "#0969da"; x.lineWidth = 2; x.lineJoin = "round"; x.beginPath();
+  dates.forEach((d, i) => { const px = X(d), py = Y(closes[i]); i ? x.lineTo(px, py) : x.moveTo(px, py); }); x.stroke();
+  for(const a of actIn){                                        // already traded: hollow grey
+    x.strokeStyle = "#57606a"; x.lineWidth = 2; x.beginPath(); x.arc(X(a.date), Y(a.price), 5, 0, 7); x.stroke();
+  }
+  const turns = fc.filter(p => p.src === "turn").sort((a, b) => a.date < b.date ? -1 : 1);
+  if(turns.length){                                             // next projected turns, purple dashed
+    x.strokeStyle = "#8250df"; x.setLineDash([5, 4]); x.lineWidth = 1.4; x.beginPath();
+    x.moveTo(X(dates[dates.length - 1]), Y(closes[closes.length - 1]));
+    for(const p of turns) x.lineTo(X(p.date), Y(p.price)); x.stroke(); x.setLineDash([]);
+  }
+  for(const p of fc){
+    const px = X(p.date), py = Y(p.price), col = p.type === "high" ? "#1a7f37" : "#cf222e";
+    if(p.src === "day"){ x.strokeStyle = col; x.lineWidth = 2; x.beginPath(); x.moveTo(px, Y(p.hi)); x.lineTo(px, Y(p.lo)); x.stroke(); }
+    x.fillStyle = col; x.beginPath(); x.arc(px, py, 4.5, 0, 7); x.fill();
+  }
+  for(const p of [v.high, v.low]){                               // the two numbers in the results, labelled
+    if(!p) continue;
+    const px = X(p.date), py = Y(p.price), col = p.type === "high" ? "#1a7f37" : "#cf222e";
+    x.strokeStyle = col; x.lineWidth = 1.5; x.beginPath(); x.arc(px, py, 8, 0, 7); x.stroke();
+    x.font = "700 12px system-ui,sans-serif"; x.textAlign = "right"; x.fillStyle = col;
+    x.fillText("$" + (p.price < 100 ? p.price.toFixed(2) : Math.round(p.price).toLocaleString()), px - 11, py + (p.type === "high" ? -6 : 14));
+  }
+  // hover / tap / keyboard inspection
+  const points = dates.map((d, i) => ({date:d, price:closes[i], kind:"Actual daily close"}))
+    .concat(fc.map(p => ({date:p.date, price:p.price, kind:(p.src === "day" ? "Forecast " : "Projected turn ") + p.type + (p.time ? " · " + t12(p.time) : "")})))
+    .concat(actIn.map(a => ({date:a.date, price:a.price, kind:"Already traded " + a.type + " (period so far)"})));
+  const base = document.createElement("canvas"); base.width = c.width; base.height = c.height;
+  try { base.getContext("2d").drawImage(c, 0, 0); } catch(e) {}
+  const tip = $("chartTooltip"); tip.style.display = "none";
+  const restore = () => { try { x.save(); x.setTransform(1,0,0,1,0,0); x.clearRect(0,0,c.width,c.height); x.drawImage(base,0,0); x.restore(); } catch(e) {} };
+  const show = (pt, cx, cy) => {
+    restore(); x.save(); x.strokeStyle = "#425a78"; x.setLineDash([3,3]); x.beginPath(); x.moveTo(X(pt.date), T); x.lineTo(X(pt.date), H - B); x.stroke(); x.restore();
+    tip.textContent = pt.kind + "\n" + pt.date + "\n" + fmt$(pt.price); tip.style.display = "block";
+    tip.style.left = Math.max(8, Math.min(cx + 12, window.innerWidth - 250)) + "px"; tip.style.top = Math.max(8, cy - 60) + "px";
+  };
+  const move = e => {
+    const r = c.getBoundingClientRect(), px = (e.clientX - r.left) * W / r.width, py = (e.clientY - r.top) * H / r.height;
+    const n = points.reduce((a, b) => Math.hypot(X(b.date) - px, Y(b.price) - py) < Math.hypot(X(a.date) - px, Y(a.price) - py) ? b : a);
+    show(n, e.clientX, e.clientY);
+  };
+  c.onpointermove = move; c.onpointerdown = move;
+  c.onpointerleave = () => { restore(); tip.style.display = "none"; };
+  let k = dates.length - 1;
+  c.onkeydown = e => {
+    if(e.key === "Escape"){ restore(); tip.style.display = "none"; return; }
+    if(e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    e.preventDefault(); k = Math.max(0, Math.min(dates.length - 1, k + (e.key === "ArrowLeft" ? -1 : 1)));
+    const r = c.getBoundingClientRect(); show(points[k], r.left + X(points[k].date) * r.width / W, r.top + Y(points[k].price) * r.height / H);
+  };
+  window.__gView = v;
+}
+
+/* ---------- history (behind the arrow) ---------- */
+function renderHistory(){
+  const H = HILO_LIVE, rows = ((H && H.history) || []).filter(r => r.ticker === CUR);
+  $("gHistBody").innerHTML = `<button type="button" onclick="document.getElementById('gHist').open=false">&times;</button>
+    <b>${esc(nice(CUR))}: past forecasts vs actual</b>
+    <table><tr><th>Day</th><th></th><th>Fcst</th><th>Actual</th><th>Err</th><th>Time f/a</th></tr>${rows.map(r =>
+      `<tr><td>${md(r.session)}</td><td>${r.side === "high" ? "H" : "L"}</td><td>${fmt$(r.pred)}</td><td>${fmt$(r.actual)}</td><td>${esc(r.err)}%</td><td>${esc(r.predTime)}/${esc(r.actualTime)}</td></tr>`).join("")
+      || '<tr><td colspan="6">No completed forecast days yet.</td></tr>'}</table>`;
+}
+
+/* ---------- render ---------- */
+function renderAll(){
+  const D = DATA_ALL[CUR];
+  const sel = $("gTicker");
+  sel.innerHTML = TICKERS.map(t => `<option value="${esc(t)}"${t === CUR ? " selected" : ""}>${esc(nice(t))} ${fmt$(DATA_ALL[t].price)}</option>`).join("");
+  document.querySelectorAll("#gPeriod button").forEach(b => b.classList.toggle("on", b.dataset.p === PERIOD));
+  const v = periodView(D, PERIOD);
+  renderResults(v); renderMeta(v); renderUpd(D);
+  drawChart(D, v);
+  if($("gHist").open) renderHistory();
+}
+$("gTicker").onchange = e => { CUR = e.target.value; safeStorage.setItem("tkr", CUR); renderAll(); };
+document.querySelectorAll("#gPeriod button").forEach(b => b.onclick = () => { PERIOD = b.dataset.p; safeStorage.setItem("period", PERIOD); renderAll(); });
+$("gHist").addEventListener("toggle", () => { if($("gHist").open) renderHistory(); });
+
+/* ---------- update: newest published data, validated, rolled back on failure ---------- */
 (function(){
-  const btn = $("btnUpdate"), st = $("updStatus");
-  const REPO = "elljp1/stock-dashboard";
-  const RAW = "https://raw.githubusercontent.com/" + REPO + "/main/data.js";
-
+  const RAW = "https://raw.githubusercontent.com/elljp1/stock-dashboard/main/data.js";
+  function grab(txt, name){
+    const i = txt.indexOf("const " + name + " = ");
+    if(i < 0) return {found:false};
+    let s = txt.slice(i + name.length + 9).split(String.fromCharCode(10) + "const ")[0].trim();
+    if(s.endsWith(";")) s = s.slice(0, -1);
+    try { return {found:true, value:JSON.parse(s)}; } catch(e) { return {found:true, bad:true}; }
+  }
   function swapIn(txt){
-    const grab = (name) => {
-      const i = txt.indexOf("const " + name + " = ");
-      if(i < 0) return null;
-      let s = txt.slice(i + ("const " + name + " = ").length);
-      s = s.split(String.fromCharCode(10) + "const ")[0].trim();
-      if(s.endsWith(";")) s = s.slice(0, -1);
-      try { return JSON.parse(s); } catch(e){ return null; }
-    };
-    const fresh = grab("DATA_ALL");
+    const d = grab(txt, "DATA_ALL"), fresh = d.value;
     if(!fresh || !Object.keys(fresh).length) throw new Error("no data in response");
-    for(const [ticker,d] of Object.entries(fresh)){
-      if(!d || !Number.isFinite(d.price) || d.price<=0 || !d.generated ||
-         !Array.isArray(d.predictions) || !d.predictions.length ||
-         !d.chart || !Array.isArray(d.chart.dates) || !d.chart.dates.length ||
-         d.chart.dates.length!==(d.chart.closes || []).length ||
-         !d.chart.closes.every(v=>Number.isFinite(v)&&v>0)) throw new Error("invalid data for " + ticker);
+    for(const [t, x] of Object.entries(fresh)){
+      if(!x || !Number.isFinite(x.price) || x.price <= 0 || !x.chart || !Array.isArray(x.chart.dates) || !x.chart.dates.length ||
+         x.chart.dates.length !== (x.chart.closes || []).length || !x.chart.closes.every(c => Number.isFinite(c) && c > 0))
+        throw new Error("invalid data for " + t);
     }
-    if(Object.keys(DATA_ALL).some(t=>!fresh[t]))throw new Error("incomplete refresh; keeping previous data");
-    const stamp=g=>{
-      const m=g.match(/(\d{4}-\d{2}-\d{2}) (\d{2}):(\d{2}) (AM|PM)/);
-      return m ? m[1]+" "+String((Number(m[2])%12)+(m[4]==="PM"?12:0)).padStart(2,"0")+":"+m[3] : "";
-    };
-    if(Object.keys(DATA_ALL).some(t=>stamp(fresh[t].generated)<stamp(DATA_ALL[t].generated)))throw new Error("older snapshot rejected");
-    // high/low forecasts refresh with the rest of the data, validated first and rolled back on failure
+    if(TICKERS.some(t => !fresh[t])) throw new Error("incomplete refresh");
+    const h = grab(txt, "HILO");
     let nextHilo;
-    if(txt.indexOf("const HILO = ") < 0){
-      nextHilo = {failed:{at:new Date().toISOString(), reason:"refreshed data has no high/low forecasts"}, stale:true,
-                  generatedAt:new Date().toISOString(), targetSession:"unknown"};
-    } else {
-      nextHilo = grab("HILO");
-      const raw = txt.slice(txt.indexOf("const HILO = ") + 13).split(String.fromCharCode(10))[0].trim();
-      if(nextHilo === null && raw !== "null;" && raw !== "null") throw new Error("high/low forecast data unreadable; keeping previous data");
-      if(!hiloValid(nextHilo)) throw new Error("high/low forecast data invalid; keeping previous data");
-      if(nextHilo && HILO_LIVE && !nextHilo.failed && !HILO_LIVE.failed &&
-         Date.parse(nextHilo.generatedAt) < Date.parse(HILO_LIVE.generatedAt)) throw new Error("older high/low snapshot rejected");
+    if(!h.found) nextHilo = {failed:{at:new Date().toISOString(), reason:"no forecasts in refreshed data"}, stale:true, generatedAt:new Date().toISOString()};
+    else {
+      if(h.bad || !hiloValid(h.value)) throw new Error("forecast data invalid");
+      nextHilo = h.value;
+      if(nextHilo && HILO_LIVE && !nextHilo.failed && !HILO_LIVE.failed && Date.parse(nextHilo.generatedAt) < Date.parse(HILO_LIVE.generatedAt))
+        throw new Error("older forecast rejected");
     }
-    const pairs=[[DATA_ALL,fresh],[TRADES,grab("TRADES")],[BENCHMARK,grab("BENCHMARK")],
-      [BACKFILL,grab("BACKFILL")],[REALTRADES,grab("REALTRADES")],[WEEKPLAN,grab("WEEKPLAN")]];
-    const backups=pairs.map(([obj])=>JSON.parse(JSON.stringify(obj)));
-    const hiloBackup=HILO_LIVE;
-    const assign=(obj,value)=>{Object.keys(obj).forEach(k=>delete obj[k]);if(Array.isArray(obj))obj.length=0;Object.assign(obj,value);};
+    const backData = JSON.parse(JSON.stringify(DATA_ALL)), backHilo = HILO_LIVE;
+    const assign = (obj, val) => { Object.keys(obj).forEach(k => delete obj[k]); Object.assign(obj, val); };
+    try { assign(DATA_ALL, fresh); HILO_LIVE = nextHilo; renderAll(); }
+    catch(e) { assign(DATA_ALL, backData); HILO_LIVE = backHilo; renderAll(); throw e; }
+  }
+  async function pullLatest(){
+    const btn = $("gUpd"); btn.disabled = true;
     try {
-      pairs.forEach(([obj,value])=>{if(value)assign(obj,value);});
-      HILO_LIVE=nextHilo;
-      renderTabs(); renderAll(DATA_ALL[CUR]);
-    } catch(e) {
-      pairs.forEach(([obj],i)=>assign(obj,backups[i]));
-      HILO_LIVE=hiloBackup;
-      renderTabs(); renderAll(DATA_ALL[CUR]); throw e;
-    }
+      const r = await fetch(RAW + "?t=" + Date.now(), {cache:"no-store"});
+      if(!r.ok) throw new Error("fetch failed " + r.status);
+      swapIn(await r.text()); LAST_PULL_FAILED = false;
+    } catch(e) { LAST_PULL_FAILED = true; }
+    finally { btn.disabled = false; renderUpd(DATA_ALL[CUR]); }
   }
-
-  async function request(url, options={}) {
-    const controller=new AbortController();
-    const timer=setTimeout(()=>controller.abort(),20000);
-    try {
-      const r=await fetch(url,Object.assign({},options,{signal:controller.signal}));
-      const body=await r.text();
-      return {ok:r.ok,status:r.status,text:async()=>body};
-    }
-    finally {clearTimeout(timer);}
-  }
-
-  function etNow(){
-    return new Date(new Date().toLocaleString("en-US", {timeZone: "America/New_York"}));
-  }
-  function freshness(){
-    const d=DATA_ALL[CUR] || {}, g=d.generated || "unknown";
-    let q="Exact quote time unavailable";
-    if(d.priceAsOf){
-      q="Price timestamp " + new Date(d.priceAsOf).toLocaleString("en-US",{
-        timeZone:"America/New_York",month:"short",day:"numeric",year:"numeric",
-        hour:"numeric",minute:"2-digit",second:"2-digit",timeZoneName:"short"
-      });
-    }
-    const reviewed=d.dailyReview && Date.parse(d.dailyReview.reviewedAt);
-    const late=reviewed && Date.now()-reviewed>45*60000;
-    return (late ? "OLDER ANALYSIS — last completed refresh more than 45 minutes ago. " : "") +
-      "Analysis generated " + g + ". " + q + ". " +
-      (d.dailyBarSource ? "Daily bar: " + d.dailyBarSource + ". " : "") +
-      "Checks for updates every 5 minutes; daily review runs automatically.";
-  }
-  async function pullLatest(label){
-    st.textContent = label || "fetching the latest data...";
-    let lastError;
-    for(let attempt=0;attempt<3;attempt++){
-      try {
-        const url=attempt===1 ? new URL("data.js",location.href).href : RAW;
-        const r=await request(url+"?t="+Date.now(),{cache:"no-store"});
-        if(!r.ok)throw new Error("fetch failed " + r.status);
-        swapIn(await r.text()); st.innerHTML=freshness(); return;
-      } catch(e){lastError=e;}
-    }
-    throw lastError;
-  }
-
-  btn.onclick = async () => {
-    btn.disabled = true;
-    try{
-      const tok = safeStorage.getItem("ghTok");
-      if(tok){
-        st.textContent = "starting a fresh price pull…";
-        const r = await request("https://api.github.com/repos/" + REPO +
-          "/actions/workflows/refresh.yml/dispatches", {
-            method:"POST",
-            headers:{Authorization:"Bearer " + tok, Accept:"application/vnd.github+json"},
-            body: JSON.stringify({ref:"main"})});
-        if(r.status === 204){
-          const before = (DATA_ALL[CUR] || {}).generated;
-          for(let i = 0; i < 40; i++){
-            await new Promise(z => setTimeout(z, 5000));
-            st.textContent = "running fresh prices + re-analysis… " + (i*5) + "s";
-            try{
-              const rr = await request(RAW + "?t=" + Date.now(), {cache:"no-store"});
-              const tx = await rr.text();
-              if(tx.indexOf('"generated": "' + before + '"') === -1){ swapIn(tx);
-                st.innerHTML = freshness(); btn.disabled = false; return; }
-            }catch(e){}
-          }
-          st.textContent = "still running — press Update again in a minute to collect the result";
-        } else { await pullLatest("token rejected — fetching latest saved data instead"); }
-      } else {
-        await pullLatest();
-      }
-    }catch(e){ st.textContent = "Update unavailable; previous data retained. Automatic retry will follow. " + e.message; }
-    btn.disabled = false;
-  };
-
-  // full re-analysis: fresh prices + the entire engine re-run on GitHub
-  const btnRe = $("btnReanalyze"), box = $("setupBox");
-  $("tokCancel").onclick = () => { box.style.display = "none"; };
-  $("tokSave").onclick = () => {
-    const v = $("tokIn").value.trim();
-    if(!v){ st.textContent = "no token entered"; return; }
-    safeStorage.setItem("ghTok", v);
-    $("tokIn").value = "";
-    box.style.display = "none";
-    st.textContent = "saved - press Reanalyze & Predict to run it";
-  };
-  btnRe.onclick = async () => {
-    const tok = safeStorage.getItem("ghTok");
-    if(!tok){ box.style.display = "block"; st.textContent = "one-time setup needed for live re-analysis"; return; }
-    btnRe.disabled = true; btn.disabled = true;
-    try{
-      st.textContent = "requesting fresh prices + full re-analysis...";
-      const r = await request("https://api.github.com/repos/" + REPO +
-        "/actions/workflows/refresh.yml/dispatches", {
-          method:"POST",
-          headers:{Authorization:"Bearer " + tok, Accept:"application/vnd.github+json"},
-          body: JSON.stringify({ref:"main"})});
-      if(r.status === 204){
-        const before = (DATA_ALL[CUR] || {}).generated;
-        for(let i = 0; i < 48; i++){
-          await new Promise(z => setTimeout(z, 5000));
-          st.textContent = "downloading prices, re-running swings, predictions, trades... " + (i*5) + "s";
-          try{
-            const rr = await request(RAW + "?t=" + Date.now(), {cache:"no-store"});
-            const tx = await rr.text();
-            if(tx.indexOf('"generated": "' + before + '"') === -1){
-              swapIn(tx);
-              st.innerHTML = "analysis refreshed - " + freshness();
-              btnRe.disabled = false; btn.disabled = false; return;
-            }
-          }catch(e){}
-        }
-        st.textContent = "still running - press Update in a minute to collect the result";
-      } else if(r.status === 401 || r.status === 403){
-        safeStorage.removeItem("ghTok");
-        box.style.display = "block";
-        st.textContent = "token was rejected or expired - please create a new one";
-      } else {
-        st.textContent = "could not start re-analysis (status " + r.status + ")";
-      }
-    }catch(e){ st.textContent = "network problem: " + e.message; }
-    btnRe.disabled = false; btn.disabled = false;
-  };
-
-  let autoBusy=false;
-  async function autoPull(){
-    if(document.hidden || autoBusy || btn.disabled || btnRe.disabled)return;
-    autoBusy=true;
-    try{await pullLatest("Checking for updated analysis…");}
-    catch(e){st.textContent="Update unavailable; previous data retained. Retrying automatically.";}
-    finally{autoBusy=false;}
-  }
-  setInterval(autoPull,5*60*1000);
-  window.addEventListener("online",autoPull);
-  document.addEventListener("visibilitychange",()=>{if(!document.hidden)autoPull();});
-  window.__freshness = freshness;
-  btn.oncontextmenu = (e) => {
-    e.preventDefault();
-    const cur = safeStorage.getItem("ghTok");
-    const msg = cur
-      ? "Full-refresh token is saved. Paste a new one, or leave blank and press OK to remove it."
-      : "Optional: paste a GitHub fine-grained token (Actions: read+write on this repo) so Update also pulls FRESH PRICES and re-runs the analysis. Stored only in this browser. Without it, Update fetches the newest saved data.";
-    const v = prompt(msg, "");
-    if(v === null) return;
-    if(v.trim()){ safeStorage.setItem("ghTok", v.trim()); st.textContent = "full refresh enabled on this device"; }
-    else { safeStorage.removeItem("ghTok"); st.textContent = "token removed"; }
-  };
+  window.__pullLatest = pullLatest;
+  $("gUpd").onclick = pullLatest;
+  setInterval(() => { if(!document.hidden) pullLatest(); }, 5 * 60 * 1000);
 })();
 
-/* ---------- section tabs: show one group at a time ---------- */
-function buildSectionTabs(){
-  const bar = document.getElementById("sectionTabs");
-  const groups = [...new Set([...document.querySelectorAll("[data-tab]")].map(e => e.dataset.tab))];
-  let active = safeStorage.getItem("secTab");
-  if(!groups.includes(active)) active = groups[0];
-  const paint = () => {
-    document.querySelectorAll("[data-tab]").forEach(e => {
-      e.style.display = (e.dataset.tab === active) ? "" : "none";
-    });
-    requestAnimationFrame(() => { try { renderAll(DATA_ALL[CUR]); } catch(e){} });
-    [...bar.children].forEach(btn => {
-      const on = btn.dataset.g === active;
-      btn.style.background = on ? "var(--blue)" : "var(--panel)";
-      btn.style.color = on ? "#fff" : "var(--dim)";
-      btn.style.borderColor = on ? "var(--blue)" : "var(--border)";
-    });
-  };
-  bar.innerHTML = "";
-  groups.forEach(g => {
-    const b = document.createElement("button");
-    b.textContent = g; b.dataset.g = g;
-    b.style.cssText = "padding:8px 18px; border:1px solid var(--border); border-radius:8px;" +
-      "font-size:14px; font-weight:700; cursor:pointer; background:var(--panel); color:var(--dim)";
-    b.onclick = () => { active = g; safeStorage.setItem("secTab", g); paint(); };
-    bar.appendChild(b);
-  });
-  paint();
-}
-
-renderTabs();
-try { renderAll(DATA_ALL[CUR]); } catch(e) { console.error("renderAll:", e); }
-buildSectionTabs();   // must run even if a panel above threw
-try { document.getElementById("updStatus").innerHTML = window.__freshness ? window.__freshness() : ""; } catch(e){}
-
-/* re-render on rotation / resize so charts refit the screen */
+renderAll();
 let _rt = null;
-window.addEventListener("resize", () => {
-  clearTimeout(_rt);
-  _rt = setTimeout(() => renderAll(DATA_ALL[CUR]), 250);
-});
+window.addEventListener("resize", () => { clearTimeout(_rt); _rt = setTimeout(renderAll, 200); });
 </script>
 </body>
 </html>

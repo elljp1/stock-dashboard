@@ -368,8 +368,128 @@ class HistoryTests(unittest.TestCase):
             row = r['history'][0]
             for k in ('pred', 'actual', 'predTime', 'actualTime', 'err', 'model'):
                 self.assertIn(k, row)
-            self.assertEqual(list(r['forwardByModel']), ['hilo-1'])
-            self.assertEqual(r['forwardByModel']['hilo-1']['premarket']['high']['n'], 1)
+            self.assertEqual(list(r['forwardByModel']), [hilo.MODEL])
+            self.assertEqual(r['forwardByModel'][hilo.MODEL]['premarket']['high']['n'], 1)
+
+
+class CoherentTimingTests(unittest.TestCase):
+    def test_marginal_modes_both_at_open_become_distinct_early_late(self):
+        bins = list(range(570, 960, 15))
+        pairs = [(570, 945)] * 10 + [(945, 570)] * 10          # half high-first, half low-first
+        t = hilo.timing_block(pairs, bins)
+        self.assertEqual((t['early']['time'], t['late']['time']), ('09:30', '15:45'))
+        self.assertEqual(t['pHighFirst'], 0.5)
+        self.assertFalse(t['resolved'])                          # order is a coin flip: not called
+        out = {'high': {'time': '09:30'}, 'low': {'time': '09:30'}}
+        hilo.apply_timing(out, pairs, bins)
+        # unresolved: the early/late bars are NOT attached to high or low
+        self.assertEqual(out['high']['timeBasis'], 'marginal mode')
+        self.assertEqual(out['timing']['n'], 20)
+
+    def test_order_called_only_when_history_agrees(self):
+        bins = list(range(570, 960, 15))
+        t = hilo.timing_block([(600, 900)] * 14 + [(900, 600)] * 6, bins)
+        self.assertTrue(t['resolved'])
+        self.assertEqual(t['pHighFirst'], 0.7)
+
+    def test_forecasts_time_early_and_late_extremes_separately(self):
+        day = date(2026, 10, 9)
+        store = build_store(sessions_before(day, 30))
+        f, _ = hilo.premarket_forecast(store['TST'], day)
+        self.assertNotEqual(f['timing']['early']['time'], f['timing']['late']['time'])
+        self.assertTrue(f['timing']['resolved'])                   # synthetic highs always come first
+        self.assertEqual(f['high']['timeBasis'], 'order-assigned')
+        self.assertNotEqual(f['high']['time'], f['low']['time'])
+        g, _ = hilo.intraday_forecast(store['TST'], day, synthetic_bars(day, 103, hi_bar=1, lo_bar=3)[:4])
+        self.assertNotEqual(g['timing']['early']['time'], g['timing']['late']['time'])
+
+    def test_period_actuals_use_only_completed_days_in_period(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'X_daily.csv'
+            rows = [('2026-09-30', 120, 90), ('2026-10-01', 110, 100), ('2026-10-05', 115, 95),
+                    ('2026-10-08', 112, 99), ('2026-10-09', 999, 1)]      # 10/09 is the target day: excluded
+            path.write_text('Datetime,Open,High,Low,Close,Volume\n' + ''.join(
+                f'{d} 00:00:00-04:00,100,{h},{l},100,0\n' for d, h, l in rows))
+            pa = hilo.period_actuals(path, date(2026, 10, 9))
+            self.assertEqual(pa['W']['high'], {'price': 115.0, 'date': '2026-10-05'})
+            self.assertEqual(pa['M']['low'], {'price': 95.0, 'date': '2026-10-05'})
+            self.assertEqual(pa['Y']['high'], {'price': 120.0, 'date': '2026-09-30'})
+
+
+class TimingSupportTests(unittest.TestCase):
+    bins = list(range(570, 960, 15))
+
+    def test_same_bar_evidence_is_allowed_not_replaced_by_an_unsupported_bar(self):
+        t = hilo.timing_block([(570, 570)] * 12 + [(570, 600)] * 3, self.bins)
+        self.assertEqual((t['early']['time'], t['late']['time']), ('09:30', '09:30'))
+        self.assertGreater(t['late']['pBar'], 0)                 # never a zero-support time
+        self.assertEqual(t['pSameBar'], 0.8)
+
+    def test_late_mode_before_early_mode_is_flagged_not_reported_as_an_order(self):
+        # early mostly 10:30, late mostly 10:00: the two modes reverse
+        pairs = [(630, 645)] * 6 + [(570, 600)] * 3 + [(600, 990 - 30)] * 5
+        t = hilo.timing_block(pairs, self.bins)
+        if t['late']['time'] < t['early']['time']:
+            self.assertFalse(t['consistent'])
+            self.assertFalse(t['resolved'])
+
+    def test_every_reported_bar_has_support(self):
+        import random
+        rng = random.Random(3)
+        for _ in range(200):
+            pairs = [tuple(rng.choice(self.bins) for _ in range(2)) for _ in range(rng.randint(5, 40))]
+            t = hilo.timing_block(pairs, self.bins)
+            self.assertGreater(t['early']['pBar'], 0)
+            self.assertGreater(t['late']['pBar'], 0)
+
+
+class ReviewB1Regressions(unittest.TestCase):
+    """Exact reproductions from the 2026-10-09 review of 180ab1e."""
+    bins = list(range(570, 960, 15))
+
+    def test_all_same_bar_pairs_keep_late_on_its_supported_bar(self):
+        t = hilo.timing_block([(600, 600)] * 20, self.bins)
+        self.assertEqual((t['early']['time'], t['late']['time']), ('10:00', '10:00'))
+        self.assertEqual((t['early']['pBar'], t['late']['pBar']), (1.0, 1.0))
+        self.assertFalse(t['resolved'])                         # one bar for both: no order to call
+
+    def test_mixed_pairs_do_not_produce_a_reversed_resolved_order(self):
+        t = hilo.timing_block([(600, 600)] * 11 + [(570, 585)] * 9, self.bins)
+        self.assertGreaterEqual(t['late']['time'], t['early']['time'])
+        self.assertGreater(t['late']['pBar'], 0)
+        if t['late']['time'] == t['early']['time']:
+            self.assertFalse(t['resolved'])
+
+
+    def test_all_high_first_pairs_give_a_supported_ordered_pair(self):
+        pairs = [(600, 615)] * 3 + [(600, 630)] * 3 + [(600, 645)] * 3 + [(600, 660)] * 3 + [(570, 585)] * 8
+        t = hilo.timing_block(pairs, self.bins)
+        self.assertEqual((t['early']['time'], t['late']['time']), ('09:30', '09:45'))
+        self.assertEqual(t['pPair'], 0.4)
+        self.assertEqual(t['pHighFirst'], 1.0)
+        self.assertTrue(t['resolved'])
+        self.assertLess(t['early']['time'], t['late']['time'])
+
+    def test_order_is_not_called_against_the_selected_pairs_own_orientation(self):
+        # 2026-10-09 review of c6b7214: globally 60% high-first, but every session behind the
+        # selected 09:30/09:45 pair was low-first, so high 09:30 / low 09:45 was never observed
+        pairs = [(585, 570)] * 8 + [(600, 615)] * 3 + [(630, 645)] * 3 + [(660, 675)] * 3 + [(690, 705)] * 3
+        t = hilo.timing_block(pairs, self.bins)
+        self.assertEqual((t['early']['time'], t['late']['time']), ('09:30', '09:45'))
+        self.assertEqual((t['pHighFirst'], t['pPairHighFirst']), (0.6, 0.0))
+        self.assertFalse(t['resolved'])
+        out = {'high': {}, 'low': {}}
+        hilo.apply_timing(out, pairs, self.bins)
+        self.assertEqual((out['high']['timeBasis'], out['low']['timeBasis']), ('marginal mode', 'marginal mode'))
+
+    def test_resolved_assignment_has_support_on_both_sides(self):
+        pairs = [(570, 585)] * 8 + [(600, 615)] * 3 + [(630, 645)] * 3 + [(660, 675)] * 3 + [(690, 705)] * 3
+        out = {'high': {}, 'low': {}}
+        hilo.apply_timing(out, pairs, self.bins)
+        self.assertTrue(out['timing']['resolved'])
+        self.assertEqual((out['high']['time'], out['low']['time']), ('09:30', '09:45'))
+        self.assertGreater(out['high']['pBar'], 0)
+        self.assertGreater(out['low']['pBar'], 0)
 
 
 if __name__ == '__main__':

@@ -17,35 +17,17 @@ const delay=()=>new Promise(r=>setTimeout(r,30));
 (async()=>{
   await delay();
   for(const ticker of w.eval('Object.keys(DATA_ALL)')){
-    w.eval(`CUR=${JSON.stringify(ticker)};renderAll(DATA_ALL[CUR]);`);
-    const timing=w.eval('DATA_ALL[CUR].timingReview');
-    if(timing){
-      assert.equal(d.querySelectorAll('#timingCards > div').length,4);
-      assert.ok(d.getElementById('timingSummary').textContent.includes(`${timing.forward.scored} forward-test calls`));
-      assert.ok(d.getElementById('timingDetails').textContent.includes('not proof'));
-      assert.ok(!d.getElementById('timingPanel').textContent.includes('undefined'));
-      for(const card of d.querySelectorAll('#timingCards > div')){
-        assert.ok(card.textContent.includes('Historical audit') && card.textContent.includes('Forward test'),'cohorts must stay separate');
+    w.eval(`CUR=${JSON.stringify(ticker)};renderAll();`);
+    for(const per of ['D','W','M','Y']){
+      d.querySelector(`#gPeriod button[data-p="${per}"]`).click();
+      const v=w.__gView, res=d.getElementById('gRes');
+      assert.ok(!/proven edge|trade this|REAL EDGE/i.test(d.body.textContent),'labels must not claim an edge or instruct trading');
+      if(!v.rec){ assert.match(res.textContent,/No forecast|unavailable/); continue; }
+      for(const side of ['high','low']){
+        const shown=Number(res.querySelector(`[data-side="${side}"]`).dataset.price);
+        assert.equal(shown,v[side].price,`${ticker} ${per} ${side}: result must equal the plotted point`);
+        assert.ok(v.fc.includes(v[side]),`${ticker} ${per} ${side}: result must be one of the plotted forecast points`);
       }
-    }
-    const note=d.getElementById('hitnote').textContent;
-    assert.ok(!/proven edge —|trade those|REAL EDGE — trade this/i.test(d.body.textContent),'labels must not claim a proven edge or instruct trading');
-    const lead=w.eval('DATA_ALL[CUR].leadEdge')||{};
-    if(Object.values(lead).some(v=>v.edge<0)) assert.ok(note.includes('BELOW chance'),'below-chance bands must say so');
-    assert.ok(!d.getElementById('predTable').textContent.includes('ACTIONABLE'));
-    assert.ok(!d.getElementById('vibPanel').textContent.includes('undefined'),'vibration panel renders for '+ticker);
-    const forecasts=w.eval('DATA_ALL[CUR].predictions');
-    const chartRow=d.querySelector('[data-chart-targets]');
-    for(const side of ['high','low']){
-      const p=forecasts.filter(p=>p.type===side).sort((a,b)=>side==='high'?b.price-a.price:a.price-b.price)[0];
-      const cell=chartRow.children[side==='high'?1:2];
-      assert.ok(cell.textContent.includes(p.isoDate),'table date must match chart target for '+ticker);
-      assert.equal(Number(cell.querySelector('.big').textContent.replace(/[$,]/g,'')),p.price,'table price must match chart for '+ticker);
-    }
-    for(const cell of d.querySelectorAll('[data-forecast-kind="range"]')){
-      assert.ok(cell.textContent.includes('RANGE ESTIMATE'));
-      assert.ok(cell.textContent.includes('not a turn date'));
-      assert.ok(!cell.textContent.includes(' hour '),'range must not claim a turning time');
     }
     const c=d.getElementById('chart');
     c.getBoundingClientRect=()=>({left:0,top:0,width:c.__w,height:c.__h});
@@ -58,20 +40,19 @@ const delay=()=>new Promise(r=>setTimeout(r,30));
     c.onkeydown({key:'ArrowLeft',preventDefault(){}});
     assert.match(d.getElementById('chartTooltip').textContent,/Actual daily close/);
   }
-  assert.match(d.getElementById('updated').textContent,/price as of|exact quote time unavailable/);
   const before=w.eval('JSON.stringify(DATA_ALL)');
   response='const DATA_ALL = {"TSLA":{"price":1}};';
-  await d.getElementById('btnUpdate').onclick();
+  await d.getElementById('gUpd').onclick();
   assert.equal(w.eval('JSON.stringify(DATA_ALL)'),before,'invalid payload must not replace data');
-  assert.equal(d.getElementById('btnUpdate').disabled,false);
+  assert.equal(d.getElementById('gUpd').className,'bad');
   failNetwork=true;
-  await d.getElementById('btnUpdate').onclick();
+  await d.getElementById('gUpd').onclick();
   assert.equal(w.eval('JSON.stringify(DATA_ALL)'),before);
   failNetwork=false;response=payload;
-  await d.getElementById('btnUpdate').onclick();
-  assert.match(d.getElementById('updStatus').textContent,/Analysis generated/);
-  assert.equal(d.getElementById('btnUpdate').disabled,false);
+  await d.getElementById('gUpd').onclick();
+  assert.notEqual(d.getElementById('gUpd').className,'bad');
+  assert.equal(d.getElementById('gUpd').disabled,false);
   assert.deepEqual(errors,[]);
-  console.log('PASS: all tickers render; hover/touch handler and keyboard inspect; invalid/offline updates preserve data; recovery succeeds.');
-  dom.window.close();
-})().catch(e=>{console.error(e);dom.window.close();process.exitCode=1;});
+  console.log('PASS: all tickers and periods render with results equal to plotted points; hover/touch and keyboard inspect; invalid/offline updates preserve data; recovery succeeds.');
+  process.exit(0);
+})().catch(e=>{console.error(e);process.exit(1);});
