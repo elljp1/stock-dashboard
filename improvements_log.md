@@ -2973,3 +2973,47 @@ features, ledgers, and the coherence gate are untouched; `tickers.txt` wasn't to
 **Watch next:** META's calibration as it gets more sessions under its belt (just crossed the n=8
 minimum, so expect the ±3.3% daily-band lean to shrink); whether NVDA/AMZN/SPY/VOO/META ever produce
 a qualifying swing to grade; and the open alerts/trades in the paper journal.
+
+## 2026-10-10 (Sat) — weekend, no new session; fetch blocked again; grade + log only
+
+**Build status:** this session's own `fetch_data.py` was blocked again — all 11 tickers failed at
+the sandbox's network proxy (same "connect_rejected" sandbox restriction seen on recent days, not a
+Yahoo-side block). Markets are closed Saturday anyway, so there was no new session to fetch even if
+Yahoo had answered. With no fresh CSVs, `analyze.py` correctly refused to rebuild
+("Incomplete analysis; retaining last published dashboard") and left the current build untouched.
+The separate cloud refresh workflow already ran Friday evening with real market access — `data.js`
+is stamped generated 10/09 9:16 PM ET across all 11 tickers. `coherence_check.py` passes clean
+(11/11 tickers), the full Python test suite passes all 136 tests, and all 5 Node UI tests (pin,
+smoke, reliability, hilo refresh, layout) pass too.
+
+**One thing worth naming, not acting on:** `anomaly_audit.py` flagged 5 tickers (TSLA, HOOD, GOOGL,
+SPY, VOO) whose forecast chain's lead event is still dated Fri 10/09, now "in the past" relative to
+today's real calendar date. This is the same mechanism diagnosed before (see 9/12's JPM/AMZN
+stale-headline-date entry, resolved by the next session on 9/13): when the current session's
+turn hasn't been confirmed yet, the chain's head stays pinned to that session's date until a new
+session trades and either confirms the turn or advances the chain. No new session has traded since
+Friday's close, so there's nothing to advance it with — it isn't a data bug, and it doesn't fail
+`coherence_check.py` (the hard gate). Expect this to clear on its own once Monday's session gives
+the chain something to resolve against, the same way the 9/12 occurrence did by the next morning.
+
+**Grades reviewed:** unchanged from Friday since no new session traded over the weekend — TSLA
+n=13 (31%/38%), HOOD n=59 (19%/27%, `priceCalibHigh` still holding at the owner's deliberate 1.15
+ceiling), QQQ n=44 (30%/34%), JPM n=27 (15%/22%), GOOGL n=34 (21%/24%), GC=F n=19 (21%/21%);
+NVDA/AMZN/SPY/VOO/META still n=0 on swing grading (quiet/too-new names, already confirmed not a
+bug). The walk-forward horizon scoreboard's daily high/low error numbers are likewise unchanged
+from Friday's reading and show the same small, already-calibrated lean per ticker — no new
+3+-day pattern anywhere. Trade cards in `trades_log.json` ride the same forecast engine, so
+nothing distinct to flag there; the newest sheet (logged 10/09) targets Fri 10/09 itself as its
+exercise window, too new to grade. In the owner's own paper/real trade journal, trade 7 (QQQ call
+credit spread) closed +$104 on 10/08 since the last review, and trade 8 (HOOD put credit) is still
+open — both are the owner's bookkeeping, not touched here.
+
+**What changed and why:** nothing. No bug found, and the one new observation (the stale chain-head
+flag) is a one-day-old, already-understood weekend artifact, not a 3+-day pattern — logging it to
+watch rather than shipping a change. Honesty features, ledgers, and the coherence gate are
+untouched; `tickers.txt` wasn't touched.
+
+**Watch next:** whether the 5-ticker stale chain-head observation clears on its own once Monday's
+session trades, the way the 9/12 occurrence did; whether HOOD's 1.15 calibration ceiling keeps
+holding; whether NVDA/AMZN/SPY/VOO/META ever produce a qualifying swing to grade; and the open
+alerts/trades in the paper journal.
