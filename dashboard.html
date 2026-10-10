@@ -224,6 +224,20 @@ function periodView(D, per){
           actual: per === "D" ? null : (ps ? {high:ps.high, low:ps.low} : null)};
 }
 
+// Text drawn on the chart next to each prediction. Day view: price and time; when the high/low order is
+// unresolved the time is the honest two-bar window with "?", never one exact time per side.
+// Other views: price and date (a turn's date is its forecast time; its intraday time is not modelled).
+function chartLabels(v){
+  if(!v.rec) return [];
+  let when = "—";
+  if(v.timing && v.timing.consistent !== false){
+    const e = t12(v.timing.early.time), l = t12(v.timing.late.time);
+    when = e === l ? "≈" + e : e + "/" + l + "?";
+  }
+  return v.fc.map(p => ({point:p, main:p === v.high || p === v.low,
+    text: fmt$(p.price) + " " + (v.per === "D" ? (p.time ? t12(p.time) : when) : md(p.date))}));
+}
+
 function renderResults(v){
   const box = $("gRes");
   if(!v.rec){
@@ -328,13 +342,35 @@ function drawChart(D, v){
     if(p.src === "day"){ x.strokeStyle = col; x.lineWidth = 2; x.beginPath(); x.moveTo(px, Y(p.hi)); x.lineTo(px, Y(p.lo)); x.stroke(); }
     x.fillStyle = col; x.beginPath(); x.arc(px, py, 4.5, 0, 7); x.fill();
   }
-  for(const p of [v.high, v.low]){                               // the two numbers in the results, labelled
+  for(const p of [v.high, v.low]){                               // the two numbers in the results: ringed
     if(!p) continue;
-    const px = X(p.date), py = Y(p.price), col = p.type === "high" ? "#1a7f37" : "#cf222e";
-    x.strokeStyle = col; x.lineWidth = 1.5; x.beginPath(); x.arc(px, py, 8, 0, 7); x.stroke();
-    x.font = "700 12px system-ui,sans-serif"; x.textAlign = "right"; x.fillStyle = col;
-    x.fillText("$" + (p.price < 100 ? p.price.toFixed(2) : Math.round(p.price).toLocaleString()), px - 11, py + (p.type === "high" ? -6 : 14));
+    x.strokeStyle = p.type === "high" ? "#1a7f37" : "#cf222e"; x.lineWidth = 1.5;
+    x.beginPath(); x.arc(X(p.date), Y(p.price), 8, 0, 7); x.stroke();
   }
+  // every prediction labelled on the chart itself; labels never overlap each other
+  const labels = chartLabels(v), boxes = [];
+  for(let g = 0; g <= 3; g++){ const y = Y(pMin + g * (pMax - pMin) / 3); boxes.push({l:W - R + 2, r:W, t:y - 9, b:y + 6}); }
+  for(const p of fc.concat(actIn)){ const px = X(p.date), py = Y(p.price); boxes.push({l:px - 6, r:px + 6, t:py - 6, b:py + 6}); }
+  const hit = r => r.l < L || r.r > W - 2 || r.t < T || r.b > H - B || boxes.some(o => r.l < o.r && r.r > o.l && r.t < o.b && r.b > o.t);
+  for(const lb of labels){
+    const p = lb.point, px = X(p.date), py = Y(p.price), col = p.type === "high" ? "#1a7f37" : "#cf222e";
+    x.font = (lb.main ? "700 12px" : "600 11px") + " system-ui,sans-serif";
+    const m = x.measureText(lb.text), w = (m && m.width) || lb.text.length * 6.5, h = lb.main ? 14 : 13;
+    const up = p.type === "high" ? -1 : 1, cand = [];
+    for(const dy of [0, 1, 2, 3, 4, 5, 6]) for(const sx of [-1, 1]) for(const vy of [up, -up])
+      cand.push({ax: sx < 0 ? px - 11 - w : px + 11, ay: py + vy * (dy * h) + (vy > 0 ? 4 : -h + 4) + (dy ? 0 : vy * 2)});
+    let pick = null;
+    for(const cnd of cand){ const r = {l:cnd.ax - 2, r:cnd.ax + w + 2, t:cnd.ay, b:cnd.ay + h}; if(!hit(r)){ pick = r; break; } }
+    if(!pick){ const ax = Math.min(Math.max(L, px - w / 2), W - 2 - w); pick = {l:ax - 2, r:ax + w + 2, t:Math.min(Math.max(T, py - h / 2), H - B - h), b:0}; pick.b = pick.t + h; }
+    boxes.push(pick);
+    const cy = (pick.t + pick.b) / 2;
+    const gap = Math.max(pick.l - px, px - pick.r, 0) + Math.max(pick.t - py, py - pick.b, 0);
+    if(gap > 14){ x.strokeStyle = col; x.lineWidth = 0.8; x.beginPath(); x.moveTo(px, py); x.lineTo(pick.l < px ? pick.r - 2 : pick.l + 2, cy); x.stroke(); }
+    x.textAlign = "left"; x.lineWidth = 3; x.strokeStyle = "rgba(255,255,255,0.9)"; x.lineJoin = "round";
+    x.strokeText(lb.text, pick.l + 2, pick.b - 3); x.fillStyle = col; x.fillText(lb.text, pick.l + 2, pick.b - 3);
+    lb.box = pick;
+  }
+  window.__gLabels = labels;
   // hover / tap / keyboard inspection
   const points = dates.map((d, i) => ({date:d, price:closes[i], kind:"Actual daily close"}))
     .concat(fc.map(p => ({date:p.date, price:p.price, kind:(p.src === "day" ? "Forecast " : "Projected turn ") + p.type + (p.time ? " · " + t12(p.time) : "")})))

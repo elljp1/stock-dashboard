@@ -53,6 +53,15 @@ setTimeout(() => {
     check(v.fc.filter(p => p.src === "turn").every(p => p.date > v.S && p.date <= v.span[1]), per + ": turns outside the selected period");
     check(v.fc.filter(p => p.src === "turn").length <= 5, per + ": more than five turns");
     if (per === "D") check(v.fc.every(p => p.src === "day"), "day view must plot only the day forecast");
+    // the chart itself carries every prediction: same price as the summary, plus a time (D) or date (W/M/Y)
+    const labs = w.__gLabels || [];
+    check(labs.length === v.fc.length && v.fc.every(p => labs.some(l => l.point === p)), per + ": every plotted prediction needs a chart label");
+    for (const l of labs) {
+      check(l.text.startsWith("$" + l.point.price.toFixed(2)), per + ": label price differs from the point: " + l.text);
+      if (per === "D") check(/ 9:30a\/3:45p\?$/.test(l.text), "unresolved day label must show the two-bar window with ?, not one exact time: " + l.text);
+      else check(l.text.endsWith(" " + Number(l.point.date.slice(5, 7)) + "/" + Number(l.point.date.slice(8, 10))), per + ": label must carry its date: " + l.text);
+    }
+    check(labs.filter(l => l.main).length === 2, per + ": the two summary numbers must be the emphasised labels");
     if (per === "M") check(/so far/.test(res.textContent) && /123\.45/.test(res.textContent) && /proj\. pt/.test(res.textContent), "month view must show projected points and the separate so-far actual");
     if (per !== "D") check(/partial: day \+ \d+ turn/.test(d.getElementById("gAsOf").textContent), per + " must say the horizon is partial");
   }
@@ -62,7 +71,9 @@ setTimeout(() => {
   res = d.getElementById("gRes");
   const whens = [...res.querySelectorAll(".when")].map(e => e.textContent.trim());
   check(whens[0] === "9:30a" && whens[1] === "3:45p" && !/order \?/.test(res.textContent), "resolved order must time high and low: " + whens);
+  const rl = Object.fromEntries((dom.window.__gLabels || []).map(l => [l.point.type, l.text]));
+  check(rl.high === "$110.00 9:30a" && rl.low === "$100.00 3:45p", "resolved day labels must carry each side's time: " + JSON.stringify(rl));
   if (fails.length) { console.error("UI LAYOUT TEST FAILED:\n - " + fails.join("\n - ")); process.exit(1); }
-  console.log("ui layout test OK: chart + compact results only, D/W/M/Y share one source, actuals separate, honest timing");
+  console.log("ui layout test OK: chart + compact results only, D/W/M/Y share one source, predictions labelled on the chart, actuals separate, honest timing");
   process.exit(0);
 }, 400);

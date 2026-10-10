@@ -77,6 +77,11 @@ low time.
 - Highs and lows already traded in the period (from completed daily bars) are
   shown separately, as "so far". On the chart they are grey hollow circles.
   They never replace the forecast.
+- Every forecast point is labelled on the chart itself, with the same price as
+  the results. On D the label adds the time: each side's own time only when the
+  order is resolved, otherwise the two-bar window with "?" (for example
+  "9:30a/3:45p?"). On W/M/Y it adds the date; a turn's intraday time is not
+  modelled, so none is shown.
 
 ## Scoring
 - A record is scored only after its session is complete.
