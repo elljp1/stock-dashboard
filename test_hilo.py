@@ -470,6 +470,27 @@ class ReviewB1Regressions(unittest.TestCase):
         self.assertTrue(t['resolved'])
         self.assertLess(t['early']['time'], t['late']['time'])
 
+    def test_order_is_not_called_against_the_selected_pairs_own_orientation(self):
+        # 2026-10-09 review of c6b7214: globally 60% high-first, but every session behind the
+        # selected 09:30/09:45 pair was low-first, so high 09:30 / low 09:45 was never observed
+        pairs = [(585, 570)] * 8 + [(600, 615)] * 3 + [(630, 645)] * 3 + [(660, 675)] * 3 + [(690, 705)] * 3
+        t = hilo.timing_block(pairs, self.bins)
+        self.assertEqual((t['early']['time'], t['late']['time']), ('09:30', '09:45'))
+        self.assertEqual((t['pHighFirst'], t['pPairHighFirst']), (0.6, 0.0))
+        self.assertFalse(t['resolved'])
+        out = {'high': {}, 'low': {}}
+        hilo.apply_timing(out, pairs, self.bins)
+        self.assertEqual((out['high']['timeBasis'], out['low']['timeBasis']), ('marginal mode', 'marginal mode'))
+
+    def test_resolved_assignment_has_support_on_both_sides(self):
+        pairs = [(570, 585)] * 8 + [(600, 615)] * 3 + [(630, 645)] * 3 + [(660, 675)] * 3 + [(690, 705)] * 3
+        out = {'high': {}, 'low': {}}
+        hilo.apply_timing(out, pairs, self.bins)
+        self.assertTrue(out['timing']['resolved'])
+        self.assertEqual((out['high']['time'], out['low']['time']), ('09:30', '09:45'))
+        self.assertGreater(out['high']['pBar'], 0)
+        self.assertGreater(out['low']['pBar'], 0)
+
 
 if __name__ == '__main__':
     unittest.main()

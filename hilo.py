@@ -219,7 +219,9 @@ def timing_block(pairs, bins):
     (the opening bar is the most common bar for both, which made both read 09:30).
     Instead: the EARLY extreme (whichever comes first) and the LATE extreme each get
     their own most likely bar, and pHighFirst says how often the high came first.
-    Only when that share is at least ORDER_RESOLVED either way is the order called.
+    The order is called only when that share AND the share among the sessions that
+    produced the selected pair (pPairHighFirst) are both at least ORDER_RESOLVED the
+    same way, so the high/low assignment is one that was actually observed.
     """
     n = len(pairs)
     p_hf = (sum(h < l for h, l in pairs) + 0.5 * sum(h == l for h, l in pairs)) / n
@@ -230,12 +232,16 @@ def timing_block(pairs, bins):
     # reversed, and the same bar for both is allowed when that is what history shows
     ordered = [(min(h, l) // BAR_MIN * BAR_MIN, max(h, l) // BAR_MIN * BAR_MIN) for h, l in pairs]
     em, lm = max(set(ordered), key=lambda pr: (ordered.count(pr), -pr[0], -pr[1]))
+    in_pair = [(h, l) for (h, l), pr in zip(pairs, ordered) if pr == (em, lm)]
+    p_pair_hf = sum(h < l for h, l in in_pair) / len(in_pair)
+    agree = (min(p_hf, p_pair_hf) >= ORDER_RESOLVED or max(p_hf, p_pair_hf) <= 1 - ORDER_RESOLVED)
     part = lambda ts, b: {'time': hhmm(b), 'pBar': round(count(ts, b) / n, 3),
                           'p60': round(sum(abs(m - b) <= WINDOW_MIN for m in ts) / n, 3)}
     return {'early': part(early, em), 'late': part(late, lm), 'pPair': round(ordered.count((em, lm)) / n, 3),
-            'pHighFirst': round(p_hf, 3), 'pSameBar': round(sum(h == l for h, l in pairs) / n, 3),
+            'pHighFirst': round(p_hf, 3), 'pPairHighFirst': round(p_pair_hf, 3),
+            'pSameBar': round(sum(h == l for h, l in pairs) / n, 3),
             'consistent': lm >= em,
-            'resolved': lm > em and max(p_hf, 1 - p_hf) >= ORDER_RESOLVED}
+            'resolved': lm > em and agree}
 
 
 def apply_timing(out, pairs, bins):
@@ -245,7 +251,8 @@ def apply_timing(out, pairs, bins):
     t['n'] = len(pairs)
     t['basis'] = ('per past session (or replayed scenario): (early, late) = the earlier and later of the '
                   'high and low bars; the reported pair is the most frequent such ordered pair (pPair); '
-                  'pBar/p60 are each bar\'s own share; pHighFirst = share of sessions where the high came first')
+                  'pBar/p60 are each bar\'s own share; pHighFirst = share of sessions where the high came first; '
+                  'pPairHighFirst = the same share among sessions that produced the selected pair')
     for side in ('high', 'low'):
         out[side]['timeBasis'] = 'marginal mode'
     if t['resolved']:

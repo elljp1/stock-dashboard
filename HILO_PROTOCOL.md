@@ -49,8 +49,10 @@ low time.
   - `early`/`late` also carry each bar's own share (`pBar`, `p60`).
   - `pHighFirst` is the share of sessions with the high first; `pSameBar` is
     the share with both in one bar.
-- The order is called (`resolved`) only when the pair has two different bars
-  and `pHighFirst` is at least 0.6 either way. Only then is it attached to the
+- The order is called (`resolved`) only when the pair has two different bars,
+  `pHighFirst` is at least 0.6 either way, and `pPairHighFirst` (the same share
+  among only the sessions behind the selected pair) is at least 0.6 the same
+  way, so the high/low assignment was actually observed. Only then is it attached to the
   high and the low (`timeBasis: order-assigned`). Otherwise each side keeps
   its marginal modal bar (`timeBasis: marginal mode`), and the page shows only
   "1st ≈ early · 2nd ≈ late · order ?" (or "both ≈ bar").
