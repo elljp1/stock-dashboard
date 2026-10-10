@@ -14,8 +14,13 @@
   body{padding:var(--pad); max-width:1100px; margin:0 auto}
   #glance{display:flex; flex-direction:column; gap:6px; height:calc(100vh - 2*var(--pad)); height:calc(100svh - 2*var(--pad)); max-height:900px}
   #gTop{display:flex; align-items:center; gap:6px}
-  #gTicker{font:700 15px system-ui,-apple-system,sans-serif; padding:6px 4px; border:1px solid var(--border);
-    border-radius:8px; background:var(--panel); color:var(--text); min-width:0; flex:1 1 auto; max-width:190px}
+  #gTk{display:grid; grid-template-columns:repeat(auto-fill, minmax(84px, 1fr)); gap:4px}
+  #gTk button{font:700 13px system-ui,-apple-system,sans-serif; line-height:1.15; padding:3px 4px; min-width:0;
+    border:1px solid var(--border); border-radius:8px; background:var(--panel); color:var(--text); cursor:pointer;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  #gTk button small{display:block; font:600 11px system-ui,-apple-system,sans-serif; color:var(--dim); font-variant-numeric:tabular-nums}
+  #gTk button.on{background:var(--blue); border-color:var(--blue); color:#fff}
+  #gTk button.on small{color:#fff}
   #gPeriod{display:flex; border:1px solid var(--border); border-radius:8px; overflow:hidden}
   #gPeriod button{font:700 13px system-ui,-apple-system,sans-serif; width:34px; padding:7px 0; border:0;
     background:var(--panel); color:var(--dim); cursor:pointer}
@@ -24,8 +29,10 @@
     background:var(--panel); color:var(--dim); cursor:pointer; white-space:nowrap; margin-left:auto}
   #gUpd .dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--green); margin-right:4px; vertical-align:1px}
   #gUpd.old .dot{background:var(--amber)} #gUpd.bad .dot{background:var(--red)}
-  #gChartWrap{flex:1 1 auto; min-height:140px; background:var(--panel); border:1px solid var(--border); border-radius:10px; overflow:hidden}
-  #chart{display:block; width:100%; height:100%; touch-action:pan-y}
+  #gChartWrap{position:relative; flex:1 1 auto; min-height:140px; background:var(--panel); border:1px solid var(--border); border-radius:10px; overflow:hidden}
+  #chart{display:block; width:100%; height:100%; touch-action:none; user-select:none; -webkit-user-select:none}
+  #gReset{position:absolute; top:6px; left:6px; font:700 12px system-ui,-apple-system,sans-serif; padding:5px 10px; border:1px solid var(--border); border-radius:8px; background:var(--panel); color:var(--blue); cursor:pointer}
+  #gReset[hidden]{display:none}
   #gRes{display:grid; grid-template-columns:auto 1fr auto; column-gap:10px; row-gap:1px; align-items:baseline;
     background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:7px 12px; font-variant-numeric:tabular-nums}
   #gRes .lbl{font-weight:700; font-size:13px; color:var(--dim)}
@@ -152,12 +159,12 @@
 </script>
 
 <div id="glance">
+  <div id="gTk" role="group" aria-label="Stocks"></div>
   <div id="gTop">
-    <select id="gTicker" aria-label="Stock"></select>
     <div id="gPeriod" role="group" aria-label="Period"><button data-p="D">D</button><button data-p="W">W</button><button data-p="M">M</button><button data-p="Y">Y</button></div>
     <button id="gUpd" title="Update"><span class="dot"></span><span id="gUpdTime">update</span></button>
   </div>
-  <div id="gChartWrap"><canvas id="chart" aria-label="Price chart with forecast high and low" tabindex="0"></canvas></div>
+  <div id="gChartWrap"><canvas id="chart" aria-label="Price chart with forecasts. Drag to pan, pinch or +/- to zoom, double-tap or 0 to reset." tabindex="0"></canvas><button id="gReset" hidden>Reset</button></div>
   <div id="gRes"></div>
   <div id="gMeta"><span id="gAsOf"></span>
     <details id="gHist"><summary>&#9656; History</summary><div id="gHistBody"></div></details></div>
@@ -213,15 +220,31 @@ function periodView(D, per){
   const resolved = !!(rec.timing && rec.timing.resolved);
   const fc = ["high","low"].map(side => ({src:"day", type:side, date:S, price:rec[side].price, lo:rec[side].lo,
     hi:rec[side].hi, time: resolved ? rec[side].time : null}));
-  if(per !== "D"){
-    (D.predictions || []).filter(p => p.isoDate > S).slice(0, 5)
-      .filter(p => p.isoDate <= span[1])
-      .forEach(p => fc.push({src:"turn", type:p.type, date:p.isoDate, price:p.price}));
-  }
-  const best = (type, better) => fc.filter(p => p.type === type).reduce((a, b) => (!a || better(b.price, a.price)) ? b : a, null);
-  return {rec:rec, per:per, S:S, span:span, fc:fc, timing:rec.timing || null, resolved:resolved,
+  // the next projected turns (at most five, only those the data supports), dated after the last completed
+  // session; D plots all of them but its results stay the day forecast; W/M/Y keep only those in the period
+  const lastClose = D.chart.dates[D.chart.dates.length - 1];
+  (D.predictions || []).filter(p => p.isoDate > lastClose).slice(0, 5)
+    .filter(p => per === "D" || p.isoDate <= span[1])
+    .forEach(p => fc.push({src:"turn", type:p.type, date:p.isoDate, price:p.price}));
+  const pool = per === "D" ? fc.filter(p => p.src === "day") : fc;
+  const best = (type, better) => pool.filter(p => p.type === type).reduce((a, b) => (!a || better(b.price, a.price)) ? b : a, null);
+  return {rec:rec, per:per, S:S, lastClose:lastClose, span:span, fc:fc, timing:rec.timing || null, resolved:resolved,
           high:best("high", (x, y) => x > y), low:best("low", (x, y) => x < y),
           actual: per === "D" ? null : (ps ? {high:ps.high, low:ps.low} : null)};
+}
+
+// Text drawn on the chart next to each prediction. Day view: price and time; when the high/low order is
+// unresolved the time is the honest two-bar window with "?", never one exact time per side.
+// Projected turns, and every point in other views: price and date (a turn's intraday time is not modelled).
+function chartLabels(v){
+  if(!v.rec) return [];
+  let when = "—";
+  if(v.timing && v.timing.consistent !== false){
+    const e = t12(v.timing.early.time), l = t12(v.timing.late.time);
+    when = e === l ? "≈" + e : e + "/" + l + "?";
+  }
+  return v.fc.map(p => ({point:p, main:p === v.high || p === v.low,
+    text: fmt$(p.price) + " " + (v.per === "D" && p.src === "day" ? (p.time ? t12(p.time) : when) : md(p.date))}));
 }
 
 function renderResults(v){
@@ -263,7 +286,7 @@ function renderMeta(v){
   const cut = new Date(v.rec.dataCutoff).toLocaleString("en-US", {timeZone:"America/New_York", weekday:"short", hour:"numeric", minute:"2-digit"}).replace(" AM","a").replace(" PM","p");
   const span = v.per === "D" ? dayLbl(v.S) : md(v.span[0]) + "–" + md(v.span[1]);
   const nt = v.fc.filter(p => p.src === "turn").length;
-  const part = v.per === "D" ? "" : ` · partial: day + ${nt} turn${nt === 1 ? "" : "s"}`;
+  const part = v.per === "D" ? (nt ? ` · + ${nt} turn${nt === 1 ? "" : "s"}` : "") : ` · partial: day + ${nt} turn${nt === 1 ? "" : "s"}`;
   el.innerHTML = `${esc(span)}${part} · ${v.rec.kind === "intraday" ? "live" : "premarket"} · data ${esc(cut)}` + (stale ? ` · <b>stale</b>` : "") + (v.per === "D" ? " · 80% range" : "");
 }
 
@@ -275,95 +298,204 @@ function renderUpd(D){
   b.title = LAST_PULL_FAILED ? "Last update failed; previous data kept" : "Update";
 }
 
-/* ---------- chart ---------- */
-function drawChart(D, v){
+/* ---------- chart ----------
+   One time window (VIEW) over the whole history plus the forecasts. The default window shows the recent
+   closes and every plotted forecast point; drag pans, pinch / wheel zooms, double-tap or Reset restores it. */
+const DAY = 864e5, tms = d => new Date(d).getTime(), isoOf = t => new Date(t).toISOString().slice(0, 10);
+let VIEW = null, CH = null;
+function chartRange(D, v){
+  const allD = D.chart.dates, last = allD[allD.length - 1];
+  let end = last;
+  for(const p of v.fc || []) if(p.date > end) end = p.date;
+  if(v.per === "W" && v.span && v.span[1] > end) end = v.span[1];
+  let s = Math.max(0, allD.length - ({D:22, W:30, M:45, Y:250}[v.per] || 30));
+  if(v.per === "Y" && v.span){ const i = allD.findIndex(d => d >= v.span[0]); if(i >= 0) s = Math.min(i, allD.length - 30); }
+  const pad = Math.max(2 * DAY, (tms(end) - tms(allD[s])) * 0.03);
+  return {fullA: tms(allD[0]), fullB: tms(end) + pad, defA: tms(allD[s]), defB: tms(end) + pad};
+}
+function setView(a, b){
+  if(!CH) return;
+  const minSpan = 7 * DAY, maxSpan = CH.fullB - CH.fullA;
+  let span = Math.min(Math.max(b - a, minSpan), maxSpan);
+  a = Math.min(Math.max(a, CH.fullA), CH.fullB - span);
+  VIEW = {key: CH.key, a: a, b: a + span};
+  if(Math.abs(VIEW.a - CH.defA) < DAY / 2 && Math.abs(VIEW.b - CH.defB) < DAY / 2) VIEW = null;
+  drawChart(CH.D, CH.v);
+}
+function drawChart(D, v, hover){
   const c = $("chart"), wrap = c.parentElement, dpr = window.devicePixelRatio || 1;
   const W = Math.max(260, wrap.clientWidth || 360), H = Math.max(140, wrap.clientHeight || 260);
-  c.width = Math.round(W * dpr); c.height = Math.round(H * dpr);
+  if(c.width !== Math.round(W * dpr) || c.height !== Math.round(H * dpr)){ c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); }
   c.__w = W; c.__h = H;
   const x = c.getContext("2d"); x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, W, H);
+  const key = D.ticker + "|" + v.per, rg = chartRange(D, v);
+  if(VIEW && VIEW.key !== key) VIEW = null;
+  const t0 = VIEW ? VIEW.a : rg.defA, t1 = VIEW ? VIEW.b : rg.defB;
+  const L = 6, R = 52, T = 8, B = 18, PW = W - L - R;
+  const X = d => L + ((typeof d === "number" ? d : tms(d)) - t0) / (t1 - t0) * PW;
+  const vis = d => { const t = tms(d); return t >= t0 && t <= t1; };
   const allD = D.chart.dates, allC = D.chart.closes;
-  let start = Math.max(0, allD.length - ({D:22, W:30, M:45, Y:250}[v.per] || 30));
-  if(v.per === "Y" && v.span){ const i = allD.findIndex(d => d >= v.span[0]); if(i >= 0) start = Math.min(i, allD.length - 30); }
-  const dates = allD.slice(start), closes = allC.slice(start);
-  const fc = v.fc || [];
+  let i0 = 0, i1 = allD.length - 1;
+  while(i0 < i1 && tms(allD[i0 + 1]) < t0) i0++;
+  while(i1 > i0 && tms(allD[i1 - 1]) > t1) i1--;
+  const dates = allD.slice(i0, i1 + 1), closes = allC.slice(i0, i1 + 1);
+  const fc = v.fc || [], fcIn = fc.filter(p => vis(p.date));
   const act = [];
   if(v.actual){ for(const side of ["high","low"]) if(v.actual[side]) act.push({type:side, date:v.actual[side].date, price:v.actual[side].price}); }
-  const actIn = act.filter(a => a.date >= dates[0]);
-  let lastDate = dates[dates.length - 1];
-  for(const p of fc) if(p.date > lastDate) lastDate = p.date;
-  if(v.per === "W" && v.span && v.span[1] > lastDate) lastDate = v.span[1];
-  const t0 = new Date(dates[0]).getTime(), t1 = Math.max(new Date(lastDate).getTime(), t0 + 864e5);
-  const pxs = closes.concat(fc.map(p => p.price), fc.filter(p => p.src === "day").map(p => [p.lo, p.hi]).flat(), actIn.map(a => a.price));
+  const actIn = act.filter(a => vis(a.date));
+  const pxs = closes.filter((_, i) => vis(dates[i])).concat(fcIn.map(p => p.price),
+    fcIn.filter(p => p.src === "day").map(p => [p.lo, p.hi]).flat(), actIn.map(a => a.price));
+  if(!pxs.length) pxs.push.apply(pxs, closes);
   let pMin = Math.min.apply(null, pxs), pMax = Math.max.apply(null, pxs);
   const padP = (pMax - pMin) * 0.06 || pMax * 0.01; pMin -= padP; pMax += padP;
-  const L = 6, R = 52, T = 8, B = 18;
-  const X = d => L + (new Date(d).getTime() - t0) / (t1 - t0) * (W - L - R);
   const Y = p => T + (1 - (p - pMin) / (pMax - pMin)) * (H - T - B);
+  CH = {D: D, v: v, key: key, fullA: rg.fullA, fullB: rg.fullB, defA: rg.defA, defB: rg.defB, t0: t0, t1: t1, L: L, PW: PW, W: W, H: H, X: X, Y: Y};
   x.font = "600 11px system-ui,sans-serif"; x.textAlign = "left"; x.fillStyle = "#57606a";
+  const axisBoxes = [];
   for(let g = 0; g <= 3; g++){
     const p = pMin + g * (pMax - pMin) / 3, y = Y(p);
-    x.strokeStyle = "#eef1f4"; x.beginPath(); x.moveTo(L, y); x.lineTo(W - R, y); x.stroke();
+    x.strokeStyle = "#eef1f4"; x.lineWidth = 1; x.beginPath(); x.moveTo(L, y); x.lineTo(W - R, y); x.stroke();
     x.fillText("$" + (p < 100 ? p.toFixed(2) : Math.round(p).toLocaleString()), W - R + 4, y + 4);
+    axisBoxes.push({l:W - R + 2, r:W, t:y - 9, b:y + 6});
   }
+  x.save(); x.beginPath(); x.rect(L, 0, PW + 1, H - B); x.clip();
   if(v.span && v.per !== "D"){                                  // the selected period, lightly shaded
     const a = Math.max(L, X(v.span[0])), b = Math.min(W - R, X(v.span[1]) + 2);
     if(b > a){ x.fillStyle = "rgba(9,105,218,0.06)"; x.fillRect(a, T, b - a, H - T - B); }
   }
-  x.textAlign = "center"; x.fillStyle = "#57606a";
-  for(const d of [dates[0], dates[Math.floor(dates.length / 2)], lastDate]) x.fillText(md(d), Math.min(Math.max(X(d), L + 16), W - R - 16), H - 4);
   x.strokeStyle = "#0969da"; x.lineWidth = 2; x.lineJoin = "round"; x.beginPath();
   dates.forEach((d, i) => { const px = X(d), py = Y(closes[i]); i ? x.lineTo(px, py) : x.moveTo(px, py); }); x.stroke();
   for(const a of actIn){                                        // already traded: hollow grey
     x.strokeStyle = "#57606a"; x.lineWidth = 2; x.beginPath(); x.arc(X(a.date), Y(a.price), 5, 0, 7); x.stroke();
   }
   const turns = fc.filter(p => p.src === "turn").sort((a, b) => a.date < b.date ? -1 : 1);
-  if(turns.length){                                             // next projected turns, purple dashed
+  if(turns.length){                                             // projected turns: purple dashed path from the last close
     x.strokeStyle = "#8250df"; x.setLineDash([5, 4]); x.lineWidth = 1.4; x.beginPath();
-    x.moveTo(X(dates[dates.length - 1]), Y(closes[closes.length - 1]));
+    x.moveTo(X(allD[allD.length - 1]), Y(allC[allC.length - 1]));
     for(const p of turns) x.lineTo(X(p.date), Y(p.price)); x.stroke(); x.setLineDash([]);
   }
   for(const p of fc){
     const px = X(p.date), py = Y(p.price), col = p.type === "high" ? "#1a7f37" : "#cf222e";
-    if(p.src === "day"){ x.strokeStyle = col; x.lineWidth = 2; x.beginPath(); x.moveTo(px, Y(p.hi)); x.lineTo(px, Y(p.lo)); x.stroke(); }
-    x.fillStyle = col; x.beginPath(); x.arc(px, py, 4.5, 0, 7); x.fill();
+    if(p.src === "day"){ x.strokeStyle = col; x.lineWidth = 3; x.beginPath(); x.moveTo(px, Y(p.hi)); x.lineTo(px, Y(p.lo)); x.stroke(); }
+    if(p.src === "turn"){ x.fillStyle = "#fff"; x.beginPath(); x.arc(px, py, 5.5, 0, 7); x.fill(); x.strokeStyle = col; x.lineWidth = 2; x.stroke(); }
+    else { x.fillStyle = col; x.beginPath(); x.arc(px, py, 4.5, 0, 7); x.fill(); }
   }
-  for(const p of [v.high, v.low]){                               // the two numbers in the results, labelled
+  for(const p of [v.high, v.low]){                               // the two numbers in the results: ringed
     if(!p) continue;
-    const px = X(p.date), py = Y(p.price), col = p.type === "high" ? "#1a7f37" : "#cf222e";
-    x.strokeStyle = col; x.lineWidth = 1.5; x.beginPath(); x.arc(px, py, 8, 0, 7); x.stroke();
-    x.font = "700 12px system-ui,sans-serif"; x.textAlign = "right"; x.fillStyle = col;
-    x.fillText("$" + (p.price < 100 ? p.price.toFixed(2) : Math.round(p.price).toLocaleString()), px - 11, py + (p.type === "high" ? -6 : 14));
+    x.strokeStyle = p.type === "high" ? "#1a7f37" : "#cf222e"; x.lineWidth = 1.5;
+    x.beginPath(); x.arc(X(p.date), Y(p.price), 8.5, 0, 7); x.stroke();
   }
-  // hover / tap / keyboard inspection
-  const points = dates.map((d, i) => ({date:d, price:closes[i], kind:"Actual daily close"}))
-    .concat(fc.map(p => ({date:p.date, price:p.price, kind:(p.src === "day" ? "Forecast " : "Projected turn ") + p.type + (p.time ? " · " + t12(p.time) : "")})))
+  if(hover){ x.strokeStyle = "#425a78"; x.lineWidth = 1; x.setLineDash([3, 3]); x.beginPath(); x.moveTo(X(hover.date), T); x.lineTo(X(hover.date), H - B); x.stroke(); x.setLineDash([]); }
+  x.restore();
+  x.textAlign = "center"; x.fillStyle = "#57606a"; x.font = "600 11px system-ui,sans-serif";
+  for(const t of [t0 + (t1 - t0) * 0.04, (t0 + t1) / 2, t1 - (t1 - t0) * 0.04]) x.fillText(md(isoOf(t)), Math.min(Math.max(X(t), L + 16), W - R - 16), H - 4);
+  // every visible prediction labelled on the chart itself; labels never overlap each other or a marker
+  const labels = chartLabels(v), boxes = axisBoxes.slice();
+  for(const p of fcIn.concat(actIn)){ const px = X(p.date), py = Y(p.price); boxes.push({l:px - 6, r:px + 6, t:py - 6, b:py + 6}); }
+  const hit = r => r.l < L || r.r > W - 2 || r.t < T || r.b > H - B || boxes.some(o => r.l < o.r && r.r > o.l && r.t < o.b && r.b > o.t);
+  const order = labels.filter(lb => vis(lb.point.date)).sort((a, b) => (b.main - a.main) || (a.point.src === "day" ? -1 : 1));
+  for(const lb of labels) lb.box = null;
+  for(const lb of order){
+    const p = lb.point, px = X(p.date), py = Y(p.price), col = p.type === "high" ? "#1a7f37" : "#cf222e";
+    x.font = (lb.main ? "700 12px" : "600 11px") + " system-ui,sans-serif";
+    const m = x.measureText(lb.text), w = (m && m.width) || lb.text.length * 6.5, h = lb.main ? 14 : 13;
+    const up = p.type === "high" ? -1 : 1, cand = [];
+    for(let dy = 0; dy <= 16; dy++) for(const sx of [-1, 1, 0]) for(const vy of [up, -up])
+      cand.push({ax: sx < 0 ? px - 11 - w : sx > 0 ? px + 11 : px - w / 2, ay: py + vy * (dy * h) + (vy > 0 ? 4 : -h + 4) + (dy ? 0 : vy * 2) + (sx ? 0 : vy * 6)});
+    let pick = null;
+    for(const cnd of cand){ const r = {l:cnd.ax - 2, r:cnd.ax + w + 2, t:cnd.ay, b:cnd.ay + h}; if(!hit(r)){ pick = r; break; } }
+    if(!pick){ const ax = Math.min(Math.max(L, px - w / 2), W - 2 - w); pick = {l:ax - 2, r:ax + w + 2, t:Math.min(Math.max(T, py - h / 2), H - B - h), b:0}; pick.b = pick.t + h; }
+    boxes.push(pick);
+    const cy = (pick.t + pick.b) / 2;
+    const gap = Math.max(pick.l - px, px - pick.r, 0) + Math.max(pick.t - py, py - pick.b, 0);
+    if(gap > 14){ x.strokeStyle = col; x.lineWidth = 0.8; x.beginPath(); x.moveTo(px, py); x.lineTo(pick.l < px ? pick.r - 2 : pick.l + 2, cy); x.stroke(); }
+    x.textAlign = "left"; x.lineWidth = 3; x.strokeStyle = "rgba(255,255,255,0.9)"; x.lineJoin = "round";
+    x.strokeText(lb.text, pick.l + 2, pick.b - 3); x.fillStyle = col; x.fillText(lb.text, pick.l + 2, pick.b - 3);
+    lb.box = pick;
+  }
+  window.__gLabels = labels;
+  CH.points = dates.map((d, i) => ({date:d, price:closes[i], kind:"Actual daily close"})).filter(p => vis(p.date))
+    .concat(fcIn.map(p => ({date:p.date, price:p.price, kind:(p.src === "day" ? "Day forecast " : "Projected turn ") + p.type + (p.time ? " · " + t12(p.time) : "")})))
     .concat(actIn.map(a => ({date:a.date, price:a.price, kind:"Already traded " + a.type + " (period so far)"})));
-  const base = document.createElement("canvas"); base.width = c.width; base.height = c.height;
-  try { base.getContext("2d").drawImage(c, 0, 0); } catch(e) {}
-  const tip = $("chartTooltip"); tip.style.display = "none";
-  const restore = () => { try { x.save(); x.setTransform(1,0,0,1,0,0); x.clearRect(0,0,c.width,c.height); x.drawImage(base,0,0); x.restore(); } catch(e) {} };
+  $("gReset").hidden = !VIEW;
+  window.__gView = v;
+}
+
+/* chart interaction: tap/hover = inspect, drag = pan, pinch or wheel = zoom, double-tap / Reset = default */
+(function(){
+  const c = $("chart"), tip = $("chartTooltip"), ptrs = new Map();
+  let g = null, lastTap = 0, k = -1;
+  const hide = () => { tip.style.display = "none"; };
   const show = (pt, cx, cy) => {
-    restore(); x.save(); x.strokeStyle = "#425a78"; x.setLineDash([3,3]); x.beginPath(); x.moveTo(X(pt.date), T); x.lineTo(X(pt.date), H - B); x.stroke(); x.restore();
+    if(!CH) return;
+    drawChart(CH.D, CH.v, pt);
     tip.textContent = pt.kind + "\n" + pt.date + "\n" + fmt$(pt.price); tip.style.display = "block";
     tip.style.left = Math.max(8, Math.min(cx + 12, window.innerWidth - 250)) + "px"; tip.style.top = Math.max(8, cy - 60) + "px";
   };
-  const move = e => {
-    const r = c.getBoundingClientRect(), px = (e.clientX - r.left) * W / r.width, py = (e.clientY - r.top) * H / r.height;
-    const n = points.reduce((a, b) => Math.hypot(X(b.date) - px, Y(b.price) - py) < Math.hypot(X(a.date) - px, Y(a.price) - py) ? b : a);
-    show(n, e.clientX, e.clientY);
+  const nearest = (cx, cy) => {
+    const r = c.getBoundingClientRect(), px = (cx - r.left) * CH.W / r.width, py = (cy - r.top) * CH.H / r.height;
+    return CH.points.reduce((a, b) => Math.hypot(CH.X(b.date) - px, CH.Y(b.price) - py) < Math.hypot(CH.X(a.date) - px, CH.Y(a.price) - py) ? b : a);
   };
-  c.onpointermove = move; c.onpointerdown = move;
-  c.onpointerleave = () => { restore(); tip.style.display = "none"; };
-  let k = dates.length - 1;
+  const inspect = e => { if(CH && CH.points && CH.points.length) show(nearest(e.clientX, e.clientY), e.clientX, e.clientY); };
+  const scale = () => { const r = c.getBoundingClientRect(); return (CH.t1 - CH.t0) / (CH.PW * r.width / CH.W); };   // ms per CSS px
+  const timeAt = cx => { const r = c.getBoundingClientRect(); return CH.t0 + ((cx - r.left) * CH.W / r.width - CH.L) / CH.PW * (CH.t1 - CH.t0); };
+  const zoom = (f, cx) => { const tm = timeAt(cx); setView(tm - (tm - CH.t0) * f, tm + (CH.t1 - tm) * f); };
+  c.onpointerdown = e => {
+    if(e.pointerId === undefined){ inspect(e); return; }
+    try { c.setPointerCapture(e.pointerId); } catch(err) {}
+    ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+    const ps = [...ptrs.values()];
+    if(ps.length === 1) g = {kind:"tap", x:e.clientX, y:e.clientY, t0:CH.t0, t1:CH.t1};
+    else if(ps.length === 2){ hide(); g = {kind:"pinch", d:Math.max(20, Math.abs(ps[0].x - ps[1].x)), mid:(ps[0].x + ps[1].x) / 2, tm:timeAt((ps[0].x + ps[1].x) / 2), span:CH.t1 - CH.t0}; }
+  };
+  c.onpointermove = e => {
+    if(!CH) return;
+    if(!ptrs.has(e.pointerId)){ if(e.pointerType !== "touch") inspect(e); return; }   // mouse hover inspects
+    ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
+    const ps = [...ptrs.values()];
+    if(g && g.kind === "pinch" && ps.length >= 2){
+      const d = Math.max(20, Math.abs(ps[0].x - ps[1].x)), span = g.span * g.d / d, mid = (ps[0].x + ps[1].x) / 2;
+      const f = (timeAt(mid) - CH.t0) / (CH.t1 - CH.t0);
+      setView(g.tm - f * span, g.tm + (1 - f) * span);
+    } else if(g && (g.kind === "tap" || g.kind === "pan")){
+      const dx = e.clientX - g.x;
+      if(g.kind === "tap" && Math.abs(dx) < 8 && Math.abs(e.clientY - g.y) < 8) return;
+      if(g.kind === "tap"){ hide(); g = {kind:"pan", x:g.x, t0:g.t0, t1:g.t1, ms:scale()}; }
+      setView(g.t0 - dx * g.ms, g.t1 - dx * g.ms);
+    }
+  };
+  const end = e => {
+    if(!ptrs.has(e.pointerId)) return;
+    ptrs.delete(e.pointerId);
+    if(g && g.kind === "tap" && !ptrs.size){
+      const now = Date.now();
+      if(now - lastTap < 320){ VIEW = null; hide(); drawChart(CH.D, CH.v); lastTap = 0; }
+      else { lastTap = now; inspect(e); }
+    }
+    if(ptrs.size === 1){ const p = [...ptrs.values()][0]; g = {kind:"pan", x:p.x, t0:CH.t0, t1:CH.t1, ms:scale()}; }
+    else if(!ptrs.size) g = null;
+  };
+  c.onpointerup = end; c.onpointercancel = end;
+  c.onpointerleave = e => { if(e && e.pointerType === "touch") return; hide(); if(CH) drawChart(CH.D, CH.v); };
+  c.onwheel = e => { if(!CH) return; e.preventDefault(); hide(); zoom(Math.exp(e.deltaY * 0.0015), e.clientX); };
   c.onkeydown = e => {
-    if(e.key === "Escape"){ restore(); tip.style.display = "none"; return; }
+    if(!CH) return;
+    if(e.key === "Escape"){ hide(); drawChart(CH.D, CH.v); return; }
+    if(e.key === "+" || e.key === "="){ e.preventDefault(); zoom(0.7, c.getBoundingClientRect().left + CH.W / 2); return; }
+    if(e.key === "-"){ e.preventDefault(); zoom(1.4, c.getBoundingClientRect().left + CH.W / 2); return; }
+    if(e.key === "0"){ VIEW = null; drawChart(CH.D, CH.v); return; }
     if(e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-    e.preventDefault(); k = Math.max(0, Math.min(dates.length - 1, k + (e.key === "ArrowLeft" ? -1 : 1)));
-    const r = c.getBoundingClientRect(); show(points[k], r.left + X(points[k].date) * r.width / W, r.top + Y(points[k].price) * r.height / H);
+    e.preventDefault();
+    const closes = CH.points.filter(p => p.kind === "Actual daily close");
+    if(!closes.length) return;
+    k = k < 0 || k >= closes.length ? closes.length - 1 : k;
+    k = Math.max(0, Math.min(closes.length - 1, k + (e.key === "ArrowLeft" ? -1 : 1)));
+    const r = c.getBoundingClientRect(), pt = closes[k];
+    show(pt, r.left + CH.X(pt.date) * r.width / CH.W, r.top + CH.Y(pt.price) * r.height / CH.H);
   };
-  window.__gView = v;
-}
+  const reset = () => { VIEW = null; hide(); if(CH) drawChart(CH.D, CH.v); };
+  $("gReset").onclick = reset; $("gReset").onpointerup = e => { if(e.pointerType === "touch") reset(); };
+})();
 
 /* ---------- history (behind the arrow) ---------- */
 function renderHistory(){
@@ -378,16 +510,26 @@ function renderHistory(){
 /* ---------- render ---------- */
 function renderAll(){
   const D = DATA_ALL[CUR];
-  const sel = $("gTicker");
-  sel.innerHTML = TICKERS.map(t => `<option value="${esc(t)}"${t === CUR ? " selected" : ""}>${esc(nice(t))} ${fmt$(DATA_ALL[t].price)}</option>`).join("");
+  const tk = $("gTk"), had = document.activeElement && document.activeElement.parentElement === tk;
+  tk.innerHTML = TICKERS.map(t => `<button data-t="${esc(t)}" aria-pressed="${t === CUR}"${t === CUR ? ' class="on"' : ""}>${esc(nice(t))}<small>${fmt$(DATA_ALL[t].price)}</small></button>`).join("");
+  if(had){ const b = tk.querySelector("button.on"); if(b) b.focus(); }
   document.querySelectorAll("#gPeriod button").forEach(b => b.classList.toggle("on", b.dataset.p === PERIOD));
   const v = periodView(D, PERIOD);
   renderResults(v); renderMeta(v); renderUpd(D);
   drawChart(D, v);
   if($("gHist").open) renderHistory();
 }
-$("gTicker").onchange = e => { CUR = e.target.value; safeStorage.setItem("tkr", CUR); renderAll(); };
-document.querySelectorAll("#gPeriod button").forEach(b => b.onclick = () => { PERIOD = b.dataset.p; safeStorage.setItem("period", PERIOD); renderAll(); });
+const pickStock = e => {
+  const b = e.target.closest("button[data-t]");
+  if(!b || b.dataset.t === CUR) return;
+  CUR = b.dataset.t; safeStorage.setItem("tkr", CUR); renderAll();
+};
+$("gTk").onclick = pickStock;                                   // mouse and keyboard
+$("gTk").onpointerup = e => { if(e.pointerType === "touch") pickStock(e); };   // a touch right after a chart drag gets no click
+document.querySelectorAll("#gPeriod button").forEach(b => {
+  const pick = () => { if(PERIOD === b.dataset.p) return; PERIOD = b.dataset.p; safeStorage.setItem("period", PERIOD); renderAll(); };
+  b.onclick = pick; b.onpointerup = e => { if(e.pointerType === "touch") pick(); };
+});
 $("gHist").addEventListener("toggle", () => { if($("gHist").open) renderHistory(); });
 
 /* ---------- update: newest published data, validated, rolled back on failure ---------- */

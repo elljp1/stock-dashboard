@@ -69,14 +69,24 @@ low time.
 ## Periods on the page (D / W / M / Y)
 - One function, `periodView()`, gives the chart and the result rows the same
   forecast points for the selected period. Those points are the day forecast
-  for the target session plus the next projected turns that fall inside the
-  period, at most five.
+  for the target session plus the next projected turns (at most five, only
+  those the data has, dated after the last completed session). D plots every
+  such turn but its results stay the day forecast; W/M/Y keep the turns inside
+  the period.
+- The chart opens on a window that holds the recent closes and every plotted
+  forecast. Drag pans, pinch / wheel / +/- zooms, double-tap, Reset or 0
+  restores it; the page itself never scrolls.
 - These are **projected points over a partial horizon**, not a forecast of the
   full period's extremes. The page labels them "proj. pt" and says
   "partial: day + N turns".
 - Highs and lows already traded in the period (from completed daily bars) are
   shown separately, as "so far". On the chart they are grey hollow circles.
   They never replace the forecast.
+- Every forecast point is labelled on the chart itself, with the same price as
+  the results. On D the label adds the time: each side's own time only when the
+  order is resolved, otherwise the two-bar window with "?" (for example
+  "9:30a/3:45p?"). On W/M/Y it adds the date; a turn's intraday time is not
+  modelled, so none is shown.
 
 ## Scoring
 - A record is scored only after its session is complete.

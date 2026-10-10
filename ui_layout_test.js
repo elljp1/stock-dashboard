@@ -31,12 +31,17 @@ setTimeout(() => {
   let dom = load(hiloFor(false)), w = dom.window, d = w.document;
   for (const id of ["detailsAll", "predTable", "timingPanel", "weekPanel", "sectionTabs", "hiloCards", "legacy"])
     check(!d.getElementById(id), "superseded element still present: " + id);
-  check(d.querySelectorAll("#gTicker option").length === Object.keys(ALL).length, "stock picker must list every stock");
+  // every followed stock and its price visible at once as one-click buttons; no selector to open
+  check(!d.querySelector("select"), "stocks must not sit behind a selector/dropdown");
+  const chips = [...d.querySelectorAll("#gTk button[data-t]")];
+  check(chips.length === Object.keys(ALL).length, "every stock needs its own button: " + chips.length);
+  check(chips.every(b => /\$[\d,]+\.\d\d/.test(b.textContent) && b.textContent.includes(b.dataset.t === "GC=F" ? "GOLD" : b.dataset.t)), "each button shows its stock and price");
+  check(chips.filter(b => b.classList.contains("on")).length === 1, "exactly one stock is selected");
   check(d.querySelectorAll("#gPeriod button").length === 4, "period picker must offer D W M Y");
-  const order = ["gTop", "gChartWrap", "gRes", "gMeta"].map(id => d.getElementById(id));
-  check(order.every((el, i) => i === 0 || !!(order[i - 1].compareDocumentPosition(el) & w.Node.DOCUMENT_POSITION_FOLLOWING)), "order must be top bar, chart, results, meta");
+  const order = ["gTk", "gTop", "gChartWrap", "gRes", "gMeta"].map(id => d.getElementById(id));
+  check(order.every((el, i) => i === 0 || !!(order[i - 1].compareDocumentPosition(el) & w.Node.DOCUMENT_POSITION_FOLLOWING)), "order must be stocks, controls, chart, results, meta");
   const shownText = d.getElementById("glance").textContent.replace(/\s+/g, " ").replace(/<[^>]*>/g, "");
-  const visible = shownText.length - d.getElementById("gTicker").textContent.length;   // picker options are collapsed
+  const visible = shownText.length - d.getElementById("gTk").textContent.length;   // the stock list is a glanceable grid
   check(visible < 260, "main screen text too long: " + visible);
   // Day, order unresolved: no time attached to high or low; the early/late pair is shown on its own
   let res = d.getElementById("gRes");
@@ -50,9 +55,23 @@ setTimeout(() => {
       check(Number(res.querySelector(`[data-side="${s}"]`).dataset.price) === v[s].price, per + " " + s + " result differs from the plotted point");
       check(v.fc.includes(v[s]) && v[s].src !== "set", per + " " + s + " result must be a plotted forecast point");
     }
-    check(v.fc.filter(p => p.src === "turn").every(p => p.date > v.S && p.date <= v.span[1]), per + ": turns outside the selected period");
+    const turns = v.fc.filter(p => p.src === "turn"), supported = ALL[T].predictions.filter(p => p.isoDate > v.lastClose).slice(0, 5);
+    check(turns.every(p => p.date > v.lastClose && (per === "D" || p.date <= v.span[1])), per + ": turns outside the selected period");
+    check(turns.every(p => supported.some(q => q.isoDate === p.date && q.price === p.price && q.type === p.type)), per + ": every turn must be a supported prediction");
     check(v.fc.filter(p => p.src === "turn").length <= 5, per + ": more than five turns");
-    if (per === "D") check(v.fc.every(p => p.src === "day"), "day view must plot only the day forecast");
+    if (per === "D") {
+      check(turns.length === supported.length, "day view must plot every supported future turn: " + turns.length + " of " + supported.length);
+      check(v.high.src === "day" && v.low.src === "day", "day results must stay the day forecast, not a multi-day turn");
+    }
+    // the chart itself carries every prediction: same price as the summary, plus a time (D) or date (W/M/Y)
+    const labs = w.__gLabels || [];
+    check(labs.length === v.fc.length && v.fc.every(p => labs.some(l => l.point === p)), per + ": every plotted prediction needs a chart label");
+    for (const l of labs) {
+      check(l.text.startsWith("$" + l.point.price.toFixed(2)), per + ": label price differs from the point: " + l.text);
+      if (per === "D" && l.point.src === "day") check(/ 9:30a\/3:45p\?$/.test(l.text), "unresolved day label must show the two-bar window with ?, not one exact time: " + l.text);
+      else check(l.text.endsWith(" " + Number(l.point.date.slice(5, 7)) + "/" + Number(l.point.date.slice(8, 10))), per + ": label must carry its date: " + l.text);
+    }
+    check(labs.filter(l => l.main).length === 2, per + ": the two summary numbers must be the emphasised labels");
     if (per === "M") check(/so far/.test(res.textContent) && /123\.45/.test(res.textContent) && /proj\. pt/.test(res.textContent), "month view must show projected points and the separate so-far actual");
     if (per !== "D") check(/partial: day \+ \d+ turn/.test(d.getElementById("gAsOf").textContent), per + " must say the horizon is partial");
   }
@@ -62,7 +81,26 @@ setTimeout(() => {
   res = d.getElementById("gRes");
   const whens = [...res.querySelectorAll(".when")].map(e => e.textContent.trim());
   check(whens[0] === "9:30a" && whens[1] === "3:45p" && !/order \?/.test(res.textContent), "resolved order must time high and low: " + whens);
+  const rl = Object.fromEntries((dom.window.__gLabels || []).filter(l => l.point.src === "day").map(l => [l.point.type, l.text]));
+  check(rl.high === "$110.00 9:30a" && rl.low === "$100.00 3:45p", "resolved day labels must carry each side's time: " + JSON.stringify(rl));
+  // one click on a stock button switches chart and results to it, every period
+  {
+    const all = Object.keys(ALL), other = all.find(t => t !== T);
+    const dm = load(hiloFor(false)), dd = dm.window.document;
+    for (const per of ["D", "W", "M", "Y"]) {
+      dd.querySelector(`#gPeriod button[data-p="${per}"]`).click();
+      for (const t of [other, T]) {
+        dd.querySelector(`#gTk button[data-t="${t}"]`).click();
+        check(dm.window.eval("CUR") === t, per + ": one click must select " + t);
+        const on = [...dd.querySelectorAll("#gTk button.on")].map(b => b.dataset.t);
+        check(on.length === 1 && on[0] === t, per + ": selected button must follow the click");
+        check(dd.querySelectorAll("#gTk button[data-t]").length === all.length, per + ": buttons must stay after switching");
+        const res = dd.getElementById("gRes").textContent;
+        check(t === T ? /High/.test(res) : /No forecast yet/.test(res), per + " " + t + ": results did not switch: " + res);
+      }
+    }
+  }
   if (fails.length) { console.error("UI LAYOUT TEST FAILED:\n - " + fails.join("\n - ")); process.exit(1); }
-  console.log("ui layout test OK: chart + compact results only, D/W/M/Y share one source, actuals separate, honest timing");
+  console.log("ui layout test OK: chart + compact results only, D/W/M/Y share one source, predictions labelled on the chart, actuals separate, honest timing");
   process.exit(0);
 }, 400);
