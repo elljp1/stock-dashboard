@@ -46,7 +46,7 @@ const dom = new JSDOM(html, {
 
 setTimeout(() => {
   const d = dom.window.document;
-  const btns = d.querySelectorAll("#gTicker option").length;
+  const btns = d.querySelectorAll("#gTk button[data-t]").length;
   // DATA_ALL is a top-level const - it lives in the global lexical scope, NOT
   // on window. window.eval shares that scope; window.DATA_ALL is undefined.
   let tickers = 0;
@@ -58,7 +58,7 @@ setTimeout(() => {
   for (const e of errors) console.log("warning (non-fatal): " + e.slice(0, 300));
   const probs = [];
   if (btns < 10)
-    probs.push(`stock picker did not build (${btns} options) - a script crashed before renderAll()`);
+    probs.push(`stock buttons did not build (${btns} buttons) - a script crashed before renderAll()`);
   if (!d.getElementById("gRes") || !d.getElementById("gRes").textContent.trim())
     probs.push("high/low results did not render");
   if (tickers < 10) probs.push(`DATA_ALL has only ${tickers} tickers`);
@@ -66,6 +66,6 @@ setTimeout(() => {
     console.error("SMOKE TEST FAILED - the page would be broken for the user:\n - " + probs.join("\n - "));
     process.exit(1);
   }
-  console.log(`smoke test OK: ${btns} stocks in picker, ${tickers} tickers, results rendered`);
+  console.log(`smoke test OK: ${btns} stock buttons, ${tickers} tickers, results rendered`);
   process.exit(0);
 }, 1500);

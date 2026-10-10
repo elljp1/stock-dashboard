@@ -14,8 +14,13 @@
   body{padding:var(--pad); max-width:1100px; margin:0 auto}
   #glance{display:flex; flex-direction:column; gap:6px; height:calc(100vh - 2*var(--pad)); height:calc(100svh - 2*var(--pad)); max-height:900px}
   #gTop{display:flex; align-items:center; gap:6px}
-  #gTicker{font:700 15px system-ui,-apple-system,sans-serif; padding:6px 4px; border:1px solid var(--border);
-    border-radius:8px; background:var(--panel); color:var(--text); min-width:0; flex:1 1 auto; max-width:190px}
+  #gTk{display:grid; grid-template-columns:repeat(auto-fill, minmax(84px, 1fr)); gap:4px}
+  #gTk button{font:700 13px system-ui,-apple-system,sans-serif; line-height:1.15; padding:3px 4px; min-width:0;
+    border:1px solid var(--border); border-radius:8px; background:var(--panel); color:var(--text); cursor:pointer;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  #gTk button small{display:block; font:600 11px system-ui,-apple-system,sans-serif; color:var(--dim); font-variant-numeric:tabular-nums}
+  #gTk button.on{background:var(--blue); border-color:var(--blue); color:#fff}
+  #gTk button.on small{color:#fff}
   #gPeriod{display:flex; border:1px solid var(--border); border-radius:8px; overflow:hidden}
   #gPeriod button{font:700 13px system-ui,-apple-system,sans-serif; width:34px; padding:7px 0; border:0;
     background:var(--panel); color:var(--dim); cursor:pointer}
@@ -152,8 +157,8 @@
 </script>
 
 <div id="glance">
+  <div id="gTk" role="group" aria-label="Stocks"></div>
   <div id="gTop">
-    <select id="gTicker" aria-label="Stock"></select>
     <div id="gPeriod" role="group" aria-label="Period"><button data-p="D">D</button><button data-p="W">W</button><button data-p="M">M</button><button data-p="Y">Y</button></div>
     <button id="gUpd" title="Update"><span class="dot"></span><span id="gUpdTime">update</span></button>
   </div>
@@ -357,8 +362,8 @@ function drawChart(D, v){
     x.font = (lb.main ? "700 12px" : "600 11px") + " system-ui,sans-serif";
     const m = x.measureText(lb.text), w = (m && m.width) || lb.text.length * 6.5, h = lb.main ? 14 : 13;
     const up = p.type === "high" ? -1 : 1, cand = [];
-    for(const dy of [0, 1, 2, 3, 4, 5, 6]) for(const sx of [-1, 1]) for(const vy of [up, -up])
-      cand.push({ax: sx < 0 ? px - 11 - w : px + 11, ay: py + vy * (dy * h) + (vy > 0 ? 4 : -h + 4) + (dy ? 0 : vy * 2)});
+    for(let dy = 0; dy <= 16; dy++) for(const sx of [-1, 1, 0]) for(const vy of [up, -up])
+      cand.push({ax: sx < 0 ? px - 11 - w : sx > 0 ? px + 11 : px - w / 2, ay: py + vy * (dy * h) + (vy > 0 ? 4 : -h + 4) + (dy ? 0 : vy * 2) + (sx ? 0 : vy * 6)});
     let pick = null;
     for(const cnd of cand){ const r = {l:cnd.ax - 2, r:cnd.ax + w + 2, t:cnd.ay, b:cnd.ay + h}; if(!hit(r)){ pick = r; break; } }
     if(!pick){ const ax = Math.min(Math.max(L, px - w / 2), W - 2 - w); pick = {l:ax - 2, r:ax + w + 2, t:Math.min(Math.max(T, py - h / 2), H - B - h), b:0}; pick.b = pick.t + h; }
@@ -414,15 +419,20 @@ function renderHistory(){
 /* ---------- render ---------- */
 function renderAll(){
   const D = DATA_ALL[CUR];
-  const sel = $("gTicker");
-  sel.innerHTML = TICKERS.map(t => `<option value="${esc(t)}"${t === CUR ? " selected" : ""}>${esc(nice(t))} ${fmt$(DATA_ALL[t].price)}</option>`).join("");
+  const tk = $("gTk"), had = document.activeElement && document.activeElement.parentElement === tk;
+  tk.innerHTML = TICKERS.map(t => `<button data-t="${esc(t)}" aria-pressed="${t === CUR}"${t === CUR ? ' class="on"' : ""}>${esc(nice(t))}<small>${fmt$(DATA_ALL[t].price)}</small></button>`).join("");
+  if(had){ const b = tk.querySelector("button.on"); if(b) b.focus(); }
   document.querySelectorAll("#gPeriod button").forEach(b => b.classList.toggle("on", b.dataset.p === PERIOD));
   const v = periodView(D, PERIOD);
   renderResults(v); renderMeta(v); renderUpd(D);
   drawChart(D, v);
   if($("gHist").open) renderHistory();
 }
-$("gTicker").onchange = e => { CUR = e.target.value; safeStorage.setItem("tkr", CUR); renderAll(); };
+$("gTk").onclick = e => {
+  const b = e.target.closest("button[data-t]");
+  if(!b || b.dataset.t === CUR) return;
+  CUR = b.dataset.t; safeStorage.setItem("tkr", CUR); renderAll();
+};
 document.querySelectorAll("#gPeriod button").forEach(b => b.onclick = () => { PERIOD = b.dataset.p; safeStorage.setItem("period", PERIOD); renderAll(); });
 $("gHist").addEventListener("toggle", () => { if($("gHist").open) renderHistory(); });
 
