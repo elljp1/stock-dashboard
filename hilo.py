@@ -30,7 +30,7 @@ from statistics import median
 import market_calendar as cal
 from market_time import EASTERN
 
-MODEL = 'hilo-1'
+MODEL = 'hilo-2'   # hilo-2: order-free early/late timing; hilo-1 records stay in the ledger, scored separately
 LEDGER = 'hilo_ledger.jsonl'
 SESSIONS = 'hilo_sessions.json'
 OUT = 'hilo.json'
@@ -39,6 +39,7 @@ MEDIAN_SESSIONS = 20      # price point: median move over the last 20 sessions
 HISTORY_SESSIONS = 60     # bands and time distribution: up to the last 60
 MIN_HISTORY = 20
 WINDOW_MIN = 60           # "near" for time: within +/- 60 minutes
+ORDER_RESOLVED = 0.6      # say which extreme comes first only when history agrees this often
 MAX_LAG_MIN = 20           # intraday records issued later than this after their cutoff are "late"
 BOOT = 2000
 # Intraday revisions are frozen at these completed-bar counts. On a full day the data
@@ -211,6 +212,48 @@ def time_block(times, bins):
             'window': {'centre': hhmm(centre), 'p60': share(centre, WINDOW_MIN), 'p30': share(centre, 30)}}
 
 
+def timing_block(pairs, bins):
+    """Coherent timing from (high bar, low bar) pairs, one pair per scenario or past session.
+
+    The high and the low are different moments, so they are not timed independently
+    (the opening bar is the most common bar for both, which made both read 09:30).
+    Instead: the EARLY extreme (whichever comes first) and the LATE extreme each get
+    their own most likely bar, and pHighFirst says how often the high came first.
+    Only when that share is at least ORDER_RESOLVED either way is the order called.
+    """
+    n = len(pairs)
+    p_hf = (sum(h < l for h, l in pairs) + 0.5 * sum(h == l for h, l in pairs)) / n
+    early = [min(h, l) for h, l in pairs]
+    late = [max(h, l) for h, l in pairs]
+    count = lambda ts, b: sum(1 for m in ts if b <= m < b + BAR_MIN)
+    em = max(bins, key=lambda b: (count(early, b), -b))
+    lm = max((b for b in bins if b != em), key=lambda b: (count(late, b), -b))
+    part = lambda ts, b: {'time': hhmm(b), 'pBar': round(count(ts, b) / n, 3),
+                          'p60': round(sum(abs(m - b) <= WINDOW_MIN for m in ts) / n, 3)}
+    return {'early': part(early, em), 'late': part(late, lm), 'pHighFirst': round(p_hf, 3),
+            'resolved': max(p_hf, 1 - p_hf) >= ORDER_RESOLVED}
+
+
+def apply_timing(out, pairs, bins):
+    """Store the coherent early/late timing. Only when the order is resolved are its bars put on
+    the high and low; otherwise each side keeps its own marginal modal bar (timeBasis says which)."""
+    t = timing_block(pairs, bins)
+    t['n'] = len(pairs)
+    t['basis'] = ('per past session (or replayed scenario): early = the earlier of the high and low bars, '
+                  'late = the later; each takes its most frequent 15-minute bar; pHighFirst = share of '
+                  'sessions where the high came first')
+    for side in ('high', 'low'):
+        out[side]['timeBasis'] = 'marginal mode'
+    if t['resolved']:
+        first, second = ('high', 'low') if t['pHighFirst'] >= 0.5 else ('low', 'high')
+        for side, part in ((first, t['early']), (second, t['late'])):
+            times = [p[0] if side == 'high' else p[1] for p in pairs]
+            b = minutes(part['time'])
+            out[side].update(time=part['time'], timeBasis='order-assigned',
+                             pBar=round(sum(1 for m in times if b <= m < b + BAR_MIN) / len(times), 3))
+    out['timing'] = t
+
+
 def premarket_forecast(store_t, day):
     """Forecast for `day` from completed sessions before it, or (None, reason)."""
     keys, all_keys = history_before(store_t, day)
@@ -231,10 +274,12 @@ def premarket_forecast(store_t, day):
     high.update(time_block([m[3] for m in moves], bins))
     low.update(time_block([m[4] for m in moves], bins))
     cutoff = cal.session_bounds(cal.as_date(prev))[1]
-    return {'target': f'full-session high and low of {day.isoformat()}',
-            'anchor': round(anchor, 4), 'anchorKind': 'prior close', 'high': high, 'low': low,
-            'history': {'n': len(moves), 'from': moves[0][0], 'to': moves[-1][0]},
-            'dataCutoff': cutoff.isoformat(), 'lastBar': f'{prev} {store_t[prev]["bars"][-1][0]}'}, None
+    out = {'target': f'full-session high and low of {day.isoformat()}',
+           'anchor': round(anchor, 4), 'anchorKind': 'prior close', 'high': high, 'low': low,
+           'history': {'n': len(moves), 'from': moves[0][0], 'to': moves[-1][0]},
+           'dataCutoff': cutoff.isoformat(), 'lastBar': f'{prev} {store_t[prev]["bars"][-1][0]}'}
+    apply_timing(out, [(m[3], m[4]) for m in moves], bins)
+    return out, None
 
 
 def intraday_forecast(store_t, day, today_bars):
@@ -268,6 +313,7 @@ def intraday_forecast(store_t, day, today_bars):
            'observed': {'high': seen['high'], 'highTime': seen['highTime'],
                         'low': seen['low'], 'lowTime': seen['lowTime'], 'bars': k},
            'history': {'n': len(scen), 'from': keys[0], 'to': keys[-1]}}
+    final_t = {}
     for side, idx, obs, obs_t, better in (('high', 0, seen['high'], seen['highTime'], max),
                                           ('low', 1, seen['low'], seen['lowTime'], min)):
         cands, times = [], []
@@ -280,6 +326,8 @@ def intraday_forecast(store_t, day, today_bars):
         block.update(time_block(times, bins))
         block['pAlreadySet'] = round(sum(c == obs for c in cands) / len(cands), 3)
         out[side] = block
+        final_t[side] = times
+    apply_timing(out, list(zip(final_t['high'], final_t['low'])), bins)
     end = datetime.combine(day, datetime.strptime(today_bars[-1][0], '%H:%M').time(), EASTERN) + timedelta(minutes=BAR_MIN)
     out['dataCutoff'] = end.isoformat()
     out['lastBar'] = f'{day.isoformat()} {today_bars[-1][0]}'
@@ -419,6 +467,15 @@ def score_rows(ledger, store, legacy=None, model=MODEL):
                    'barHit': minutes(f['time']) == a_t, 'tErr': abs(minutes(f['time']) - a_t),
                    'near60': abs(minutes(f['time']) - a_t) <= WINDOW_MIN,
                    'winHit': abs(minutes(f['window']['centre']) - a_t) <= WINDOW_MIN}
+            if side == 'high' and rec.get('timing'):
+                # order-free timing, scored once per record: the earlier and the later actual extreme
+                tm = rec['timing']
+                ah_t, al_t = minutes(actual['highTime']), minutes(actual['lowTime'])
+                ae, al_ = min(ah_t, al_t), max(ah_t, al_t)
+                e, l = minutes(tm['early']['time']), minutes(tm['late']['time'])
+                row.update(earlyBar=e == ae, lateBar=l == al_, early60=abs(e - ae) <= WINDOW_MIN,
+                           late60=abs(l - al_) <= WINDOW_MIN,
+                           orderRight=(ah_t < al_t) == (tm['pHighFirst'] >= 0.5) if ah_t != al_t else None)
             if rec['kind'] == 'premarket':
                 if prior_ok:
                     row['cmpErr'] = {'prior-day extreme': _err(extremes(st[keys[-1]]['bars'])[side], a_p)}
@@ -470,6 +527,13 @@ def summarize(rows):
                        'within30': _rate(rows, lambda r: r['tErr'] <= 30), 'within60': _rate(rows, lambda r: r['tErr'] <= 60)},
            'timeNear': {'model': _rate(rows, lambda r: r['near60'])},
            'timeWindow': {'model': _rate(rows, lambda r: r['winHit'])}}
+    tr = [r for r in rows if 'early60' in r]
+    if tr:
+        orr = [r for r in tr if r['orderRight'] is not None]
+        out['timeOrderFree'] = {'n': len(tr), 'earlyBar': _rate(tr, lambda r: r['earlyBar']),
+                                'early60': _rate(tr, lambda r: r['early60']),
+                                'lateBar': _rate(tr, lambda r: r['lateBar']), 'late60': _rate(tr, lambda r: r['late60']),
+                                'orderRight': _rate(orr, lambda r: r['orderRight'])}
     names = sorted({k for r in rows for k, v in (r.get('cmpErr') or {}).items() if v is not None})
     cmp_p = {}
     for name in names:
@@ -579,6 +643,40 @@ METHOD = (f'Price: prior close x (1 + median move to the high/low over the last 
           'from the same bar. Regular session only; NYSE holidays and half-days applied.')
 
 
+def period_spans(day):
+    """Week (Mon-Fri), month and year containing the target session."""
+    mon = day - timedelta(days=day.weekday())
+    return {'W': (mon, mon + timedelta(days=4)),
+            'M': (day.replace(day=1), (day.replace(day=28) + timedelta(days=4)).replace(day=1) - timedelta(days=1)),
+            'Y': (day.replace(month=1, day=1), day.replace(month=12, day=31))}
+
+
+def period_actuals(path, day):
+    """Highest high and lowest low already traded in each period, from completed daily bars before `day`."""
+    rows = []
+    try:
+        with open(path, newline='', encoding='utf-8') as f:
+            for r in csv.DictReader(f):
+                try:
+                    d = datetime.fromisoformat(r['Datetime']).astimezone(EASTERN).date()
+                    h, l = float(r['High']), float(r['Low'])
+                except (KeyError, ValueError, TypeError):
+                    continue
+                if math.isfinite(h) and math.isfinite(l) and 0 < l <= h and d < day:
+                    rows.append((d, h, l))
+    except OSError:
+        return None
+    out = {}
+    for key, (start, end) in period_spans(day).items():
+        inside = [r for r in rows if start <= r[0] <= end]
+        out[key] = {'start': start.isoformat(), 'end': end.isoformat(),
+                    'high': {'price': round(max(inside, key=lambda r: r[1])[1], 2),
+                             'date': max(inside, key=lambda r: r[1])[0].isoformat()} if inside else None,
+                    'low': {'price': round(min(inside, key=lambda r: r[2])[2], 2),
+                            'date': min(inside, key=lambda r: r[2])[0].isoformat()} if inside else None}
+    return out
+
+
 def tickers(path='tickers.txt'):
     names = [t.strip().upper() for t in Path(path).read_text().splitlines() if t.strip()]
     return [t for t in names if '=' not in t], [t for t in names if '=' in t]
@@ -603,8 +701,11 @@ def run(now=None, root='.'):
     ledger = read_ledger(ledger_path)
     have = {record_key(r) for r in ledger}
     equities, excluded = tickers(root / 'tickers.txt')
-    notes, latest = {}, {}
+    notes, latest, periods = {}, {}, {}
     for t in equities:
+        pa = period_actuals(root / f'{t}_daily.csv', day)
+        if pa:
+            periods[t] = pa
         path = root / f'{t}_15m.csv'
         if not path.exists():
             notes[t] = 'no 15-minute bars downloaded'
@@ -665,7 +766,7 @@ def run(now=None, root='.'):
         'lateIntradayRecords': sum(1 for r in ledger if r.get('late')),
         'storedSessions': {t: len(v) for t, v in store.items()},
         'forward': fwd, 'status': forward_status(fwd) if fwd else None,
-        'forwardByModel': by_model, 'history': history,
+        'forwardByModel': by_model, 'history': history, 'periods': periods,
         'retrospective': retrospective(store),
         'build': {'commit': os.environ.get('GITHUB_SHA', 'local'), 'run': os.environ.get('GITHUB_RUN_ID')},
     }

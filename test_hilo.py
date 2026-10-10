@@ -368,8 +368,52 @@ class HistoryTests(unittest.TestCase):
             row = r['history'][0]
             for k in ('pred', 'actual', 'predTime', 'actualTime', 'err', 'model'):
                 self.assertIn(k, row)
-            self.assertEqual(list(r['forwardByModel']), ['hilo-1'])
-            self.assertEqual(r['forwardByModel']['hilo-1']['premarket']['high']['n'], 1)
+            self.assertEqual(list(r['forwardByModel']), [hilo.MODEL])
+            self.assertEqual(r['forwardByModel'][hilo.MODEL]['premarket']['high']['n'], 1)
+
+
+class CoherentTimingTests(unittest.TestCase):
+    def test_marginal_modes_both_at_open_become_distinct_early_late(self):
+        bins = list(range(570, 960, 15))
+        pairs = [(570, 945)] * 10 + [(945, 570)] * 10          # half high-first, half low-first
+        t = hilo.timing_block(pairs, bins)
+        self.assertEqual((t['early']['time'], t['late']['time']), ('09:30', '15:45'))
+        self.assertEqual(t['pHighFirst'], 0.5)
+        self.assertFalse(t['resolved'])                          # order is a coin flip: not called
+        out = {'high': {'time': '09:30'}, 'low': {'time': '09:30'}}
+        hilo.apply_timing(out, pairs, bins)
+        # unresolved: the early/late bars are NOT attached to high or low
+        self.assertEqual(out['high']['timeBasis'], 'marginal mode')
+        self.assertEqual(out['timing']['n'], 20)
+
+    def test_order_called_only_when_history_agrees(self):
+        bins = list(range(570, 960, 15))
+        t = hilo.timing_block([(600, 900)] * 14 + [(900, 600)] * 6, bins)
+        self.assertTrue(t['resolved'])
+        self.assertEqual(t['pHighFirst'], 0.7)
+
+    def test_forecasts_time_early_and_late_extremes_separately(self):
+        day = date(2026, 10, 9)
+        store = build_store(sessions_before(day, 30))
+        f, _ = hilo.premarket_forecast(store['TST'], day)
+        self.assertNotEqual(f['timing']['early']['time'], f['timing']['late']['time'])
+        self.assertTrue(f['timing']['resolved'])                   # synthetic highs always come first
+        self.assertEqual(f['high']['timeBasis'], 'order-assigned')
+        self.assertNotEqual(f['high']['time'], f['low']['time'])
+        g, _ = hilo.intraday_forecast(store['TST'], day, synthetic_bars(day, 103, hi_bar=1, lo_bar=3)[:4])
+        self.assertNotEqual(g['timing']['early']['time'], g['timing']['late']['time'])
+
+    def test_period_actuals_use_only_completed_days_in_period(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / 'X_daily.csv'
+            rows = [('2026-09-30', 120, 90), ('2026-10-01', 110, 100), ('2026-10-05', 115, 95),
+                    ('2026-10-08', 112, 99), ('2026-10-09', 999, 1)]      # 10/09 is the target day: excluded
+            path.write_text('Datetime,Open,High,Low,Close,Volume\n' + ''.join(
+                f'{d} 00:00:00-04:00,100,{h},{l},100,0\n' for d, h, l in rows))
+            pa = hilo.period_actuals(path, date(2026, 10, 9))
+            self.assertEqual(pa['W']['high'], {'price': 115.0, 'date': '2026-10-05'})
+            self.assertEqual(pa['M']['low'], {'price': 95.0, 'date': '2026-10-05'})
+            self.assertEqual(pa['Y']['high'], {'price': 120.0, 'date': '2026-09-30'})
 
 
 if __name__ == '__main__':

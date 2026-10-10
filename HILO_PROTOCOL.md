@@ -37,21 +37,35 @@ low time.
   not shown as current. Output older than 3 hours is shown as STALE, with
   its session date.
 
-## Time outputs
-- `time` is the **modal 15-minute bar**, the single most likely bar (ties go to
-  the earliest), with its probability `pBar`. This is the primary time output.
-- `window.centre` is a **separate output**. It is the centre of the
-  ±60-minute window that holds the most probability, with `window.p60` (and
-  `p30` around the same centre). It is a window centre, not the most likely
-  time. It equals the prior-60-session best fixed clock.
-- Both are scored separately:
-  - modal bar exactly right (`timeBar`)
-  - modal bar within ±60 minutes (`timeNear`), against the opening bar, the
-    open ±60, the prior-60-session best fixed window, and the legacy app
-  - window centre within ±60 minutes (`timeWindow`)
-- Intraday times come from the whole distribution. In each replayed scenario
-  the final extreme is either the one already traded (at its observed bar) or
-  a later one, so every window sums all of that probability.
+## Time outputs (hilo-2)
+- hilo-1 timed the high and the low independently. The opening bar is the most
+  common bar for both, so both read 09:30 on 78% of forecasts in a walk-forward
+  replay. In reality the two shared a bar on only 2.4% of days.
+- hilo-2 uses `timing`. For each past session (or replayed intraday scenario):
+  - **early** is the earlier of the high bar and the low bar; **late** is the later.
+  - Each takes its most frequent 15-minute bar, with `pBar` and `p60`.
+  - `pHighFirst` is the share of sessions in which the high came first; `n` is the number of sessions.
+- The order is called (`resolved`) only when `pHighFirst` is at least 0.6
+  either way. Only then are the early and late bars attached to the high and
+  the low (`timeBasis: order-assigned`). Otherwise each side keeps its own
+  marginal modal bar (`timeBasis: marginal mode`), and the page shows only
+  "1st ≈ early · 2nd ≈ late · order ?".
+- Walk-forward replay, 330 test sessions on 10 stocks (retrospective only):
+  - The early extreme hit its bar 67% of the time, and was within 60 minutes 86%.
+  - The late extreme hit its bar 19% of the time, and was within 60 minutes 37–38%.
+  - Called by majority, the order was right only 47.9% of the time. That is why it is shown as unresolved.
+- hilo-1 records remain in the ledger, unchanged, and are scored separately (`forwardByModel`).
+- `window.centre` (the best ±60-minute window) is still recorded and scored against the prior-60 fixed window.
+
+## Periods on the page (D / W / M / Y)
+- One function, `periodView()`, gives the chart and the result rows the same
+  forecast points for the selected period. Those points are the day forecast
+  for the target session plus the next projected turns that fall inside the
+  period, at most five.
+- The period's forecast high and low are the highest and lowest of those points.
+- Highs and lows already traded in the period (from completed daily bars) are
+  shown separately, as "so far". On the chart they are grey hollow circles.
+  They never replace the forecast.
 
 ## Scoring
 - A record is scored only after its session is complete.

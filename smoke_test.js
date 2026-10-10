@@ -6,7 +6,7 @@
  * index.html in jsdom and asserts the page reached its interactive state.
  *
  * Fails ONLY on the two things that define "page is broken for the user":
- * the section tab bar didn't build, or the ticker data didn't load. Anything
+ * the stock picker didn't build, or the ticker data didn't load. Anything
  * else is printed as a warning - jsdom is not a real browser, and a false
  * failure here blocks every cloud refresh (which happened on 8/19-8/20).
  */
@@ -46,7 +46,7 @@ const dom = new JSDOM(html, {
 
 setTimeout(() => {
   const d = dom.window.document;
-  const btns = d.querySelectorAll("#sectionTabs button").length;
+  const btns = d.querySelectorAll("#gTicker option").length;
   // DATA_ALL is a top-level const - it lives in the global lexical scope, NOT
   // on window. window.eval shares that scope; window.DATA_ALL is undefined.
   let tickers = 0;
@@ -57,13 +57,15 @@ setTimeout(() => {
 
   for (const e of errors) console.log("warning (non-fatal): " + e.slice(0, 300));
   const probs = [];
-  if (btns < 4)
-    probs.push(`section tabs did not build (${btns} buttons) - a script crashed before buildSectionTabs()`);
+  if (btns < 10)
+    probs.push(`stock picker did not build (${btns} options) - a script crashed before renderAll()`);
+  if (!d.getElementById("gRes") || !d.getElementById("gRes").textContent.trim())
+    probs.push("high/low results did not render");
   if (tickers < 10) probs.push(`DATA_ALL has only ${tickers} tickers`);
   if (probs.length) {
     console.error("SMOKE TEST FAILED - the page would be broken for the user:\n - " + probs.join("\n - "));
     process.exit(1);
   }
-  console.log(`smoke test OK: ${btns} tab buttons, ${tickers} tickers`);
+  console.log(`smoke test OK: ${btns} stocks in picker, ${tickers} tickers, results rendered`);
   process.exit(0);
 }, 1500);
