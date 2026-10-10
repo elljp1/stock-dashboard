@@ -313,6 +313,26 @@ class ReviewFixTests(unittest.TestCase):
             self.assertEqual(r['otherModelRecords'], 1)
             self.assertEqual(r['forward']['premarket']['high']['n'], 1)
 
+    def test_earlier_model_call_does_not_block_the_current_models_call(self):
+        # 2026-10-09 release: hilo-1 had already frozen the 10/12 premarket, so hilo-2 issued
+        # nothing and the page showed no forecast
+        with tempfile.TemporaryDirectory() as tmp:
+            root = self.root(tmp)
+            hilo.run(now=et(2026, 10, 9, 8, 0), root=root)
+            ledger_path = root / hilo.LEDGER
+            first = hilo.read_ledger(ledger_path)[0]
+            old = {k: v for k, v in first.items() if k not in ('id', 'prevHash')}
+            old['model'] = 'hilo-1'
+            ledger_path.unlink()
+            old_line = json.dumps(hilo.append_record(old, ledger_path), sort_keys=True)
+            r = hilo.run(now=et(2026, 10, 9, 8, 30), root=root)
+            ledger = hilo.read_ledger(ledger_path)
+            self.assertEqual([x['model'] for x in ledger], ['hilo-1', hilo.MODEL])
+            self.assertEqual(ledger_path.read_text().splitlines()[0], old_line)   # old call kept as-is
+            self.assertEqual(r['latest']['TST']['premarket']['model'], hilo.MODEL)
+            hilo.run(now=et(2026, 10, 9, 9, 0), root=root)
+            self.assertEqual(len(hilo.read_ledger(ledger_path)), 2)                # still once per model
+
     def test_multimodal_time_reports_mode_and_window_separately(self):
         bins = list(range(570, 960, 15))
         b = hilo.time_block([570] * 10 + [945] * 10, bins)

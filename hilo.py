@@ -423,7 +423,8 @@ def append_record(rec, path=LEDGER):
 
 
 def record_key(rec):
-    return (rec['ticker'], rec['session'], rec['kind'], rec.get('checkpoint'))
+    # per model: an earlier model's frozen call never blocks the current model's own call
+    return (rec['ticker'], rec['session'], rec['kind'], rec.get('checkpoint'), rec.get('model'))
 
 
 def checkpoint(k):
@@ -733,7 +734,7 @@ def run(now=None, root='.'):
             cp = checkpoint(len(done))
             if cp is None:
                 f, why = None, 'before the first intraday checkpoint'
-            elif (t, day.isoformat(), 'intraday', cp) in have:
+            elif (t, day.isoformat(), 'intraday', cp, MODEL) in have:
                 f, why = None, f'checkpoint {cp} already recorded'
             else:
                 # freeze exactly the first cp bars; skipped earlier checkpoints are not backfilled
