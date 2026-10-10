@@ -53,7 +53,8 @@ setTimeout(() => {
     check(v.fc.filter(p => p.src === "turn").every(p => p.date > v.S && p.date <= v.span[1]), per + ": turns outside the selected period");
     check(v.fc.filter(p => p.src === "turn").length <= 5, per + ": more than five turns");
     if (per === "D") check(v.fc.every(p => p.src === "day"), "day view must plot only the day forecast");
-    if (per === "M") check(/so far/.test(res.textContent) && /123\.45/.test(res.textContent) && /fcst/.test(res.textContent), "month view must show forecast and the separate so-far actual");
+    if (per === "M") check(/so far/.test(res.textContent) && /123\.45/.test(res.textContent) && /proj\. pt/.test(res.textContent), "month view must show projected points and the separate so-far actual");
+    if (per !== "D") check(/partial: day \+ \d+ turn/.test(d.getElementById("gAsOf").textContent), per + " must say the horizon is partial");
   }
   // Day, order resolved: each side gets its own time
   dom = load(hiloFor(true)); d = dom.window.document;

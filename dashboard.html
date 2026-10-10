@@ -239,14 +239,17 @@ function renderResults(v){
       val = `${fmt$(f.price)}<small>${Math.round(f.lo)}–${Math.round(f.hi)}</small>`;
       when = f.time ? t12(f.time) : "";
     } else {
-      val = `${fmt$(f.price)}<small>fcst ${esc(md(f.date))}</small>`;
+      val = `${fmt$(f.price)}<small>proj. pt ${esc(md(f.date))}</small>`;
       const a = v.actual && v.actual[side];
       when = a ? `<small>so far</small> ${fmt$(a.price)} <small>${md(a.date)}</small>` : "";
     }
     rows.push(`<span class="lbl">${name}</span><span class="val ${cls}" data-side="${side}" data-price="${f.price}">${val}</span><span class="when">${when}</span>`);
   }
   if(v.per === "D" && v.timing && !v.resolved){
-    rows.push(`<span class="lbl">Time</span><span class="when" style="text-align:left">1st ≈${t12(v.timing.early.time)} · 2nd ≈${t12(v.timing.late.time)}</span><span class="when"><small>order ?</small></span>`);
+    const e = v.timing.early.time, l = v.timing.late.time;
+    const txt = v.timing.consistent === false ? "times unclear"
+      : (e === l ? `both ≈${t12(e)}` : `1st ≈${t12(e)} · 2nd ≈${t12(l)}`);
+    rows.push(`<span class="lbl">Time</span><span class="when" style="text-align:left">${txt}</span><span class="when"><small>${e === l || v.timing.consistent === false ? "" : "order ?"}</small></span>`);
   }
   box.innerHTML = rows.join("");
 }
@@ -259,7 +262,9 @@ function renderMeta(v){
   const stale = v.S < etToday();
   const cut = new Date(v.rec.dataCutoff).toLocaleString("en-US", {timeZone:"America/New_York", weekday:"short", hour:"numeric", minute:"2-digit"}).replace(" AM","a").replace(" PM","p");
   const span = v.per === "D" ? dayLbl(v.S) : md(v.span[0]) + "–" + md(v.span[1]);
-  el.innerHTML = `${esc(span)} · ${v.rec.kind === "intraday" ? "live" : "premarket"} · data ${esc(cut)}` + (stale ? ` · <b>stale</b>` : "") + ` · 80% range`;
+  const nt = v.fc.filter(p => p.src === "turn").length;
+  const part = v.per === "D" ? "" : ` · partial: day + ${nt} turn${nt === 1 ? "" : "s"}`;
+  el.innerHTML = `${esc(span)}${part} · ${v.rec.kind === "intraday" ? "live" : "premarket"} · data ${esc(cut)}` + (stale ? ` · <b>stale</b>` : "") + (v.per === "D" ? " · 80% range" : "");
 }
 
 function renderUpd(D){
