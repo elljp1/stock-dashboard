@@ -1,751 +1,10 @@
 {
- "generatedAt": "2026-10-09T22:21:58+00:00",
- "model": "hilo-1",
+ "generatedAt": "2026-10-10T00:33:47+00:00",
+ "model": "hilo-2",
  "targetSession": "2026-10-12",
  "kind": "premarket",
  "method": "Price: prior close x (1 + median move to the high/low over the last 20 sessions); 80% band = 10th-90th percentile of that move over up to 60 sessions. Time: the modal 15-minute bar of past highs/lows (up to 60 sessions) with its probability; separately, the centre of the +/-60 min window holding the most probability (a window centre, not the likeliest time). Intraday revisions forecast the FINAL full-session high/low, including what already traded, from exactly the bars up to a fixed checkpoint, by replaying the rest of each earlier session from the same bar. Regular session only; NYSE holidays and half-days applied.",
- "latest": {
-  "TSLA": {
-   "premarket": {
-    "anchor": 382.71,
-    "anchorKind": "prior close",
-    "dataCutoff": "2026-10-09T16:00:00-04:00",
-    "high": {
-     "hi": 399.64,
-     "lo": 382.11,
-     "pBar": 0.39,
-     "price": 387.85,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.39,
-       "time": "09:30"
-      },
-      {
-       "p": 0.085,
-       "time": "10:00"
-      },
-      {
-       "p": 0.085,
-       "time": "15:45"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.203,
-      "p60": 0.678
-     }
-    },
-    "history": {
-     "from": "2026-07-20",
-     "n": 59,
-     "to": "2026-10-09"
-    },
-    "id": "cf2841e93381cd08",
-    "issuedAt": "2026-10-09T20:09:01+00:00",
-    "kind": "premarket",
-    "lastBar": "2026-10-09 15:45",
-    "low": {
-     "hi": 385.24,
-     "lo": 369.03,
-     "pBar": 0.424,
-     "price": 377.8,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.424,
-       "time": "09:30"
-      },
-      {
-       "p": 0.085,
-       "time": "15:45"
-      },
-      {
-       "p": 0.068,
-       "time": "10:00"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.169,
-      "p60": 0.712
-     }
-    },
-    "model": "hilo-1",
-    "prevHash": "0000000000000000000000000000000000000000000000000000000000000000",
-    "session": "2026-10-12",
-    "target": "full-session high and low of 2026-10-12",
-    "ticker": "TSLA",
-    "v": 1
-   }
-  },
-  "HOOD": {
-   "premarket": {
-    "anchor": 109.05,
-    "anchorKind": "prior close",
-    "dataCutoff": "2026-10-09T16:00:00-04:00",
-    "high": {
-     "hi": 117.35,
-     "lo": 108.47,
-     "pBar": 0.492,
-     "price": 111.42,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.492,
-       "time": "09:30"
-      },
-      {
-       "p": 0.102,
-       "time": "09:45"
-      },
-      {
-       "p": 0.085,
-       "time": "10:00"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.169,
-      "p60": 0.797
-     }
-    },
-    "history": {
-     "from": "2026-07-20",
-     "n": 59,
-     "to": "2026-10-09"
-    },
-    "id": "81db695359652252",
-    "issuedAt": "2026-10-09T20:09:01+00:00",
-    "kind": "premarket",
-    "lastBar": "2026-10-09 15:45",
-    "low": {
-     "hi": 110.62,
-     "lo": 103.64,
-     "pBar": 0.407,
-     "price": 107.31,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.407,
-       "time": "09:30"
-      },
-      {
-       "p": 0.153,
-       "time": "15:45"
-      },
-      {
-       "p": 0.068,
-       "time": "09:45"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.102,
-      "p60": 0.627
-     }
-    },
-    "model": "hilo-1",
-    "prevHash": "163a066ee712a24f83b1d00ff8295d99e5055d9be1b2d6675a960027ea596947",
-    "session": "2026-10-12",
-    "target": "full-session high and low of 2026-10-12",
-    "ticker": "HOOD",
-    "v": 1
-   }
-  },
-  "QQQ": {
-   "premarket": {
-    "anchor": 751.24,
-    "anchorKind": "prior close",
-    "dataCutoff": "2026-10-09T16:00:00-04:00",
-    "high": {
-     "hi": 764.77,
-     "lo": 748.29,
-     "pBar": 0.237,
-     "price": 756.29,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.237,
-       "time": "09:30"
-      },
-      {
-       "p": 0.136,
-       "time": "15:45"
-      },
-      {
-       "p": 0.102,
-       "time": "09:45"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.153,
-      "p60": 0.542
-     }
-    },
-    "history": {
-     "from": "2026-07-20",
-     "n": 59,
-     "to": "2026-10-09"
-    },
-    "id": "1a8f6bfd605e05ba",
-    "issuedAt": "2026-10-09T20:09:01+00:00",
-    "kind": "premarket",
-    "lastBar": "2026-10-09 15:45",
-    "low": {
-     "hi": 756.58,
-     "lo": 738.43,
-     "pBar": 0.254,
-     "price": 749.56,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.254,
-       "time": "09:30"
-      },
-      {
-       "p": 0.136,
-       "time": "10:15"
-      },
-      {
-       "p": 0.119,
-       "time": "15:45"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.288,
-      "p60": 0.695
-     }
-    },
-    "model": "hilo-1",
-    "prevHash": "1a801484818ef9f038ea4d82df7e5d44dc5b9d84a1c5a004799a9f9ea0a48d9a",
-    "session": "2026-10-12",
-    "target": "full-session high and low of 2026-10-12",
-    "ticker": "QQQ",
-    "v": 1
-   }
-  },
-  "JPM": {
-   "premarket": {
-    "anchor": 333.02,
-    "anchorKind": "prior close",
-    "dataCutoff": "2026-10-09T16:00:00-04:00",
-    "high": {
-     "hi": 339.0,
-     "lo": 332.99,
-     "pBar": 0.424,
-     "price": 334.62,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.424,
-       "time": "09:30"
-      },
-      {
-       "p": 0.085,
-       "time": "10:00"
-      },
-      {
-       "p": 0.085,
-       "time": "15:30"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.169,
-      "p60": 0.678
-     }
-    },
-    "history": {
-     "from": "2026-07-20",
-     "n": 59,
-     "to": "2026-10-09"
-    },
-    "id": "68cb5cb6899836c8",
-    "issuedAt": "2026-10-09T20:09:01+00:00",
-    "kind": "premarket",
-    "lastBar": "2026-10-09 15:45",
-    "low": {
-     "hi": 333.36,
-     "lo": 326.53,
-     "pBar": 0.305,
-     "price": 329.26,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.305,
-       "time": "09:30"
-      },
-      {
-       "p": 0.102,
-       "time": "10:00"
-      },
-      {
-       "p": 0.068,
-       "time": "15:45"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.22,
-      "p60": 0.644
-     }
-    },
-    "model": "hilo-1",
-    "prevHash": "5923933183839e64760b2d438f0e0b9897dcdbe6a068d7c5175e809993b48b03",
-    "session": "2026-10-12",
-    "target": "full-session high and low of 2026-10-12",
-    "ticker": "JPM",
-    "v": 1
-   }
-  },
-  "GOOGL": {
-   "premarket": {
-    "anchor": 351.63,
-    "anchorKind": "prior close",
-    "dataCutoff": "2026-10-09T16:00:00-04:00",
-    "high": {
-     "hi": 363.38,
-     "lo": 350.63,
-     "pBar": 0.458,
-     "price": 357.58,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.458,
-       "time": "09:30"
-      },
-      {
-       "p": 0.102,
-       "time": "10:15"
-      },
-      {
-       "p": 0.068,
-       "time": "15:45"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.169,
-      "p60": 0.695
-     }
-    },
-    "history": {
-     "from": "2026-07-20",
-     "n": 59,
-     "to": "2026-10-09"
-    },
-    "id": "3df84ef977865145",
-    "issuedAt": "2026-10-09T20:09:01+00:00",
-    "kind": "premarket",
-    "lastBar": "2026-10-09 15:45",
-    "low": {
-     "hi": 354.65,
-     "lo": 342.69,
-     "pBar": 0.39,
-     "price": 349.69,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.39,
-       "time": "09:30"
-      },
-      {
-       "p": 0.102,
-       "time": "09:45"
-      },
-      {
-       "p": 0.102,
-       "time": "15:45"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.169,
-      "p60": 0.712
-     }
-    },
-    "model": "hilo-1",
-    "prevHash": "5a4e73399e62731d6b7c3a8cef20f6c88b69f427b5a916ef6ef41a5ad86f4c5b",
-    "session": "2026-10-12",
-    "target": "full-session high and low of 2026-10-12",
-    "ticker": "GOOGL",
-    "v": 1
-   }
-  },
-  "NVDA": {
-   "premarket": {
-    "anchor": 229.32,
-    "anchorKind": "prior close",
-    "dataCutoff": "2026-10-09T16:00:00-04:00",
-    "high": {
-     "hi": 237.4,
-     "lo": 229.0,
-     "pBar": 0.424,
-     "price": 233.03,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.424,
-       "time": "09:30"
-      },
-      {
-       "p": 0.085,
-       "time": "15:45"
-      },
-      {
-       "p": 0.068,
-       "time": "10:00"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.153,
-      "p60": 0.644
-     }
-    },
-    "history": {
-     "from": "2026-07-20",
-     "n": 59,
-     "to": "2026-10-09"
-    },
-    "id": "ce2940ad6c2cf4d3",
-    "issuedAt": "2026-10-09T20:09:01+00:00",
-    "kind": "premarket",
-    "lastBar": "2026-10-09 15:45",
-    "low": {
-     "hi": 231.94,
-     "lo": 222.04,
-     "pBar": 0.305,
-     "price": 228.67,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.305,
-       "time": "09:30"
-      },
-      {
-       "p": 0.169,
-       "time": "15:45"
-      },
-      {
-       "p": 0.068,
-       "time": "10:15"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.169,
-      "p60": 0.525
-     }
-    },
-    "model": "hilo-1",
-    "prevHash": "a4b7e186d20b97d1497674f7b1817bdf9761283b8f8f160b69436929838f8dff",
-    "session": "2026-10-12",
-    "target": "full-session high and low of 2026-10-12",
-    "ticker": "NVDA",
-    "v": 1
-   }
-  },
-  "AMZN": {
-   "premarket": {
-    "anchor": 262.48,
-    "anchorKind": "prior close",
-    "dataCutoff": "2026-10-09T16:00:00-04:00",
-    "high": {
-     "hi": 269.55,
-     "lo": 260.45,
-     "pBar": 0.407,
-     "price": 265.33,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.407,
-       "time": "09:30"
-      },
-      {
-       "p": 0.085,
-       "time": "15:45"
-      },
-      {
-       "p": 0.068,
-       "time": "09:45"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.119,
-      "p60": 0.644
-     }
-    },
-    "history": {
-     "from": "2026-07-20",
-     "n": 59,
-     "to": "2026-10-09"
-    },
-    "id": "f0b23a1aa78592ed",
-    "issuedAt": "2026-10-09T20:09:01+00:00",
-    "kind": "premarket",
-    "lastBar": "2026-10-09 15:45",
-    "low": {
-     "hi": 264.12,
-     "lo": 256.01,
-     "pBar": 0.373,
-     "price": 259.8,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.373,
-       "time": "09:30"
-      },
-      {
-       "p": 0.102,
-       "time": "09:45"
-      },
-      {
-       "p": 0.102,
-       "time": "15:45"
-      }
-     ],
-     "window": {
-      "centre": "10:15",
-      "p30": 0.22,
-      "p60": 0.644
-     }
-    },
-    "model": "hilo-1",
-    "prevHash": "3eb505efa6d24058f02b12c8a386628d4bfd54862041b18fc90793359f84e50c",
-    "session": "2026-10-12",
-    "target": "full-session high and low of 2026-10-12",
-    "ticker": "AMZN",
-    "v": 1
-   }
-  },
-  "SPY": {
-   "premarket": {
-    "anchor": 778.53,
-    "anchorKind": "prior close",
-    "dataCutoff": "2026-10-09T16:00:00-04:00",
-    "high": {
-     "hi": 787.37,
-     "lo": 777.1,
-     "pBar": 0.237,
-     "price": 780.98,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.237,
-       "time": "09:30"
-      },
-      {
-       "p": 0.119,
-       "time": "15:45"
-      },
-      {
-       "p": 0.068,
-       "time": "11:00"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.186,
-      "p60": 0.508
-     }
-    },
-    "history": {
-     "from": "2026-07-20",
-     "n": 59,
-     "to": "2026-10-09"
-    },
-    "id": "2014a951b8f4a86b",
-    "issuedAt": "2026-10-09T20:09:01+00:00",
-    "kind": "premarket",
-    "lastBar": "2026-10-09 15:45",
-    "low": {
-     "hi": 781.48,
-     "lo": 771.51,
-     "pBar": 0.153,
-     "price": 775.06,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.153,
-       "time": "09:30"
-      },
-      {
-       "p": 0.119,
-       "time": "15:45"
-      },
-      {
-       "p": 0.102,
-       "time": "09:45"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.271,
-      "p60": 0.627
-     }
-    },
-    "model": "hilo-1",
-    "prevHash": "1276a99af9c981d0ee76a261bb3168e85bbfc3056738ad04218e63d9c5a0ec31",
-    "session": "2026-10-12",
-    "target": "full-session high and low of 2026-10-12",
-    "ticker": "SPY",
-    "v": 1
-   }
-  },
-  "VOO": {
-   "premarket": {
-    "anchor": 715.65,
-    "anchorKind": "prior close",
-    "dataCutoff": "2026-10-09T16:00:00-04:00",
-    "high": {
-     "hi": 723.8,
-     "lo": 714.33,
-     "pBar": 0.237,
-     "price": 717.92,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.237,
-       "time": "09:30"
-      },
-      {
-       "p": 0.119,
-       "time": "15:45"
-      },
-      {
-       "p": 0.068,
-       "time": "11:00"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.203,
-      "p60": 0.508
-     }
-    },
-    "history": {
-     "from": "2026-07-20",
-     "n": 59,
-     "to": "2026-10-09"
-    },
-    "id": "4321d78c5cac334d",
-    "issuedAt": "2026-10-09T20:09:01+00:00",
-    "kind": "premarket",
-    "lastBar": "2026-10-09 15:45",
-    "low": {
-     "hi": 718.35,
-     "lo": 709.29,
-     "pBar": 0.153,
-     "price": 712.89,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.153,
-       "time": "09:30"
-      },
-      {
-       "p": 0.119,
-       "time": "15:45"
-      },
-      {
-       "p": 0.102,
-       "time": "09:45"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.271,
-      "p60": 0.627
-     }
-    },
-    "model": "hilo-1",
-    "prevHash": "38d9f75d3c7ba353b4ab55dc1ede0fe05998ceaad6492b88e3f5701eed7a58a9",
-    "session": "2026-10-12",
-    "target": "full-session high and low of 2026-10-12",
-    "ticker": "VOO",
-    "v": 1
-   }
-  },
-  "META": {
-   "premarket": {
-    "anchor": 718.6,
-    "anchorKind": "prior close",
-    "dataCutoff": "2026-10-09T16:00:00-04:00",
-    "high": {
-     "hi": 746.21,
-     "lo": 717.77,
-     "pBar": 0.39,
-     "price": 730.97,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.39,
-       "time": "09:30"
-      },
-      {
-       "p": 0.136,
-       "time": "15:45"
-      },
-      {
-       "p": 0.068,
-       "time": "09:45"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.153,
-      "p60": 0.661
-     }
-    },
-    "history": {
-     "from": "2026-07-20",
-     "n": 59,
-     "to": "2026-10-09"
-    },
-    "id": "3a85c52e8567343f",
-    "issuedAt": "2026-10-09T20:09:01+00:00",
-    "kind": "premarket",
-    "lastBar": "2026-10-09 15:45",
-    "low": {
-     "hi": 720.27,
-     "lo": 692.78,
-     "pBar": 0.441,
-     "price": 713.63,
-     "time": "09:30",
-     "topBins": [
-      {
-       "p": 0.441,
-       "time": "09:30"
-      },
-      {
-       "p": 0.169,
-       "time": "15:45"
-      },
-      {
-       "p": 0.051,
-       "time": "09:45"
-      }
-     ],
-     "window": {
-      "centre": "10:30",
-      "p30": 0.051,
-      "p60": 0.559
-     }
-    },
-    "model": "hilo-1",
-    "prevHash": "deae4401ab991d94e8d527405750cdc446291d9898859f8805464fab0dccf641",
-    "session": "2026-10-12",
-    "target": "full-session high and low of 2026-10-12",
-    "ticker": "META",
-    "v": 1
-   }
-  }
- },
+ "latest": {},
  "notes": {},
  "excluded": {
   "GC=F": "futures session calendar not implemented"
@@ -754,7 +13,7 @@
   "ok": true,
   "records": 10
  },
- "otherModelRecords": 0,
+ "otherModelRecords": 10,
  "lateIntradayRecords": 0,
  "storedSessions": {
   "TSLA": 60,
@@ -959,6 +218,328 @@
   }
  },
  "history": [],
+ "periods": {
+  "TSLA": {
+   "W": {
+    "start": "2026-10-12",
+    "end": "2026-10-16",
+    "high": null,
+    "low": null
+   },
+   "M": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "high": {
+     "price": 388.56,
+     "date": "2026-10-09"
+    },
+    "low": {
+     "price": 353.8,
+     "date": "2026-10-01"
+    }
+   },
+   "Y": {
+    "start": "2026-01-01",
+    "end": "2026-12-31",
+    "high": {
+     "price": 458.34,
+     "date": "2026-01-02"
+    },
+    "low": {
+     "price": 297.38,
+     "date": "2026-07-29"
+    }
+   }
+  },
+  "HOOD": {
+   "W": {
+    "start": "2026-10-12",
+    "end": "2026-10-16",
+    "high": null,
+    "low": null
+   },
+   "M": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "high": {
+     "price": 119.38,
+     "date": "2026-10-02"
+    },
+    "low": {
+     "price": 105.11,
+     "date": "2026-10-08"
+    }
+   },
+   "Y": {
+    "start": "2026-01-01",
+    "end": "2026-12-31",
+    "high": {
+     "price": 126.74,
+     "date": "2026-09-23"
+    },
+    "low": {
+     "price": 63.51,
+     "date": "2026-03-30"
+    }
+   }
+  },
+  "QQQ": {
+   "W": {
+    "start": "2026-10-12",
+    "end": "2026-10-16",
+    "high": null,
+    "low": null
+   },
+   "M": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "high": {
+     "price": 762.86,
+     "date": "2026-10-06"
+    },
+    "low": {
+     "price": 736.25,
+     "date": "2026-10-01"
+    }
+   },
+   "Y": {
+    "start": "2026-01-01",
+    "end": "2026-12-31",
+    "high": {
+     "price": 762.86,
+     "date": "2026-10-06"
+    },
+    "low": {
+     "price": 555.6,
+     "date": "2026-03-30"
+    }
+   }
+  },
+  "JPM": {
+   "W": {
+    "start": "2026-10-12",
+    "end": "2026-10-16",
+    "high": null,
+    "low": null
+   },
+   "M": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "high": {
+     "price": 334.85,
+     "date": "2026-10-02"
+    },
+    "low": {
+     "price": 325.07,
+     "date": "2026-10-07"
+    }
+   },
+   "Y": {
+    "start": "2026-01-01",
+    "end": "2026-12-31",
+    "high": {
+     "price": 366.5,
+     "date": "2026-08-13"
+    },
+    "low": {
+     "price": 279.1,
+     "date": "2026-03-12"
+    }
+   }
+  },
+  "GOOGL": {
+   "W": {
+    "start": "2026-10-12",
+    "end": "2026-10-16",
+    "high": null,
+    "low": null
+   },
+   "M": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "high": {
+     "price": 356.83,
+     "date": "2026-10-08"
+    },
+    "low": {
+     "price": 335.51,
+     "date": "2026-10-01"
+    }
+   },
+   "Y": {
+    "start": "2026-01-01",
+    "end": "2026-12-31",
+    "high": {
+     "price": 408.61,
+     "date": "2026-05-18"
+    },
+    "low": {
+     "price": 272.11,
+     "date": "2026-03-30"
+    }
+   }
+  },
+  "NVDA": {
+   "W": {
+    "start": "2026-10-12",
+    "end": "2026-10-16",
+    "high": null,
+    "low": null
+   },
+   "M": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "high": {
+     "price": 243.37,
+     "date": "2026-10-06"
+    },
+    "low": {
+     "price": 228.16,
+     "date": "2026-10-01"
+    }
+   },
+   "Y": {
+    "start": "2026-01-01",
+    "end": "2026-12-31",
+    "high": {
+     "price": 243.37,
+     "date": "2026-10-06"
+    },
+    "low": {
+     "price": 164.27,
+     "date": "2026-03-30"
+    }
+   }
+  },
+  "AMZN": {
+   "W": {
+    "start": "2026-10-12",
+    "end": "2026-10-16",
+    "high": null,
+    "low": null
+   },
+   "M": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "high": {
+     "price": 262.8,
+     "date": "2026-10-09"
+    },
+    "low": {
+     "price": 246.12,
+     "date": "2026-10-01"
+    }
+   },
+   "Y": {
+    "start": "2026-01-01",
+    "end": "2026-12-31",
+    "high": {
+     "price": 287.2,
+     "date": "2026-08-03"
+    },
+    "low": {
+     "price": 196.0,
+     "date": "2026-02-17"
+    }
+   }
+  },
+  "SPY": {
+   "W": {
+    "start": "2026-10-12",
+    "end": "2026-10-16",
+    "high": null,
+    "low": null
+   },
+   "M": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "high": {
+     "price": 781.62,
+     "date": "2026-10-06"
+    },
+    "low": {
+     "price": 758.79,
+     "date": "2026-10-01"
+    }
+   },
+   "Y": {
+    "start": "2026-01-01",
+    "end": "2026-12-31",
+    "high": {
+     "price": 781.62,
+     "date": "2026-10-06"
+    },
+    "low": {
+     "price": 629.28,
+     "date": "2026-03-30"
+    }
+   }
+  },
+  "VOO": {
+   "W": {
+    "start": "2026-10-12",
+    "end": "2026-10-16",
+    "high": null,
+    "low": null
+   },
+   "M": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "high": {
+     "price": 718.47,
+     "date": "2026-10-06"
+    },
+    "low": {
+     "price": 697.47,
+     "date": "2026-10-01"
+    }
+   },
+   "Y": {
+    "start": "2026-01-01",
+    "end": "2026-12-31",
+    "high": {
+     "price": 718.47,
+     "date": "2026-10-06"
+    },
+    "low": {
+     "price": 578.46,
+     "date": "2026-03-30"
+    }
+   }
+  },
+  "META": {
+   "W": {
+    "start": "2026-10-12",
+    "end": "2026-10-16",
+    "high": null,
+    "low": null
+   },
+   "M": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "high": {
+     "price": 747.6,
+     "date": "2026-10-06"
+    },
+    "low": {
+     "price": 711.68,
+     "date": "2026-10-08"
+    }
+   },
+   "Y": {
+    "start": "2026-01-01",
+    "end": "2026-12-31",
+    "high": {
+     "price": 779.82,
+     "date": "2026-09-24"
+    },
+    "low": {
+     "price": 520.26,
+     "date": "2026-03-27"
+    }
+   }
+  }
+ },
  "retrospective": {
   "premarket": {
    "high": {
@@ -1040,6 +621,14 @@
       }
      },
      "strongest": "the open +/-60"
+    },
+    "timeOrderFree": {
+     "n": 390,
+     "earlyBar": 63.6,
+     "early60": 85.6,
+     "lateBar": 16.2,
+     "late60": 34.6,
+     "orderRight": 47.4
     }
    },
    "low": {
@@ -1066,16 +655,16 @@
      "strongest": "prior-day extreme"
     },
     "timeBar": {
-     "model": 31.0,
-     "within30": 42.6,
-     "within60": 50.3,
+     "model": 29.0,
+     "within30": 41.0,
+     "within60": 49.5,
      "comparators": {
       "opening bar": {
        "n": 390,
        "comparator": 31.5,
-       "modelSameRows": 31.0,
+       "modelSameRows": 29.0,
        "diffCI": [
-        -1.538,
+        -5.385,
         0.0
        ]
       }
@@ -1083,21 +672,21 @@
      "strongest": "opening bar"
     },
     "timeNear": {
-     "model": 50.3,
+     "model": 49.5,
      "comparators": {
       "prior-60 best fixed window": {
        "n": 390,
        "comparator": 63.3,
-       "modelSameRows": 50.3,
+       "modelSameRows": 49.5,
        "diffCI": [
-        -18.462,
-        -8.205
+        -18.718,
+        -8.974
        ]
       },
       "the open +/-60": {
        "n": 390,
        "comparator": 51.3,
-       "modelSameRows": 50.3
+       "modelSameRows": 49.5
       }
      },
      "strongest": "prior-60 best fixed window"
@@ -1149,32 +738,32 @@
      "strongest": "extreme so far stands"
     },
     "timeBar": {
-     "model": 64.7,
-     "within30": 68.2,
-     "within60": 71.2,
+     "model": 64.5,
+     "within30": 68.0,
+     "within60": 71.1,
      "comparators": {
       "extreme so far stands": {
        "n": 2400,
        "comparator": 64.6,
-       "modelSameRows": 64.7,
+       "modelSameRows": 64.5,
        "diffCI": [
-        -0.833,
-        1.083
+        -1.208,
+        1.042
        ]
       }
      },
      "strongest": "extreme so far stands"
     },
     "timeNear": {
-     "model": 71.2,
+     "model": 71.1,
      "comparators": {
       "extreme so far stands": {
        "n": 2400,
        "comparator": 70.1,
-       "modelSameRows": 71.2,
+       "modelSameRows": 71.1,
        "diffCI": [
-        -0.417,
-        2.667
+        -1.042,
+        3.333
        ]
       }
      },
@@ -1194,6 +783,14 @@
       }
      },
      "strongest": "extreme so far stands"
+    },
+    "timeOrderFree": {
+     "n": 2400,
+     "earlyBar": 81.0,
+     "early60": 91.6,
+     "lateBar": 39.8,
+     "late60": 51.8,
+     "orderRight": 81.2
     }
    },
    "low": {
@@ -1220,32 +817,32 @@
      "strongest": "extreme so far stands"
     },
     "timeBar": {
-     "model": 62.7,
-     "within30": 65.8,
-     "within60": 69.0,
+     "model": 61.3,
+     "within30": 63.7,
+     "within60": 66.6,
      "comparators": {
       "extreme so far stands": {
        "n": 2400,
        "comparator": 62.5,
-       "modelSameRows": 62.7,
+       "modelSameRows": 61.3,
        "diffCI": [
-        -1.792,
-        2.083
+        -3.917,
+        1.583
        ]
       }
      },
      "strongest": "extreme so far stands"
     },
     "timeNear": {
-     "model": 69.0,
+     "model": 66.6,
      "comparators": {
       "extreme so far stands": {
        "n": 2400,
        "comparator": 68.6,
-       "modelSameRows": 69.0,
+       "modelSameRows": 66.6,
        "diffCI": [
-        -1.792,
-        2.667
+        -5.0,
+        1.208
        ]
       }
      },
@@ -1294,32 +891,32 @@
       "strongest": "extreme so far stands"
      },
      "timeBar": {
-      "model": 44.2,
-      "within30": 50.5,
-      "within60": 55.5,
+      "model": 42.5,
+      "within30": 48.2,
+      "within60": 53.5,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 42.0,
-        "modelSameRows": 44.2,
+        "modelSameRows": 42.5,
         "diffCI": [
-         0.25,
-         4.25
+         -1.5,
+         2.5
         ]
        }
       },
       "strongest": "extreme so far stands"
      },
      "timeNear": {
-      "model": 55.5,
+      "model": 53.5,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 54.2,
-        "modelSameRows": 55.5,
+        "modelSameRows": 53.5,
         "diffCI": [
-         0.0,
-         2.75
+         -3.25,
+         1.5
         ]
        }
       },
@@ -1339,6 +936,14 @@
        }
       },
       "strongest": "extreme so far stands"
+     },
+     "timeOrderFree": {
+      "n": 400,
+      "earlyBar": 64.8,
+      "early60": 86.2,
+      "lateBar": 17.0,
+      "late60": 33.5,
+      "orderRight": 67.7
      }
     },
     "low": {
@@ -1365,32 +970,32 @@
       "strongest": "extreme so far stands"
      },
      "timeBar": {
-      "model": 38.2,
-      "within30": 45.0,
-      "within60": 51.0,
+      "model": 35.0,
+      "within30": 38.2,
+      "within60": 44.0,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 38.2,
-        "modelSameRows": 38.2,
+        "modelSameRows": 35.0,
         "diffCI": [
-         -2.75,
-         2.75
+         -7.5,
+         1.0
         ]
        }
       },
       "strongest": "extreme so far stands"
      },
      "timeNear": {
-      "model": 51.0,
+      "model": 44.0,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 51.8,
-        "modelSameRows": 51.0,
+        "modelSameRows": 44.0,
         "diffCI": [
-         -4.5,
-         3.0
+         -13.25,
+         -2.25
         ]
        }
       },
@@ -1438,32 +1043,32 @@
       "strongest": "extreme so far stands"
      },
      "timeBar": {
-      "model": 49.2,
-      "within30": 53.2,
-      "within60": 57.8,
+      "model": 49.5,
+      "within30": 54.0,
+      "within60": 57.5,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 51.0,
-        "modelSameRows": 49.2,
+        "modelSameRows": 49.5,
         "diffCI": [
-         -3.75,
-         -0.25
+         -4.0,
+         0.5
         ]
        }
       },
       "strongest": "extreme so far stands"
      },
      "timeNear": {
-      "model": 57.8,
+      "model": 57.5,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 56.2,
-        "modelSameRows": 57.8,
+        "modelSameRows": 57.5,
         "diffCI": [
-         -1.0,
-         4.0
+         -1.75,
+         4.25
         ]
        }
       },
@@ -1483,6 +1088,14 @@
        }
       },
       "strongest": "extreme so far stands"
+     },
+     "timeOrderFree": {
+      "n": 400,
+      "earlyBar": 70.5,
+      "early60": 88.5,
+      "lateBar": 21.5,
+      "late60": 36.8,
+      "orderRight": 70.3
      }
     },
     "low": {
@@ -1509,32 +1122,32 @@
       "strongest": "extreme so far stands"
      },
      "timeBar": {
-      "model": 47.8,
-      "within30": 51.5,
-      "within60": 57.8,
+      "model": 44.8,
+      "within30": 48.0,
+      "within60": 51.5,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 48.5,
-        "modelSameRows": 47.8,
+        "modelSameRows": 44.8,
         "diffCI": [
-         -4.75,
-         2.75
+         -9.0,
+         1.25
         ]
        }
       },
       "strongest": "extreme so far stands"
      },
      "timeNear": {
-      "model": 57.8,
+      "model": 51.5,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 56.5,
-        "modelSameRows": 57.8,
+        "modelSameRows": 51.5,
         "diffCI": [
-         -2.5,
-         5.0
+         -11.25,
+         1.25
         ]
        }
       },
@@ -1582,17 +1195,17 @@
       "strongest": "extreme so far stands"
      },
      "timeBar": {
-      "model": 60.5,
-      "within30": 62.5,
+      "model": 60.0,
+      "within30": 62.2,
       "within60": 65.5,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 61.8,
-        "modelSameRows": 60.5,
+        "modelSameRows": 60.0,
         "diffCI": [
-         -3.0,
-         0.25
+         -5.0,
+         1.25
         ]
        }
       },
@@ -1606,8 +1219,8 @@
         "comparator": 66.8,
         "modelSameRows": 65.5,
         "diffCI": [
-         -3.5,
-         0.5
+         -6.0,
+         3.25
         ]
        }
       },
@@ -1627,6 +1240,14 @@
        }
       },
       "strongest": "extreme so far stands"
+     },
+     "timeOrderFree": {
+      "n": 400,
+      "earlyBar": 78.8,
+      "early60": 90.8,
+      "lateBar": 29.8,
+      "late60": 42.0,
+      "orderRight": 76.7
      }
     },
     "low": {
@@ -1653,31 +1274,31 @@
       "strongest": "extreme so far stands"
      },
      "timeBar": {
-      "model": 59.8,
-      "within30": 62.5,
-      "within60": 64.0,
+      "model": 58.5,
+      "within30": 61.0,
+      "within60": 63.0,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 61.0,
-        "modelSameRows": 59.8,
+        "modelSameRows": 58.5,
         "diffCI": [
-         -4.75,
-         2.0
+         -6.75,
+         1.5
         ]
        }
       },
       "strongest": "extreme so far stands"
      },
      "timeNear": {
-      "model": 64.0,
+      "model": 63.0,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 65.5,
-        "modelSameRows": 64.0,
+        "modelSameRows": 63.0,
         "diffCI": [
-         -5.75,
+         -7.75,
          2.25
         ]
        }
@@ -1726,32 +1347,32 @@
       "strongest": "extreme so far stands"
      },
      "timeBar": {
-      "model": 71.2,
-      "within30": 75.0,
-      "within60": 76.5,
+      "model": 71.8,
+      "within30": 75.2,
+      "within60": 77.8,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 72.0,
-        "modelSameRows": 71.2,
+        "modelSameRows": 71.8,
         "diffCI": [
-         -2.0,
-         0.5
+         -1.75,
+         1.25
         ]
        }
       },
       "strongest": "extreme so far stands"
      },
      "timeNear": {
-      "model": 76.5,
+      "model": 77.8,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 75.5,
-        "modelSameRows": 76.5,
+        "modelSameRows": 77.8,
         "diffCI": [
-         -1.25,
-         3.5
+         -0.25,
+         5.5
         ]
        }
       },
@@ -1771,6 +1392,14 @@
        }
       },
       "strongest": "extreme so far stands"
+     },
+     "timeOrderFree": {
+      "n": 400,
+      "earlyBar": 87.8,
+      "early60": 93.2,
+      "lateBar": 45.0,
+      "late60": 55.8,
+      "orderRight": 87.7
      }
     },
     "low": {
@@ -1797,32 +1426,32 @@
       "strongest": "extreme so far stands"
      },
      "timeBar": {
-      "model": 69.8,
-      "within30": 70.8,
-      "within60": 72.5,
+      "model": 68.2,
+      "within30": 69.5,
+      "within60": 71.8,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 68.0,
-        "modelSameRows": 69.8,
+        "modelSameRows": 68.2,
         "diffCI": [
-         -2.25,
-         5.25
+         -4.25,
+         4.25
         ]
        }
       },
       "strongest": "extreme so far stands"
      },
      "timeNear": {
-      "model": 72.5,
+      "model": 71.8,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 70.8,
-        "modelSameRows": 72.5,
+        "modelSameRows": 71.8,
         "diffCI": [
-         -2.75,
-         5.75
+         -4.25,
+         5.5
         ]
        }
       },
@@ -1870,17 +1499,17 @@
       "strongest": "extreme so far stands"
      },
      "timeBar": {
-      "model": 79.5,
-      "within30": 81.8,
+      "model": 79.2,
+      "within30": 81.5,
       "within60": 83.0,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 78.0,
-        "modelSameRows": 79.5,
+        "modelSameRows": 79.2,
         "diffCI": [
-         -0.25,
-         3.25
+         -0.5,
+         3.0
         ]
        }
       },
@@ -1894,7 +1523,7 @@
         "comparator": 80.2,
         "modelSameRows": 83.0,
         "diffCI": [
-         -1.0,
+         -1.25,
          7.0
         ]
        }
@@ -1915,6 +1544,14 @@
        }
       },
       "strongest": "extreme so far stands"
+     },
+     "timeOrderFree": {
+      "n": 400,
+      "earlyBar": 90.0,
+      "early60": 93.8,
+      "lateBar": 56.0,
+      "late60": 62.5,
+      "orderRight": 89.5
      }
     },
     "low": {
@@ -1941,32 +1578,32 @@
       "strongest": "extreme so far stands"
      },
      "timeBar": {
-      "model": 75.8,
-      "within30": 77.0,
-      "within60": 78.2,
+      "model": 76.2,
+      "within30": 77.5,
+      "within60": 78.8,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 76.8,
-        "modelSameRows": 75.8,
+        "modelSameRows": 76.2,
         "diffCI": [
-         -4.5,
-         2.25
+         -4.25,
+         3.0
         ]
        }
       },
       "strongest": "extreme so far stands"
      },
      "timeNear": {
-      "model": 78.2,
+      "model": 78.8,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 78.5,
-        "modelSameRows": 78.2,
+        "modelSameRows": 78.8,
         "diffCI": [
-         -4.25,
-         3.25
+         -3.5,
+         4.0
         ]
        }
       },
@@ -2014,32 +1651,32 @@
       "strongest": "extreme so far stands"
      },
      "timeBar": {
-      "model": 83.5,
-      "within30": 86.5,
-      "within60": 88.8,
+      "model": 84.0,
+      "within30": 87.0,
+      "within60": 89.2,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 82.8,
-        "modelSameRows": 83.5,
+        "modelSameRows": 84.0,
         "diffCI": [
-         -2.5,
-         3.5
+         -2.0,
+         4.0
         ]
        }
       },
       "strongest": "extreme so far stands"
      },
      "timeNear": {
-      "model": 88.8,
+      "model": 89.2,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 87.8,
-        "modelSameRows": 88.8,
+        "modelSameRows": 89.2,
         "diffCI": [
-         -2.0,
-         3.5
+         -1.75,
+         4.0
         ]
        }
       },
@@ -2059,6 +1696,14 @@
        }
       },
       "strongest": "extreme so far stands"
+     },
+     "timeOrderFree": {
+      "n": 400,
+      "earlyBar": 94.5,
+      "early60": 97.2,
+      "lateBar": 69.2,
+      "late60": 80.2,
+      "orderRight": 95.6
      }
     },
     "low": {
@@ -2085,32 +1730,32 @@
       "strongest": "extreme so far stands"
      },
      "timeBar": {
-      "model": 84.8,
-      "within30": 87.8,
-      "within60": 90.5,
+      "model": 85.0,
+      "within30": 88.0,
+      "within60": 90.8,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 82.5,
-        "modelSameRows": 84.8,
+        "modelSameRows": 85.0,
         "diffCI": [
          -1.75,
-         6.25
+         6.75
         ]
        }
       },
       "strongest": "extreme so far stands"
      },
      "timeNear": {
-      "model": 90.5,
+      "model": 90.8,
       "comparators": {
        "extreme so far stands": {
         "n": 400,
         "comparator": 88.5,
-        "modelSameRows": 90.5,
+        "modelSameRows": 90.8,
         "diffCI": [
-         -1.5,
-         5.5
+         -1.25,
+         5.75
         ]
        }
       },
@@ -2136,7 +1781,7 @@
   }
  },
  "build": {
-  "commit": "cb88bda55bf61fe523b212013353ca430fbd6128",
-  "run": "37998706162"
+  "commit": "3d3a1e82a47e82c8d60060099a0838929b617e3f",
+  "run": "38009514313"
  }
 }
