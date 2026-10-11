@@ -3017,3 +3017,48 @@ untouched; `tickers.txt` wasn't touched.
 session trades, the way the 9/12 occurrence did; whether HOOD's 1.15 calibration ceiling keeps
 holding; whether NVDA/AMZN/SPY/VOO/META ever produce a qualifying swing to grade; and the open
 alerts/trades in the paper journal.
+
+## 2026-10-11 (Sun) — weekend, no new session; fetch blocked again; grade + log only
+
+**Build status:** this session's own `fetch_data.py` was blocked again — all 11 tickers failed with
+the same "Tunnel connection failed: 403 Forbidden" sandbox network restriction seen all week (not a
+Yahoo-side block). One thing worth noting for the record: the run took close to 3 minutes to finish
+rather than failing instantly, because each failed range retries up to 3 times with an 8-second
+backoff before giving up — that's expected behavior given 11 tickers x 3 ranges, not a hang, and it
+completed normally and reported all 11 failures. Markets were closed all weekend anyway, so there
+was no new session to fetch even with network access. With no fresh CSVs, `analyze.py` correctly
+refused to rebuild ("Incomplete analysis; retaining last published dashboard") and left the current
+build untouched. The separate cloud refresh workflow already ran Saturday evening with real market
+access — `data.js` is stamped generated 10/10 6:18 PM ET across all 11 tickers. `coherence_check.py`
+passes clean (11/11 tickers), `anomaly_audit.py` reports no anomalies, the full Python test suite
+passes all 136 tests (14 subtests), and all 5 Node UI tests (pin, smoke, reliability, hilo refresh,
+layout) pass too.
+
+**Yesterday's open item resolved itself:** Saturday's entry flagged 5 tickers (TSLA, HOOD, GOOGL,
+SPY, VOO) whose forecast chain's lead event was stuck dated Fri 10/09, now in the past relative to
+the real calendar date, and guessed it would clear once Monday's session traded. It actually cleared
+before that — today's `anomaly_audit.py` run reports zero anomalies, so whatever resolved the stale
+head did so purely from the calendar advancing, not from a new session. Worth remembering precisely
+in case the same flag reappears: it doesn't strictly need a new trading session to clear, just needs
+today's date to move past the stuck one.
+
+**Grades reviewed:** unchanged from Saturday since no new session traded over the weekend — TSLA
+n=13 (31%/38%), HOOD n=59 (19%/27%, `priceCalibHigh` still holding at the owner's deliberate 1.15
+ceiling), QQQ n=44 (30%/34%), JPM n=27 (15%/22%), GOOGL n=34 (21%/24%), GC=F n=19 (21%/21%);
+NVDA/AMZN/SPY/VOO/META still n=0 on swing grading (quiet/too-new names, already confirmed not a
+bug). The walk-forward horizon scoreboard's numbers are likewise unchanged from Saturday's reading:
+every name's timed within-hour hit rate is far above its random-control baseline, and median price
+error beats the naive baseline for nearly every name/direction pair. The one standing exception,
+AMZN lows (model 1.05% vs naive 0.86%), is holding at the same small gap it's shown for several days
+running — stable, not widening, so still a watch item rather than a fix. In the owner's own paper
+trade journal (`spread_journal.json`), trade 6 (HOOD 10/30 101/96 put credit spread, opened 10/5) is
+still the only open position; everything else logged there is closed or pending/not-entered — that's
+the owner's bookkeeping, not touched here.
+
+**What changed and why:** nothing. No bug found, no 3+-day pattern crossed the change bar, and
+today's network block is the same known sandbox limitation as every other day this week, not an app
+bug. Honesty features, ledgers, and the coherence gate are untouched; `tickers.txt` wasn't touched.
+
+**Watch next:** whether the AMZN-low naive-baseline gap narrows, holds, or starts widening; whether
+HOOD's 1.15 calibration ceiling keeps holding; whether NVDA/AMZN/SPY/VOO/META ever produce a
+qualifying swing to grade; and the still-open HOOD spread (trade 6) in the paper journal.
