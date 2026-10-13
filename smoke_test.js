@@ -57,8 +57,10 @@ setTimeout(() => {
 
   for (const e of errors) console.log("warning (non-fatal): " + e.slice(0, 300));
   const probs = [];
-  if (btns < 10)
-    probs.push(`stock buttons did not build (${btns} buttons) - a script crashed before renderAll()`);
+  const expected = ["TSLA", "HOOD", "META", "QQQ", "JPM", "GOOGL", "GC=F"];
+  const shown = [...d.querySelectorAll("#gTk button[data-t]")].map(b => b.dataset.t);
+  if (JSON.stringify(shown) !== JSON.stringify(expected))
+    probs.push(`unexpected stock button order: ${shown.join(", ")}`);
   if (!d.getElementById("gRes") || !d.getElementById("gRes").textContent.trim())
     probs.push("high/low results did not render");
   if (tickers < 10) probs.push(`DATA_ALL has only ${tickers} tickers`);
