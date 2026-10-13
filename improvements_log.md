@@ -3104,3 +3104,44 @@ any of today's newly-logged small highs-side gaps (GOOGL/HOOD/META/NVDA/SPY/VOO)
 stay noise-sized; whether HOOD's 1.15 calibration ceiling keeps holding; whether
 NVDA/AMZN/SPY/VOO/META ever produce a qualifying swing to grade; and the still-open HOOD spread
 (trade 8) in the paper journal.
+
+## 2026-10-13 (Tue) — daily review: grades steady, no code change
+
+**Build status:** this sandbox's own `fetch_data.py` was blocked again with the same "Tunnel
+connection failed: 403 Forbidden" network restriction seen every day this week (not a Yahoo-side
+block) — all 11 tickers and the pre/post-market fetch failed. With no fresh CSVs on disk,
+`analyze.py` correctly refused to rebuild ("Incomplete analysis; retaining last published
+dashboard") and left every committed file untouched. That's fine today specifically because the
+separate cloud refresh workflow already ran with real market access earlier today — `data.js` is
+stamped generated 10/13 5:45 PM ET across all 11 tickers. `coherence_check.py` passes clean (11/11
+tickers), `anomaly_audit.py` reports no anomalies ("chain, levels, horizons and trade cards all
+line up"), the full Python test suite passes all 136 tests across 14 files, and all 5 Node UI tests
+(pin, smoke, reliability, hilo refresh, layout) pass too.
+
+**Grades reviewed:** swing-grading track record — TSLA n=13 (31%/38%), HOOD n=59 (19%/27%,
+`priceCalibHigh` still holding at the owner's deliberate 1.15 ceiling), QQQ n=44 (30%/34%), JPM n=27
+(15%/22%), GOOGL n=35 (20%/23%, up one graded call from yesterday's 34 via the cloud refresh — a
+normal day-over-day tick, not a bug), GC=F n=19 (21%/21%); NVDA/AMZN/SPY/VOO/META still n=0 (quiet/
+too-new names, already confirmed not a bug). The walk-forward horizon scoreboard's long-standing
+watch item, AMZN lows, is still holding at essentially the same small gap (model 1.03% vs naive
+0.86% median price error, vs ~1.04/0.87 yesterday) — stable, not widening after many days of
+tracking. The six small highs-side gaps logged for the first time yesterday as a baseline moved in
+both directions today with no clear trend yet (GOOGL highs actually flipped to the model's favor,
+1.04 vs naive 1.08, versus 1.15/1.13 yesterday; HOOD highs grew slightly, 2.06 vs 1.88, versus
+2.06/1.96; META highs grew slightly, 1.24 vs 1.07, versus 1.19/1.04; NVDA highs' gap widened mostly
+because the naive baseline itself moved, 1.29 vs 1.16, versus 1.29/1.27; SPY and VOO highs stayed
+flat at 0.37/0.35 and 0.38/0.37) — this is only the second reading of these six, so there isn't a
+3+ day pattern yet either way; logging them again to keep building the baseline. In the owner's own
+paper trade journal (`spread_journal.json`), trade 8 (HOOD put credit spread) is still the only open
+position, unchanged — that's the owner's bookkeeping, not touched here.
+
+**What changed and why:** nothing. No bug found, and no pattern has crossed the 3+ day change bar —
+the AMZN-low gap keeps holding, and the six newly-tracked highs-side gaps are still only two
+readings old with mixed direction, not yet a trend. Honesty features, ledgers, and the coherence
+gate are untouched; `tickers.txt` wasn't touched.
+
+**Watch next:** whether the AMZN-low naive-baseline gap starts widening instead of holding; whether
+the six highs-side gaps (GOOGL/HOOD/META/NVDA/SPY/VOO) settle into a consistent direction over the
+next couple of readings rather than moving around like today; whether HOOD's 1.15 calibration
+ceiling keeps holding; whether NVDA/AMZN/SPY/VOO/META ever produce a qualifying swing to grade; and
+the still-open HOOD spread (trade 8) in the paper journal.
