@@ -184,7 +184,12 @@ const esc = v => String(v == null ? "" : v).replace(/[&<>"']/g, ch => ({'&':'&am
 const NICE = {"GC=F": "GOLD"};
 const nice = t => NICE[t] || t;
 const PERIODS = ["D","W","M","Y"];
-let TICKERS = Object.keys(DATA_ALL);
+// Display preferences only; retain all collected data and history.
+let TICKERS = Object.keys(DATA_ALL).filter(t => !["NVDA", "AMZN", "SPY", "VOO"].includes(t));
+if(TICKERS.includes("META") && TICKERS.includes("QQQ")){
+  TICKERS.splice(TICKERS.indexOf("META"), 1);
+  TICKERS.splice(TICKERS.indexOf("QQQ"), 0, "META");
+}
 let CUR = safeStorage.getItem("tkr"); if(!TICKERS.includes(CUR)) CUR = TICKERS[0];
 let PERIOD = safeStorage.getItem("period"); if(!PERIODS.includes(PERIOD)) PERIOD = "D";
 let HILO_LIVE = (typeof HILO === "undefined") ? null : HILO;
@@ -550,7 +555,7 @@ $("gHist").addEventListener("toggle", () => { if($("gHist").open) renderHistory(
          x.chart.dates.length !== (x.chart.closes || []).length || !x.chart.closes.every(c => Number.isFinite(c) && c > 0))
         throw new Error("invalid data for " + t);
     }
-    if(TICKERS.some(t => !fresh[t])) throw new Error("incomplete refresh");
+    if(Object.keys(DATA_ALL).some(t => !fresh[t])) throw new Error("incomplete refresh");
     const h = grab(txt, "HILO");
     let nextHilo;
     if(!h.found) nextHilo = {failed:{at:new Date().toISOString(), reason:"no forecasts in refreshed data"}, stale:true, generatedAt:new Date().toISOString()};
