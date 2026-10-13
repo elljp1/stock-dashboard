@@ -606,7 +606,7 @@
       "closed": null,
       "closeCost": null,
       "pnl": null,
-      "notes": "Timing-led: app projects a HOOD low 10/05 (~106.28) then a high 10/22 (~130.18). Suggested 2 contracts; user placed 3 ($1,185 risk, 10.8%). With trade 7 ($1,600) total open risk is $2,785 (25.3%), just over the 25% cap (user's call). Filled 2:45pm ET 10/5: sold 101P at 2.50, bought 96P at 1.45 ($1.05 credit, $315 total). Exit at $0.53 debit or the 10/22 high; stop $2.10 debit or HOOD close below 101. Adds to the 700 HOOD shares held in Individual. 10/6 9:34am: app moved the HOOD high to Fri 10/09 (~127.15), then a LOW 10/19 (~107.29); timing exit moved to 10/09. 10/6 10:33am: app flipped again: HOOD LOW Wed 10/07 (~109.09) next, then HIGH 10/19 (~128.62); against the app's leg until the 10/07 low (mid 0.975); short 101 is 7.4% below that low. Timing exit moved to 10/19.",
+      "notes": "Timing-led: app projects a HOOD low 10/05 (~106.28) then a high 10/22 (~130.18). Suggested 2 contracts; user placed 3 ($1,185 risk, 10.8%). With trade 7 ($1,600) total open risk is $2,785 (25.3%), just over the 25% cap (user's call). Filled 2:45pm ET 10/5: sold 101P at 2.50, bought 96P at 1.45 ($1.05 credit, $315 total). Exit at $0.53 debit or the 10/22 high; stop $2.10 debit or HOOD close below 101. Adds to the 700 HOOD shares held in Individual. 10/6 9:34am: app moved the HOOD high to Fri 10/09 (~127.15), then a LOW 10/19 (~107.29); timing exit moved to 10/09. 10/6 10:33am: app flipped again: HOOD LOW Wed 10/07 (~109.09) next, then HIGH 10/19 (~128.62); against the app's leg until the 10/07 low (mid 0.975); short 101 is 7.4% below that low. Timing exit moved to 10/19. 10/13 11:36am: user placed a GTC buy-to-close at $0.50 debit x3 (order 6ace5014), +$165 if filled; spread mid $1.14 with HOOD at $111.28. Planned timing exit still the 10/19 high.",
       "plannedExitTurnHistory": [
         {
           "type": "high",
@@ -637,7 +637,17 @@
           "replacedOn": "2026-10-08"
         }
       ],
-      "tradeNo": 6
+      "tradeNo": 6,
+      "exitOrder": {
+        "orderId": "6ace5014-cdfe-4e0c-8771-e905fe6d55d3",
+        "type": "limit debit",
+        "price": 0.5,
+        "quantity": 3,
+        "timeInForce": "gtc",
+        "placedAt": "2026-10-13T11:36 ET",
+        "placedBy": "user in app",
+        "state": "confirmed (resting)"
+      }
     }
   ],
   "otherAccountOrders": [

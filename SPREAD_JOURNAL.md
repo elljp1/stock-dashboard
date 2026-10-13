@@ -31,7 +31,7 @@ Only filled trades get a number. Old internal ids are in the Ref column.
 | 3 | 9/24 | Agentic | QQQ 10/23 770/780 call credit spread x2 | $2.00 | $1.48 | 10/8 | **+$104** |
 | 4 | 9/30 | Individual | TSLA 10/30 330 put x2 (short) | $10.00 | $8.00 / $7.00 | 10/1 | **+$500** |
 | 5 | 9/30 | Joint | TSLA 10/30 330 put x3 (short) | $10.00 | $8.00 x2 / $7.00 | 10/1 | **+$700** |
-| 6 | 10/5 | Agentic | HOOD 10/30 101/96 put credit spread x3 | $1.05 | | | open |
+| 6 | 10/5 | Agentic | HOOD 10/30 101/96 put credit spread x3 | $1.05 | | | open (exit order $0.50 GTC resting since 10/13 11:36am) |
 | 7 | 10/8 | Individual | META 10/30 700 put x1 (short) | $24.43 | $19.00 | 10/9 | **+$543** |
 | 8 | 10/8 | Joint | META 10/30 700 put x1 (short) | $24.00 | $19.00 | 10/9 | **+$500** |
 
