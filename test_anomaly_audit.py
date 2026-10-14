@@ -1,3 +1,4 @@
+from datetime import date, timedelta
 import json
 from pathlib import Path
 import subprocess
@@ -7,6 +8,14 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parent
+
+# The audit flags any forecast event dated before today, so fixture dates must
+# stay in the future.  Anchor on a Monday at least a week out so session counts
+# (weekdays only) are stable and no time-zone edge can make a date look past.
+_today = date.today()
+MON = _today + timedelta(days=7 + (7 - _today.weekday()) % 7)
+TUE = MON + timedelta(days=1)
+WED = MON + timedelta(days=2)
 
 
 class ForecastVelocityAuditTests(unittest.TestCase):
@@ -35,23 +44,23 @@ class ForecastVelocityAuditTests(unittest.TestCase):
 
     def test_two_session_moderate_swing_is_allowed(self):
         result = self.run_audit([
-            {"isoDate": "2026-10-13", "type": "high", "price": 106.0},
-            {"isoDate": "2026-10-15", "type": "low", "price": 100.0},
+            {"isoDate": MON.isoformat(), "type": "high", "price": 106.0},
+            {"isoDate": WED.isoformat(), "type": "low", "price": 100.0},
         ])
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
 
     def test_same_session_turns_are_blocked(self):
         result = self.run_audit([
-            {"isoDate": "2026-10-13", "type": "high", "price": 101.0},
-            {"isoDate": "2026-10-13", "type": "low", "price": 100.0},
+            {"isoDate": MON.isoformat(), "type": "high", "price": 101.0},
+            {"isoDate": MON.isoformat(), "type": "low", "price": 100.0},
         ])
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("same trading session", result.stdout)
 
     def test_one_session_nineteen_percent_move_stays_blocked(self):
         result = self.run_audit([
-            {"isoDate": "2026-10-13", "type": "high", "price": 119.0},
-            {"isoDate": "2026-10-14", "type": "low", "price": 100.0},
+            {"isoDate": MON.isoformat(), "type": "high", "price": 119.0},
+            {"isoDate": TUE.isoformat(), "type": "low", "price": 100.0},
         ])
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("implausible", result.stdout)
