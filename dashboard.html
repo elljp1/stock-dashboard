@@ -30,7 +30,7 @@
   #gUpd .dot{display:inline-block; width:7px; height:7px; border-radius:50%; background:var(--green); margin-right:4px; vertical-align:1px}
   #gUpd.old .dot{background:var(--amber)} #gUpd.bad .dot{background:var(--red)}
   #gChartWrap{position:relative; flex:1 1 auto; min-height:140px; background:var(--panel); border:1px solid var(--border); border-radius:10px; overflow:hidden}
-  #chart{display:block; width:100%; height:100%; touch-action:none; user-select:none; -webkit-user-select:none}
+  #chart{display:block; width:100%; height:100%; touch-action:none; user-select:none; -webkit-user-select:none; -webkit-touch-callout:none}
   #gReset{position:absolute; top:6px; left:6px; font:700 12px system-ui,-apple-system,sans-serif; padding:5px 10px; border:1px solid var(--border); border-radius:8px; background:var(--panel); color:var(--blue); cursor:pointer}
   #gReset[hidden]{display:none}
   #gRes{display:grid; grid-template-columns:auto 1fr auto; column-gap:10px; row-gap:1px; align-items:baseline;
@@ -327,7 +327,7 @@ function setView(a, b){
   if(Math.abs(VIEW.a - CH.defA) < DAY / 2 && Math.abs(VIEW.b - CH.defB) < DAY / 2) VIEW = null;
   drawChart(CH.D, CH.v);
 }
-function drawChart(D, v, hover){
+function drawChart(D, v, hover, cross){
   const c = $("chart"), wrap = c.parentElement, dpr = window.devicePixelRatio || 1;
   const W = Math.max(260, wrap.clientWidth || 360), H = Math.max(140, wrap.clientHeight || 260);
   if(c.width !== Math.round(W * dpr) || c.height !== Math.round(H * dpr)){ c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); }
@@ -354,7 +354,8 @@ function drawChart(D, v, hover){
   let pMin = Math.min.apply(null, pxs), pMax = Math.max.apply(null, pxs);
   const padP = (pMax - pMin) * 0.06 || pMax * 0.01; pMin -= padP; pMax += padP;
   const Y = p => T + (1 - (p - pMin) / (pMax - pMin)) * (H - T - B);
-  CH = {D: D, v: v, key: key, fullA: rg.fullA, fullB: rg.fullB, defA: rg.defA, defB: rg.defB, t0: t0, t1: t1, L: L, PW: PW, W: W, H: H, X: X, Y: Y};
+  CH = {D: D, v: v, key: key, fullA: rg.fullA, fullB: rg.fullB, defA: rg.defA, defB: rg.defB, t0: t0, t1: t1, L: L, R: R, T: T, B: B, PW: PW, W: W, H: H, X: X, Y: Y,
+        priceAt: py => pMin + (1 - (py - T) / (H - T - B)) * (pMax - pMin)};
   x.font = "600 11px system-ui,sans-serif"; x.textAlign = "left"; x.fillStyle = "#57606a";
   const axisBoxes = [];
   for(let g = 0; g <= 3; g++){
@@ -391,7 +392,20 @@ function drawChart(D, v, hover){
     x.beginPath(); x.arc(X(p.date), Y(p.price), 8.5, 0, 7); x.stroke();
   }
   if(hover){ x.strokeStyle = "#425a78"; x.lineWidth = 1; x.setLineDash([3, 3]); x.beginPath(); x.moveTo(X(hover.date), T); x.lineTo(X(hover.date), H - B); x.stroke(); x.setLineDash([]); }
+  if(cross){                                                    // touch-and-hold crosshair: free date/price readout
+    x.strokeStyle = "#425a78"; x.lineWidth = 1; x.setLineDash([3, 3]); x.beginPath();
+    x.moveTo(cross.px, T); x.lineTo(cross.px, H - B); x.moveTo(L, cross.py); x.lineTo(W - R, cross.py); x.stroke(); x.setLineDash([]);
+    for(const m of [cross.close, cross.path]) if(m){
+      x.fillStyle = m === cross.close ? "#0969da" : "#8250df"; x.beginPath(); x.arc(X(m.t), Y(m.price), 4, 0, 7); x.fill();
+    }
+  }
   x.restore();
+  if(cross){                                                    // the price under the finger, on the price axis
+    const lbl = "$" + (cross.price < 1000 ? cross.price.toFixed(2) : Math.round(cross.price).toLocaleString()), y = Math.min(Math.max(cross.py, T + 8), H - B - 8);
+    x.font = "700 11px system-ui,sans-serif"; const w = x.measureText(lbl).width + 8;
+    x.fillStyle = "#425a78"; x.fillRect(W - R + 1, y - 8, Math.min(w, R - 2), 16);
+    x.fillStyle = "#fff"; x.textAlign = "left"; x.fillText(lbl, W - R + 5, y + 4);
+  }
   x.textAlign = "center"; x.fillStyle = "#57606a"; x.font = "600 11px system-ui,sans-serif";
   for(const t of [t0 + (t1 - t0) * 0.04, (t0 + t1) / 2, t1 - (t1 - t0) * 0.04]) x.fillText(md(isoOf(t)), Math.min(Math.max(X(t), L + 16), W - R - 16), H - 4);
   // every visible prediction labelled on the chart itself; labels never overlap each other or a marker
@@ -426,11 +440,46 @@ function drawChart(D, v, hover){
   window.__gView = v;
 }
 
-/* chart interaction: tap/hover = inspect, drag = pan, pinch or wheel = zoom, double-tap / Reset = default */
+/* chart interaction: tap/hover = inspect, touch-and-hold = crosshair readout, drag = pan, pinch or wheel = zoom,
+   double-tap / Reset = default */
 (function(){
   const c = $("chart"), tip = $("chartTooltip"), ptrs = new Map();
-  let g = null, lastTap = 0, k = -1;
+  let g = null, lastTap = 0, k = -1, hold = 0;
+  const HOLD_MS = 380;
   const hide = () => { tip.style.display = "none"; };
+  const stopHold = () => { if(hold){ clearTimeout(hold); hold = 0; } };
+  /* crosshair at a finger position: the day under it, the price at its height, the actual close and the
+     projected path on that day, and any forecast plotted on that day */
+  const crossAt = (cx, cy) => {
+    const r = c.getBoundingClientRect(), D = CH.D, v = CH.v, allD = D.chart.dates, allC = D.chart.closes;
+    const fx = Math.min(Math.max((cx - r.left) * CH.W / r.width, CH.L), CH.L + CH.PW);
+    const py = Math.min(Math.max((cy - r.top) * CH.H / r.height, CH.T), CH.H - CH.B);
+    const day = isoOf(Math.round((CH.t0 + (fx - CH.L) / CH.PW * (CH.t1 - CH.t0)) / DAY) * DAY), td = tms(day);
+    const i = allD.indexOf(day), close = i >= 0 ? {t: td, price: allC[i]} : null;
+    const lastD = allD[allD.length - 1], pts = [{t: tms(lastD), price: allC[allC.length - 1]}]
+      .concat((v.fc || []).filter(p => p.src === "turn").sort((a, b) => a.date < b.date ? -1 : 1).map(p => ({t: tms(p.date), price: p.price})));
+    let path = null;
+    if(day > lastD) for(let j = 1; j < pts.length; j++) if(td <= pts[j].t){
+      const a = pts[j - 1], b = pts[j]; path = {t: td, price: a.price + (b.price - a.price) * (td - a.t) / ((b.t - a.t) || 1)}; break;
+    }
+    return {day: day, px: Math.min(Math.max(CH.X(day), CH.L), CH.L + CH.PW), py: py, price: CH.priceAt(py), close: close, path: path};
+  };
+  const scrub = (cx, cy) => {
+    if(!CH) return;
+    const cr = crossAt(cx, cy), v = CH.v;
+    drawChart(CH.D, CH.v, null, cr);
+    const lines = [dayLbl(cr.day), "Crosshair: " + fmt$(cr.price)];
+    if(cr.close) lines.push("Close: " + fmt$(cr.close.price));
+    if(cr.path) lines.push("Projected path: \u2248" + fmt$(cr.path.price));
+    for(const lb of chartLabels(v)) if(lb.point.date === cr.day){
+      const p = lb.point;
+      lines.push((p.src === "day" ? "Forecast " : "Turn ") + p.type + ": " + lb.text + (p.src === "day" && p.lo != null ? " (80% " + fmt$(p.lo) + "\u2013" + fmt$(p.hi) + ")" : ""));
+    }
+    if(v.actual) for(const side of ["high", "low"]) if(v.actual[side] && v.actual[side].date === cr.day) lines.push("Already traded " + side + ": " + fmt$(v.actual[side].price));
+    tip.textContent = lines.join("\n"); tip.style.display = "block";
+    tip.style.left = Math.max(8, Math.min(cx + 14, window.innerWidth - 250)) + "px";
+    tip.style.top = Math.max(8, cy - 30 - 20 * lines.length) + "px";          // above the finger, not under it
+  };
   const show = (pt, cx, cy) => {
     if(!CH) return;
     drawChart(CH.D, CH.v, pt);
@@ -450,14 +499,22 @@ function drawChart(D, v, hover){
     try { c.setPointerCapture(e.pointerId); } catch(err) {}
     ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
     const ps = [...ptrs.values()];
-    if(ps.length === 1) g = {kind:"tap", x:e.clientX, y:e.clientY, t0:CH.t0, t1:CH.t1};
-    else if(ps.length === 2){ hide(); g = {kind:"pinch", d:Math.max(20, Math.abs(ps[0].x - ps[1].x)), mid:(ps[0].x + ps[1].x) / 2, tm:timeAt((ps[0].x + ps[1].x) / 2), span:CH.t1 - CH.t0}; }
+    if(ps.length === 1){
+      g = {kind:"tap", x:e.clientX, y:e.clientY, t0:CH.t0, t1:CH.t1};
+      const id = e.pointerId;
+      stopHold(); hold = setTimeout(() => {
+        hold = 0; const q = ptrs.get(id);
+        if(g && g.kind === "tap" && q){ g = {kind:"scrub"}; scrub(q.x, q.y); }
+      }, HOLD_MS);
+    }
+    else if(ps.length === 2){ stopHold(); hide(); g = {kind:"pinch", d:Math.max(20, Math.abs(ps[0].x - ps[1].x)), mid:(ps[0].x + ps[1].x) / 2, tm:timeAt((ps[0].x + ps[1].x) / 2), span:CH.t1 - CH.t0}; }
   };
   c.onpointermove = e => {
     if(!CH) return;
     if(!ptrs.has(e.pointerId)){ if(e.pointerType !== "touch") inspect(e); return; }   // mouse hover inspects
     ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
     const ps = [...ptrs.values()];
+    if(g && g.kind === "scrub"){ scrub(e.clientX, e.clientY); return; }
     if(g && g.kind === "pinch" && ps.length >= 2){
       const d = Math.max(20, Math.abs(ps[0].x - ps[1].x)), span = g.span * g.d / d, mid = (ps[0].x + ps[1].x) / 2;
       const f = (timeAt(mid) - CH.t0) / (CH.t1 - CH.t0);
@@ -465,13 +522,15 @@ function drawChart(D, v, hover){
     } else if(g && (g.kind === "tap" || g.kind === "pan")){
       const dx = e.clientX - g.x;
       if(g.kind === "tap" && Math.abs(dx) < 8 && Math.abs(e.clientY - g.y) < 8) return;
-      if(g.kind === "tap"){ hide(); g = {kind:"pan", x:g.x, t0:g.t0, t1:g.t1, ms:scale()}; }
+      if(g.kind === "tap"){ stopHold(); hide(); g = {kind:"pan", x:g.x, t0:g.t0, t1:g.t1, ms:scale()}; }
       setView(g.t0 - dx * g.ms, g.t1 - dx * g.ms);
     }
   };
   const end = e => {
     if(!ptrs.has(e.pointerId)) return;
     ptrs.delete(e.pointerId);
+    stopHold();
+    if(g && g.kind === "scrub"){ if(!ptrs.size) g = null; return; }            // the readout stays until the next tap
     if(g && g.kind === "tap" && !ptrs.size){
       const now = Date.now();
       if(now - lastTap < 320){ VIEW = null; hide(); drawChart(CH.D, CH.v); lastTap = 0; }
@@ -481,6 +540,7 @@ function drawChart(D, v, hover){
     else if(!ptrs.size) g = null;
   };
   c.onpointerup = end; c.onpointercancel = end;
+  c.oncontextmenu = e => { e.preventDefault(); };                              // no long-press menu over the chart
   c.onpointerleave = e => { if(e && e.pointerType === "touch") return; hide(); if(CH) drawChart(CH.D, CH.v); };
   c.onwheel = e => { if(!CH) return; e.preventDefault(); hide(); zoom(Math.exp(e.deltaY * 0.0015), e.clientX); };
   c.onkeydown = e => {
