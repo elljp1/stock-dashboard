@@ -47,8 +47,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | U5 | 9/16 | Agentic | HOOD 10/23 100/95 put spread x2 (second order) | cancelled 9/16 |
 | U6 | 9/16 | Agentic | QQQ 10/23 685/680 put spread x2 @ $1.55 | cancelled 9/18 |
 | U7 | 9/21 | Individual | HOOD 10/23 140 covered call x2 @ $5.00 | cancelled 9/28 |
-| U8 | 10/8 | Individual | JPM 10/30 330 put x1 @ $10.00 | resting |
-| U9 | 10/8 | Joint | JPM 10/30 330 put x1 @ $10.00 | resting |
+| U8 | 10/8 | Individual | JPM 10/30 330 put x1 @ $10.00 | cancelled 10/13 2:21pm, never filled |
+| U9 | 10/8 | Joint | JPM 10/30 330 put x1 @ $10.00 | cancelled 10/13 2:21pm, never filled |
 
 ## Agentic order log (internal ids; see numbered list above)
 | # | Opened | Ticker | Structure | Credit | Max loss | BE | POP | % acct | Exit target | Closed | P&L |
@@ -77,8 +77,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open TSLA $330 put 10/30 x3 | $10.00 GTC | filled 9/30 9:44am at $10.00 ($3,000); closed: 2 at $8.00 on 9/30 1:41pm (+$400), 1 at $7.00 on 10/1 9:30am (+$300); +$700 total | $99,000 | 9/30 9:43am |
 | Individual | Sell to open META $700 put 10/30 x1 | $24.00 GTC | filled 10/8 1:07pm at $24.43 ($2,443); closed 10/9 12:45pm: bought back at $19.00, **+$543** | $70,000 | 10/8 1:07pm |
 | Joint | Sell to open META $700 put 10/30 x1 | $24.00 GTC | filled 10/8 1:08pm at $24.00 ($2,400); closed 10/9 12:45pm: bought back at $19.00, **+$500** | $70,000 | 10/8 1:08pm |
-| Individual | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | resting (placed 10/8 2:53pm) | $33,000 | 10/8 2:53pm |
-| Joint | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | resting (placed 10/8 2:53pm) | $33,000 | 10/8 2:53pm |
+| Individual | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | cancelled by user 10/13 2:21pm, never filled | $33,000 | 10/8 2:53pm |
+| Joint | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | cancelled by user 10/13 2:21pm, never filled | $33,000 | 10/8 2:53pm |
 
 ## Alert log (graded at expiry, taken or not)
 
