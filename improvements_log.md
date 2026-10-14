@@ -3145,3 +3145,47 @@ the six highs-side gaps (GOOGL/HOOD/META/NVDA/SPY/VOO) settle into a consistent 
 next couple of readings rather than moving around like today; whether HOOD's 1.15 calibration
 ceiling keeps holding; whether NVDA/AMZN/SPY/VOO/META ever produce a qualifying swing to grade; and
 the still-open HOOD spread (trade 8) in the paper journal.
+
+## 2026-10-14 (Wed) — daily review: grades steady, no code change
+
+**Build status:** this sandbox's own `fetch_data.py` was blocked again with the same "Tunnel
+connection failed: 403 Forbidden" network restriction seen all week (not a Yahoo-side block) — all
+11 tickers and the pre/post-market fetch failed, and with no fresh CSVs on disk `analyze.py`
+correctly refused to rebuild rather than overwrite the dashboard with incomplete data. That's fine
+today specifically because the separate cloud refresh workflow already ran three times today with
+real market access — `data.js` is stamped generated 10/14 9:45 PM ET across all 11 tickers.
+`coherence_check.py` passes clean (11/11 tickers), `anomaly_audit.py` reports no anomalies, the full
+Python test suite passes all 136 tests across 14 files, and all 5 Node UI tests (pin, smoke,
+reliability, hilo refresh, layout) pass too. Also found and fixed a repo-housekeeping issue unrelated
+to the dashboard logic: this sandbox's local `main` branch had quietly drifted onto an unrelated,
+stale commit history (no common ancestor with `origin/main`) — reset it to match `origin/main`
+before doing anything else so today's review builds on the real published site, not a fork of it.
+
+**Grades reviewed:** swing-grading track record — TSLA n=13 (31%/38%, unchanged), HOOD n=61
+(18%/26%, up from n=59 yesterday), QQQ n=61 (25%/30%, up from n=44 — a bigger jump than usual
+because several pending calls crossed their grading window today; cross-checked against
+`coherence_check.py`/`anomaly_audit.py`, both clean, so treating it as normal catch-up grading
+rather than a bug), JPM n=28 (14%/21%), GOOGL n=36 (19%/22%), GC=F n=19 (21%/21%, unchanged);
+NVDA/AMZN/SPY/VOO/META still n=0 (quiet/too-new names). The walk-forward horizon scoreboard's
+long-standing watch item, AMZN lows, is still holding at essentially the same small gap (model
+1.04% vs naive 0.87% median price error, vs ~1.03/0.86 yesterday) — stable after many days of
+tracking. Of the six highs-side gaps being tracked since 10/12: GOOGL keeps improving in the
+model's favor for a third straight day (0.94 vs 1.03 today, vs 1.04/1.08 yesterday, vs 1.15/1.13 the
+day before); META is now the one to watch — its model-vs-naive gap has widened for three straight
+readings (1.31 vs 1.12 today, 1.24/1.07 yesterday, 1.19/1.04 the day before), but the move each day
+is only about 0.02 percentage points on a still-small sample (n=32), so it doesn't clear the bar for
+a code change yet; HOOD, NVDA, SPY and VOO highs all moved within their recent range with no clear
+direction. In the owner's own paper trade journal (`spread_journal.json`), trade 8 (HOOD put credit
+spread) is still open with its GTC buy-to-close order resting, unchanged — that's the owner's
+bookkeeping, not touched here.
+
+**What changed and why:** no dashboard logic change today — no bug found, and no pattern has
+cleared the 3+ day bar for an actual fix. The QQQ grading jump and the branch-pointer fix above were
+both housekeeping/verification, not changes to any honesty feature, ledger, or the coherence gate;
+`tickers.txt` wasn't touched.
+
+**Watch next:** whether META's highs-side gap keeps widening for a 4th reading (that would start to
+look like a real pattern rather than noise); whether GOOGL's highs keep favoring the model or
+reverse; whether the AMZN-low gap starts moving instead of holding flat; whether HOOD's 1.15
+calibration ceiling keeps holding; whether NVDA/AMZN/SPY/VOO/META ever produce a qualifying swing to
+grade; and the still-open HOOD spread (trade 8) in the paper journal.
