@@ -82,6 +82,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Individual | Sell to open QQQ $700 put 11/20 x2 (two orders) | $13.15 + $13.40 GFD | filled 10/15 9:54am at $13.15 and 9:55am at $13.40 (avg $13.275, $2,655); closed 10/15 10:58am: both bought back at $10.00, **+$655** | $140,000 | 10/15 9:54am |
 | Individual | Sell to open QQQ $700 put 11/20 x1 (third) | $13.40 GTC | working, not filled (close order covers only 2) | $70,000 | 10/15 10:01am |
 | Joint | Sell to open QQQ $700 put 11/20 x1 | $13.40 GTC | working, not filled | $70,000 | 10/15 11:27am |
+| Individual | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | working, not filled | $33,000 | 10/15 3:11pm |
+| Joint | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | working, not filled | $33,000 | 10/15 3:12pm |
 
 ## Alert log (graded at expiry, taken or not)
 
