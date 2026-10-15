@@ -15,7 +15,7 @@ Robinhood rejects multi-leg orders placed through the agent in agentic accounts 
 - Exit: buy back at 50% of credit received (GTC order placed right after fill)
 - Loss rule: close if the spread costs 2x the credit to buy back, or short strike is breached
 
-- **TSLA bias (9/14):** Stuart expects a TSLA drop in October. No TSLA put credit spreads. Call credit spreads only, sold into a bounce (up ≥1.5% or RSI ≥60), $10 wide, expiring before the Oct 21 earnings. The 9/14 TSLA 335/325 put spread alert ($2.33 mid) was declined for this reason.
+- **TSLA bias (9/14):** Stuart expects a TSLA drop in October. No TSLA put credit spreads. Call credit spreads only, sold into a bounce (up ≥1.5% or RSI ≥60), $10 wide, expiring before the Oct 21 earnings. **10/15:** Stuart trades on technicals only; earnings no longer block a setup (flagged in the alert instead). The 9/14 TSLA 335/325 put spread alert ($2.33 mid) was declined for this reason.
 
 ## Pre-trade card (shown before every order)
 Ticker, structure, expiry and DTE, spot, spread mid vs. limit, short delta and IV,
@@ -79,6 +79,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open META $700 put 10/30 x1 | $24.00 GTC | filled 10/8 1:08pm at $24.00 ($2,400); closed 10/9 12:45pm: bought back at $19.00, **+$500** | $70,000 | 10/8 1:08pm |
 | Individual | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | cancelled by user 10/13 2:21pm, never filled | $33,000 | 10/8 2:53pm |
 | Joint | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | cancelled by user 10/13 2:21pm, never filled | $33,000 | 10/8 2:53pm |
+| Individual | Sell to open QQQ $700 put 11/20 x2 (two orders) | $13.15 + $13.40 GFD | filled 10/15 9:54am at $13.15 and 9:55am at $13.40 (avg $13.275, $2,655); open | $140,000 | 10/15 9:54am |
 
 ## Alert log (graded at expiry, taken or not)
 
@@ -124,6 +125,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 38 | 10/8 9:35am | HOOD 10/23 100/95 put (timing: place at the 10/09 low ~104, leg up to 10/19 high ~121; doubles trade 8, over 25% risk cap) | $1.015 (limit $1.00, 3x) | Pushed, open | pending |
 | 39 | 10/8 9:35am | QQQ 10/30 775/785 call (timing: place at the 10/09 high ~764, leg down to 10/22 low ~735; stacks on trade 7, over 25% risk cap) | $2.425 (limit $2.40, 1x) | Pushed, open | void (10/8 10:34am: superseded by 40) |
 | 40 | 10/8 10:34am | QQQ 10/30 780/790 call (timing: place at the 10/09 high ~764, leg down to 10/22 low ~735; stacks on trade 7, over 25% risk cap) | $2.04 (limit $2.00, 1x) | Pushed, void 10/8 2:34pm (app dropped the 10/09 high; next QQQ turn is a 10/16 low) | void |
+| 41 | 10/15 9:58am | META 11/06 675/665 put (timing: place at today's low ~710, leg up to 10/30 high ~801; spans META 10/21 report) | $2.275 (limit $2.25, 1x) | Pushed, open | pending |
+| 42 | 10/15 9:58am | HOOD 11/06 85/80 put (timing: place at today's low ~94, leg up to 11/02 high ~118; spans HOOD 10/27 report; stacks on trade 8; with #41 over 25% risk cap) | $1.115 (limit $1.10, 3x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
