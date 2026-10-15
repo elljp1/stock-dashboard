@@ -164,7 +164,7 @@
     <div id="gPeriod" role="group" aria-label="Period"><button data-p="D">D</button><button data-p="W">W</button><button data-p="M">M</button><button data-p="Y">Y</button></div>
     <button id="gUpd" title="Update"><span class="dot"></span><span id="gUpdTime">update</span></button>
   </div>
-  <div id="gChartWrap"><canvas id="chart" aria-label="Price chart with forecasts. Drag to pan, pinch or +/- to zoom, double-tap or 0 to reset." tabindex="0"></canvas><button id="gReset" hidden>Reset</button></div>
+  <div id="gChartWrap"><canvas id="chart" aria-label="Price chart with forecasts. Tap or hover anywhere for the date and price there; touch-and-hold then slide to scrub. Drag to pan, pinch or +/- to zoom, double-tap or 0 to reset." tabindex="0"></canvas><button id="gReset" hidden>Reset</button></div>
   <div id="gRes"></div>
   <div id="gMeta"><span id="gAsOf"></span>
     <details id="gHist"><summary>&#9656; History</summary><div id="gHistBody"></div></details></div>
@@ -215,6 +215,21 @@ function hiloRec(t){
   return slot.intraday || slot.premarket || null;
 }
 
+/* the session's high and low traded so far and the latest price, from the page data (refreshed about every
+   30 minutes), only when that data is for the forecast session itself */
+const etDate = iso => new Date(iso).toLocaleDateString("en-CA", {timeZone:"America/New_York"});
+const atTime = s => { const m = /(\d+):(\d\d)\s*(AM|PM)/.exec((s && s.src === "actual" && s.time) || "");
+  return m ? String((Number(m[1]) % 12) + (m[3] === "PM" ? 12 : 0)).padStart(2, "0") + ":" + m[2] : null; };
+function liveToday(D, S){
+  const r = (D.ranges || {}).daily, hz = (D.horizons || {}).daily || {};
+  if(!r || !S || D.lastDailyBar !== S || !D.priceAsOf || etDate(D.priceAsOf) !== S || !(r.low > 0 && r.high >= r.low)) return null;
+  return {date:S, high:r.high, low:r.low, hiTime:atTime(hz.high), loTime:atTime(hz.low)};
+}
+/* the 80% price range for a projected turn (analyze.py turnBands), when the data carries one */
+const turnBand = (D, p) => (D.turnBands || []).find(b => b.isoDate === p.isoDate && b.type === p.type) || null;
+const short$ = v => v >= 200 ? String(Math.round(v)) : v.toFixed(v >= 20 ? 1 : 2);
+const range$ = (lo, hi) => Math.abs(hi - lo) < 0.005 ? "already set" : short$(lo) + "–" + short$(hi);
+
 /* the single source for chart and results */
 function periodView(D, per){
   const rec = hiloRec(D.ticker);
@@ -223,19 +238,39 @@ function periodView(D, per){
   const ps = ((HILO_LIVE.periods || {})[D.ticker] || {})[per] || null;
   const span = per === "D" ? [S, S] : (ps ? [ps.start, ps.end] : [S, S]);
   const resolved = !!(rec.timing && rec.timing.resolved);
-  const fc = ["high","low"].map(side => ({src:"day", type:side, date:S, price:rec[side].price, lo:rec[side].lo,
-    hi:rec[side].hi, time: resolved ? rec[side].time : null}));
+  const live = liveToday(D, S);
+  // the final high can only be at or above today's high so far (the low at or below), so the day forecast
+  // and its range are lifted (lowered) to what has already traded when the market has gone past them
+  const fc = ["high","low"].map(side => {
+    const f = rec[side], so = live ? live[side] : null, past = side === "high" ? Math.max : Math.min;
+    const p = {src:"day", type:side, date:S, price:f.price, lo:f.lo, hi:f.hi, time: resolved ? f.time : null};
+    if(so){
+      if(p.time && past(f.price, so) === so && so !== f.price) p.time = live[side === "high" ? "hiTime" : "loTime"] || p.time;
+      p.price = past(p.price, so); p.lo = past(p.lo, so); p.hi = past(p.hi, so);
+    }
+    return p;
+  });
   // the next projected turns (at most five, only those the data supports), dated after the last completed
   // session; D plots all of them but its results stay the day forecast; W/M/Y keep only those in the period
   const lastClose = D.chart.dates[D.chart.dates.length - 1];
   (D.predictions || []).filter(p => p.isoDate > lastClose).slice(0, 5)
     .filter(p => per === "D" || p.isoDate <= span[1])
-    .forEach(p => fc.push({src:"turn", type:p.type, date:p.isoDate, price:p.price}));
+    .forEach(p => { const b = turnBand(D, p);
+      fc.push({src:"turn", type:p.type, date:p.isoDate, price:p.price, lo:b ? b.lo : null, hi:b ? b.hi : null, basis:b ? b.basis : null}); });
   const pool = per === "D" ? fc.filter(p => p.src === "day") : fc;
   const best = (type, better) => pool.filter(p => p.type === type).reduce((a, b) => (!a || better(b.price, a.price)) ? b : a, null);
+  // already traded: today so far (D); the period so far through yesterday plus today so far (W/M/Y)
+  let actual = null;
+  if(per === "D") actual = live ? {high:{price:live.high, date:S}, low:{price:live.low, date:S}} : null;
+  else if(ps || live){
+    actual = {high: ps ? ps.high : null, low: ps ? ps.low : null};
+    if(live && live.date >= span[0] && live.date <= span[1]){
+      if(!actual.high || live.high > actual.high.price) actual.high = {price:live.high, date:live.date};
+      if(!actual.low || live.low < actual.low.price) actual.low = {price:live.low, date:live.date};
+    }
+  }
   return {rec:rec, per:per, S:S, lastClose:lastClose, span:span, fc:fc, timing:rec.timing || null, resolved:resolved,
-          high:best("high", (x, y) => x > y), low:best("low", (x, y) => x < y),
-          actual: per === "D" ? null : (ps ? {high:ps.high, low:ps.low} : null)};
+          high:best("high", (x, y) => x > y), low:best("low", (x, y) => x < y), actual:actual, live:live};
 }
 
 // Text drawn on the chart next to each prediction. Day view: price and time; when the high/low order is
@@ -249,7 +284,8 @@ function chartLabels(v){
     when = e === l ? "≈" + e : e + "/" + l + "?";
   }
   return v.fc.map(p => ({point:p, main:p === v.high || p === v.low,
-    text: fmt$(p.price) + " " + (v.per === "D" && p.src === "day" ? (p.time ? t12(p.time) : when) : md(p.date))}));
+    text: fmt$(p.price) + " " + (v.per === "D" && p.src === "day" ? (p.time ? t12(p.time) : when)
+      : (p.src === "turn" && p.lo != null ? "(" + range$(p.lo, p.hi) + ") " : "") + md(p.date))}));
 }
 
 function renderResults(v){
@@ -264,10 +300,10 @@ function renderResults(v){
     const f = v[side], cls = side === "high" ? "hi" : "lo", name = side === "high" ? "High" : "Low";
     let val, when = "";
     if(v.per === "D"){
-      val = `${fmt$(f.price)}<small>${Math.round(f.lo)}–${Math.round(f.hi)}</small>`;
+      val = `${fmt$(f.price)}<small>${range$(f.lo, f.hi)}</small>`;
       when = f.time ? t12(f.time) : "";
     } else {
-      val = `${fmt$(f.price)}<small>proj. pt ${esc(md(f.date))}</small>`;
+      val = `${fmt$(f.price)}<small>${f.lo != null ? range$(f.lo, f.hi) + " · " : ""}proj. pt ${esc(md(f.date))}</small>`;
       const a = v.actual && v.actual[side];
       when = a ? `<small>so far</small> ${fmt$(a.price)} <small>${md(a.date)}</small>` : "";
     }
@@ -278,6 +314,10 @@ function renderResults(v){
     const txt = v.timing.consistent === false ? "times unclear"
       : (e === l ? `both ≈${t12(e)}` : `1st ≈${t12(e)} · 2nd ≈${t12(l)}`);
     rows.push(`<span class="lbl">Time</span><span class="when" style="text-align:left">${txt}</span><span class="when"><small>${e === l || v.timing.consistent === false ? "" : "order ?"}</small></span>`);
+  }
+  if(v.per === "D" && v.live){                                    // where the session stands right now
+    const D = DATA_ALL[CUR], at = new Date(D.priceAsOf).toLocaleTimeString("en-US", {timeZone:"America/New_York", hour:"numeric", minute:"2-digit"}).replace(" AM","a").replace(" PM","p");
+    rows.push(`<span class="lbl">Now</span><span class="when" style="text-align:left">${fmt$(D.price)} <small>${esc(at)}</small></span><span class="when"><small>so far ${fmt$(v.live.low)}–${fmt$(v.live.high)}</small></span>`);
   }
   box.innerHTML = rows.join("");
 }
@@ -383,6 +423,11 @@ function drawChart(D, v, hover, cross){
   for(const p of fc){
     const px = X(p.date), py = Y(p.price), col = p.type === "high" ? "#1a7f37" : "#cf222e";
     if(p.src === "day"){ x.strokeStyle = col; x.lineWidth = 3; x.beginPath(); x.moveTo(px, Y(p.hi)); x.lineTo(px, Y(p.lo)); x.stroke(); }
+    if(p.src === "turn" && p.lo != null){                       // a turn's 80% range: faint bar with end caps
+      x.strokeStyle = col; x.globalAlpha = 0.35; x.lineWidth = 2; x.beginPath();
+      x.moveTo(px, Y(p.hi)); x.lineTo(px, Y(p.lo)); x.moveTo(px - 4, Y(p.hi)); x.lineTo(px + 4, Y(p.hi)); x.moveTo(px - 4, Y(p.lo)); x.lineTo(px + 4, Y(p.lo));
+      x.stroke(); x.globalAlpha = 1;
+    }
     if(p.src === "turn"){ x.fillStyle = "#fff"; x.beginPath(); x.arc(px, py, 5.5, 0, 7); x.fill(); x.strokeStyle = col; x.lineWidth = 2; x.stroke(); }
     else { x.fillStyle = col; x.beginPath(); x.arc(px, py, 4.5, 0, 7); x.fill(); }
   }
@@ -435,12 +480,12 @@ function drawChart(D, v, hover, cross){
   window.__gLabels = labels;
   CH.points = dates.map((d, i) => ({date:d, price:closes[i], kind:"Actual daily close"})).filter(p => vis(p.date))
     .concat(fcIn.map(p => ({date:p.date, price:p.price, kind:(p.src === "day" ? "Day forecast " : "Projected turn ") + p.type + (p.time ? " · " + t12(p.time) : "")})))
-    .concat(actIn.map(a => ({date:a.date, price:a.price, kind:"Already traded " + a.type + " (period so far)"})));
+    .concat(actIn.map(a => ({date:a.date, price:a.price, kind:"Already traded " + a.type + (v.per === "D" ? " (today so far)" : " (period so far)")})));
   $("gReset").hidden = !VIEW;
   window.__gView = v;
 }
 
-/* chart interaction: tap/hover = inspect, touch-and-hold = crosshair readout, drag = pan, pinch or wheel = zoom,
+/* chart interaction: tap/hover = crosshair readout at that spot, touch-and-hold then slide = scrub the crosshair, drag = pan, pinch or wheel = zoom,
    double-tap / Reset = default */
 (function(){
   const c = $("chart"), tip = $("chartTooltip"), ptrs = new Map();
@@ -468,14 +513,17 @@ function drawChart(D, v, hover, cross){
     if(!CH) return;
     const cr = crossAt(cx, cy), v = CH.v;
     drawChart(CH.D, CH.v, null, cr);
-    const lines = [dayLbl(cr.day), "Crosshair: " + fmt$(cr.price)];
-    if(cr.close) lines.push("Close: " + fmt$(cr.close.price));
+    const wd = new Date(cr.day + "T12:00:00").toLocaleDateString("en-US", {weekday:"short"});
+    const lines = [wd + " " + cr.day, "Price here: " + fmt$(cr.price)];
+    if(cr.close) lines.push(v.live && cr.day === v.live.date ? "Latest: " + fmt$(CH.D.price) : "Close: " + fmt$(cr.close.price));
     if(cr.path) lines.push("Projected path: \u2248" + fmt$(cr.path.price));
-    for(const lb of chartLabels(v)) if(lb.point.date === cr.day){
-      const p = lb.point;
-      lines.push((p.src === "day" ? "Forecast " : "Turn ") + p.type + ": " + lb.text + (p.src === "day" && p.lo != null ? " (80% " + fmt$(p.lo) + "\u2013" + fmt$(p.hi) + ")" : ""));
+    for(const p of v.fc || []) if(p.date === cr.day){
+      const when = p.src === "day" ? (p.time ? " " + t12(p.time) : "") : "";
+      lines.push((p.src === "day" ? "Forecast " : "Turn ") + p.type + ": " + fmt$(p.price) + when);
+      if(p.lo != null && p.hi - p.lo >= 0.005) lines.push("  80% range " + fmt$(p.lo) + "\u2013" + fmt$(p.hi) + (p.basis ? " (" + p.basis + ")" : ""));
     }
-    if(v.actual) for(const side of ["high", "low"]) if(v.actual[side] && v.actual[side].date === cr.day) lines.push("Already traded " + side + ": " + fmt$(v.actual[side].price));
+    if(v.actual) for(const side of ["high", "low"]) if(v.actual[side] && v.actual[side].date === cr.day) lines.push("Already traded " + side + ": " + fmt$(v.actual[side].price) +
+      (v.live && v.live.date === cr.day && v.live[side === "high" ? "hiTime" : "loTime"] ? " at " + t12(v.live[side === "high" ? "hiTime" : "loTime"]) : ""));
     tip.textContent = lines.join("\n"); tip.style.display = "block";
     tip.style.left = Math.max(8, Math.min(cx + 14, window.innerWidth - 250)) + "px";
     tip.style.top = Math.max(8, cy - 30 - 20 * lines.length) + "px";          // above the finger, not under it
@@ -511,7 +559,7 @@ function drawChart(D, v, hover, cross){
   };
   c.onpointermove = e => {
     if(!CH) return;
-    if(!ptrs.has(e.pointerId)){ if(e.pointerType !== "touch") inspect(e); return; }   // mouse hover inspects
+    if(!ptrs.has(e.pointerId)){ if(e.pointerType !== "touch") scrub(e.clientX, e.clientY); return; }   // mouse hover: crosshair
     ptrs.set(e.pointerId, {x:e.clientX, y:e.clientY});
     const ps = [...ptrs.values()];
     if(g && g.kind === "scrub"){ scrub(e.clientX, e.clientY); return; }
@@ -534,7 +582,7 @@ function drawChart(D, v, hover, cross){
     if(g && g.kind === "tap" && !ptrs.size){
       const now = Date.now();
       if(now - lastTap < 320){ VIEW = null; hide(); drawChart(CH.D, CH.v); lastTap = 0; }
-      else { lastTap = now; inspect(e); }
+      else { lastTap = now; scrub(e.clientX, e.clientY); }       // a tap anywhere: date and price at that spot
     }
     if(ptrs.size === 1){ const p = [...ptrs.values()][0]; g = {kind:"pan", x:p.x, t0:CH.t0, t1:CH.t1, ms:scale()}; }
     else if(!ptrs.size) g = null;

@@ -2113,6 +2113,36 @@ def analyze(tkr):
         "revisions": rev_rows[:25],
         "recent": sorted(graded, key=lambda r: r["isoDate"], reverse=True)[:40]}
 
+    # ------- an 80% price range for each projected turn -------
+    # From this ticker's own graded calls: each miss in log terms, scaled by
+    # sqrt(lead days) so a turn 2 days out gets a narrower range than one 30
+    # days out; the 10th-90th percentile is rescaled to each turn's lead.
+    # Fewer than 10 graded calls of a type: the 80% range of the stock's own
+    # daily moves over the same lead instead (basis "volatility").
+    def _zs(rows):
+        return [math.log(1 + r["priceErrPct"] / 100) / math.sqrt(max(r["leadDays"], 1))
+                for r in rows if r["priceErrPct"] is not None and r["priceErrPct"] > -100]
+    _z_by = {t: _zs([r for r in graded if r["type"] == t]) for t in ("high", "low")}
+    _rets = np.diff(np.log(daily["Close"].tail(61).to_numpy(dtype=float)))
+    _sig = float(np.std(_rets, ddof=1)) if len(_rets) > 10 else None
+    bands = []
+    for p in preds:
+        lead = max((datetime.strptime(p["isoDate"], "%Y-%m-%d").date() - NOW.date()).days, 1)
+        zs = _z_by.get(p["type"]) or []
+        if len(zs) >= 10:
+            z10, z90 = float(np.percentile(zs, 10)), float(np.percentile(zs, 90))
+            lo, hi = p["price"] * math.exp(-z90 * math.sqrt(lead)), p["price"] * math.exp(-z10 * math.sqrt(lead))
+            basis = f"{len(zs)} past calls"
+        elif _sig:
+            k = 1.2816 * _sig * math.sqrt(max(np.busday_count(last_bar_date, p["isoDate"]), 1))
+            lo, hi = p["price"] * math.exp(-k), p["price"] * math.exp(k)
+            basis = "volatility"
+        else:
+            continue
+        bands.append({"isoDate": p["isoDate"], "type": p["type"],
+                      "lo": round(min(lo, p["price"]), 2), "hi": round(max(hi, p["price"]), 2), "basis": basis})
+    out["turnBands"] = bands
+
     # ------- per-day forecasts: follow the PREDICTED PATH, not a cone -------
     # Expected price walks from today's price through each forecast turn; each
     # day gets a normal daily range around that path, widening modestly with
