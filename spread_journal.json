@@ -597,16 +597,16 @@
       "lossExitDebit": 2.1,
       "plannedExitTurn": {
         "type": "high",
-        "date": "2026-10-19",
-        "time": "Venus 11:45-12:40 PM; Saturn 2:30-3:25 PM",
-        "price": 121.2
+        "date": "2026-10-23",
+        "time": "Saturn 9:57-10:51 AM; Venus 1:34-2:28 PM",
+        "price": 117.3
       },
       "fillCredit": 1.05,
       "opened": "2026-10-05T14:45 ET",
       "closed": null,
       "closeCost": null,
       "pnl": null,
-      "notes": "Timing-led: app projects a HOOD low 10/05 (~106.28) then a high 10/22 (~130.18). Suggested 2 contracts; user placed 3 ($1,185 risk, 10.8%). With trade 7 ($1,600) total open risk is $2,785 (25.3%), just over the 25% cap (user's call). Filled 2:45pm ET 10/5: sold 101P at 2.50, bought 96P at 1.45 ($1.05 credit, $315 total). Exit at $0.53 debit or the 10/22 high; stop $2.10 debit or HOOD close below 101. Adds to the 700 HOOD shares held in Individual. 10/6 9:34am: app moved the HOOD high to Fri 10/09 (~127.15), then a LOW 10/19 (~107.29); timing exit moved to 10/09. 10/6 10:33am: app flipped again: HOOD LOW Wed 10/07 (~109.09) next, then HIGH 10/19 (~128.62); against the app's leg until the 10/07 low (mid 0.975); short 101 is 7.4% below that low. Timing exit moved to 10/19. 10/13 11:36am: user placed a GTC buy-to-close at $0.50 debit x3 (order 6ace5014), +$165 if filled; spread mid $1.14 with HOOD at $111.28. Planned timing exit still the 10/19 high.",
+      "notes": "Timing-led: app projects a HOOD low 10/05 (~106.28) then a high 10/22 (~130.18). Suggested 2 contracts; user placed 3 ($1,185 risk, 10.8%). With trade 7 ($1,600) total open risk is $2,785 (25.3%), just over the 25% cap (user's call). Filled 2:45pm ET 10/5: sold 101P at 2.50, bought 96P at 1.45 ($1.05 credit, $315 total). Exit at $0.53 debit or the 10/22 high; stop $2.10 debit or HOOD close below 101. Adds to the 700 HOOD shares held in Individual. 10/6 9:34am: app moved the HOOD high to Fri 10/09 (~127.15), then a LOW 10/19 (~107.29); timing exit moved to 10/09. 10/6 10:33am: app flipped again: HOOD LOW Wed 10/07 (~109.09) next, then HIGH 10/19 (~128.62); against the app's leg until the 10/07 low (mid 0.975); short 101 is 7.4% below that low. Timing exit moved to 10/19. 10/13 11:36am: user placed a GTC buy-to-close at $0.50 debit x3 (order 6ace5014), +$165 if filled; spread mid $1.14 with HOOD at $111.28. Planned timing exit still the 10/19 high. 10/15 10:38am: user replaced the $0.50 exit with a $1.00 GTC buy-to-close x3 (order 6ad0e56e), about +$15 after fees if filled; spread mid ~$2.65 then. 11:10am refresh: app's next HOOD turn is a HIGH 10/23 (~117.30), so the spread is back with the app's leg; timing exit 10/23.",
       "plannedExitTurnHistory": [
         {
           "type": "high",
@@ -639,15 +639,27 @@
       ],
       "tradeNo": 6,
       "exitOrder": {
-        "orderId": "6ace5014-cdfe-4e0c-8771-e905fe6d55d3",
+        "orderId": "6ad0e56e-7cb5-4a31-93c2-f90daede70fa",
         "type": "limit debit",
-        "price": 0.5,
+        "price": 1.0,
         "quantity": 3,
         "timeInForce": "gtc",
-        "placedAt": "2026-10-13T11:36 ET",
+        "placedAt": "2026-10-15T10:38 ET",
         "placedBy": "user in app",
         "state": "confirmed (resting)"
-      }
+      },
+      "exitOrderHistory": [
+        {
+          "orderId": "6ace5014-cdfe-4e0c-8771-e905fe6d55d3",
+          "type": "limit debit",
+          "price": 0.5,
+          "quantity": 3,
+          "timeInForce": "gtc",
+          "placedAt": "2026-10-13T11:36 ET",
+          "placedBy": "user in app",
+          "state": "cancelled 2026-10-15T10:38 ET (replaced by $1.00)"
+        }
+      ]
     }
   ],
   "otherAccountOrders": [
@@ -883,7 +895,7 @@
       "order": "sell to open QQQ $700 put 11/20 x1",
       "limit": 13.15,
       "tif": "gfd",
-      "status": "open; buy-to-close x2 at $10.00 GTC working (one order covers both contracts)",
+      "status": "closed 10/15 10:58am ET: bought back at $10.00 (sold at $13.15)",
       "placed": "2026-10-15T09:54 ET",
       "filled": "2026-10-15T09:54 ET",
       "fillPrice": 13.15,
@@ -895,7 +907,7 @@
       "collateral": 70000,
       "orderId": "6ad0db04-6042-4f73-95d4-0cd1565e61fd",
       "note": "Cash-secured short put placed by the user (2 orders, 2 contracts total, avg $13.275, $2,655). App projects QQQ lows of 713.93 (10/16) and 710.09 (11/16), both above the strike. Not part of the Agentic spread P&L.",
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 2,
@@ -911,15 +923,18 @@
           "tif": "gtc",
           "placed": "2026-10-15T10:03 ET",
           "orderId": "6ad0dd1f-6b48-4939-a53d-8619bf6059e1",
-          "status": "working"
+          "status": "filled 10/15 10:58am at $10.00 (2 contracts)"
         }
-      ]
+      ],
+      "closeCost": 10.0,
+      "closed": "2026-10-15T10:58 ET",
+      "pnl": 315
     },
     {
       "order": "sell to open QQQ $700 put 11/20 x1",
       "limit": 13.4,
       "tif": "gfd",
-      "status": "open; buy-to-close x2 at $10.00 GTC working (one order covers both contracts)",
+      "status": "closed 10/15 10:58am ET: bought back at $10.00 (sold at $13.40)",
       "placed": "2026-10-15T09:55 ET",
       "filled": "2026-10-15T09:55 ET",
       "fillPrice": 13.4,
@@ -931,7 +946,7 @@
       "collateral": 70000,
       "orderId": "6ad0db3a-9c4a-4913-a1fa-fc5eefcdcd23",
       "note": "Cash-secured short put placed by the user (2 orders, 2 contracts total, avg $13.275, $2,655). App projects QQQ lows of 713.93 (10/16) and 710.09 (11/16), both above the strike. Not part of the Agentic spread P&L.",
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 2,
@@ -947,9 +962,12 @@
           "tif": "gtc",
           "placed": "2026-10-15T10:03 ET",
           "orderId": "6ad0dd1f-6b48-4939-a53d-8619bf6059e1",
-          "status": "working"
+          "status": "filled 10/15 10:58am at $10.00 (2 contracts)"
         }
-      ]
+      ],
+      "closeCost": 10.0,
+      "closed": "2026-10-15T10:58 ET",
+      "pnl": 340
     },
     {
       "order": "sell to open QQQ $700 put 11/20 x1",
@@ -967,6 +985,24 @@
       "collateral": 70000,
       "orderId": "6ad0dcc4-52dc-4e4f-a7bc-8e92705731b5",
       "note": "Third QQQ 700P, resting above the 11.43 mark (seen 10:33am). If it fills, the $10 buy-to-close covers only 2 of 3. Not part of the Agentic spread P&L.",
+      "openQty": 0
+    },
+    {
+      "order": "sell to open QQQ $700 put 11/20 x1",
+      "limit": 13.4,
+      "tif": "gtc",
+      "status": "working (not filled)",
+      "placed": "2026-10-15T11:27 ET",
+      "filled": null,
+      "fillPrice": null,
+      "breakeven": 686.6,
+      "placedAgent": "user",
+      "account": "Joint ••••6540",
+      "quantity": 1,
+      "premium": 1340,
+      "collateral": 70000,
+      "orderId": "6ad0f0e7-f54a-49d7-8d5a-07a6a38c2416",
+      "note": "Same order as the Individual third 700P (both resting at $13.40 with the put near $9.82). Not part of the Agentic spread P&L.",
       "openQty": 0
     }
   ],

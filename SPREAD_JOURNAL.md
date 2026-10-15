@@ -31,7 +31,7 @@ Only filled trades get a number. Old internal ids are in the Ref column.
 | 3 | 9/24 | Agentic | QQQ 10/23 770/780 call credit spread x2 | $2.00 | $1.48 | 10/8 | **+$104** |
 | 4 | 9/30 | Individual | TSLA 10/30 330 put x2 (short) | $10.00 | $8.00 / $7.00 | 10/1 | **+$500** |
 | 5 | 9/30 | Joint | TSLA 10/30 330 put x3 (short) | $10.00 | $8.00 x2 / $7.00 | 10/1 | **+$700** |
-| 6 | 10/5 | Agentic | HOOD 10/30 101/96 put credit spread x3 | $1.05 | | | open (exit order $0.50 GTC resting since 10/13 11:36am) |
+| 6 | 10/5 | Agentic | HOOD 10/30 101/96 put credit spread x3 | $1.05 | | | open (exit order $1.00 GTC resting since 10/15 10:38am; the $0.50 order was cancelled) |
 | 7 | 10/8 | Individual | META 10/30 700 put x1 (short) | $24.43 | $19.00 | 10/9 | **+$543** |
 | 8 | 10/8 | Joint | META 10/30 700 put x1 (short) | $24.00 | $19.00 | 10/9 | **+$500** |
 
@@ -79,8 +79,9 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open META $700 put 10/30 x1 | $24.00 GTC | filled 10/8 1:08pm at $24.00 ($2,400); closed 10/9 12:45pm: bought back at $19.00, **+$500** | $70,000 | 10/8 1:08pm |
 | Individual | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | cancelled by user 10/13 2:21pm, never filled | $33,000 | 10/8 2:53pm |
 | Joint | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | cancelled by user 10/13 2:21pm, never filled | $33,000 | 10/8 2:53pm |
-| Individual | Sell to open QQQ $700 put 11/20 x2 (two orders) | $13.15 + $13.40 GFD | filled 10/15 9:54am at $13.15 and 9:55am at $13.40 (avg $13.275, $2,655); open; buy-to-close x2 at $10.00 GTC working (placed 10:03am, replaced a $7.00 order) | $140,000 | 10/15 9:54am |
+| Individual | Sell to open QQQ $700 put 11/20 x2 (two orders) | $13.15 + $13.40 GFD | filled 10/15 9:54am at $13.15 and 9:55am at $13.40 (avg $13.275, $2,655); closed 10/15 10:58am: both bought back at $10.00, **+$655** | $140,000 | 10/15 9:54am |
 | Individual | Sell to open QQQ $700 put 11/20 x1 (third) | $13.40 GTC | working, not filled (close order covers only 2) | $70,000 | 10/15 10:01am |
+| Joint | Sell to open QQQ $700 put 11/20 x1 | $13.40 GTC | working, not filled | $70,000 | 10/15 11:27am |
 
 ## Alert log (graded at expiry, taken or not)
 
