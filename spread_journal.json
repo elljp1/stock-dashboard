@@ -883,7 +883,7 @@
       "order": "sell to open QQQ $700 put 11/20 x1",
       "limit": 13.15,
       "tif": "gfd",
-      "status": "open (filled)",
+      "status": "open; buy-to-close x2 at $10.00 GTC working (one order covers both contracts)",
       "placed": "2026-10-15T09:54 ET",
       "filled": "2026-10-15T09:54 ET",
       "fillPrice": 13.15,
@@ -895,13 +895,31 @@
       "collateral": 70000,
       "orderId": "6ad0db04-6042-4f73-95d4-0cd1565e61fd",
       "note": "Cash-secured short put placed by the user (2 orders, 2 contracts total, avg $13.275, $2,655). App projects QQQ lows of 713.93 (10/16) and 710.09 (11/16), both above the strike. Not part of the Agentic spread P&L.",
-      "openQty": 1
+      "openQty": 1,
+      "closeOrders": [
+        {
+          "qty": 2,
+          "limit": 7.0,
+          "tif": "gtc",
+          "placed": "2026-10-15T10:00 ET",
+          "orderId": "6ad0dc83-2dc5-45b4-b1df-f79ed3be8e30",
+          "status": "cancelled 10/15 10:03am (replaced by $10)"
+        },
+        {
+          "qty": 2,
+          "limit": 10.0,
+          "tif": "gtc",
+          "placed": "2026-10-15T10:03 ET",
+          "orderId": "6ad0dd1f-6b48-4939-a53d-8619bf6059e1",
+          "status": "working"
+        }
+      ]
     },
     {
       "order": "sell to open QQQ $700 put 11/20 x1",
       "limit": 13.4,
       "tif": "gfd",
-      "status": "open (filled)",
+      "status": "open; buy-to-close x2 at $10.00 GTC working (one order covers both contracts)",
       "placed": "2026-10-15T09:55 ET",
       "filled": "2026-10-15T09:55 ET",
       "fillPrice": 13.4,
@@ -913,7 +931,43 @@
       "collateral": 70000,
       "orderId": "6ad0db3a-9c4a-4913-a1fa-fc5eefcdcd23",
       "note": "Cash-secured short put placed by the user (2 orders, 2 contracts total, avg $13.275, $2,655). App projects QQQ lows of 713.93 (10/16) and 710.09 (11/16), both above the strike. Not part of the Agentic spread P&L.",
-      "openQty": 1
+      "openQty": 1,
+      "closeOrders": [
+        {
+          "qty": 2,
+          "limit": 7.0,
+          "tif": "gtc",
+          "placed": "2026-10-15T10:00 ET",
+          "orderId": "6ad0dc83-2dc5-45b4-b1df-f79ed3be8e30",
+          "status": "cancelled 10/15 10:03am (replaced by $10)"
+        },
+        {
+          "qty": 2,
+          "limit": 10.0,
+          "tif": "gtc",
+          "placed": "2026-10-15T10:03 ET",
+          "orderId": "6ad0dd1f-6b48-4939-a53d-8619bf6059e1",
+          "status": "working"
+        }
+      ]
+    },
+    {
+      "order": "sell to open QQQ $700 put 11/20 x1",
+      "limit": 13.4,
+      "tif": "gtc",
+      "status": "working (not filled)",
+      "placed": "2026-10-15T10:01 ET",
+      "filled": null,
+      "fillPrice": null,
+      "breakeven": 686.6,
+      "placedAgent": "user",
+      "account": "Individual ••••8549",
+      "quantity": 1,
+      "premium": 1340,
+      "collateral": 70000,
+      "orderId": "6ad0dcc4-52dc-4e4f-a7bc-8e92705731b5",
+      "note": "Third QQQ 700P, resting above the 11.43 mark (seen 10:33am). If it fills, the $10 buy-to-close covers only 2 of 3. Not part of the Agentic spread P&L.",
+      "openQty": 0
     }
   ],
   "alerts": {

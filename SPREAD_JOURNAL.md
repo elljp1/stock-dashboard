@@ -79,7 +79,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open META $700 put 10/30 x1 | $24.00 GTC | filled 10/8 1:08pm at $24.00 ($2,400); closed 10/9 12:45pm: bought back at $19.00, **+$500** | $70,000 | 10/8 1:08pm |
 | Individual | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | cancelled by user 10/13 2:21pm, never filled | $33,000 | 10/8 2:53pm |
 | Joint | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | cancelled by user 10/13 2:21pm, never filled | $33,000 | 10/8 2:53pm |
-| Individual | Sell to open QQQ $700 put 11/20 x2 (two orders) | $13.15 + $13.40 GFD | filled 10/15 9:54am at $13.15 and 9:55am at $13.40 (avg $13.275, $2,655); open | $140,000 | 10/15 9:54am |
+| Individual | Sell to open QQQ $700 put 11/20 x2 (two orders) | $13.15 + $13.40 GFD | filled 10/15 9:54am at $13.15 and 9:55am at $13.40 (avg $13.275, $2,655); open; buy-to-close x2 at $10.00 GTC working (placed 10:03am, replaced a $7.00 order) | $140,000 | 10/15 9:54am |
+| Individual | Sell to open QQQ $700 put 11/20 x1 (third) | $13.40 GTC | working, not filled (close order covers only 2) | $70,000 | 10/15 10:01am |
 
 ## Alert log (graded at expiry, taken or not)
 
