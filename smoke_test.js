@@ -57,7 +57,7 @@ setTimeout(() => {
 
   for (const e of errors) console.log("warning (non-fatal): " + e.slice(0, 300));
   const probs = [];
-  const expected = ["TSLA", "HOOD", "META", "QQQ", "JPM", "GOOGL", "GC=F"];
+  const expected = ["TSLA", "HOOD", "META", "QQQ", "JPM", "GOOGL", "GC=F", "SPCX"];
   const shown = [...d.querySelectorAll("#gTk button[data-t]")].map(b => b.dataset.t);
   if (JSON.stringify(shown) !== JSON.stringify(expected))
     probs.push(`unexpected stock button order: ${shown.join(", ")}`);

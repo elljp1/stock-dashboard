@@ -5,7 +5,7 @@ const { JSDOM } = require("jsdom");
 
 const data = fs.readFileSync("data.js", "utf8").split("\n").filter(l => !l.startsWith("const HILO = ")).join("\n");
 const ALL = new Function(data + ";return DATA_ALL;")();
-const DISPLAYED = ["TSLA", "HOOD", "META", "QQQ", "JPM", "GOOGL", "GC=F"];
+const DISPLAYED = ["TSLA", "HOOD", "META", "QQQ", "JPM", "GOOGL", "GC=F", "SPCX"];
 const T = Object.keys(ALL)[0];
 const side = (price, time) => ({ price, lo: price - 2, hi: price + 2, time, pBar: 0.3, window: { centre: "10:30", p60: 0.6 } });
 function hiloFor(resolved) {
