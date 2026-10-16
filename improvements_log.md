@@ -3230,3 +3230,44 @@ GOOGL's highs keep favoring the model; whether the AMZN-low gap starts moving in
 flat; whether HOOD's 1.15 calibration ceiling keeps holding; whether NVDA/AMZN/SPY/VOO/META ever
 produce a qualifying swing to grade; and the still-open HOOD spread (trade 8), whose exit order the
 owner has now adjusted twice as the projected turn kept flipping.
+
+## 2026-10-16 (Fri) — daily review: NVDA gets its first graded swings, no code change
+
+**Build status:** this sandbox's own `fetch_data.py` hit the same "Tunnel connection failed: 403
+Forbidden" network block seen all week on every one of the 12 tickers and the pre/post-market
+fetch, so `analyze.py` correctly refused to rebuild ("Incomplete analysis; retaining last published
+dashboard") and left every committed file untouched. That's fine today because the separate cloud
+refresh workflow already ran with real market access earlier today — `data.js` is stamped generated
+10/16 5:46 PM ET across all 12 tickers (SPCX is now live alongside the other 11). Also had to reset
+this sandbox's local `main` to match `origin/main` again before reviewing anything (same recurring
+housekeeping as prior days). `coherence_check.py` passes clean (12/12 tickers), `anomaly_audit.py`
+reports no anomalies, the full Python test suite passes all 136 tests across 14 files, and all 5
+Node UI tests (pin, smoke, reliability, hilo refresh, layout) pass too.
+
+**Grades reviewed:** swing-grading track record — TSLA n=13 (31%/38%, unchanged), HOOD n=61
+(18%/26%, unchanged), QQQ n=61 (25%/30%, unchanged), JPM n=28 (14%/21%, unchanged), GOOGL n=36
+(19%/22%, unchanged), GC=F n=19 (21%/21%, unchanged). The one real change: NVDA crossed from n=0
+("too new to grade") to n=17 graded swings (12%/18% hit rates) — its first qualifying zigzag swings
+have resolved; too small a sample to mean much yet, but worth tracking now that it has one. AMZN,
+SPY, VOO, META and SPCX are still n=0 (genuinely quiet/too-new names, not a bug). HOOD's 1.15
+calibration ceiling is still holding. On the walk-forward horizon scoreboard, I re-ran today's exact
+grading code against yesterday's saved ledger snapshot to get an apples-to-apples check, since the
+daily model-vs-naive price-error numbers looked different from how I'd summarized them in recent
+entries: side by side, every ticker moved by only the expected one new session (n+1) with the median
+error essentially unchanged (e.g. GOOGL highs 1.79% model vs 1.0% naive yesterday to 1.75% vs 1.0%
+today; AMZN lows 2.00% vs 0.83% to 1.97% vs 0.83%) — so the gaps some tickers show against the naive
+baseline are a stable, already-honestly-displayed characteristic, not a new jump or a bug; my
+own paraphrasing in a couple of recent entries undersold how wide a few of these gaps really are.
+In the owner's own paper trade journal (`spread_journal.json`), trade 8 (HOOD put credit spread) is
+still open, unchanged — that's the owner's own bookkeeping, not touched here.
+
+**What changed and why:** no dashboard logic change today. No bug found — today's deep-dive into
+the horizon scoreboard numbers confirmed stability rather than finding a regression, and NVDA's new
+swing grades are a data milestone, not something to act on with only 17 samples. Honesty features,
+ledgers, and the coherence gate are untouched; `tickers.txt` wasn't touched.
+
+**Watch next:** whether NVDA's 12%/18% hit rate holds up or moves as more swings resolve; whether
+the GOOGL-highs and AMZN-lows naive-baseline gaps (both model error roughly double the naive
+baseline, stable for weeks now) ever narrow, which would say the model is adding real value there;
+whether HOOD's 1.15 calibration ceiling keeps holding; whether SPY/VOO/META/SPCX ever produce a
+qualifying swing to grade; and the still-open HOOD spread (trade 8) in the paper journal.
