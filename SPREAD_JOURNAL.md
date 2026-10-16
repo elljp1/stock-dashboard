@@ -34,7 +34,7 @@ Only filled trades get a number. Old internal ids are in the Ref column.
 | 6 | 10/5 | Agentic | HOOD 10/30 101/96 put credit spread x3 | $1.05 | | | open (exit order $1.00 GTC resting since 10/15 10:38am; the $0.50 order was cancelled) |
 | 7 | 10/8 | Individual | META 10/30 700 put x1 (short) | $24.43 | $19.00 | 10/9 | **+$543** |
 | 8 | 10/8 | Joint | META 10/30 700 put x1 (short) | $24.00 | $19.00 | 10/9 | **+$500** |
-| 9 | 10/16 | Agentic | META 11/20 670/660 put credit spread x2 | $2.50 | | | open (no exit order yet) |
+| 9 | 10/16 | Agentic | META 11/20 670/660 put credit spread x2 | $2.50 | | | open (exit order $1.25 GTC resting since 10/16 11:13am) |
 
 Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint +$1,200).
 
@@ -60,7 +60,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 6 | 9/23 11:27am | GOOGL | 10/23 $325/$320 put credit spread x3 | $1.25 | $1,125 | $323.75 | 76% | 10.2% | $1.20 GTC (replaced $0.60 9/24) | 9/24 12:41pm at $1.20 | **+$15** (break-even; exited against the app's leg) |
 | 7 | 9/24 3:53pm | QQQ | 10/23 $770/$780 call credit spread x2 | $2.00 | $1,600 | $772.00 | ~82% | 14.5% (user accepted) | $1.00 GTC, replaced by user with $1.50 GTC 10/8 | 10/8 1:04pm at $1.48 | **+$104** (26% of max) |
 | 8 | 10/5 2:45pm | HOOD | 10/30 $101/$96 put credit spread x3 | $1.05 | $1,185 | $99.95 | ~78% | 10.8% (25.3% total with #7, user accepted) | $0.53 or the 10/19 projected high (~121; app turn moved 10/22 → 10/09 → 10/19 → 10/15 → 10/19 on 10/8, low 10/09 ~104 first); stop $2.10 / HOOD close below $101 | | open |
-| 9 | 10/16 10:16am | META | 11/20 $670/$660 put credit spread x2 | $2.50 | $1,500 | $667.50 | ~76% | 13.6% (24.4% total with #8) | $1.25 or the 11/16 projected high (~837); entered before the 10/19 low (~710), against the app's leg until then; stop $5.00 / 670 breached | | open |
+| 9 | 10/16 10:16am | META | 11/20 $670/$660 put credit spread x2 | $2.50 | $1,500 | $667.50 | ~76% | 13.6% (24.4% total with #8) | $1.25 or the 11/16 projected high (~837); entered before the 10/19 low (~710), against the app's leg until then; stop $5.00 / 670 breached; exit order $1.25 GTC placed 10/16 11:13am | | open |
 
 ## Monthly results
 | Month | Start | Deposits | Realized P&L | Growth | Trades | W/L |
@@ -82,8 +82,10 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Individual | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | cancelled by user 10/13 2:21pm, never filled | $33,000 | 10/8 2:53pm |
 | Joint | Sell to open JPM $330 put 10/30 x1 | $10.00 GTC | cancelled by user 10/13 2:21pm, never filled | $33,000 | 10/8 2:53pm |
 | Individual | Sell to open QQQ $700 put 11/20 x2 (two orders) | $13.15 + $13.40 GFD | filled 10/15 9:54am at $13.15 and 9:55am at $13.40 (avg $13.275, $2,655); closed 10/15 10:58am: both bought back at $10.00, **+$655** | $140,000 | 10/15 9:54am |
-| Individual | Sell to open QQQ $700 put 11/20 x1 (third) | $13.40 GTC | working, not filled (close order covers only 2) | $70,000 | 10/15 10:01am |
-| Joint | Sell to open QQQ $700 put 11/20 x1 | $13.40 GTC | working, not filled | $70,000 | 10/15 11:27am |
+| Individual | Sell to open QQQ $700 put 11/20 x1 (third) | $13.40 GTC | cancelled 10/16 11:17am (replaced at $12.50) | $70,000 | 10/15 10:01am |
+| Joint | Sell to open QQQ $700 put 11/20 x1 | $13.40 GTC | cancelled 10/16 11:16am (replaced at $12.50) | $70,000 | 10/15 11:27am |
+| Individual | Sell to open QQQ $700 put 11/20 x1 | $12.50 GTC | working, not filled | $70,000 | 10/16 11:17am |
+| Joint | Sell to open QQQ $700 put 11/20 x1 | $12.50 GTC | working, not filled | $70,000 | 10/16 11:16am |
 | Individual | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | working, not filled | $33,000 | 10/15 3:11pm |
 | Joint | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | working, not filled | $33,000 | 10/15 3:12pm |
 

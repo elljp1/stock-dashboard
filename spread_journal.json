@@ -712,7 +712,14 @@
       "closed": null,
       "closeCost": null,
       "pnl": null,
-      "notes": "Alert 44 suggested 1x at $2.35 as a GTC to place at the 10/19 projected low (~710, Saturn 2:30-3:25 PM). User placed 2x at $2.50 GTC at 10:16am 10/16, filled at once: sold 670P at 14.30, bought 660P at 11.80 ($2.50 credit, $500 total). $1,500 risk (13.6%); with trade 8 total open risk $2,685 (24.4%). Entered before the 10/19 low, so the spread is against the app's leg until that turn. Exit at $1.25 debit or the 11/16 high; stop $5.00 debit or 670 breached. Spans META 10/21 report. No exit order resting yet."
+      "notes": "Alert 44 suggested 1x at $2.35 as a GTC to place at the 10/19 projected low (~710, Saturn 2:30-3:25 PM). User placed 2x at $2.50 GTC at 10:16am 10/16, filled at once: sold 670P at 14.30, bought 660P at 11.80 ($2.50 credit, $500 total). $1,500 risk (13.6%); with trade 8 total open risk $2,685 (24.4%). Entered before the 10/19 low, so the spread is against the app's leg until that turn. Exit at $1.25 debit or the 11/16 high; stop $5.00 debit or 670 breached. Spans META 10/21 report. No exit order resting yet. 10/16 11:13am: user placed a $1.25 GTC buy-to-close x2 (order 6ad23f0d), +$250 if filled (50% of credit).",
+      "exitOrder": {
+        "orderId": "6ad23f0d-c375-4795-956b-971c5a664f89",
+        "limitDebit": 1.25,
+        "tif": "gtc",
+        "placed": "2026-10-16T11:13 ET",
+        "placedBy": "user in app"
+      }
     }
   ],
   "otherAccountOrders": [
@@ -1026,7 +1033,7 @@
       "order": "sell to open QQQ $700 put 11/20 x1",
       "limit": 13.4,
       "tif": "gtc",
-      "status": "working (not filled)",
+      "status": "cancelled 10/16 11:17am ET (user replaced it with a $12.50 GTC, order 6ad23ff7)",
       "placed": "2026-10-15T10:01 ET",
       "filled": null,
       "fillPrice": null,
@@ -1044,7 +1051,7 @@
       "order": "sell to open QQQ $700 put 11/20 x1",
       "limit": 13.4,
       "tif": "gtc",
-      "status": "working (not filled)",
+      "status": "cancelled 10/16 11:16am ET (user replaced it with a $12.50 GTC, order 6ad23fd9)",
       "placed": "2026-10-15T11:27 ET",
       "filled": null,
       "fillPrice": null,
@@ -1093,6 +1100,42 @@
       "orderId": "6ad12594-e8f4-47c4-8f96-35fbe316ec41",
       "note": "Cash-secured short put placed by the user (one each in Individual and Joint). App projects TSLA lows of 329.78 (10/26) and 330.34 (11/05), right at the strike. Not part of the Agentic spread P&L.",
       "openQty": 0
+    },
+    {
+      "order": "sell to open QQQ $700 put 11/20 x1",
+      "limit": 12.5,
+      "tif": "gtc",
+      "status": "working (not filled)",
+      "filled": null,
+      "fillPrice": null,
+      "breakeven": 687.5,
+      "placedAgent": "user",
+      "quantity": 1,
+      "premium": 1250,
+      "collateral": 70000,
+      "openQty": 0,
+      "placed": "2026-10-16T11:17 ET",
+      "account": "Individual ••••8549",
+      "orderId": "6ad23ff7-7c9d-47b9-a5f6-3583a5ca3df6",
+      "note": "Replaces the $13.40 GTC. Fills near QQQ ~$714 (app's projected 10/16 low 713.93). Not part of the Agentic spread P&L."
+    },
+    {
+      "order": "sell to open QQQ $700 put 11/20 x1",
+      "limit": 12.5,
+      "tif": "gtc",
+      "status": "working (not filled)",
+      "filled": null,
+      "fillPrice": null,
+      "breakeven": 687.5,
+      "placedAgent": "user",
+      "quantity": 1,
+      "premium": 1250,
+      "collateral": 70000,
+      "openQty": 0,
+      "placed": "2026-10-16T11:16 ET",
+      "account": "Joint ••••6540",
+      "orderId": "6ad23fd9-f831-4be4-a9b3-cb3fe49ee07c",
+      "note": "Replaces the $13.40 GTC. Fills near QQQ ~$714 (app's projected 10/16 low 713.93). Not part of the Agentic spread P&L."
     }
   ],
   "alerts": {
