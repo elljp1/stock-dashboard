@@ -35,6 +35,8 @@ Only filled trades get a number. Old internal ids are in the Ref column.
 | 7 | 10/8 | Individual | META 10/30 700 put x1 (short) | $24.43 | $19.00 | 10/9 | **+$543** |
 | 8 | 10/8 | Joint | META 10/30 700 put x1 (short) | $24.00 | $19.00 | 10/9 | **+$500** |
 | 9 | 10/16 | Agentic | META 11/20 670/660 put credit spread x2 | $2.50 | | | open (exit order $1.25 GTC resting since 10/16 11:13am) |
+| 10 | 10/16 | Individual | QQQ 11/20 700 put x1 (short) | $12.50 | | | open |
+| 11 | 10/16 | Joint | QQQ 11/20 700 put x1 (short) | $12.50 | | | open |
 
 Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint +$1,200).
 
@@ -84,8 +86,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Individual | Sell to open QQQ $700 put 11/20 x2 (two orders) | $13.15 + $13.40 GFD | filled 10/15 9:54am at $13.15 and 9:55am at $13.40 (avg $13.275, $2,655); closed 10/15 10:58am: both bought back at $10.00, **+$655** | $140,000 | 10/15 9:54am |
 | Individual | Sell to open QQQ $700 put 11/20 x1 (third) | $13.40 GTC | cancelled 10/16 11:17am (replaced at $12.50) | $70,000 | 10/15 10:01am |
 | Joint | Sell to open QQQ $700 put 11/20 x1 | $13.40 GTC | cancelled 10/16 11:16am (replaced at $12.50) | $70,000 | 10/15 11:27am |
-| Individual | Sell to open QQQ $700 put 11/20 x1 | $12.50 GTC | working, not filled | $70,000 | 10/16 11:17am |
-| Joint | Sell to open QQQ $700 put 11/20 x1 | $12.50 GTC | working, not filled | $70,000 | 10/16 11:16am |
+| Individual | Sell to open QQQ $700 put 11/20 x1 | $12.50 GTC | filled 10/16 12:02pm at $12.50; open | $70,000 | 10/16 11:17am |
+| Joint | Sell to open QQQ $700 put 11/20 x1 | $12.50 GTC | filled 10/16 12:02pm at $12.50; open | $70,000 | 10/16 11:16am |
 | Individual | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | working, not filled | $33,000 | 10/15 3:11pm |
 | Joint | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | working, not filled | $33,000 | 10/15 3:12pm |
 
