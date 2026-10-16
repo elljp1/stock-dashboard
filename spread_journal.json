@@ -660,6 +660,59 @@
           "state": "cancelled 2026-10-15T10:38 ET (replaced by $1.00)"
         }
       ]
+    },
+    {
+      "id": 9,
+      "status": "open",
+      "account": "••••2831 Agentic",
+      "orderId": "6ad231ab-e1e9-4af9-a549-dc78fd97cf28",
+      "ticker": "META",
+      "strategy": "put credit spread",
+      "expiry": "2026-11-20",
+      "dteAtPlan": 35,
+      "width": 10,
+      "quantity": 2,
+      "legs": {
+        "sell": {
+          "strike": 670,
+          "type": "put",
+          "optionId": "317b606c-7c39-48d7-8da3-3fd69f82fcb4"
+        },
+        "buy": {
+          "strike": 660,
+          "type": "put",
+          "optionId": "5113322f-1808-464c-a832-41ec3dfa4035"
+        }
+      },
+      "entryLimitCredit": 2.5,
+      "timeInForce": "gtc",
+      "placedAt": "2026-10-16T10:16 ET",
+      "placedBy": "user in app",
+      "alertId": 44,
+      "spotAtPlan": 726.35,
+      "shortDeltaAtPlan": -0.221,
+      "breakeven": 667.5,
+      "maxProfit": 500,
+      "maxLoss": 1500,
+      "collateral": 2000,
+      "pctAccountAtRisk": {
+        "on11000": 0.136
+      },
+      "earningsDate": "2026-10-21",
+      "exitTargetDebit": 1.25,
+      "lossExitDebit": 5.0,
+      "plannedExitTurn": {
+        "type": "high",
+        "date": "2026-11-16",
+        "time": "9:30 AM ET",
+        "price": 836.97
+      },
+      "fillCredit": 2.5,
+      "opened": "2026-10-16T10:16 ET",
+      "closed": null,
+      "closeCost": null,
+      "pnl": null,
+      "notes": "Alert 44 suggested 1x at $2.35 as a GTC to place at the 10/19 projected low (~710, Saturn 2:30-3:25 PM). User placed 2x at $2.50 GTC at 10:16am 10/16, filled at once: sold 670P at 14.30, bought 660P at 11.80 ($2.50 credit, $500 total). $1,500 risk (13.6%); with trade 8 total open risk $2,685 (24.4%). Entered before the 10/19 low, so the spread is against the app's leg until that turn. Exit at $1.25 debit or the 11/16 high; stop $5.00 debit or 670 breached. Spans META 10/21 report. No exit order resting yet."
     }
   ],
   "otherAccountOrders": [
@@ -2046,8 +2099,8 @@
         "id": 44,
         "date": "2026-10-16",
         "time": "09:47 ET",
-        "taken": false,
-        "reason": "pushed; awaiting user",
+        "taken": true,
+        "reason": "taken: trade 9 (user placed 2x at $2.50 GTC, filled 10:16am ET 10/16, before the 10/19 turn)",
         "outcome": "pending",
         "symbol": "META",
         "spread": "11/20 670/660 put credit",
@@ -2168,6 +2221,18 @@
         "pnl": 500,
         "status": "closed",
         "ref": "otherAccountOrders META Joint"
+      },
+      {
+        "no": 9,
+        "date": "2026-10-16",
+        "account": "Agentic",
+        "trade": "META 11/20 670/660 put credit spread x2",
+        "in": 2.5,
+        "out": null,
+        "closed": null,
+        "pnl": null,
+        "status": "open",
+        "ref": "trades id 9"
       }
     ]
   },

@@ -34,6 +34,7 @@ Only filled trades get a number. Old internal ids are in the Ref column.
 | 6 | 10/5 | Agentic | HOOD 10/30 101/96 put credit spread x3 | $1.05 | | | open (exit order $1.00 GTC resting since 10/15 10:38am; the $0.50 order was cancelled) |
 | 7 | 10/8 | Individual | META 10/30 700 put x1 (short) | $24.43 | $19.00 | 10/9 | **+$543** |
 | 8 | 10/8 | Joint | META 10/30 700 put x1 (short) | $24.00 | $19.00 | 10/9 | **+$500** |
+| 9 | 10/16 | Agentic | META 11/20 670/660 put credit spread x2 | $2.50 | | | open (no exit order yet) |
 
 Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint +$1,200).
 
@@ -59,6 +60,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 6 | 9/23 11:27am | GOOGL | 10/23 $325/$320 put credit spread x3 | $1.25 | $1,125 | $323.75 | 76% | 10.2% | $1.20 GTC (replaced $0.60 9/24) | 9/24 12:41pm at $1.20 | **+$15** (break-even; exited against the app's leg) |
 | 7 | 9/24 3:53pm | QQQ | 10/23 $770/$780 call credit spread x2 | $2.00 | $1,600 | $772.00 | ~82% | 14.5% (user accepted) | $1.00 GTC, replaced by user with $1.50 GTC 10/8 | 10/8 1:04pm at $1.48 | **+$104** (26% of max) |
 | 8 | 10/5 2:45pm | HOOD | 10/30 $101/$96 put credit spread x3 | $1.05 | $1,185 | $99.95 | ~78% | 10.8% (25.3% total with #7, user accepted) | $0.53 or the 10/19 projected high (~121; app turn moved 10/22 → 10/09 → 10/19 → 10/15 → 10/19 on 10/8, low 10/09 ~104 first); stop $2.10 / HOOD close below $101 | | open |
+| 9 | 10/16 10:16am | META | 11/20 $670/$660 put credit spread x2 | $2.50 | $1,500 | $667.50 | ~76% | 13.6% (24.4% total with #8) | $1.25 or the 11/16 projected high (~837); entered before the 10/19 low (~710), against the app's leg until then; stop $5.00 / 670 breached | | open |
 
 ## Monthly results
 | Month | Start | Deposits | Realized P&L | Growth | Trades | W/L |
@@ -132,7 +134,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 41 | 10/15 9:58am | META 11/06 675/665 put (timing: place at today's low ~710, leg up to 10/30 high ~801; spans META 10/21 report) | $2.275 (limit $2.25, 1x) | Pushed, void 10/16 9:47am (app moved the META high to 11/16; superseded by #44) | void |
 | 42 | 10/15 9:58am | HOOD 11/06 85/80 put (timing: place at today's low ~94, leg up to 11/02 high ~118; spans HOOD 10/27 report; stacks on trade 8; with #41 over 25% risk cap) | $1.115 (limit $1.10, 3x) | Pushed, void 10/16 9:47am (app now projects a HOOD high 10/23; superseded by #43) | void |
 | 43 | 10/16 9:47am | HOOD 10/30 94/89 put (timing: current leg up to 10/23 high ~120; spans HOOD 10/27 report; same expiry and bet as trade 8) | $1.02 (limit $1.00, 3x) | Pushed, open | pending |
-| 44 | 10/16 9:47am | META 11/20 670/660 put (timing: place at the 10/19 low ~710, leg up to 11/16 high ~837; spans META 10/21 report; with #43 and trade 8 over 25% risk cap) | $2.375 (limit $2.35, 1x) | Pushed, open | pending |
+| 44 | 10/16 9:47am | META 11/20 670/660 put (timing: place at the 10/19 low ~710, leg up to 11/16 high ~837; spans META 10/21 report; with #43 and trade 8 over 25% risk cap) | $2.375 (limit $2.35, 1x) | Taken: trade 9 (user 2x at $2.50, filled 10/16 10:16am) | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
