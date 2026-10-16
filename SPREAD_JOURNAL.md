@@ -37,6 +37,10 @@ Only filled trades get a number. Old internal ids are in the Ref column.
 | 9 | 10/16 | Agentic | META 11/20 670/660 put credit spread x2 | $2.50 | | | open (exit order $1.25 GTC resting since 10/16 11:13am) |
 | 10 | 10/16 | Individual | QQQ 11/20 700 put x1 (short) | $12.50 | | | open |
 | 11 | 10/16 | Joint | QQQ 11/20 700 put x1 (short) | $12.50 | | | open |
+| 12 | 10/16 | Individual | TSLA 11/20 330 put x1 (short) | $10.00 | | | open |
+| 13 | 10/16 | Joint | TSLA 11/20 330 put x1 (short) | $10.00 | | | open |
+| 14 | 10/16 | Individual | QQQ 11/20 700 put x1 (short) | $16.03 | | | open |
+| 15 | 10/16 | Joint | QQQ 11/20 700 put x1 (short) | $16.00 | | | open |
 
 Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint +$1,200).
 
@@ -88,8 +92,10 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open QQQ $700 put 11/20 x1 | $13.40 GTC | cancelled 10/16 11:16am (replaced at $12.50) | $70,000 | 10/15 11:27am |
 | Individual | Sell to open QQQ $700 put 11/20 x1 | $12.50 GTC | filled 10/16 12:02pm at $12.50; open | $70,000 | 10/16 11:17am |
 | Joint | Sell to open QQQ $700 put 11/20 x1 | $12.50 GTC | filled 10/16 12:02pm at $12.50; open | $70,000 | 10/16 11:16am |
-| Individual | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | working, not filled | $33,000 | 10/15 3:11pm |
-| Joint | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | working, not filled | $33,000 | 10/15 3:12pm |
+| Individual | Sell to open QQQ $700 put 11/20 x1 | $16.00 GFD | filled 10/16 1:22pm at $16.03; open. Close orders on both contracts: $6.50 and $8.00 GTC | $70,000 | 10/16 1:22pm |
+| Joint | Sell to open QQQ $700 put 11/20 x1 | $16.00 GFD | filled 10/16 1:22pm at $16.00; open. Close orders on both contracts: $6.50 and $8.00 GTC | $70,000 | 10/16 1:22pm |
+| Individual | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | filled 10/16 1:03pm at $10.00; open | $33,000 | 10/15 3:11pm |
+| Joint | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | filled 10/16 1:03pm at $10.00; open | $33,000 | 10/15 3:12pm |
 
 ## Alert log (graded at expiry, taken or not)
 
