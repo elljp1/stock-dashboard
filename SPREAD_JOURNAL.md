@@ -129,8 +129,10 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 38 | 10/8 9:35am | HOOD 10/23 100/95 put (timing: place at the 10/09 low ~104, leg up to 10/19 high ~121; doubles trade 8, over 25% risk cap) | $1.015 (limit $1.00, 3x) | Pushed, open | pending |
 | 39 | 10/8 9:35am | QQQ 10/30 775/785 call (timing: place at the 10/09 high ~764, leg down to 10/22 low ~735; stacks on trade 7, over 25% risk cap) | $2.425 (limit $2.40, 1x) | Pushed, open | void (10/8 10:34am: superseded by 40) |
 | 40 | 10/8 10:34am | QQQ 10/30 780/790 call (timing: place at the 10/09 high ~764, leg down to 10/22 low ~735; stacks on trade 7, over 25% risk cap) | $2.04 (limit $2.00, 1x) | Pushed, void 10/8 2:34pm (app dropped the 10/09 high; next QQQ turn is a 10/16 low) | void |
-| 41 | 10/15 9:58am | META 11/06 675/665 put (timing: place at today's low ~710, leg up to 10/30 high ~801; spans META 10/21 report) | $2.275 (limit $2.25, 1x) | Pushed, open | pending |
-| 42 | 10/15 9:58am | HOOD 11/06 85/80 put (timing: place at today's low ~94, leg up to 11/02 high ~118; spans HOOD 10/27 report; stacks on trade 8; with #41 over 25% risk cap) | $1.115 (limit $1.10, 3x) | Pushed, open | pending |
+| 41 | 10/15 9:58am | META 11/06 675/665 put (timing: place at today's low ~710, leg up to 10/30 high ~801; spans META 10/21 report) | $2.275 (limit $2.25, 1x) | Pushed, void 10/16 9:47am (app moved the META high to 11/16; superseded by #44) | void |
+| 42 | 10/15 9:58am | HOOD 11/06 85/80 put (timing: place at today's low ~94, leg up to 11/02 high ~118; spans HOOD 10/27 report; stacks on trade 8; with #41 over 25% risk cap) | $1.115 (limit $1.10, 3x) | Pushed, void 10/16 9:47am (app now projects a HOOD high 10/23; superseded by #43) | void |
+| 43 | 10/16 9:47am | HOOD 10/30 94/89 put (timing: current leg up to 10/23 high ~120; spans HOOD 10/27 report; same expiry and bet as trade 8) | $1.02 (limit $1.00, 3x) | Pushed, open | pending |
+| 44 | 10/16 9:47am | META 11/20 670/660 put (timing: place at the 10/19 low ~710, leg up to 11/16 high ~837; spans META 10/21 report; with #43 and trade 8 over 25% risk cap) | $2.375 (limit $2.35, 1x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
