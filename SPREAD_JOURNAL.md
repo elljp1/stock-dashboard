@@ -94,8 +94,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open QQQ $700 put 11/20 x1 | $12.50 GTC | filled 10/16 12:02pm at $12.50; open | $70,000 | 10/16 11:16am |
 | Individual | Sell to open QQQ $700 put 11/20 x1 | $16.00 GFD | filled 10/16 1:22pm at $16.03; open. Close orders on both contracts: $6.50 and $8.00 GTC | $70,000 | 10/16 1:22pm |
 | Joint | Sell to open QQQ $700 put 11/20 x1 | $16.00 GFD | filled 10/16 1:22pm at $16.00; open. Close orders on both contracts: $6.50 and $8.00 GTC | $70,000 | 10/16 1:22pm |
-| Individual | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | filled 10/16 1:03pm at $10.00; open | $33,000 | 10/15 3:11pm |
-| Joint | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | filled 10/16 1:03pm at $10.00; open | $33,000 | 10/15 3:12pm |
+| Individual | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | filled 10/16 1:03pm at $10.00; open; buy-to-close $5.00 GTC (6ad2a0bb) placed 6:10pm | $33,000 | 10/15 3:11pm |
+| Joint | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | filled 10/16 1:03pm at $10.00; open; buy-to-close $5.00 GTC (6ad2a0a0) placed 6:09pm | $33,000 | 10/15 3:12pm |
 
 ## Alert log (graded at expiry, taken or not)
 
