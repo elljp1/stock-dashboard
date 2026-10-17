@@ -3271,3 +3271,37 @@ the GOOGL-highs and AMZN-lows naive-baseline gaps (both model error roughly doub
 baseline, stable for weeks now) ever narrow, which would say the model is adding real value there;
 whether HOOD's 1.15 calibration ceiling keeps holding; whether SPY/VOO/META/SPCX ever produce a
 qualifying swing to grade; and the still-open HOOD spread (trade 8) in the paper journal.
+
+## 2026-10-17
+
+**Today's data situation:** today is a Saturday, so there was no new trading session to grade
+regardless, and this cloud run's attempt to re-download prices was blocked anyway — Yahoo's chart
+API returned "403 Forbidden" for all 12 tickers from this sandbox's network address. Per the
+standing instructions for that case, I left the site on its last good build rather than touching
+anything: the dashboard is running on data refreshed on 2026-10-16 by the separate scheduled
+GitHub Actions job (which uses a different network address and fetched successfully), not from
+this session. I re-ran the coherence check, the grading, and the full test suite against that
+already-published data to make sure everything is still sound.
+
+**Grades reviewed:** the coherence gate passes (12/12 tickers), all 136 automated Python checks
+pass, and all 5 browser-behavior checks (PIN lock, page load, chart rendering, data refresh,
+layout) pass. Every swing-grading and horizon-scoreboard number is byte-for-byte identical to
+yesterday's entry (TSLA 31%/38% n=13, HOOD 18%/26% n=61, QQQ 25%/30% n=61, JPM 14%/21% n=28, GOOGL
+19%/22% n=36, NVDA 12%/18% n=17, GC=F 21%/21% n=19; GOOGL daily-high error 1.75% model vs 1.0%
+naive, AMZN daily-low error 1.97% vs 0.83% naive) — exactly what's expected when no new trading day
+has happened to grade. One thing worth flagging, not fixing: a separate anomaly checker
+(`anomaly_audit.py`) now notices that the "next predicted move" list for QQQ, GOOGL and NVDA still
+shows an event dated 2026-10-16 (yesterday) as upcoming, because nothing has run since the weekend
+started to roll it forward. This is simply staleness from skipping a refresh over the weekend, not
+a logic bug — it should clear itself automatically the moment Monday's scheduled refresh runs. I'm
+noting it here only so it doesn't look alarming if it shows up again Monday morning before that
+refresh completes.
+
+**What changed and why:** no dashboard logic change today — nothing failed, nothing regressed, and
+there was no new data to act on. Honesty features (hit-rate displays, random-control comparisons,
+grading, coherence gate) and `tickers.txt` were untouched.
+
+**Watch next:** confirm Monday's scheduled refresh clears the stale 10-16 chain entries on
+QQQ/GOOGL/NVDA as expected; otherwise same watch list as yesterday — NVDA's new small-sample hit
+rate, the GOOGL-highs/AMZN-lows naive-baseline gaps, HOOD's calibration ceiling, and whether
+SPY/VOO/META/SPCX ever produce a gradable swing.
