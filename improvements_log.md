@@ -3305,3 +3305,39 @@ grading, coherence gate) and `tickers.txt` were untouched.
 QQQ/GOOGL/NVDA as expected; otherwise same watch list as yesterday — NVDA's new small-sample hit
 rate, the GOOGL-highs/AMZN-lows naive-baseline gaps, HOOD's calibration ceiling, and whether
 SPY/VOO/META/SPCX ever produce a gradable swing.
+
+## 2026-10-18 (Sun) — daily review: grades steady, no code change
+
+**Today's data situation:** another weekend day, so there was no new trading session to grade.
+This sandbox's own attempt to re-download prices hit the same "Tunnel connection failed: 403
+Forbidden" block on all 12 tickers and the pre/post-market fetch, so `analyze.py` correctly refused
+to rebuild and left the already-published dashboard untouched — it's running on the separate cloud
+refresh's build from Saturday 10/17 (last daily bar 10/16, the most recent real trading session).
+Re-ran the coherence check, the full test suite, and the anomaly audit against that published data
+to confirm everything is still sound: coherence passes clean (12/12 tickers), all 128 automated
+Python checks pass, and all 5 browser-behavior checks (PIN lock, page load, chart rendering, data
+refresh, layout) pass. The anomaly checker also confirms the stale 10-16 "next predicted move" dates
+on QQQ/GOOGL/NVDA flagged yesterday have cleared on their own as expected — the chain now rolls
+forward from Mon 10/19.
+
+**Grades reviewed:** every swing-grading and horizon-scoreboard number is byte-for-byte identical to
+Friday/Saturday's entries, exactly as expected with no new session to grade: TSLA 31%/38% n=13, HOOD
+18%/26% n=61, QQQ 25%/30% n=61, JPM 14%/21% n=28, GOOGL 19%/22% n=36, NVDA 12%/18% n=17, GC=F
+21%/21% n=19; AMZN/SPY/VOO/META/SPCX still n=0 (too quiet/too new to grade). The naive-baseline gaps
+are unchanged too (GOOGL daily-high error 1.75% model vs 1.0% naive; AMZN daily-low error 1.97% vs
+0.83% naive), and HOOD's 1.15 calibration ceiling is still holding. In the owner's own paper trade
+journal, trade 8 (HOOD put credit spread) is still open, unchanged — that's the owner's own
+bookkeeping, not touched here. The system's own option trade-card ledger (`trades_log.json`) is
+still appending one dated snapshot per day with no gaps or malformed entries (82 entries through
+10/17); it has no built-in hindsight grading of its own, so there's nothing new to report there
+beyond confirming it keeps logging cleanly.
+
+**What changed and why:** no dashboard logic change today — nothing failed, nothing regressed, and
+there was no new data to act on. Honesty features (hit-rate displays, random-control comparisons,
+grading, coherence gate) and `tickers.txt` were untouched.
+
+**Watch next:** Monday's scheduled refresh should bring the first new trading session since Friday
+10/16 — worth checking the swing-grading and horizon numbers actually move then. Otherwise same
+watch list as recent days: NVDA's small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline
+gaps, HOOD's calibration ceiling, whether SPY/VOO/META/SPCX ever produce a gradable swing, and the
+still-open HOOD spread (trade 8) in the paper journal.
