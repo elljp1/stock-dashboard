@@ -3341,3 +3341,45 @@ grading, coherence gate) and `tickers.txt` were untouched.
 watch list as recent days: NVDA's small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline
 gaps, HOOD's calibration ceiling, whether SPY/VOO/META/SPCX ever produce a gradable swing, and the
 still-open HOOD spread (trade 8) in the paper journal.
+
+## 2026-10-19 (Mon) — real trading day; grades flat as expected; flagging a live risk on the open HOOD spread
+
+**Data situation:** this session's own attempt to re-download prices hit the same "Tunnel
+connection failed: 403 Forbidden" network-policy block on all 12 tickers (confirmed via the proxy's
+own status log as a gateway policy denial, not a Yahoo-side block), so `analyze.py` correctly
+refused to rebuild rather than overwrite good data with an empty one. The dashboard is running on
+the separate scheduled GitHub Actions refresh, which reached Yahoo fine and published today's real
+close (generated 5:41 PM ET, last daily bar 10/19). Re-ran the coherence check, the full 136-test
+suite, and the anomaly audit against that published build: coherence passes clean (12/12 tickers),
+every test passes, and the anomaly audit finds no chain/level/trade-card inconsistencies.
+
+**Grades reviewed:** the swing-prediction track record is byte-for-byte unchanged from Sunday -
+TSLA n=13 (31%/38%), HOOD n=61 (18%/26%), QQQ n=61 (25%/30%), JPM n=28 (14%/21%), GOOGL n=36
+(19%/22%), NVDA n=17 (12%/18%), GC=F n=19 (21%/21%); AMZN/SPY/VOO/META/SPCX still n=0. That's
+expected, not stale: today's daily-range grade (`horizonGrades`) always lands one trading day in
+arrears (it needs the following session's data to confirm), so today's close (10/19) will be the
+one that shows up in tomorrow's numbers, same as every other Monday-after-a-quiet-weekend. The
+option trade-card ledger (`trades_log.json`) keeps appending one dated snapshot with no gaps (85
+entries through today).
+
+**What I'm flagging, not fixing:** the owner's own paper/live trade journal (`spread_journal.json`,
+trade 8) shows a 3-contract HOOD put credit spread (sold the $101 put, bought the $96 put, opened
+10/5, expires 10/30) that has moved sharply against the position. HOOD has fallen for four straight
+sessions - from a $110.52 close on 10/13 to $96.52 today (-12.6%) - and today's close is now BELOW
+both the $99.95 breakeven and the $101 short strike, sitting just $0.52 above the $96 long strike
+(near the $1,185 max-loss end of the trade, vs. $315 max profit, on $1,500 of collateral). This
+isn't a bug or a dashboard problem - the journal correctly shows the trade as still "open" and
+nothing in the system auto-alerts on an existing position's risk - so I'm not changing any code for
+it, just surfacing it clearly since it's a real, live risk with 11 days left to expiry.
+
+**What changed and why:** no dashboard logic change today. Everything mechanical is healthy
+(coherence, tests, anomaly audit all clean) and nothing here clears the 3+-day-pattern-plus-clear-
+bug bar - the n=0 tickers and HOOD's calibration ceiling are already-diagnosed, ongoing conditions,
+not new bugs. Honesty features (hit-rate displays, random-control comparisons, grading, coherence
+gate) and `tickers.txt` are untouched.
+
+**Watch next:** whether HOOD keeps falling toward/through the $96 long strike before 10/30 expiry,
+or stabilizes; whether tomorrow's run finally grades today's (10/19) session in `horizonGrades` as
+expected; and the same standing watch list - NVDA's small-sample hit rate, the GOOGL-highs/AMZN-
+lows naive-baseline gaps, HOOD's calibration ceiling, and whether SPY/VOO/META/SPCX ever produce a
+gradable swing.
