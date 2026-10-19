@@ -147,7 +147,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 44 | 10/16 9:47am | META 11/20 670/660 put (timing: place at the 10/19 low ~710, leg up to 11/16 high ~837; spans META 10/21 report; with #43 and trade 8 over 25% risk cap) | $2.375 (limit $2.35, 1x) | Taken: trade 9 (user 2x at $2.50, filled 10/16 10:16am) | pending |
 | 45 | 10/16 2:35pm | GOOGL 10/30 320/315 put (timing: place at today's low ~335, leg up to 10/26 high ~353; spans GOOGL 10/28 report; over 25% risk cap with trades 8 and 9) | $1.05 (limit $1.05, 3x) | Pushed, open; re-pushed 3:46pm at $1.15 (limit $1.15) | pending |
 | 46 | 10/16 2:35pm | META 11/20 640/630 put (timing: place at the 10/19 low ~687, leg up to 11/16 high ~815; spans META 10/21 report; stacks on trade 9; over 25% risk cap) | $2.15 (limit $2.15, 1x) | Pushed; re-pushed 3:46pm at $2.275 (limit $2.25); superseded 10/19 by #47 | void |
-| 47 | 10/19 9:35am | META 10/30 650/640 put (timing: place at today's low ~685, leg up to 10/26 high ~743; spans META 10/21 report; over 25% risk cap with trades 8 and 9) | $2.10 (limit $2.10, 1x) | Pushed, open | pending |
+| 47 | 10/19 9:35am | META 10/30 650/640 put (timing: place at today's low ~685, leg up to 10/26 high ~743; spans META 10/21 report; over 25% risk cap with trades 8 and 9) | $2.10 (limit $2.10, 1x) | Pushed; superseded 10/19 10:38am by #48 | void |
+| 48 | 10/19 10:38am | META 10/30 645/635 put (timing: place at today's low ~685, leg up to 10/26 high ~744; spans META 10/21 report; over 25% risk cap with trades 8 and 9) | $2.00 (limit $2.00, 1x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
