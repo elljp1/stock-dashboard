@@ -1,8 +1,8 @@
 {
- "generatedAt": "2026-10-19T13:24:45+00:00",
+ "generatedAt": "2026-10-19T13:36:57+00:00",
  "model": "hilo-2",
  "targetSession": "2026-10-19",
- "kind": "premarket",
+ "kind": "intraday",
  "method": "Price: prior close x (1 + median move to the high/low over the last 20 sessions); 80% band = 10th-90th percentile of that move over up to 60 sessions. Time: the modal 15-minute bar of past highs/lows (up to 60 sessions) with its probability; separately, the centre of the +/-60 min window holding the most probability (a window centre, not the likeliest time). Intraday revisions forecast the FINAL full-session high/low, including what already traded, from exactly the bars up to a fixed checkpoint, by replaying the rest of each earlier session from the same bar. Regular session only; NYSE holidays and half-days applied.",
  "latest": {
   "TSLA": {
@@ -1062,7 +1062,19 @@
    }
   }
  },
- "notes": {},
+ "notes": {
+  "TSLA": "before the first intraday checkpoint",
+  "HOOD": "before the first intraday checkpoint",
+  "QQQ": "before the first intraday checkpoint",
+  "JPM": "before the first intraday checkpoint",
+  "GOOGL": "before the first intraday checkpoint",
+  "NVDA": "before the first intraday checkpoint",
+  "AMZN": "before the first intraday checkpoint",
+  "SPY": "before the first intraday checkpoint",
+  "VOO": "before the first intraday checkpoint",
+  "META": "before the first intraday checkpoint",
+  "SPCX": "before the first intraday checkpoint"
+ },
  "excluded": {
   "GC=F": "futures session calendar not implemented"
  },
@@ -6574,7 +6586,7 @@
   }
  },
  "build": {
-  "commit": "b75007df359331094aac0b2a26636fcf7494051a",
-  "run": "39259767397"
+  "commit": "c3b76f79a8babecf9a273136e76b3f59ea23cc41",
+  "run": "39261537853"
  }
 }
