@@ -2296,8 +2296,8 @@
         "date": "2026-10-16",
         "time": "14:35 ET",
         "taken": false,
-        "reason": "pushed; re-pushed 3:46pm (mid +$0.125); awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; re-pushed 3:46pm (mid +$0.125); awaiting user; superseded 10/19 9:35am by #47 (app moved the next META high to 10/26)",
+        "outcome": "void",
         "symbol": "META",
         "spread": "11/20 640/630 put credit",
         "midAtAlert": 2.15,
@@ -2327,6 +2327,32 @@
             "plannedExit": "close at the 11/16 projected high or at 50% ($1.13); stop $4.50 debit or 640 breached"
           }
         ]
+      },
+      {
+        "id": 47,
+        "date": "2026-10-19",
+        "time": "09:35 ET",
+        "taken": false,
+        "reason": "pushed; awaiting user",
+        "outcome": "pending",
+        "symbol": "META",
+        "spread": "10/30 650/640 put credit",
+        "midAtAlert": 2.1,
+        "suggestedLimit": 2.1,
+        "shortDelta": -0.201,
+        "spot": 704.62,
+        "contracts": 1,
+        "maxLoss": 790,
+        "breakeven": 647.9,
+        "legType": "next leg up (current leg down to today's LOW; resting GTC to place at the turn)",
+        "entryTurnDate": "2026-10-19",
+        "entryTurnTime": "Saturn 2:30-3:25 PM",
+        "entryTurnPrice": 684.62,
+        "turnDate": "2026-10-26",
+        "turnTime": "9:30 AM ET",
+        "turnPrice": 742.88,
+        "plannedExit": "close at the 10/26 projected high or at 50% of credit ($1.05); stop $4.20 debit or 650 breached",
+        "note": "650P (-0.201) nearest 0.20: 8.725 (8.40/9.05), 640P 6.625; credit/width 0.21; OI 1083. 3% rule vs today's 684.62 low: short <= 664.08. 655/645 also qualifies (2.20, -0.221). Spans META 10/21 report. 1x = 7.2% (2x = 14.4%, over 13%); with trades 8 and 9 total open risk $3,475 (31.6%, over 25%). Supersedes #46."
       }
     ]
   },
