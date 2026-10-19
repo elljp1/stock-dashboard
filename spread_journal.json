@@ -1069,7 +1069,7 @@
       "order": "sell to open TSLA $330 put 11/20 x1",
       "limit": 10.0,
       "tif": "gtc",
-      "status": "filled 10/16 1:03pm ET at $10.00 (open short put)",
+      "status": "filled 10/16 1:03pm ET at $10.00; closed 10/19 09:50 at $7.30, +$270",
       "placed": "2026-10-15T15:11 ET",
       "filled": "2026-10-16T13:03 ET",
       "fillPrice": 10.0,
@@ -1081,24 +1081,28 @@
       "collateral": 33000,
       "orderId": "6ad12568-1140-43e6-b935-7023d2081b57",
       "note": "Cash-secured short put placed by the user (one each in Individual and Joint). App projects TSLA lows of 329.78 (10/26) and 330.34 (11/05), right at the strike. Not part of the Agentic spread P&L.",
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 1,
           "limit": 5.0,
           "tif": "gtc",
           "orderId": "6ad2a0bb-43d3-4e7d-933a-035c97cdd79c",
-          "state": "queued",
+          "state": "cancelled 10/19 (replaced by a buy-to-close at $7.30)",
           "placed": "2026-10-16T18:09-18:10 ET",
           "target": "50% of $10.00 credit, +$500"
         }
-      ]
+      ],
+      "closePrice": 7.3,
+      "closeOrderId": "6ad61cd2-5313-42ab-a4a6-bddd5b66748a",
+      "closed": "2026-10-19T09:50 ET",
+      "pnl": 270
     },
     {
       "order": "sell to open TSLA $330 put 11/20 x1",
       "limit": 10.0,
       "tif": "gtc",
-      "status": "filled 10/16 1:03pm ET at $10.00 (open short put)",
+      "status": "filled 10/16 1:03pm ET at $10.00; closed 10/19 09:50 at $7.30, +$270",
       "placed": "2026-10-15T15:12 ET",
       "filled": "2026-10-16T13:03 ET",
       "fillPrice": 10.0,
@@ -1110,24 +1114,28 @@
       "collateral": 33000,
       "orderId": "6ad12594-e8f4-47c4-8f96-35fbe316ec41",
       "note": "Cash-secured short put placed by the user (one each in Individual and Joint). App projects TSLA lows of 329.78 (10/26) and 330.34 (11/05), right at the strike. Not part of the Agentic spread P&L.",
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 1,
           "limit": 5.0,
           "tif": "gtc",
           "orderId": "6ad2a0a0-3037-42da-bfc0-cc520468e7de",
-          "state": "queued",
+          "state": "cancelled 10/19 (replaced by a buy-to-close at $7.30)",
           "placed": "2026-10-16T18:09-18:10 ET",
           "target": "50% of $10.00 credit, +$500"
         }
-      ]
+      ],
+      "closePrice": 7.3,
+      "closeOrderId": "6ad61cbb-94bf-443a-9efe-f8ff16040f05",
+      "closed": "2026-10-19T09:50 ET",
+      "pnl": 270
     },
     {
       "order": "sell to open QQQ $700 put 11/20 x1",
       "limit": 12.5,
       "tif": "gtc",
-      "status": "filled 10/16 12:02pm ET at $12.50 (open short put)",
+      "status": "filled 10/16 12:02pm ET at $12.50; closed 10/19 10:18 at $10.00, +$250",
       "filled": "2026-10-16T12:02 ET",
       "fillPrice": 12.5,
       "breakeven": 687.5,
@@ -1135,17 +1143,21 @@
       "quantity": 1,
       "premium": 1250,
       "collateral": 70000,
-      "openQty": 1,
+      "openQty": 0,
       "placed": "2026-10-16T11:17 ET",
       "account": "Individual ••••8549",
       "orderId": "6ad23ff7-7c9d-47b9-a5f6-3583a5ca3df6",
-      "note": "Replaces the $13.40 GTC. Fills near QQQ ~$714 (app's projected 10/16 low 713.93). Not part of the Agentic spread P&L."
+      "note": "Replaces the $13.40 GTC. Fills near QQQ ~$714 (app's projected 10/16 low 713.93). Not part of the Agentic spread P&L.",
+      "closePrice": 10.0,
+      "closeOrderId": "6ad61cf0-fac9-417f-b84d-7a035d95d344",
+      "closed": "2026-10-19T10:18 ET",
+      "pnl": 250
     },
     {
       "order": "sell to open QQQ $700 put 11/20 x1",
       "limit": 12.5,
       "tif": "gtc",
-      "status": "filled 10/16 12:02pm ET at $12.50 (open short put)",
+      "status": "filled 10/16 12:02pm ET at $12.50; closed 10/19 10:18 at $10.00, +$250",
       "filled": "2026-10-16T12:02 ET",
       "fillPrice": 12.5,
       "breakeven": 687.5,
@@ -1153,17 +1165,21 @@
       "quantity": 1,
       "premium": 1250,
       "collateral": 70000,
-      "openQty": 1,
+      "openQty": 0,
       "placed": "2026-10-16T11:16 ET",
       "account": "Joint ••••6540",
       "orderId": "6ad23fd9-f831-4be4-a9b3-cb3fe49ee07c",
-      "note": "Replaces the $13.40 GTC. Fills near QQQ ~$714 (app's projected 10/16 low 713.93). Not part of the Agentic spread P&L."
+      "note": "Replaces the $13.40 GTC. Fills near QQQ ~$714 (app's projected 10/16 low 713.93). Not part of the Agentic spread P&L.",
+      "closePrice": 10.0,
+      "closeOrderId": "6ad61d16-42f8-4b67-bba3-29e51d613980",
+      "closed": "2026-10-19T10:18 ET",
+      "pnl": 250
     },
     {
       "order": "sell to open QQQ $700 put 11/20 x1",
       "limit": 16.0,
       "tif": "gfd",
-      "status": "filled 10/16 1:22pm at $16.03 (open short put)",
+      "status": "filled 10/16 1:22pm at $16.03; closed 10/19 10:18 at $10.00, +$603",
       "placed": "2026-10-16T13:22 ET",
       "filled": "2026-10-16T13:22 ET",
       "fillPrice": 16.03,
@@ -1174,30 +1190,34 @@
       "premium": 1603,
       "collateral": 70000,
       "orderId": "6ad25d73-785f-4584-a77f-a2f2040bc1b1",
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 1,
           "limit": 6.5,
           "tif": "gtc",
           "orderId": "6ad25f6b-ac94-4e05-b700-b5685e299f81",
-          "state": "working"
+          "state": "cancelled 10/19 (replaced by a buy-to-close at $10.00)"
         },
         {
           "qty": 1,
           "limit": 8.0,
           "tif": "gtc",
           "orderId": "6ad25f8b-f1d6-4632-86c6-dc0abafd97dd",
-          "state": "working"
+          "state": "cancelled 10/19 (replaced by a buy-to-close at $10.00)"
         }
       ],
-      "note": "Second open QQQ 700P in Individual (with the $12.50 fill; avg $14.265). Buy-to-close orders cover both contracts: $6.50 GTC (6ad25f6b) and $8.00 GTC (6ad25f8b), placed 1:31pm. Not part of the Agentic spread P&L."
+      "note": "Second open QQQ 700P in Individual (with the $12.50 fill; avg $14.265). Buy-to-close orders cover both contracts: $6.50 GTC (6ad25f6b) and $8.00 GTC (6ad25f8b), placed 1:31pm. Not part of the Agentic spread P&L.",
+      "closePrice": 10.0,
+      "closeOrderId": "6ad61d04-7354-4c5f-b480-3f1254a92126",
+      "closed": "2026-10-19T10:18 ET",
+      "pnl": 603
     },
     {
       "order": "sell to open QQQ $700 put 11/20 x1",
       "limit": 16.0,
       "tif": "gfd",
-      "status": "filled 10/16 1:22pm at $16.00 (open short put)",
+      "status": "filled 10/16 1:22pm at $16.00; closed 10/19 10:18 at $10.00, +$600",
       "placed": "2026-10-16T13:22 ET",
       "filled": "2026-10-16T13:22 ET",
       "fillPrice": 16.0,
@@ -1208,24 +1228,28 @@
       "premium": 1600,
       "collateral": 70000,
       "orderId": "6ad25d46-913e-48a8-be3a-ad7f2a395fce",
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 1,
           "limit": 6.5,
           "tif": "gtc",
           "orderId": "6ad25fdd-e91a-4176-b051-7a98612ec3b0",
-          "state": "working"
+          "state": "cancelled 10/19 (replaced by a buy-to-close at $10.00)"
         },
         {
           "qty": 1,
           "limit": 8.0,
           "tif": "gtc",
           "orderId": "6ad25fbe-3a25-4e2b-b71a-b7c5590ff35d",
-          "state": "working"
+          "state": "cancelled 10/19 (replaced by a buy-to-close at $10.00)"
         }
       ],
-      "note": "Second open QQQ 700P in Joint (with the $12.50 fill; avg $14.25). Buy-to-close orders cover both contracts: $6.50 GTC (6ad25fdd) and $8.00 GTC (6ad25fbe), placed 1:32-1:33pm. Not part of the Agentic spread P&L."
+      "note": "Second open QQQ 700P in Joint (with the $12.50 fill; avg $14.25). Buy-to-close orders cover both contracts: $6.50 GTC (6ad25fdd) and $8.00 GTC (6ad25fbe), placed 1:32-1:33pm. Not part of the Agentic spread P&L.",
+      "closePrice": 10.0,
+      "closeOrderId": "6ad61d2b-a704-4736-8122-acd361321d97",
+      "closed": "2026-10-19T10:18 ET",
+      "pnl": 600
     }
   ],
   "alerts": {
