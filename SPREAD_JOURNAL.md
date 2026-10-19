@@ -96,6 +96,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open QQQ $700 put 11/20 x1 | $16.00 GFD | filled 10/16 1:22pm at $16.00; closed 10/19 10:18am at $10.00, **+$600** ($6.50/$8.00 close orders cancelled) | $70,000 | 10/16 1:22pm |
 | Individual | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | filled 10/16 1:03pm at $10.00; closed 10/19 9:50am at $7.30, **+$270** ($5.00 GTC cancelled) | $33,000 | 10/15 3:11pm |
 | Joint | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | filled 10/16 1:03pm at $10.00; closed 10/19 9:50am at $7.30, **+$270** ($5.00 GTC cancelled) | $33,000 | 10/15 3:12pm |
+| Individual | Sell to open META $670 put 11/20 x1 | $25.00 GTC | working (replaced a $24.00 GTC from 12:46pm) | $67,000 | 10/19 1:29pm |
+| Joint | Sell to open META $670 put 11/20 x1 | $25.00 GTC | working (replaced a $24.00 GTC from 12:46pm) | $67,000 | 10/19 1:28pm |
 
 ## Alert log (graded at expiry, taken or not)
 
