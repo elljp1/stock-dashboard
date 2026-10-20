@@ -3383,3 +3383,45 @@ or stabilizes; whether tomorrow's run finally grades today's (10/19) session in 
 expected; and the same standing watch list - NVDA's small-sample hit rate, the GOOGL-highs/AMZN-
 lows naive-baseline gaps, HOOD's calibration ceiling, and whether SPY/VOO/META/SPCX ever produce a
 gradable swing.
+
+## 2026-10-20 (Tue) — another network-blocked session; grades flat; the open HOOD spread dipped into max-loss territory intraday
+
+**Data situation:** this session's attempt to re-download prices hit the same gateway-level "403
+Forbidden" block on all 12 tickers that's shown up on recent network-blocked days (confirmed via
+the proxy's own status log as a policy denial on Yahoo's address, not something Yahoo itself did).
+With no fresh CSVs to analyze, I left `analyze.py` and the published dashboard alone rather than
+risk overwriting good data; the site is running on today's separate scheduled GitHub Actions
+refresh, which reached Yahoo fine (generated 5:40 PM ET, last daily bar 10/20). I re-ran the
+coherence check against that published build and it passes clean (12 of 12 tickers).
+
+**Grades reviewed:** the swing-prediction track record is essentially unchanged from yesterday -
+TSLA n=13 (31%/38%), HOOD n=61 (18%/26%), QQQ n=61 (25%/30%), JPM n=28 (14%/21%), GOOGL n=36
+(19%/22%), NVDA n=17 (12%/18%); GC=F ticked up one sample to n=20 (20%/20%, was 19 at 21%/21% -
+noise, not a trend). AMZN/SPY/VOO/META/SPCX are still n=0. I checked why in detail today: it's not
+a glitch - these tickers' own swing charts show no *confirmed* reversal large enough to count as a
+gradable swing since each ticker's prediction logging began (SPY/VOO's last confirmed turn was
+March 30, the start of an unbroken rally since; AMZN's was August 3). The grader is working exactly
+as designed, it just has nothing to grade yet for names that haven't had a big enough trend change.
+The day-by-day high/low accuracy check (`horizonGrades`), which doesn't depend on a confirmed swing,
+is still updating fine for those same tickers (e.g. SPY's daily high/low miss is under 1% on
+average) - so the dashboard's honesty features aren't blind here, just one specific report is.
+
+**What I'm flagging, not fixing:** the owner's own open HOOD put-credit-spread (trade 8, opened
+10/5, expires 10/30) kept moving against the position - HOOD's intraday low today (10/20) touched
+$94.77, which is *below* the $96 long-put strike, meaning the spread briefly traded at its maximum
+possible loss before HOOD recovered to close at $98.21 (still under the $99.95 breakeven). This is
+the owner's own live position, not a dashboard bug, so I'm not touching code for it - just
+surfacing that the risk already flagged yesterday got measurably worse today, with 10 days left to
+expiry.
+
+**What changed and why:** no dashboard logic change today. Today's finding on *why* the n=0 tickers
+stay at zero is a useful diagnosis, but it describes intended zigzag behavior (no confirmed swing
+yet), not a bug to patch, and I have no fresh data today to safely test a change against anyway - so
+per the grade-and-log default, nothing shipped. Honesty features (hit-rate displays, random-control
+comparisons, grading, coherence gate) and `tickers.txt` are untouched.
+
+**Watch next:** whether HOOD closes below the $96 long strike outright before 10/30 expiry (that
+would lock in the max loss rather than just touching it intraday); whether tomorrow's run finally
+grades today's (10/20) session in `horizonGrades`; and the same standing watch list - NVDA's
+small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline gaps, HOOD's calibration ceiling,
+and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
