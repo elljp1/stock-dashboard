@@ -96,8 +96,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open QQQ $700 put 11/20 x1 | $16.00 GFD | filled 10/16 1:22pm at $16.00; closed 10/19 10:18am at $10.00, **+$600** ($6.50/$8.00 close orders cancelled) | $70,000 | 10/16 1:22pm |
 | Individual | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | filled 10/16 1:03pm at $10.00; closed 10/19 9:50am at $7.30, **+$270** ($5.00 GTC cancelled) | $33,000 | 10/15 3:11pm |
 | Joint | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | filled 10/16 1:03pm at $10.00; closed 10/19 9:50am at $7.30, **+$270** ($5.00 GTC cancelled) | $33,000 | 10/15 3:12pm |
-| Individual | Sell to open META $670 put 11/20 x1 | $25.00 GTC | working (replaced a $24.00 GTC from 12:46pm) | $67,000 | 10/19 1:29pm |
-| Joint | Sell to open META $670 put 11/20 x1 | $25.00 GTC | working (replaced a $24.00 GTC from 12:46pm) | $67,000 | 10/19 1:28pm |
+| Individual | Sell to open META $670 put 11/20 x1 | $25.00 GTC | filled 10/20 9:30am at $25.00; buy to close $20.00 GTC resting (placed 9:32am) | $67,000 | 10/19 1:29pm |
+| Joint | Sell to open META $670 put 11/20 x1 | $25.00 GTC | filled 10/20 9:30am at $25.00; buy to close $20.00 GTC resting (placed 9:32am) | $67,000 | 10/19 1:28pm |
 
 ## Alert log (graded at expiry, taken or not)
 
@@ -152,6 +152,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 47 | 10/19 9:35am | META 10/30 650/640 put (timing: place at today's low ~685, leg up to 10/26 high ~743; spans META 10/21 report; over 25% risk cap with trades 8 and 9) | $2.10 (limit $2.10, 1x) | Pushed; superseded 10/19 10:38am by #48 | void |
 | 48 | 10/19 10:38am | META 10/30 645/635 put (timing: place at today's low ~685, leg up to 10/26 high ~744; spans META 10/21 report; over 25% risk cap with trades 8 and 9) | $2.00 (limit $2.00, 1x) | Pushed; superseded 10/19 11:47am by #49 | void |
 | 49 | 10/19 11:47am | META 11/06 645/635 put (timing: place at today's low ~685, leg up to 10/30 high ~768; spans META 10/21 report; over 25% risk cap with trades 8 and 9) | $2.125 (limit $2.10, 1x) | Pushed, open | pending |
+| 50 | 10/20 9:40am | HOOD 11/06 93/88 put (timing: place at today's low ~93.89 2:29-3:24pm, leg up to 11/02 high ~114; strike from the app's low; credit 35% of width; spans HOOD 10/27 report) | $1.75 (limit $1.75, 4x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 

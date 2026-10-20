@@ -1255,7 +1255,7 @@
       "order": "sell to open META $670 put 11/20 x1",
       "limit": 25.0,
       "tif": "gtc",
-      "status": "working (resting GTC)",
+      "status": "filled 10/20 9:30am ET at $25.00; buy-to-close $20.00 GTC resting",
       "placed": "2026-10-19T13:29 ET",
       "placedAgent": "user",
       "account": "Individual ••••8549",
@@ -1270,13 +1270,26 @@
         "placed": "2026-10-19T12:46 ET",
         "state": "cancelled"
       },
-      "note": "Cash-secured short put placed by the user; $24 GTC (12:46pm) replaced by $25 GTC. 670P mark ~$21.03 at 2:38pm, so it needs META lower to fill (app projects today's low ~684.62 at 2:30-3:25pm). Not part of the Agentic spread P&L."
+      "note": "Cash-secured short put placed by the user; $24 GTC (12:46pm) replaced by $25 GTC. 670P mark ~$21.03 at 2:38pm, so it needs META lower to fill (app projects today's low ~684.62 at 2:30-3:25pm). Not part of the Agentic spread P&L.",
+      "filled": "2026-10-20T09:30 ET",
+      "fillPrice": 25.0,
+      "openQty": 1,
+      "closeOrders": [
+        {
+          "qty": 1,
+          "limit": 20.0,
+          "tif": "gtc",
+          "orderId": "6ad76d32-179c-4691-b93e-c1ba47989f95",
+          "placed": "2026-10-20T09:32 ET",
+          "state": "working"
+        }
+      ]
     },
     {
       "order": "sell to open META $670 put 11/20 x1",
       "limit": 25.0,
       "tif": "gtc",
-      "status": "working (resting GTC)",
+      "status": "filled 10/20 9:30am ET at $25.00; buy-to-close $20.00 GTC resting",
       "placed": "2026-10-19T13:28 ET",
       "placedAgent": "user",
       "account": "Joint ••••6540",
@@ -1291,7 +1304,20 @@
         "placed": "2026-10-19T12:46 ET",
         "state": "cancelled"
       },
-      "note": "Cash-secured short put placed by the user; $24 GTC (12:46pm) replaced by $25 GTC. 670P mark ~$21.03 at 2:38pm, so it needs META lower to fill (app projects today's low ~684.62 at 2:30-3:25pm). Not part of the Agentic spread P&L."
+      "note": "Cash-secured short put placed by the user; $24 GTC (12:46pm) replaced by $25 GTC. 670P mark ~$21.03 at 2:38pm, so it needs META lower to fill (app projects today's low ~684.62 at 2:30-3:25pm). Not part of the Agentic spread P&L.",
+      "filled": "2026-10-20T09:30 ET",
+      "fillPrice": 25.0,
+      "openQty": 1,
+      "closeOrders": [
+        {
+          "qty": 1,
+          "limit": 20.0,
+          "tif": "gtc",
+          "orderId": "6ad76d58-647c-44d4-b737-afcdd3d9706a",
+          "placed": "2026-10-20T09:32 ET",
+          "state": "working"
+        }
+      ]
     }
   ],
   "alerts": {
@@ -2471,6 +2497,32 @@
         "turnPrice": 767.55,
         "plannedExit": "close at the 10/30 projected high or at 50% of credit ($1.05); stop $4.20 debit or 645 breached",
         "note": "640P (-0.192) nearest 0.20 fails (640/630 $1.90, 0.19); next closer 645P (-0.21): 10.375 (10.10/10.65), 635P 8.25; credit/width 0.2125; OI 186. 3% rule vs today's 684.62 low: short <= 664.08. Spans META 10/21 report. 1x = 7.2%; with trades 8 and 9 total open risk $3,475 (31.6%, over 25%). Supersedes #48. User said 10/19 the spread alerts are underperforming; rule changes offered, not yet chosen."
+      },
+      {
+        "id": 50,
+        "date": "2026-10-20",
+        "time": "9:40 ET",
+        "taken": false,
+        "reason": "pushed; awaiting user",
+        "outcome": "pending",
+        "symbol": "HOOD",
+        "spread": "11/06 93/88 put credit",
+        "midAtAlert": 1.75,
+        "suggestedLimit": 1.75,
+        "shortDelta": -0.368,
+        "spot": 96.84,
+        "contracts": 4,
+        "maxLoss": 1300,
+        "breakeven": 91.25,
+        "legType": "next leg up (place at today's projected LOW; resting GTC to place at the turn)",
+        "entryTurnDate": "2026-10-20",
+        "entryTurnTime": "Sun 2:29-3:24 PM",
+        "entryTurnPrice": 93.89,
+        "turnDate": "2026-11-02",
+        "turnTime": "Venus 10:47-11:39 AM; Saturn 1:23-2:15 PM",
+        "turnPrice": 114.06,
+        "plannedExit": "GTC buy-back $1.23 (30% profit) until 10/27, then $0.88 (50%); close at the 11/02 projected high; stop $3.50 debit or 93 breached",
+        "note": "First alert under the user's 10/19 rules: strike from the app's projected low (first strike at or below 93.89), credit/width 0.35 >= 0.33. 93P 4.30 (4.25/4.35), 88P 2.55 (2.52/2.58); OI 223. Spans HOOD 10/27 report. Other 10/21-turn setups checked: GOOGL 10/30 332.5/327.5 $1.60 (0.32), QQQ 11/06 705/695 $2.765 (0.28), META 11/04 655/645 $3.275 (0.33 rounded down, 0.3275; no open interest, very wide quotes); none qualify."
       }
     ]
   },
