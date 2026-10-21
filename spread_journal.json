@@ -1255,7 +1255,7 @@
       "order": "sell to open META $670 put 11/20 x1",
       "limit": 25.0,
       "tif": "gtc",
-      "status": "filled 10/20 9:30am ET at $25.00; buy-to-close $20.00 GTC resting",
+      "status": "filled 10/20 9:30am ET at $25.00; closed 10/21 9:40am at $20.00, +$500",
       "placed": "2026-10-19T13:29 ET",
       "placedAgent": "user",
       "account": "Individual ••••8549",
@@ -1273,7 +1273,7 @@
       "note": "Cash-secured short put placed by the user; $24 GTC (12:46pm) replaced by $25 GTC. 670P mark ~$21.03 at 2:38pm, so it needs META lower to fill (app projects today's low ~684.62 at 2:30-3:25pm). Not part of the Agentic spread P&L.",
       "filled": "2026-10-20T09:30 ET",
       "fillPrice": 25.0,
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 1,
@@ -1281,15 +1281,19 @@
           "tif": "gtc",
           "orderId": "6ad76d32-179c-4691-b93e-c1ba47989f95",
           "placed": "2026-10-20T09:32 ET",
-          "state": "working"
+          "state": "filled 10/21 9:40am at $20.00"
         }
-      ]
+      ],
+      "closePrice": 20.0,
+      "closeOrderId": "6ad76d32-179c-4691-b93e-c1ba47989f95",
+      "closed": "2026-10-21T09:40 ET",
+      "pnl": 500
     },
     {
       "order": "sell to open META $670 put 11/20 x1",
       "limit": 25.0,
       "tif": "gtc",
-      "status": "filled 10/20 9:30am ET at $25.00; buy-to-close $20.00 GTC resting",
+      "status": "filled 10/20 9:30am ET at $25.00; closed 10/21 9:40am at $20.00, +$500",
       "placed": "2026-10-19T13:28 ET",
       "placedAgent": "user",
       "account": "Joint ••••6540",
@@ -1307,7 +1311,7 @@
       "note": "Cash-secured short put placed by the user; $24 GTC (12:46pm) replaced by $25 GTC. 670P mark ~$21.03 at 2:38pm, so it needs META lower to fill (app projects today's low ~684.62 at 2:30-3:25pm). Not part of the Agentic spread P&L.",
       "filled": "2026-10-20T09:30 ET",
       "fillPrice": 25.0,
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 1,
@@ -1315,9 +1319,13 @@
           "tif": "gtc",
           "orderId": "6ad76d58-647c-44d4-b737-afcdd3d9706a",
           "placed": "2026-10-20T09:32 ET",
-          "state": "working"
+          "state": "filled 10/21 9:40am at $20.00"
         }
-      ]
+      ],
+      "closePrice": 20.0,
+      "closeOrderId": "6ad76d58-647c-44d4-b737-afcdd3d9706a",
+      "closed": "2026-10-21T09:40 ET",
+      "pnl": 500
     }
   ],
   "alerts": {
@@ -2579,8 +2587,8 @@
         "date": "2026-10-21",
         "time": "9:39 ET",
         "taken": false,
-        "reason": "pushed 9:39am at $1.925 (limit $1.90); awaiting user",
-        "outcome": "pending",
+        "reason": "pushed 9:39am at $1.925 (limit $1.90); awaiting user; superseded 9:47am by #53 (app moved the exit high to 11/04, so expiry moved to 11/06)",
+        "outcome": "superseded",
         "symbol": "GOOGL",
         "spread": "11/04 325/320 put credit",
         "midAtAlert": 1.925,
@@ -2599,6 +2607,84 @@
         "turnPrice": 346.31,
         "plannedExit": "GTC buy-back $1.35 (30% profit) until 10/27, then $0.96 (50%); close at the 11/02 projected high; stop $3.85 debit or 325 breached",
         "note": "Strike from the app's projected low (first strike at or below 326.10); credit/width 0.385. 325P 7.80 (7.20/8.40), 320P 5.875 (5.45/6.30); OI 10/8. Spans GOOGL 10/28 report. Replaces #51. Also checked: TSLA 11/04 397.5/407.5 call $2.925 (0.29), META 11/13 645/635 put $2.20 (0.22)."
+      },
+      {
+        "id": 53,
+        "date": "2026-10-21",
+        "time": "9:47 ET",
+        "taken": false,
+        "outcome": "pending",
+        "entryTurnDate": "2026-10-21",
+        "reason": "pushed 9:47am at $1.80; awaiting user",
+        "symbol": "GOOGL",
+        "spread": "11/06 325/320 put credit",
+        "midAtAlert": 1.8,
+        "suggestedLimit": 1.8,
+        "shortDelta": -0.362,
+        "spot": 333.55,
+        "contracts": 4,
+        "maxLoss": 1280,
+        "breakeven": 323.2,
+        "legType": "next leg up (place at today's 10/21 projected LOW; resting GTC to place at the turn)",
+        "entryTurnTime": "Jupiter 9:56-10:51 AM; Sun 11:45-12:40 PM",
+        "entryTurnPrice": 326.1,
+        "turnDate": "2026-11-04",
+        "turnTime": "Venus 11:39-12:30 PM; Saturn 2:14-3:05 PM",
+        "turnPrice": 349.28,
+        "plannedExit": "GTC buy-back $1.26 (30% profit) until 10/28, then $0.90 (50%); close at the 11/04 projected high; stop $3.60 debit or 325 breached",
+        "note": "Replaces #52 (same strikes; expiry moved with the app's exit turn). 325P 7.90 (7.65/8.15), 320P 6.10 (5.90/6.30); credit/width 0.36. Spans GOOGL 10/28 report."
+      },
+      {
+        "id": 54,
+        "date": "2026-10-21",
+        "time": "9:47 ET",
+        "taken": false,
+        "outcome": "pending",
+        "entryTurnDate": "2026-10-21",
+        "reason": "pushed 9:47am at $4.025 (limit $4.00); awaiting user",
+        "symbol": "TSLA",
+        "spread": "11/04 390/400 call credit",
+        "midAtAlert": 4.025,
+        "suggestedLimit": 4.0,
+        "shortDelta": 0.484,
+        "spot": 385.39,
+        "contracts": 2,
+        "maxLoss": 1195,
+        "breakeven": 394.03,
+        "legType": "next leg down (place at today's 10/21 projected HIGH; resting GTC to place at the turn)",
+        "entryTurnTime": "Saturn 9:30-9:56 AM; Moon 2:29-3:23 PM; Saturn 3:23-4:00 PM",
+        "entryTurnPrice": 389.34,
+        "turnDate": "2026-10-30",
+        "turnTime": "Jupiter 10:54-11:46 AM; Venus 1:32-2:24 PM",
+        "turnPrice": 359.97,
+        "plannedExit": "GTC buy-back $2.82 (30% profit) until 10/26, then $2.01 (50%); close at the 10/30 projected low; stop $8.05 debit or 390 breached",
+        "note": "Strike from the app's projected high (first strike at or above 389.34). 390C 14.25 (14.05/14.45), 400C 10.225 (10.00/10.45); credit/width 0.40. Spans TSLA 10/21 report (pm)."
+      },
+      {
+        "id": 55,
+        "date": "2026-10-21",
+        "time": "9:47 ET",
+        "taken": false,
+        "outcome": "pending",
+        "entryTurnDate": "2026-10-21",
+        "reason": "pushed 9:47am at $3.325 (limit $3.30); awaiting user",
+        "symbol": "META",
+        "spread": "11/13 675/665 put credit",
+        "midAtAlert": 3.325,
+        "suggestedLimit": 3.3,
+        "shortDelta": -0.319,
+        "spot": 708.02,
+        "contracts": 2,
+        "maxLoss": 1335,
+        "breakeven": 671.68,
+        "legType": "next leg up (place at today's 10/21 projected LOW; resting GTC to place at the turn)",
+        "entryTurnTime": "Saturn 9:30-9:56 AM; Venus 12:40-1:34 PM; Saturn 3:23-4:00 PM",
+        "entryTurnPrice": 679.69,
+        "turnDate": "2026-11-09",
+        "turnTime": "9:30 AM",
+        "turnPrice": 781.49,
+        "plannedExit": "GTC buy-back $2.33 (30% profit) until 10/30, then $1.66 (50%); close at the 11/09 projected high; stop $6.65 debit or 675 breached",
+        "note": "Strike from the app's projected low (first strike at or below 679.69). 675P 19.25 (18.90/19.60), 665P 15.925 (15.65/16.20); credit/width 0.33. Spans META 10/21 report (pm)."
       }
     ]
   },
