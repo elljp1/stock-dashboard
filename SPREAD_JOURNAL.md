@@ -158,6 +158,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 53 | 10/21 9:47am | GOOGL 11/06 325/320 put (timing: place at today's low ~326.10, leg up to 11/04 high ~349; strike from the app's low; credit 36% of width; spans GOOGL 10/28 report; replaces #52) | $1.80 (limit $1.80, 4x) | Pushed, open | pending |
 | 54 | 10/21 9:47am | TSLA 11/04 390/400 call (timing: place at today's high ~389.34, leg down to 10/30 low ~360; strike from the app's high; credit 40% of width; spans TSLA 10/21 report) | $4.025 (limit $4.00, 2x) | Pushed, void 10/21 10:38am (app raised today's TSLA high to ~397.30; 397.5/407.5 pays 32%) | void |
 | 55 | 10/21 9:47am | META 11/13 675/665 put (timing: place at today's low ~679.69, leg up to 11/09 high ~781; strike from the app's low; credit 33% of width; spans META 10/21 report) | $3.325 (limit $3.30, 2x) | Pushed; 10:38am entry moved to 10/22; void 11:46am (app dropped the META low; next turn is an 11/04 high ~808) | void |
+| 56 | 10/21 12:16pm | TSLA 11/04 397.5/407.5 call (timing: place at today's high ~397.30 2:29-4:00pm, leg down to 10/30 low ~367; strike from the app's high; credit 34% of width; spans TSLA 10/21 report) | $3.375 (limit $3.35, 2x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
