@@ -255,8 +255,9 @@ function periodView(D, per){
   const lastClose = D.chart.dates[D.chart.dates.length - 1];
   (D.predictions || []).filter(p => p.isoDate > lastClose).slice(0, 5)
     .filter(p => per === "D" || p.isoDate <= span[1])
-    .forEach(p => { const b = turnBand(D, p);
-      fc.push({src:"turn", type:p.type, date:p.isoDate, price:p.price, lo:b ? b.lo : null, hi:b ? b.hi : null, basis:b ? b.basis : null}); });
+    // no price range on projected turns (user 10/21): far-out ranges were so wide a low's range topped the
+    // high before it, which told the reader nothing; the turn shows its projected price and date only
+    .forEach(p => fc.push({src:"turn", type:p.type, date:p.isoDate, price:p.price, lo:null, hi:null, basis:null}));
   const pool = per === "D" ? fc.filter(p => p.src === "day") : fc;
   const best = (type, better) => pool.filter(p => p.type === type).reduce((a, b) => (!a || better(b.price, a.price)) ? b : a, null);
   // already traded: today so far (D); the period so far through yesterday plus today so far (W/M/Y)
