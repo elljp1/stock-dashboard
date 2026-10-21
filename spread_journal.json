@@ -2529,8 +2529,8 @@
         "date": "2026-10-20",
         "time": "9:48 ET",
         "taken": false,
-        "reason": "pushed 9:48am at $1.65; re-pushed 2:39pm at $1.80 and 3:38pm at $1.925 (limit $1.90); awaiting user",
-        "outcome": "pending",
+        "reason": "pushed 9:48am at $1.65; re-pushed 2:39pm at $1.80 and 3:38pm at $1.925 (limit $1.90); awaiting user; superseded 10/21 9:39am by #52 (app moved the exit high to 11/02 and the low to ~326.10)",
+        "outcome": "superseded",
         "symbol": "GOOGL",
         "spread": "10/30 332.5/327.5 put credit",
         "midAtAlert": 1.65,
@@ -2573,6 +2573,32 @@
             "plannedExit": "GTC buy-back $1.35 (30% profit) until 10/23, then $0.96 (50%); close at the 10/26 projected high; stop $3.85 debit or 332.5 breached"
           }
         ]
+      },
+      {
+        "id": 52,
+        "date": "2026-10-21",
+        "time": "9:39 ET",
+        "taken": false,
+        "reason": "pushed 9:39am at $1.925 (limit $1.90); awaiting user",
+        "outcome": "pending",
+        "symbol": "GOOGL",
+        "spread": "11/04 325/320 put credit",
+        "midAtAlert": 1.925,
+        "suggestedLimit": 1.9,
+        "shortDelta": -0.365,
+        "spot": 333.46,
+        "contracts": 4,
+        "maxLoss": 1230,
+        "breakeven": 323.08,
+        "legType": "next leg up (place at today's 10/21 projected LOW; resting GTC to place at the turn)",
+        "entryTurnDate": "2026-10-21",
+        "entryTurnTime": "Jupiter 9:56-10:51 AM; Sun 11:45-12:40 PM",
+        "entryTurnPrice": 326.1,
+        "turnDate": "2026-11-02",
+        "turnTime": "Venus 10:47-11:39 AM; Saturn 1:23-2:15 PM",
+        "turnPrice": 346.31,
+        "plannedExit": "GTC buy-back $1.35 (30% profit) until 10/27, then $0.96 (50%); close at the 11/02 projected high; stop $3.85 debit or 325 breached",
+        "note": "Strike from the app's projected low (first strike at or below 326.10); credit/width 0.385. 325P 7.80 (7.20/8.40), 320P 5.875 (5.45/6.30); OI 10/8. Spans GOOGL 10/28 report. Replaces #51. Also checked: TSLA 11/04 397.5/407.5 call $2.925 (0.29), META 11/13 645/635 put $2.20 (0.22)."
       }
     ]
   },

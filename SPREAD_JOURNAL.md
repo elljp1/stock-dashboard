@@ -153,7 +153,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 48 | 10/19 10:38am | META 10/30 645/635 put (timing: place at today's low ~685, leg up to 10/26 high ~744; spans META 10/21 report; over 25% risk cap with trades 8 and 9) | $2.00 (limit $2.00, 1x) | Pushed; superseded 10/19 11:47am by #49 | void |
 | 49 | 10/19 11:47am | META 11/06 645/635 put (timing: place at today's low ~685, leg up to 10/30 high ~768; spans META 10/21 report; over 25% risk cap with trades 8 and 9) | $2.125 (limit $2.10, 1x) | Pushed, open | pending |
 | 50 | 10/20 9:40am | HOOD 11/06 93/88 put (timing: place at today's low ~93.89 2:29-3:24pm, leg up to 11/02 high ~114; strike from the app's low; credit 35% of width; spans HOOD 10/27 report) | $1.75 (limit $1.75, 4x) | Pushed, void 10/20 10:38am (app dropped today's HOOD low; next turn is a 10/23 high ~109) | void |
-| 51 | 10/20 9:48am | GOOGL 10/30 332.5/327.5 put (timing: place at the 10/21 low ~334.84, leg up to 10/26 high ~349; strike from the app's low; credit 33% of width; spans GOOGL 10/28 report) | $1.65 (limit $1.65, 4x) | Pushed, open; re-pushed 2:39pm at $1.80 and 3:38pm at $1.925 (limit $1.90, 4x) | pending |
+| 51 | 10/20 9:48am | GOOGL 10/30 332.5/327.5 put (timing: place at the 10/21 low ~334.84, leg up to 10/26 high ~349; strike from the app's low; credit 33% of width; spans GOOGL 10/28 report) | $1.65 (limit $1.65, 4x) | Pushed; re-pushed 2:39pm at $1.80 and 3:38pm at $1.925; superseded 10/21 by #52 (app moved the exit high to 11/02, low to ~326.10) | superseded |
+| 52 | 10/21 9:39am | GOOGL 11/04 325/320 put (timing: place at today's low ~326.10 9:56-10:51am or 11:45am-12:40pm, leg up to 11/02 high ~346; strike from the app's low; credit 38.5% of width; spans GOOGL 10/28 report) | $1.925 (limit $1.90, 4x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
