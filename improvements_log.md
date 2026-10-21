@@ -3425,3 +3425,45 @@ would lock in the max loss rather than just touching it intraday); whether tomor
 grades today's (10/20) session in `horizonGrades`; and the same standing watch list - NVDA's
 small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline gaps, HOOD's calibration ceiling,
 and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
+
+## 2026-10-21 (Wed) — daily review: HOOD's open spread recovered sharply; grades mostly flat, no code change
+
+**Data situation:** today's download attempt hit the same gateway-level "403 Forbidden"/tunnel
+block on all 12 tickers that's shown up on most recent sessions (confirmed in the proxy's own
+status log as a policy denial on Yahoo's address, not a Yahoo-side block), so `analyze.py` was
+left alone rather than run against no fresh CSVs. The dashboard is running on today's separate
+scheduled GitHub Actions refresh, which reached Yahoo fine and published today's real close
+(generated 5:40 PM ET, last daily bar 10/21). Re-ran the coherence check, the full 136-test suite,
+and the anomaly audit against that published build: coherence passes clean (12/12 tickers), every
+test passes, and the anomaly audit finds no chain/level/trade-card inconsistencies.
+
+**Grades reviewed:** mostly small, expected moves - TSLA n=13 (31%/38%, unchanged), HOOD n=63
+(17%/25%, was 61 at 18%/26%), QQQ n=63 (24%/29%, was 61 at 25%/30%), JPM n=29 (14%/21%, was 28 at
+14%/21%), NVDA n=18 (11%/17%, was 17 at 12%/18%), GC=F n=21 (19%/19%, was 20 at 20%/20%) - all
+normal noise on small samples, not a trend. GOOGL jumped from n=36 to n=45 (20%/22%, was 19%/22%)
+- a batch of nine predictions resolved at once because a confirmed GOOGL swing landed that several
+earlier forecasts had been pointing at; checked this isn't a double-counting bug (the published
+`resolved` list is just the last 30 of the full `n`, by design, same as every other ticker) and
+it's a legitimate one-day batch of resolutions, not an anomaly. AMZN/SPY/VOO/META/SPCX are still
+n=0, same already-diagnosed reason (no confirmed swing yet for those tickers' prediction windows).
+
+**What I'm flagging, not fixing (good news this time):** the owner's open HOOD put credit spread
+(sold the $101 put, bought the $96 put, 3 contracts, opened 10/5, expires 10/30) that touched its
+maximum-loss zone intraday yesterday (HOOD traded as low as $94.77) recovered sharply today - HOOD
+closed at $102.08, back *above* both the $101 short strike and the $99.95 breakeven. The spread is
+now in profitable territory again with 9 days left to expiry, a big swing from yesterday's close of
+$98.21. Also checked the other open credit spread, META 11/20 670/660 puts (trade 9): META closed
+at $724.54, comfortably above the $670 short strike, no concern there. Neither is a dashboard bug,
+so no code change - just surfacing the state of both live positions.
+
+**What changed and why:** no dashboard logic change today. Everything mechanical is healthy
+(coherence, tests, anomaly audit all clean), the GOOGL batch-resolution was verified as legitimate
+rather than a bug, and nothing else here clears the 3+-day-pattern-plus-clear-bug bar - the n=0
+tickers and HOOD's calibration ceiling are already-diagnosed, ongoing conditions. Honesty features
+(hit-rate displays, random-control comparisons, grading, coherence gate) and `tickers.txt` are
+untouched.
+
+**Watch next:** whether HOOD's recovery holds into the 10/30 expiry or reverses again; whether
+tomorrow's run grades today's (10/21) session in `horizonGrades`; and the same standing watch list
+- NVDA's small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline gaps, HOOD's calibration
+ceiling, and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
