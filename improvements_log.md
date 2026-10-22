@@ -3467,3 +3467,52 @@ untouched.
 tomorrow's run grades today's (10/21) session in `horizonGrades`; and the same standing watch list
 - NVDA's small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline gaps, HOOD's calibration
 ceiling, and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
+
+## 2026-10-22 (Thu) — a hard risk-off day; both open real spreads got hit, HOOD's badly, with 8 days left
+
+**Data situation:** today's download attempt hit the same gateway-level block on all 12 tickers
+seen on most recent sessions (confirmed in the proxy's own status log as a policy denial on
+Yahoo's address), so `analyze.py` was left alone rather than run against missing CSVs - it
+correctly refused and raised rather than overwrite the published build. The dashboard is running
+on today's separate scheduled GitHub Actions refresh, which reached Yahoo fine and published
+today's real close (generated 6:03 PM ET, last daily bar 10/22). Re-ran the coherence check, the
+full 136-test suite, and the anomaly audit against that published build: coherence passes clean
+(12/12 tickers), every test passes, and the anomaly audit finds no chain/level/trade-card
+inconsistencies.
+
+**Grades reviewed:** no new resolutions since yesterday - every ticker's `n` and hit-rate numbers
+are unchanged (TSLA 13, HOOD 63, QQQ 63, JPM 29, GOOGL 45, NVDA 18, GC=F 21; AMZN/SPY/VOO/META/SPCX
+still n=0). `horizonGrades`'s last graded session is still 10/21 for every ticker, as expected since
+today's close wasn't yet available when that log was built - should pick up 10/22 tomorrow. Nothing
+here clears the 3+-day pattern-plus-bug bar.
+
+**What I'm flagging (today's real news, not a dashboard bug):** it was a broad risk-off day -
+QQQ -2.9%, SPY -1.2%, TSLA -3.1%, NVDA -4.4%, GOOGL -3.1% - but the owner's two open real spreads
+both got hit much harder than the market:
+- **HOOD put credit spread (trade 8: sold $101 put / bought $96 put, 3 contracts, opened 10/5,
+  expires 10/30 - only 8 days left).** HOOD fell 5.3% to close $96.58, after an intraday low of
+  $95.62 at 2:00 PM that broke *below* the $96 long-put strike - meaning the spread touched
+  max-loss territory intraday. The close at $96.58 is only $0.58 above the long strike, essentially
+  at max loss, well under the $99.95 breakeven. With just over a week to expiry this is the
+  position to watch most closely.
+- **META put credit spread (trade 9: sold $670 put / bought $660 put, 2 contracts, opened 10/16,
+  expires 11/20 - 29 days left).** META fell 7.0% to close $648.85 (intraday low $639.69 at
+  3:15 PM), landing *below* the $660 long strike - also in max-loss territory for now, though with
+  four weeks left to recover. The spread journal already flagged this spread as spanning META's
+  10/21 earnings report, so this looks like a post-earnings reaction rather than a surprise.
+  Checked the dashboard's own forecast chain for context: it had already been projecting a lower
+  low on 10/23 for both names (HOOD $93.89, META $634.84) before today's drop, so the direction
+  wasn't unforecast, even though the one-day size of the move (especially META's) was large.
+
+**What changed and why:** no dashboard logic change today. Everything mechanical is healthy
+(coherence, tests, anomaly audit all clean), there were no new grades to analyze for a pattern, and
+nothing here clears the 3+-day-pattern-plus-clear-bug bar - today's story is a real market move
+against two live positions, not a code issue. Honesty features (hit-rate displays, random-control
+comparisons, grading, coherence gate) and `tickers.txt` are untouched.
+
+**Watch next:** HOOD's spread with only 8 days to the 10/30 expiry - whether it can recover back
+above the $99.95 breakeven the way it did on 10/21, or whether it's now looking like a likely
+max-loss outcome; META's spread has more runway (29 days) but needs a real bounce off today's
+$639.69 low; whether tomorrow's run grades today's (10/22) session in `horizonGrades`; and the
+standing watch list - NVDA's small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline gaps,
+HOOD's calibration ceiling, and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
