@@ -100,8 +100,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open META $670 put 11/20 x1 | $25.00 GTC | filled 10/20 9:30am at $25.00; closed 10/21 9:40am at $20.00 (buy to close placed 10/20 9:32am), +$500 | $67,000 | 10/19 1:28pm |
 | Individual | Sell to open META $650 put 11/20 x1 | $25.00 GTC | filled 10/22 9:36am at $25.00; buy to close $20.00 GTC resting (placed 10:00am) | $65,000 | 10/22 9:32am |
 | Joint | Sell to open META $650 put 11/20 x1 | $25.00 GTC | filled 10/22 9:36am at $25.00; buy to close $20.00 GTC resting (placed 10:00am) | $65,000 | 10/22 9:33am |
-| Individual | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | resting | $68,500 | 10/22 10:40am |
-| Joint | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | resting | $68,500 | 10/22 10:40am |
+| Individual | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; no exit order | $68,500 | 10/22 10:40am |
+| Joint | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; no exit order | $68,500 | 10/22 10:40am |
 
 ## Alert log (graded at expiry, taken or not)
 
@@ -165,10 +165,13 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 56 | 10/21 12:16pm | TSLA 11/04 397.5/407.5 call (timing: place at today's high ~397.30 2:29-4:00pm, leg down to 10/30 low ~367; strike from the app's high; credit 34% of width; spans TSLA 10/21 report) | $3.375 (limit $3.35, 2x) | Pushed; superseded 3:38pm by #58, restored 3:46pm; void 10/22 (high moved to 10/23; credit 26%) | void |
 | 57 | 10/21 3:10pm | META 11/13 675/665 put (timing: place at the 10/22 low ~679.69 9:57-10:51am or 12:40-1:34pm, leg up to 11/09 high ~780; strike from the app's low; credit 36% of width; spans META 10/21 report; app restored the low after #55 was voided) | $3.55 (limit $3.50, 2x) | Pushed; void 10/22 (META fell to ~656; app low now 10/23 ~635; 630/620 pays 29%) | void |
 | 58 | 10/21 3:38pm | TSLA 11/04 390/400 call (timing: place at today's high ~389.62 3:23-4:00pm, leg down to 10/30 low ~363; strike from the app's high; credit 41% of width; spans TSLA 10/21 report; replaces #56) | $4.125 (limit $4.10, 2x) | Pushed; superseded 3:46pm (app moved the high back to ~397.30, so #56 applies) | superseded |
-| 59 | 10/22 11:18am | QQQ 11/03 705/695 put (timing: place at the 10/23 low ~705.82 9:57-10:51am, leg up to 10/30 high ~732; strike from the app's low; credit 34% of width) | $3.36 (limit $3.35, 2x) | Pushed, open | pending |
-| 60 | 10/22 11:18am | GOOGL 11/06 322.5/317.5 put (timing: place at the 10/23 low ~323.44 10:51-11:46am or 12:40-1:34pm, leg up to 11/04 high ~348; strike from the app's low; credit 41% of width; spans GOOGL 10/28 report; replaces #53) | $2.05 (limit $2.05, 4x) | Pushed, open | pending |
-| 61 | 10/22 11:50am | TSLA 11/04 390/400 call (timing: place at the 10/23 high ~389.64 9:30-10:51am or 3:22-4:00pm, leg down to 10/30 low ~363; strike from the app's high; credit 34% of width) | $3.40 (limit $3.40, 2x) | Pushed, open | pending |
-| 62 | 10/22 11:50am | HOOD 11/06 93/88 put (timing: place at the 10/23 low ~93.89 12:40-1:34pm, leg up to 11/02 high ~110; strike from the app's low; credit 33% of width; spans HOOD 10/27 report) | $1.665 (limit $1.65, 4x) | Pushed, open | pending |
+| 59 | 10/22 11:18am | QQQ 11/03 705/695 put (timing: place at the 10/23 low ~705.82 9:57-10:51am, leg up to 10/30 high ~732; strike from the app's low; credit 34% of width) | $3.36 (limit $3.35, 2x) | Pushed; superseded 10/22 2:38pm by #65 (app lowered the low to ~703.06) | superseded |
+| 60 | 10/22 11:18am | GOOGL 11/06 322.5/317.5 put (timing: place at the 10/23 low ~323.44 10:51-11:46am or 12:40-1:34pm, leg up to 11/04 high ~348; strike from the app's low; credit 41% of width; spans GOOGL 10/28 report; replaces #53) | $2.05 (limit $2.05, 4x) | Pushed; superseded 10/22 2:38pm by #64 (app lowered the low to ~316.40) | superseded |
+| 61 | 10/22 11:50am | TSLA 11/04 390/400 call (timing: place at the 10/23 high ~389.64 9:30-10:51am or 3:22-4:00pm, leg down to 10/30 low ~363; strike from the app's high; credit 34% of width) | $3.40 (limit $3.40, 2x) | Pushed; void 10/22 2:38pm (TSLA fell to ~376; credit 26%) | void |
+| 62 | 10/22 11:50am | HOOD 11/06 93/88 put (timing: place at the 10/23 low ~93.89 12:40-1:34pm, leg up to 11/02 high ~110; strike from the app's low; credit 33% of width; spans HOOD 10/27 report) | $1.665 (limit $1.65, 4x) | Pushed; re-pushed 2:38pm at $1.87 | pending |
+| 63 | 10/22 2:38pm | META 11/13 630/620 put (timing: place at the 10/23 low ~634.84 1:34-2:28pm, leg up to 11/09 high ~736; strike from the app's low; credit 39% of width) | $3.875 (limit $3.85, 2x) | Pushed, open | pending |
+| 64 | 10/22 2:38pm | GOOGL 11/06 315/310 put (timing: place at the 10/23 low ~316.40 10:51-11:46am or 12:40-1:34pm, leg up to 11/04 high ~337; strike from the app's low; credit 34.5% of width; spans GOOGL 10/28 report; replaces #60) | $1.725 (limit $1.70, 4x) | Pushed, open | pending |
+| 65 | 10/22 2:38pm | QQQ 11/03 700/690 put (timing: place at the 10/23 low ~703.06 9:57-10:51am, leg up to 10/30 high ~728; 693P not listed, so 700/690; credit 34% of width; replaces #59) | $3.37 (limit $3.35, 2x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
