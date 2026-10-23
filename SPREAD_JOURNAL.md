@@ -100,8 +100,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open META $670 put 11/20 x1 | $25.00 GTC | filled 10/20 9:30am at $25.00; closed 10/21 9:40am at $20.00 (buy to close placed 10/20 9:32am), +$500 | $67,000 | 10/19 1:28pm |
 | Individual | Sell to open META $650 put 11/20 x1 | $25.00 GTC | filled 10/22 9:36am at $25.00; buy to close $20.00 GTC resting (placed 10:00am) | $65,000 | 10/22 9:32am |
 | Joint | Sell to open META $650 put 11/20 x1 | $25.00 GTC | filled 10/22 9:36am at $25.00; buy to close $20.00 GTC resting (placed 10:00am) | $65,000 | 10/22 9:33am |
-| Individual | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; no exit order | $68,500 | 10/22 10:40am |
-| Joint | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; no exit order | $68,500 | 10/22 10:40am |
+| Individual | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; buy-to-close $6.25 GTC resting (placed 10/23 1:58am) | $68,500 | 10/22 10:40am |
+| Joint | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; buy-to-close $6.25 GTC resting (placed 10/23 1:58am) | $68,500 | 10/22 10:40am |
 
 ## Alert log (graded at expiry, taken or not)
 
