@@ -3561,3 +3561,49 @@ has roughly four weeks of runway but is still underwater and needs a real bounce
 whether tomorrow's run grades today's (10/23) session in `horizonGrades`; and the standing list -
 NVDA's small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline gaps, HOOD's calibration
 ceiling, and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
+
+## 2026-10-24 (Sat) — weekend, no new session; fetch blocked again; grade + log only
+
+**Today's data situation:** today is a Saturday, so there was no new trading session to grade
+regardless. This sandbox's own attempt to re-download prices (`fetch_data.py`) was blocked before
+it ever reached Yahoo — all 12 tickers and the pre/post-market fetch failed with "Tunnel
+connection failed: 403 Forbidden," which is this sandbox's own network proxy refusing the
+connection, not a Yahoo-side block. Raw per-ticker CSVs aren't committed to the repo (gitignored -
+only the built `data.js` is published), so there was no local cache to fall back to either, and
+per the standing rule `analyze.py` was correctly left untouched rather than run against missing
+files. The dashboard is still running on the separate scheduled GitHub Actions refresh's last
+build (generated Friday 10/23 6:17 PM ET, last daily bar 10/23 - the most recent real trading
+session; nothing new has landed from that workflow since, as expected on a weekend). Ran the
+coherence check and the full test suite (all 13 `test_*.py` files, 136 tests) against that
+published build: coherence passes clean (12/12 tickers), and every test passes.
+
+**One thing flagged, not fixed:** `anomaly_audit.py` now reports 6 "chain still shows a PAST
+event 2026-10-23" anomalies (HOOD, QQQ, JPM, GOOGL, AMZN, META), because the confluence chain
+hasn't rolled forward since Friday's refresh and today is later than the dated event it's still
+pointing to. This is the same well-documented weekend staleness artifact noted on prior
+Saturdays/Sundays this quarter (e.g. 10/10-10/11, 10/17-10/18) - it is not a logic bug, and it
+reliably clears itself the moment the next weekday scheduled refresh runs. No action needed.
+
+**Grades reviewed:** every swing-grading number is byte-for-byte identical to yesterday's (Friday
+10/23) entry, exactly as expected with no new session to grade: TSLA n=13 (31%/38%), HOOD n=64
+(17%/25%), QQQ n=64 (23%/28%), JPM n=29 (14%/21%), GOOGL n=45 (20%/22%), NVDA n=19 (11%/16%), GC=F
+n=22 (18%/18%). AMZN, SPY, VOO, META and SPCX remain at n=0 - the same already-diagnosed, ongoing
+condition, not a new pattern. The two open real spreads from the owner's journal are unchanged
+from Friday's close: the HOOD put credit spread (trade 8, sold $101P/bought $96P x3, expires
+10/30 - still 5 trading days left once Monday opens) closed Friday at $95.07, still below the $96
+long strike; the META put credit spread (trade 9, sold $670P/bought $660P x2, expires 11/20)
+closed Friday at $642.62, still well below the $660 long strike but with much more runway. Neither
+moved over the weekend because the market was closed - this is unchanged real-market exposure, not
+a dashboard issue.
+
+**What changed and why:** no dashboard logic change today - nothing failed, nothing regressed,
+and there was no new data to act on or new pattern clearing the 3+-day bar for a code change. The
+anomaly flag above is a known, already-diagnosed weekend artifact. Honesty features (hit-rate
+displays, random-control comparisons, grading, coherence gate) and `tickers.txt` are untouched.
+
+**Watch next:** confirm Monday's scheduled refresh clears today's stale 10-23 chain entries on
+HOOD/QQQ/JPM/GOOGL/AMZN/META as it has every prior weekend; whether HOOD's spread (now entering
+its final week before the 10/30 expiry) can recover above the $99.95 breakeven or is heading to a
+realized loss; whether META's spread finds a bounce with its longer runway; and the standing list -
+NVDA's small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline gaps, HOOD's calibration
+ceiling, and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
