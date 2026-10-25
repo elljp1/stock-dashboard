@@ -3607,3 +3607,53 @@ its final week before the 10/30 expiry) can recover above the $99.95 breakeven o
 realized loss; whether META's spread finds a bounce with its longer runway; and the standing list -
 NVDA's small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline gaps, HOOD's calibration
 ceiling, and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
+
+## 2026-10-25 (Sun) — weekend, no new session; fetch blocked again; grade + log only
+
+**Today's data situation:** today is a Sunday, so there was no new trading session to grade
+regardless. This sandbox's own attempt to re-download prices (`fetch_data.py`) was blocked before
+it ever reached Yahoo - all 12 tickers and the pre/post-market fetch failed with "Tunnel
+connection failed: 403 Forbidden," the same sandbox-proxy block seen on prior weekend runs, not a
+Yahoo-side block. No raw per-ticker CSVs exist locally (they're gitignored and weren't recreated),
+so per the standing rule `analyze.py` was correctly left untouched rather than run against missing
+files. The dashboard is still running on the separate scheduled GitHub Actions refresh's last
+build (generated Saturday 10/24 6:21 PM ET, last daily bar still 10/23 - the most recent real
+trading session; nothing new has landed from that workflow since). Ran the coherence check and the
+full test suite (all 14 `test_*.py` files, 136 tests, 14 subtests) and the anomaly audit against
+that published build: coherence passes clean (12/12 tickers), every test passes, and - unlike
+Saturday's run - the anomaly audit now reports **zero** anomalies (the prior stale "chain still
+shows a PAST event 2026-10-23" flags on HOOD/QQQ/JPM/GOOGL/AMZN/META have cleared on their own,
+exactly as expected once the dated chain events were no longer in the future relative to the
+refresh).
+
+**Grades reviewed:** every swing-grading number is byte-for-byte identical to Friday/Saturday's
+entries, exactly as expected with no new session to grade: TSLA n=13 (31%/38%), HOOD n=64
+(17%/25%), QQQ n=64 (23%/28%), JPM n=29 (14%/21%), GOOGL n=45 (20%/22%), NVDA n=19 (11%/16%), GC=F
+n=22 (18%/18%). AMZN, SPY, VOO, META and SPCX remain at n=0 - the same already-diagnosed, ongoing
+condition, not a new pattern. The two open real spreads from the owner's journal are unchanged
+from Friday's close (markets were closed all weekend): the HOOD put credit spread (trade 8, sold
+$101 put / bought $96 put x3, expires 10/30) is still sitting at essentially its $1,185 max loss,
+last priced with HOOD at $94.90-$95.04, below the $96 long strike and the $99.95 breakeven - Monday
+will start its final week (5 trading days: 10/26-10/30) with no recovery yet. The META put credit
+spread (trade 9, sold $670 put / bought $660 put x2, expires 11/20) is still underwater too, last
+priced with META at $640.10-$640.20 versus the $660 long strike and $667.50 breakeven, but with
+about four weeks of runway left. Neither moved over the weekend because the market was closed -
+this is unchanged real-market exposure, not a dashboard issue.
+
+**What changed and why:** no dashboard logic change today - nothing failed, nothing regressed, and
+there was no new data to act on or new pattern clearing the 3+-day-pattern-plus-clear-bug bar for a
+code change. The n=0 tickers and HOOD's calibration ceiling are the same ongoing conditions already
+logged; today's story is still a real market move against two live positions, not a code issue. One
+non-blocking observation for future reference, not acted on today: `forecast_ledger.json` has grown
+to about 34 MB and is adding roughly 40-200 KB per refresh run with no pruning visible in the code -
+worth watching in case it becomes a real repo-size problem, but it isn't breaking anything today and
+doesn't meet the bar for an unplanned change. Honesty features (hit-rate displays, random-control
+comparisons, grading, coherence gate) and `tickers.txt` are untouched.
+
+**Watch next:** HOOD's spread enters its final week (5 trading days to the 10/30 expiry) still
+priced at essentially max loss - whether it can recover above the $99.95 breakeven or is heading to
+a realized loss; whether META's spread (about four weeks of runway) finds a bounce; whether
+tomorrow's (Monday's) scheduled refresh brings a new session to grade; the slow growth of
+`forecast_ledger.json`; and the standing list - NVDA's small-sample hit rate, the GOOGL-highs/
+AMZN-lows naive-baseline gaps, HOOD's calibration ceiling, and whether SPY/VOO/META/SPCX ever
+produce a confirmed swing to grade.
