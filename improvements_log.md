@@ -3657,3 +3657,46 @@ tomorrow's (Monday's) scheduled refresh brings a new session to grade; the slow 
 `forecast_ledger.json`; and the standing list - NVDA's small-sample hit rate, the GOOGL-highs/
 AMZN-lows naive-baseline gaps, HOOD's calibration ceiling, and whether SPY/VOO/META/SPCX ever
 produce a confirmed swing to grade.
+
+## 2026-10-26 (Mon) — first trading day of the week; QQQ gets a new graded miss; both open real spreads sink further; grade + log only
+
+**Today's data situation:** this sandbox's own `fetch_data.py` was again blocked before reaching
+Yahoo - all 12 tickers and the pre/post-market fetch failed with "Tunnel connection failed: 403
+Forbidden," the same sandbox-proxy block as every prior weekday run, not a Yahoo-side block. No raw
+per-ticker CSVs exist locally (gitignored, never recreated here), so `analyze.py` was correctly left
+untouched. The dashboard is instead running on the separate scheduled GitHub Actions refresh's own
+build, generated today at 5:40 PM ET with the last daily bar dated 2026-10-26 - today's real session
+did land. Ran the coherence check (passes clean, 12/12 tickers), the full test suite (all 14
+`test_*.py` files, 136 tests) and the anomaly audit against that build: everything passes, zero
+anomalies.
+
+**Grades reviewed:** TSLA n=13 (31%/38%), HOOD n=64 (17%/25%), JPM n=29 (14%/21%), GOOGL n=45
+(20%/22%), NVDA n=19 (11%/16%), GC=F n=22 (18%/18%) - all unchanged from Sunday. QQQ moved to n=65
+(23%/28%, rate unchanged after rounding): a new prediction resolved - a high called for 10/15 (logged
+9/15, methods Rhythm 7-bar + Fib 55-bars-from-07/29-low) actually printed on 10/06, 7 trading days
+early, missing both the hit2 and hit3 windows. That's now three resolved QQQ highs in a row (logged
+8/26, 9/24, 9/15) all missing the same way - predicted date later than the actual high - two of the
+three sharing that same Rhythm-7bar + Fib-55bar combo. One new data point since Sunday isn't the
+3+-cleared-pattern bar for a code change by itself, but it's now a notable trend worth tracking
+closely. The two open real spreads both got worse today: HOOD (trade 8, sold $101 put / bought $96
+put x3, expires 10/30) priced with HOOD at $93.10, now below even the $96 long strike - essentially
+locked at its $1,185 max loss with 4 trading days left (10/27-10/30) and no sign of recovery. META
+(trade 9, sold $670 put / bought $660 put x2, expires 11/20) priced with META at $633.00 (down from
+$640.10-$640.20 Friday), also now below its $660 long strike for the first time, though it still has
+about four weeks of runway to recover. AMZN, SPY, VOO, META and SPCX remain at n=0 - the same
+already-diagnosed, ongoing condition.
+
+**What changed and why:** no dashboard logic change today. Coherence, tests and the anomaly audit
+are all clean, and the one new QQQ data point - while part of an emerging 3-high lag pattern -
+is a single session, not yet the sustained, confirmed pattern the discipline requires before
+touching prediction code; it goes on the watch list instead. `forecast_ledger.json` is still slowly
+growing (now ~34.3 MB), not yet a real problem. Honesty features (hit-rate displays, random-control
+comparisons, grading, coherence gate) and `tickers.txt` are untouched.
+
+**Watch next:** whether the QQQ-high lag (actual high printing well before the predicted date)
+repeats a 4th time, which would clear the bar for a method-weighting fix; whether HOOD's spread
+recovers above the $99.95 breakeven in its final 4 trading days or settles into a realized ~$1,185
+loss at the 10/30 expiry; whether META's slide below its $660 long strike continues or reverses with
+four weeks still on the clock; the slow growth of `forecast_ledger.json`; and the standing list -
+NVDA's small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline gaps, HOOD's calibration
+ceiling, and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
