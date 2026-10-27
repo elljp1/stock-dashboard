@@ -178,7 +178,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 69 | 10/26 9:39am | META 11/13 620/610 put (timing: place at the 10/26 low ~620.17 11:46am-12:39pm, leg up to 11/09 high ~707; credit 34% of width; replaces #63) | $3.40 (limit $3.40, 2x) | Pushed; re-pushed 10:03am at $3.85; superseded 10/27 by #72 (low moved to 10/28) | superseded |
 | 70 | 10/26 10:03am | TSLA 11/13 400/410 call (timing: place at the 10/27 high ~397.30 10:53am-12:39pm, leg down to 11/05 low ~364; 11/13 has no 397.5 strike; credit 38% of width; replaces #68) | $3.80 (limit $3.80, 2x); re-pushed 11:46am $4.025 (limit $4.00) | Pushed; void 10/27 (high moved to ~406.89, TSLA above 400; replaced by #73) | void |
 | 71 | 10/27 9:46am | GOOGL 11/06 310/305 put (timing: place at the 10/28 low ~311.76 10:00-10:53am or 11:46am-12:39pm, leg up to 11/04 high ~333; credit 33% of width; spans GOOGL 10/28 report; replaces #66) | $1.65 (limit $1.65, 4x); re-pushed 10:04am $1.825 (limit $1.80) | Pushed, open | pending |
-| 72 | 10/27 9:46am | META 11/13 615/605 put (timing: place at the 10/28 low ~616.30 12:39-1:32pm, leg up to 11/09 high ~697; credit 41% of width; replaces #69) | $4.125 (limit $4.10, 2x) | Pushed, open | pending |
+| 72 | 10/27 9:46am | META 11/13 615/605 put (timing: place at the 10/28 low ~616.30 12:39-1:32pm, leg up to 11/09 high ~697; credit 41% of width; replaces #69) | $4.125 (limit $4.10, 2x); re-pushed 4:04pm $4.225 (limit $4.20) | Pushed, open | pending |
 | 73 | 10/27 11:46am | TSLA 11/13 410/420 call (timing: place at today's high ~406.89 11:46am-12:39pm, leg down to 11/05 low ~379; credit 40% of width; replaces #70) | $3.975 (limit $3.95, 2x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
