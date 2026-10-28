@@ -12,7 +12,10 @@ LIVE_REVIEW = "https://elljp1.github.io/stock-dashboard/daily_review.json"
 def due_slot(now):
     now = now.astimezone(EASTERN)
     minute = now.hour * 60 + now.minute
-    if not 360 <= minute <= 1140:
+    # Keep accepting delayed GitHub schedule deliveries through the end of the
+    # Eastern day.  The final requested slot is 18:00, but GitHub may deliver
+    # the 19:00-23:55 recovery checks well after their nominal times.
+    if not 360 <= minute <= 1439:
         return None
     slots = [1080]  # Daily 18:00 review, including weekends.
     if now.weekday() < 5:
@@ -68,3 +71,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
