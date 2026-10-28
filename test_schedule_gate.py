@@ -42,9 +42,18 @@ class ScheduleTests(unittest.TestCase):
     def test_manual_refresh_and_evening_cutoff(self):
         now = datetime.fromisoformat("2026-09-09T23:20:00-04:00")
         self.assertTrue(decision(now, event="workflow_dispatch")[0])
-        self.assertFalse(decision(now)[0])
+        self.assertTrue(decision(now, "2026-09-09T17:00:00-04:00")[0])
+        self.assertFalse(decision(now, "2026-09-09T18:00:00-04:00")[0])
         self.assertTrue(decision(now.replace(hour=18), "2026-09-09T17:00:00-04:00")[0])
+
+    def test_delayed_evening_event_still_recovers_six_pm_review(self):
+        for stamp in ("2026-09-09T19:49:00-04:00", "2026-09-09T23:59:00-04:00"):
+            now = datetime.fromisoformat(stamp)
+            self.assertTrue(decision(now, "2026-09-09T16:41:00-04:00")[0])
+            self.assertFalse(decision(now, "2026-09-09T18:00:00-04:00")[0])
+        self.assertIsNone(due_slot(datetime.fromisoformat("2026-09-10T00:00:00-04:00")))
 
 
 if __name__ == "__main__":
     unittest.main()
+
