@@ -3700,3 +3700,51 @@ loss at the 10/30 expiry; whether META's slide below its $660 long strike contin
 four weeks still on the clock; the slow growth of `forecast_ledger.json`; and the standing list -
 NVDA's small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline gaps, HOOD's calibration
 ceiling, and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
+
+## 2026-10-28 (Wed) — HOOD's open spread locks in near-certain max loss with 2 days left; grade + log only
+
+**Today's data situation:** this sandbox's own `fetch_data.py` was blocked again before reaching
+Yahoo - all 12 tickers failed with a proxy-level connection refusal (confirmed via the proxy's own
+status log: "gateway answered 403 to CONNECT," a policy block on this sandbox, not a Yahoo-side
+block). No raw per-ticker CSVs exist locally (gitignored, never recreated here), so `analyze.py`
+correctly refused to run against the missing files and raised its own safety error rather than
+risk publishing an empty or broken build - exactly the behavior that safeguard is there for. The
+live dashboard is instead running on the separate scheduled GitHub Actions refresh's own build,
+generated today at 5:42 PM ET with the last daily bar dated 2026-10-28 - today's real session did
+land. Ran the coherence check (passes clean, 12/12 tickers), the full test suite (all 13
+`test_*.py` files, every test passing) and the anomaly audit against that build: everything is
+clean, zero anomalies.
+
+**Grades reviewed:** TSLA n=13 (31%/38%), QQQ n=65 (23%/28%), JPM n=29 (14%/21%), GOOGL n=45
+(20%/22%), NVDA n=19 (11%/16%), GC=F n=22 (18%/18%) - all byte-for-byte unchanged from Monday, no
+new resolutions. HOOD moved to n=67 (16%/24%, was 64 at 17%/25%): three more HOOD predictions
+resolved, all as full misses (the predicted window closed with no matching high or low ever
+confirmed), nudging its already-weak hit rate down a point - consistent with the long-standing,
+already-logged HOOD calibration problem, not a new issue. AMZN, SPY, VOO, META and SPCX remain at
+n=0, the same ongoing condition. The two open real spreads both got worse again: HOOD (trade 8,
+sold $101 put / bought $96 put x3, expires 10/30) is now priced with HOOD at $90.10 - well below
+even the $96 long strike, with only 2 trading days left (10/29-10/30) and effectively no path left
+to avoid the ~$1,185 max loss. META (trade 9, sold $670 put / bought $660 put x2, expires 11/20) is
+now priced with META at $618.00 (down from $633.00 on Monday), also below its $660 long strike,
+though it still has about three weeks of runway to recover before the max $1,500 loss would lock
+in. The owner's journal also shows two new pending (unfilled) GTC orders placed today - a HOOD
+88/83 put spread (#74, replacing the voided #67) and a TSLA 412.5/422.5 call spread (#75) - neither
+has filled yet, so neither changes any open position.
+
+**What changed and why:** no dashboard logic change today. Coherence, the full test suite and the
+anomaly audit are all clean, and nothing crossed the 3+-graded-day pattern bar: HOOD's dip is a
+continuation of its already-tracked calibration weakness, not a new signal, and the QQQ-high lag
+flagged Monday did not get a 4th data point today (count unchanged at n=65). `forecast_ledger.json`
+continues its slow growth (now ~38.4 MB, up from ~34.3 MB two days ago) - still not breaking
+anything, but the growth rate itself is worth a closer look soon if it keeps climbing this fast.
+Honesty features (hit-rate displays, random-control comparisons, grading, coherence gate) and
+`tickers.txt` are untouched.
+
+**Watch next:** whether HOOD's spread closes Friday 10/30 at its ~$1,185 max loss (no realistic
+recovery path with 2 trading days and HOOD $6+ below the long strike) - this would be its first
+fully realized loss on a graded real position; whether META's slide below its $660 long strike
+continues or reverses with about three weeks still on the clock; whether either of today's two new
+pending orders (#74 HOOD, #75 TSLA) actually fills; the accelerating growth of
+`forecast_ledger.json`; whether the QQQ-high lag repeats a 4th time; and the standing list - NVDA's
+small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline gaps, HOOD's calibration ceiling,
+and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
