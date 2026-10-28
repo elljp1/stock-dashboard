@@ -241,7 +241,20 @@ for t, d in D.items():
                 issues.append(f"{t}: '{tr['label'][:34]}' tagged THIS WEEK but executes {tr['execute']}")
         # expiry must outlive the exit
         e, x = md(tr.get("exp")), b
-        if e and x and e < x:
+        expiry_date = None
+        exit_date = None
+        try:
+            expiry_date = date.fromisoformat(tr.get("expIso", ""))
+            entry_date = date.fromisoformat(tr.get("sortd", ""))
+            if x:
+                exit_date = date(entry_date.year, x[0], x[1])
+                if exit_date < entry_date:
+                    exit_date = date(entry_date.year + 1, x[0], x[1])
+        except (TypeError, ValueError):
+            pass
+        if expiry_date and exit_date and expiry_date < exit_date:
+            issues.append(f"{t}: '{tr['label'][:34]}' expires {tr['exp']} before its exit {tr['exitWin']}")
+        elif not expiry_date and e and x and e < x:
             issues.append(f"{t}: '{tr['label'][:34]}' expires {tr['exp']} before its exit {tr['exitWin']}")
         # strike vs the event it claims to target
         st = tr.get("strikes") or []
@@ -269,3 +282,4 @@ else:
 # just declared inconsistent.
 if issues:
     sys.exit(1)
+
