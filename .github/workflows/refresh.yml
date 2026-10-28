@@ -2,8 +2,9 @@ name: Refresh dashboard
 on:
   schedule:
     # One GitHub clock; schedule_gate.py decides which requested slot is due.
-    # Catch-up checks continue until 19:00 ET. No external service or token.
-    - cron: "*/5 6-19 * * *"
+    # Catch-up checks continue through 23:55 ET so delayed GitHub deliveries
+    # can still recover the 18:00 review. No external service or token.
+    - cron: "*/5 6-23 * * *"
       timezone: "America/New_York"
   workflow_dispatch: {}
   push:
@@ -114,3 +115,4 @@ jobs:
       - name: Report failure
         if: failure()
         run: echo "::error::Refresh or deployment failed. Previous publication remains available; next scheduled run retries. Inspect this run before treating data as current."
+
