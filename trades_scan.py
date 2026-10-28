@@ -120,7 +120,9 @@ def build_trades(dall):
                 hz = horizon(ed)
                 # expiry must outlive the exit event
                 e1 = pick_exp(max(10, (xd - today).days + 10))
-                e1s = datetime.fromtimestamp(e1, tz=timezone.utc).strftime("%b %d")
+                e1dt = datetime.fromtimestamp(e1, tz=timezone.utc)
+                e1s = e1dt.strftime("%b %d")
+                e1iso = e1dt.date().isoformat()
                 res1 = chain(tkr, e1)
                 puts1 = {p["strike"]: p for p in res1["options"][0]["puts"]}
                 ps = sorted(puts1)
@@ -136,7 +138,8 @@ def build_trades(dall):
                         "thesis": f"enter at the projected {entry['date']} low (~${entry['price']}), "
                                   f"buy-to-close into the {exit_ev['date']} high (~${exit_ev['price']}). "
                                   f"Highest premium - assigned if the low overshoots; size accordingly",
-                        "exp": e1s, "strikes": [k0], "premium": round(m0, 2),
+                        "exp": e1s, "expIso": e1iso,
+                        "strikes": [k0], "premium": round(m0, 2),
                         "execute": _when(entry), "exitWin": _when(exit_ev)})
 
                 deep = min([l["price"] for l in sup[1:2]] + [spot * 0.9])
@@ -149,7 +152,8 @@ def build_trades(dall):
                         "detail": f"~${m1:.2f} (${m1*100:.0f}/contract) - yield {m1/k1*100:.1f}% - "
                                   f"breakeven ${k1-m1:.2f} - collateral ${k1*100:,.0f}",
                         "thesis": "strike below the deep/crash target - paid to wait",
-                        "exp": e1s, "strikes": [k1], "premium": round(m1, 2),
+                        "exp": e1s, "expIso": e1iso,
+                        "strikes": [k1], "premium": round(m1, 2),
                         "execute": _when(entry), "exitWin": "50% profit or ~1 week"})
 
                 ks = _nearest(ps, entry["price"])
@@ -164,12 +168,15 @@ def build_trades(dall):
                             "detail": f"credit ~${cr:.2f} (${cr*100:.0f}) - max loss ${(w-cr)*100:.0f} - "
                                       f"ROI {cr/(w-cr)*100:.0f}% if price holds ${ks:g}",
                             "thesis": "short strike at the projected low shelf, risk capped",
-                            "exp": e1s, "strikes": [ks, kl], "premium": round(cr, 2),
+                            "exp": e1s, "expIso": e1iso,
+                            "strikes": [ks, kl], "premium": round(cr, 2),
                             "execute": _when(entry), "exitWin": "50% profit or ~1 week"})
 
                 # bounce play off that low, targeting the paired high
                 e2 = pick_exp(max(7, (xd - today).days + 5))
-                e2s = datetime.fromtimestamp(e2, tz=timezone.utc).strftime("%b %d")
+                e2dt = datetime.fromtimestamp(e2, tz=timezone.utc)
+                e2s = e2dt.strftime("%b %d")
+                e2iso = e2dt.date().isoformat()
                 calls2 = {c["strike"]: c for c in chain(tkr, e2)["options"][0]["calls"]}
                 cs = sorted(calls2)
                 kb = _nearest(cs, entry["price"], below=False)
@@ -186,7 +193,8 @@ def build_trades(dall):
                             "thesis": f"targets the {exit_ev['date']} rebound. DO NOT enter on the date alone - "
                                       f"wait for the low to CONFIRM (price back +3% off the low). "
                                       f"Bounce bets in a falling tape are lottery tickets (graded lesson 7/23-24)",
-                            "exp": e2s, "strikes": [kb, kt], "premium": round(deb, 2),
+                            "exp": e2s, "expIso": e2iso,
+                            "strikes": [kb, kt], "premium": round(deb, 2),
                             "execute": _when(entry) + " - AFTER +3% reversal confirms",
                             "exitWin": _when(exit_ev)})
 
@@ -196,7 +204,9 @@ def build_trades(dall):
                 hd = ev_date(hi_ev)
                 hz = horizon(hd)
                 e3 = pick_exp(max(7, (hd - today).days + 5))
-                e3s = datetime.fromtimestamp(e3, tz=timezone.utc).strftime("%b %d")
+                e3dt = datetime.fromtimestamp(e3, tz=timezone.utc)
+                e3s = e3dt.strftime("%b %d")
+                e3iso = e3dt.date().isoformat()
                 res3 = chain(tkr, e3)
                 calls3 = {c["strike"]: c for c in res3["options"][0]["calls"]}
                 puts3 = {p["strike"]: p for p in res3["options"][0]["puts"]}
@@ -214,7 +224,8 @@ def build_trades(dall):
                                       f"ROI {max(0,(w-deb))/deb*100:.0f}% if ${hi_ev['price']} prints by {hi_ev['date']}",
                             "thesis": f"price is projected to rise into the {hi_ev['date']} high - "
                                       f"this is the actionable trade NOW, not the far-off put entry",
-                            "exp": e3s, "strikes": [kb, kt], "premium": round(deb, 2),
+                            "exp": e3s, "expIso": e3iso,
+                            "strikes": [kb, kt], "premium": round(deb, 2),
                             "execute": f"now / today - {hi_ev.get('planetHour') or hi_ev.get('time','')}",
                             "exitWin": _when(hi_ev)})
                 ksup = _nearest(ps3, sup[0]["price"] if sup else spot * 0.97)
@@ -227,7 +238,8 @@ def build_trades(dall):
                                   f"breakeven ${ksup-mp:.2f} - collateral ${ksup*100:,.0f}",
                         "thesis": f"collect premium while price is projected to rise into {hi_ev['date']}; "
                                   f"strike sits on the nearest tested support",
-                        "exp": e3s, "strikes": [ksup], "premium": round(mp, 2),
+                        "exp": e3s, "expIso": e3iso,
+                        "strikes": [ksup], "premium": round(mp, 2),
                         "execute": "now / today",
                         "exitWin": _when(hi_ev) + " (or 50% profit)"})
         except Exception as e:
@@ -256,3 +268,4 @@ if __name__ == "__main__":
         for tr in v["trades"]:
             print(f" [{tr.get('hz','')}] {tr['kind']:10} {tr['label']}")
             print(f"      in: {tr.get('execute')}   out: {tr.get('exitWin')}")
+
