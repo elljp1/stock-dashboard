@@ -182,7 +182,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 73 | 10/27 11:46am | TSLA 11/13 410/420 call (timing: place at today's high ~406.89 11:46am-12:39pm, leg down to 11/05 low ~379; credit 40% of width; replaces #70) | $3.975 (limit $3.95, 2x) | Pushed; void 10/28 (high moved to 10/29 ~411.67, above the 410 short) | void |
 | 74 | 10/28 9:48am | HOOD 11/13 88/83 put (timing: place at today's low ~88.33 10:00-10:53am or 11:46am-12:39pm, leg up to 11/09 high ~105.54; credit 37% of width; replaces #67) | $1.84 (limit $1.80, 4x) | Pushed, open | pending |
 | 75 | 10/28 2:38pm | TSLA 11/13 412.5/422.5 call (timing: place at the 10/29 high ~411.67 11:46am-1:32pm, leg down to 11/05 low ~382; credit 35% of width) | $3.50 (limit $3.50, 2x) | Pushed; void 10/29 (exit low moved to 11/16, after the 11/13 expiry; replaced by #76) | void |
-| 76 | 10/29 10:09am | TSLA 11/20 415/425 call (timing: place at today's high ~411.67 11:46am-1:32pm, leg down to 11/16 low ~368; credit 33% of width; replaces #75) | $3.325 (limit $3.30, 2x); re-pushed 10:48am $3.525 (limit $3.50) | Pushed; void 10/29 12:08pm (high moved to ~418.34, above the 415 short) | void |
+| 76 | 10/29 10:09am | TSLA 11/20 415/425 call (timing: place at today's high ~411.67 11:46am-1:32pm, leg down to 11/16 low ~368; credit 33% of width; replaces #75) | $3.325 (limit $3.30, 2x); re-pushed 10:48am $3.525 (limit $3.50) | Pushed; void 10/29 12:08pm (high moved to ~418.34, above the 415 short); reinstated 2:39pm (high back to ~411.67; mid $3.50) | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
