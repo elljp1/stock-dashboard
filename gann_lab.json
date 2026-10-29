@@ -1,5 +1,5 @@
 {
- "computed": "2026-10-22",
+ "computed": "2026-10-29",
  "version": 2,
  "window": 2,
  "split": 0.7,
@@ -11,8 +11,8 @@
   "TSLA": {
    "history": {
     "from": "2010-06-29",
-    "to": "2026-10-21",
-    "sessions": 4104
+    "to": "2026-10-28",
+    "sessions": 4109
    },
    "swingThresholdPct": 10.0,
    "majorThresholdPct": 25.0,
@@ -2366,7 +2366,7 @@
    ],
    "upcoming": [],
    "nullInPlay": [
-    3,
+    4,
     0,
     0
    ]
@@ -2374,17 +2374,40 @@
   "HOOD": {
    "history": {
     "from": "2021-07-29",
-    "to": "2026-10-21",
-    "sessions": 1314
+    "to": "2026-10-28",
+    "sessions": 1319
    },
    "swingThresholdPct": 10.0,
    "majorThresholdPct": 25.0,
    "turns": 90,
-   "majorTurns": 27,
+   "majorTurns": 28,
    "split": "2025-03-13",
    "tested": 70,
    "inPlay": 0,
    "tools": [
+    {
+     "tool": "range squared in time, 8 pt/day",
+     "family": "range squared",
+     "sel": {
+      "n": 1,
+      "hits": 1,
+      "hitPct": 100.0,
+      "chancePct": 21.4,
+      "lift": 4.67,
+      "p": 0.21439,
+      "pBinomial": 0.214
+     },
+     "hold": {
+      "n": 4,
+      "hits": 2,
+      "hitPct": 50.0,
+      "chancePct": 25.1,
+      "lift": 1.99,
+      "p": 0.26587,
+      "pBinomial": 0.264
+     },
+     "verdict": "TOO FEW CALLS"
+    },
     {
      "tool": "time = price x0.1 (days = anchor price)",
      "family": "time = price",
@@ -2403,25 +2426,19 @@
      "verdict": "TOO FEW CALLS"
     },
     {
-     "tool": "range squared in time, 8 pt/day",
-     "family": "range squared",
+     "tool": "price squares time, 4 pt/day",
+     "family": "price = time",
      "sel": {
-      "n": 1,
-      "hits": 1,
+      "n": 2,
+      "hits": 2,
       "hitPct": 100.0,
-      "chancePct": 22.9,
-      "lift": 4.37,
-      "p": 0.22939,
-      "pBinomial": 0.229
+      "chancePct": 24.1,
+      "lift": 4.15,
+      "p": 0.05897,
+      "pBinomial": 0.0582
      },
      "hold": {
-      "n": 4,
-      "hits": 2,
-      "hitPct": 50.0,
-      "chancePct": 25.5,
-      "lift": 1.96,
-      "p": 0.25937,
-      "pBinomial": 0.27
+      "n": 0
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -2432,27 +2449,10 @@
       "n": 1,
       "hits": 1,
       "hitPct": 100.0,
-      "chancePct": 23.8,
-      "lift": 4.2,
-      "p": 0.23838,
-      "pBinomial": 0.238
-     },
-     "hold": {
-      "n": 0
-     },
-     "verdict": "TOO FEW CALLS"
-    },
-    {
-     "tool": "price squares time, 4 pt/day",
-     "family": "price = time",
-     "sel": {
-      "n": 2,
-      "hits": 2,
-      "hitPct": 100.0,
-      "chancePct": 24.5,
-      "lift": 4.08,
-      "p": 0.05997,
-      "pBinomial": 0.06
+      "chancePct": 25.7,
+      "lift": 3.9,
+      "p": 0.25687,
+      "pBinomial": 0.257
      },
      "hold": {
       "n": 0
@@ -2466,19 +2466,19 @@
       "n": 5,
       "hits": 3,
       "hitPct": 60.0,
-      "chancePct": 25.1,
-      "lift": 2.39,
-      "p": 0.09545,
-      "pBinomial": 0.105
+      "chancePct": 24.6,
+      "lift": 2.44,
+      "p": 0.09445,
+      "pBinomial": 0.099
      },
      "hold": {
       "n": 10,
       "hits": 3,
       "hitPct": 30.0,
-      "chancePct": 25.4,
-      "lift": 1.18,
-      "p": 0.47726,
-      "pBinomial": 0.486
+      "chancePct": 25.7,
+      "lift": 1.17,
+      "p": 0.48576,
+      "pBinomial": 0.496
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -2489,19 +2489,19 @@
       "n": 5,
       "hits": 4,
       "hitPct": 80.0,
-      "chancePct": 39.6,
-      "lift": 2.02,
-      "p": 0.08096,
-      "pBinomial": 0.0843
+      "chancePct": 39.3,
+      "lift": 2.04,
+      "p": 0.08046,
+      "pBinomial": 0.0817
      },
      "hold": {
       "n": 33,
       "hits": 14,
       "hitPct": 42.4,
-      "chancePct": 31.2,
-      "lift": 1.36,
-      "p": 0.11244,
-      "pBinomial": 0.115
+      "chancePct": 31.1,
+      "lift": 1.37,
+      "p": 0.09195,
+      "pBinomial": 0.112
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -2535,19 +2535,19 @@
       "n": 6,
       "hits": 4,
       "hitPct": 66.7,
-      "chancePct": 38.3,
-      "lift": 1.74,
-      "p": 0.15842,
-      "pBinomial": 0.157
+      "chancePct": 37.9,
+      "lift": 1.76,
+      "p": 0.14493,
+      "pBinomial": 0.152
      },
      "hold": {
       "n": 15,
       "hits": 10,
       "hitPct": 66.7,
-      "chancePct": 32.9,
-      "lift": 2.03,
-      "p": 0.0085,
-      "pBinomial": 0.00767
+      "chancePct": 33.1,
+      "lift": 2.01,
+      "p": 0.0055,
+      "pBinomial": 0.00802
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -2558,19 +2558,19 @@
       "n": 10,
       "hits": 5,
       "hitPct": 50.0,
-      "chancePct": 29.7,
+      "chancePct": 29.8,
       "lift": 1.68,
-      "p": 0.13643,
-      "pBinomial": 0.145
+      "p": 0.13543,
+      "pBinomial": 0.148
      },
      "hold": {
       "n": 20,
       "hits": 6,
       "hitPct": 30.0,
-      "chancePct": 32.5,
+      "chancePct": 32.6,
       "lift": 0.92,
-      "p": 0.67616,
-      "pBinomial": 0.676
+      "p": 0.67266,
+      "pBinomial": 0.678
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -2581,16 +2581,16 @@
       "n": 23,
       "hits": 14,
       "hitPct": 60.9,
-      "chancePct": 38.4,
+      "chancePct": 38.5,
       "lift": 1.58,
-      "p": 0.02299,
-      "pBinomial": 0.0243
+      "p": 0.02049,
+      "pBinomial": 0.0246
      },
      "hold": {
       "n": 1,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 39.9,
+      "chancePct": 39.1,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -2604,19 +2604,19 @@
       "n": 15,
       "hits": 10,
       "hitPct": 66.7,
-      "chancePct": 42.6,
-      "lift": 1.56,
-      "p": 0.04948,
-      "pBinomial": 0.0533
+      "chancePct": 42.5,
+      "lift": 1.57,
+      "p": 0.04798,
+      "pBinomial": 0.0523
      },
      "hold": {
       "n": 13,
       "hits": 3,
       "hitPct": 23.1,
-      "chancePct": 41.2,
+      "chancePct": 40.9,
       "lift": 0.56,
-      "p": 0.95402,
-      "pBinomial": 0.951
+      "p": 0.95302,
+      "pBinomial": 0.949
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -2627,10 +2627,10 @@
       "n": 33,
       "hits": 17,
       "hitPct": 51.5,
-      "chancePct": 33.3,
-      "lift": 1.55,
-      "p": 0.02099,
-      "pBinomial": 0.023
+      "chancePct": 33.4,
+      "lift": 1.54,
+      "p": 0.02549,
+      "pBinomial": 0.0241
      },
      "hold": {
       "n": 16,
@@ -2638,8 +2638,8 @@
       "hitPct": 31.2,
       "chancePct": 30.1,
       "lift": 1.04,
-      "p": 0.55722,
-      "pBinomial": 0.555
+      "p": 0.55122,
+      "pBinomial": 0.554
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -2667,6 +2667,29 @@
      "verdict": "TOO FEW CALLS"
     },
     {
+     "tool": "seasonal dates (Sun at each 45 degrees)",
+     "family": "year circle",
+     "sel": {
+      "n": 29,
+      "hits": 13,
+      "hitPct": 44.8,
+      "chancePct": 30.0,
+      "lift": 1.49,
+      "p": 0.05997,
+      "pBinomial": 0.0651
+     },
+     "hold": {
+      "n": 13,
+      "hits": 4,
+      "hitPct": 30.8,
+      "chancePct": 31.3,
+      "lift": 0.98,
+      "p": 0.62819,
+      "pBinomial": 0.618
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
      "tool": "90 calendar days from a major turn",
      "family": "time counts",
      "sel": {
@@ -2686,29 +2709,6 @@
       "lift": 1.01,
       "p": 0.63568,
       "pBinomial": 0.625
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
-     "tool": "seasonal dates (Sun at each 45 degrees)",
-     "family": "year circle",
-     "sel": {
-      "n": 29,
-      "hits": 13,
-      "hitPct": 44.8,
-      "chancePct": 30.3,
-      "lift": 1.48,
-      "p": 0.06297,
-      "pBinomial": 0.0694
-     },
-     "hold": {
-      "n": 13,
-      "hits": 4,
-      "hitPct": 30.8,
-      "chancePct": 30.9,
-      "lift": 1.0,
-      "p": 0.6062,
-      "pBinomial": 0.606
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -2790,17 +2790,17 @@
       "hitPct": 25.0,
       "chancePct": 18.5,
       "lift": 1.35,
-      "p": 0.56322,
-      "pBinomial": 0.558
+      "p": 0.56822,
+      "pBinomial": 0.559
      },
      "hold": {
       "n": 2,
       "hits": 1,
       "hitPct": 50.0,
-      "chancePct": 45.5,
-      "lift": 1.1,
-      "p": 0.70915,
-      "pBinomial": 0.703
+      "chancePct": 44.9,
+      "lift": 1.11,
+      "p": 0.69965,
+      "pBinomial": 0.697
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -2851,29 +2851,6 @@
      "verdict": "NOT ABOVE CHANCE"
     },
     {
-     "tool": "range squared in time, 1 pt/day",
-     "family": "range squared",
-     "sel": {
-      "n": 16,
-      "hits": 7,
-      "hitPct": 43.8,
-      "chancePct": 33.2,
-      "lift": 1.32,
-      "p": 0.25137,
-      "pBinomial": 0.259
-     },
-     "hold": {
-      "n": 24,
-      "hits": 7,
-      "hitPct": 29.2,
-      "chancePct": 34.0,
-      "lift": 0.86,
-      "p": 0.77311,
-      "pBinomial": 0.76
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
      "tool": "Mercury reaches the anchor price's degree",
      "family": "planet degree",
      "sel": {
@@ -2893,6 +2870,29 @@
       "lift": 0.36,
       "p": 0.9975,
       "pBinomial": 0.997
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
+     "tool": "range squared in time, 1 pt/day",
+     "family": "range squared",
+     "sel": {
+      "n": 16,
+      "hits": 7,
+      "hitPct": 43.8,
+      "chancePct": 33.4,
+      "lift": 1.31,
+      "p": 0.25187,
+      "pBinomial": 0.264
+     },
+     "hold": {
+      "n": 24,
+      "hits": 7,
+      "hitPct": 29.2,
+      "chancePct": 33.9,
+      "lift": 0.86,
+      "p": 0.76412,
+      "pBinomial": 0.757
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -3019,19 +3019,19 @@
       "n": 61,
       "hits": 19,
       "hitPct": 31.1,
-      "chancePct": 25.4,
+      "chancePct": 25.3,
       "lift": 1.23,
-      "p": 0.14793,
-      "pBinomial": 0.187
+      "p": 0.15192,
+      "pBinomial": 0.181
      },
      "hold": {
       "n": 27,
       "hits": 3,
       "hitPct": 11.1,
-      "chancePct": 18.5,
-      "lift": 0.6,
-      "p": 0.91904,
-      "pBinomial": 0.9
+      "chancePct": 18.7,
+      "lift": 0.59,
+      "p": 0.92804,
+      "pBinomial": 0.904
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -3042,19 +3042,19 @@
       "n": 83,
       "hits": 40,
       "hitPct": 48.2,
-      "chancePct": 39.6,
+      "chancePct": 39.4,
       "lift": 1.22,
-      "p": 0.05597,
-      "pBinomial": 0.0696
+      "p": 0.05797,
+      "pBinomial": 0.0642
      },
      "hold": {
       "n": 51,
       "hits": 12,
       "hitPct": 23.5,
-      "chancePct": 29.7,
+      "chancePct": 29.8,
       "lift": 0.79,
-      "p": 0.87456,
-      "pBinomial": 0.871
+      "p": 0.88356,
+      "pBinomial": 0.874
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -3134,19 +3134,19 @@
       "n": 41,
       "hits": 17,
       "hitPct": 41.5,
-      "chancePct": 35.6,
+      "chancePct": 35.5,
       "lift": 1.17,
-      "p": 0.26337,
-      "pBinomial": 0.264
+      "p": 0.25837,
+      "pBinomial": 0.259
      },
      "hold": {
       "n": 19,
       "hits": 5,
       "hitPct": 26.3,
-      "chancePct": 34.5,
+      "chancePct": 34.6,
       "lift": 0.76,
-      "p": 0.85057,
-      "pBinomial": 0.838
+      "p": 0.84708,
+      "pBinomial": 0.842
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -3266,48 +3266,48 @@
      "verdict": "NOT ABOVE CHANCE"
     },
     {
-     "tool": "range squared in time, 0.5 pt/day",
-     "family": "range squared",
-     "sel": {
-      "n": 30,
-      "hits": 11,
-      "hitPct": 36.7,
-      "chancePct": 33.5,
-      "lift": 1.1,
-      "p": 0.41779,
-      "pBinomial": 0.421
-     },
-     "hold": {
-      "n": 23,
-      "hits": 5,
-      "hitPct": 21.7,
-      "chancePct": 34.3,
-      "lift": 0.63,
-      "p": 0.93753,
-      "pBinomial": 0.937
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
      "tool": "history analog at 4x time scale",
      "family": "analog scale",
      "sel": {
       "n": 35,
       "hits": 11,
       "hitPct": 31.4,
-      "chancePct": 28.7,
+      "chancePct": 28.5,
       "lift": 1.1,
-      "p": 0.41529,
-      "pBinomial": 0.42
+      "p": 0.3993,
+      "pBinomial": 0.41
      },
      "hold": {
       "n": 65,
       "hits": 15,
       "hitPct": 23.1,
-      "chancePct": 30.0,
-      "lift": 0.77,
-      "p": 0.91954,
-      "pBinomial": 0.916
+      "chancePct": 30.2,
+      "lift": 0.76,
+      "p": 0.92004,
+      "pBinomial": 0.919
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
+     "tool": "range squared in time, 0.5 pt/day",
+     "family": "range squared",
+     "sel": {
+      "n": 30,
+      "hits": 11,
+      "hitPct": 36.7,
+      "chancePct": 33.8,
+      "lift": 1.09,
+      "p": 0.41779,
+      "pBinomial": 0.436
+     },
+     "hold": {
+      "n": 23,
+      "hits": 5,
+      "hitPct": 21.7,
+      "chancePct": 33.6,
+      "lift": 0.65,
+      "p": 0.92404,
+      "pBinomial": 0.928
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -3320,17 +3320,17 @@
       "hitPct": 42.0,
       "chancePct": 38.4,
       "lift": 1.09,
-      "p": 0.34683,
+      "p": 0.34533,
       "pBinomial": 0.35
      },
      "hold": {
       "n": 22,
       "hits": 7,
       "hitPct": 31.8,
-      "chancePct": 35.7,
-      "lift": 0.89,
-      "p": 0.72414,
-      "pBinomial": 0.723
+      "chancePct": 35.2,
+      "lift": 0.91,
+      "p": 0.70665,
+      "pBinomial": 0.703
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -3341,19 +3341,19 @@
       "n": 112,
       "hits": 35,
       "hitPct": 31.2,
-      "chancePct": 29.4,
-      "lift": 1.06,
-      "p": 0.36282,
-      "pBinomial": 0.37
+      "chancePct": 29.3,
+      "lift": 1.07,
+      "p": 0.35432,
+      "pBinomial": 0.361
      },
      "hold": {
       "n": 53,
       "hits": 16,
       "hitPct": 30.2,
-      "chancePct": 30.0,
+      "chancePct": 29.8,
       "lift": 1.01,
-      "p": 0.54723,
-      "pBinomial": 0.542
+      "p": 0.54623,
+      "pBinomial": 0.529
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -3366,17 +3366,17 @@
       "hitPct": 41.0,
       "chancePct": 39.5,
       "lift": 1.04,
-      "p": 0.48176,
+      "p": 0.48226,
       "pBinomial": 0.482
      },
      "hold": {
       "n": 25,
       "hits": 6,
       "hitPct": 24.0,
-      "chancePct": 30.5,
+      "chancePct": 30.4,
       "lift": 0.79,
-      "p": 0.83108,
-      "pBinomial": 0.82
+      "p": 0.82809,
+      "pBinomial": 0.819
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -3410,19 +3410,19 @@
       "n": 28,
       "hits": 11,
       "hitPct": 39.3,
-      "chancePct": 38.3,
+      "chancePct": 38.1,
       "lift": 1.03,
-      "p": 0.52074,
-      "pBinomial": 0.528
+      "p": 0.52674,
+      "pBinomial": 0.521
      },
      "hold": {
       "n": 19,
       "hits": 3,
       "hitPct": 15.8,
-      "chancePct": 32.2,
-      "lift": 0.49,
-      "p": 0.96802,
-      "pBinomial": 0.97
+      "chancePct": 31.9,
+      "lift": 0.5,
+      "p": 0.97501,
+      "pBinomial": 0.968
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -3456,16 +3456,16 @@
       "n": 20,
       "hits": 8,
       "hitPct": 40.0,
-      "chancePct": 40.2,
+      "chancePct": 40.3,
       "lift": 0.99,
-      "p": 0.5972,
-      "pBinomial": 0.593
+      "p": 0.6007,
+      "pBinomial": 0.595
      },
      "hold": {
       "n": 15,
       "hits": 1,
       "hitPct": 6.7,
-      "chancePct": 32.0,
+      "chancePct": 31.9,
       "lift": 0.21,
       "p": 0.998,
       "pBinomial": 0.997
@@ -3519,27 +3519,27 @@
      "verdict": "NOT ABOVE CHANCE"
     },
     {
-     "tool": "price on Venus's degree (price mod 360)",
-     "family": "planet degree",
+     "tool": "prior swing duration x1",
+     "family": "swing ratios",
      "sel": {
-      "n": 3,
-      "hits": 1,
-      "hitPct": 33.3,
-      "chancePct": 34.9,
+      "n": 44,
+      "hits": 15,
+      "hitPct": 34.1,
+      "chancePct": 36.0,
       "lift": 0.95,
-      "p": 0.74713,
-      "pBinomial": 0.725
+      "p": 0.66917,
+      "pBinomial": 0.659
      },
      "hold": {
-      "n": 1,
-      "hits": 0,
-      "hitPct": 0.0,
-      "chancePct": 45.5,
-      "lift": 0.0,
-      "p": 1.0,
-      "pBinomial": 1.0
+      "n": 20,
+      "hits": 4,
+      "hitPct": 20.0,
+      "chancePct": 32.9,
+      "lift": 0.61,
+      "p": 0.92954,
+      "pBinomial": 0.934
      },
-     "verdict": "TOO FEW CALLS"
+     "verdict": "NOT ABOVE CHANCE"
     },
     {
      "tool": "Mercury returns to its place at the anchor turn",
@@ -3565,29 +3565,6 @@
      "verdict": "NOT ABOVE CHANCE"
     },
     {
-     "tool": "prior swing duration x1",
-     "family": "swing ratios",
-     "sel": {
-      "n": 44,
-      "hits": 15,
-      "hitPct": 34.1,
-      "chancePct": 36.1,
-      "lift": 0.94,
-      "p": 0.68216,
-      "pBinomial": 0.662
-     },
-     "hold": {
-      "n": 20,
-      "hits": 4,
-      "hitPct": 20.0,
-      "chancePct": 32.8,
-      "lift": 0.61,
-      "p": 0.92754,
-      "pBinomial": 0.934
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
      "tool": "time = price x1 (days = anchor price)",
      "family": "time = price",
      "sel": {
@@ -3607,6 +3584,29 @@
       "lift": 1.53,
       "p": 0.29535,
       "pBinomial": 0.308
+     },
+     "verdict": "TOO FEW CALLS"
+    },
+    {
+     "tool": "price on Venus's degree (price mod 360)",
+     "family": "planet degree",
+     "sel": {
+      "n": 3,
+      "hits": 1,
+      "hitPct": 33.3,
+      "chancePct": 36.7,
+      "lift": 0.91,
+      "p": 0.76462,
+      "pBinomial": 0.746
+     },
+     "hold": {
+      "n": 1,
+      "hits": 0,
+      "hitPct": 0.0,
+      "chancePct": 48.0,
+      "lift": 0.0,
+      "p": 1.0,
+      "pBinomial": 1.0
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -3663,19 +3663,42 @@
       "n": 35,
       "hits": 10,
       "hitPct": 28.6,
-      "chancePct": 32.6,
-      "lift": 0.88,
-      "p": 0.76062,
-      "pBinomial": 0.751
+      "chancePct": 32.9,
+      "lift": 0.87,
+      "p": 0.78111,
+      "pBinomial": 0.763
      },
      "hold": {
       "n": 18,
       "hits": 10,
       "hitPct": 55.6,
-      "chancePct": 30.2,
-      "lift": 1.84,
-      "p": 0.01449,
-      "pBinomial": 0.0221
+      "chancePct": 29.9,
+      "lift": 1.86,
+      "p": 0.01799,
+      "pBinomial": 0.0202
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
+     "tool": "prior swing duration x1.618",
+     "family": "swing ratios",
+     "sel": {
+      "n": 49,
+      "hits": 15,
+      "hitPct": 30.6,
+      "chancePct": 37.9,
+      "lift": 0.81,
+      "p": 0.89305,
+      "pBinomial": 0.887
+     },
+     "hold": {
+      "n": 20,
+      "hits": 4,
+      "hitPct": 20.0,
+      "chancePct": 34.3,
+      "lift": 0.58,
+      "p": 0.94603,
+      "pBinomial": 0.949
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -3686,18 +3709,18 @@
       "n": 94,
       "hits": 18,
       "hitPct": 19.1,
-      "chancePct": 23.4,
-      "lift": 0.82,
-      "p": 0.85657,
-      "pBinomial": 0.865
+      "chancePct": 23.5,
+      "lift": 0.81,
+      "p": 0.87806,
+      "pBinomial": 0.871
      },
      "hold": {
       "n": 71,
       "hits": 23,
       "hitPct": 32.4,
-      "chancePct": 29.6,
+      "chancePct": 29.7,
       "lift": 1.09,
-      "p": 0.34283,
+      "p": 0.34333,
       "pBinomial": 0.348
      },
      "verdict": "NOT ABOVE CHANCE"
@@ -3709,66 +3732,19 @@
       "n": 50,
       "hits": 15,
       "hitPct": 30.0,
-      "chancePct": 37.6,
+      "chancePct": 37.5,
       "lift": 0.8,
-      "p": 0.90805,
-      "pBinomial": 0.897
+      "p": 0.90355,
+      "pBinomial": 0.895
      },
      "hold": {
       "n": 22,
       "hits": 7,
       "hitPct": 31.8,
-      "chancePct": 33.6,
-      "lift": 0.95,
-      "p": 0.65017,
-      "pBinomial": 0.648
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
-     "tool": "prior swing duration x1.618",
-     "family": "swing ratios",
-     "sel": {
-      "n": 49,
-      "hits": 15,
-      "hitPct": 30.6,
-      "chancePct": 38.1,
-      "lift": 0.8,
-      "p": 0.90305,
-      "pBinomial": 0.891
-     },
-     "hold": {
-      "n": 20,
-      "hits": 4,
-      "hitPct": 20.0,
-      "chancePct": 34.5,
-      "lift": 0.58,
-      "p": 0.94653,
-      "pBinomial": 0.951
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
-     "tool": "Square of Nine levels from the last major turn",
-     "family": "price levels",
-     "tol": "1% of price",
-     "sel": {
-      "n": 61,
-      "hits": 7,
-      "hitPct": 11.5,
-      "chancePct": 14.6,
-      "lift": 0.79,
-      "p": 0.8046,
-      "pBinomial": 0.805
-     },
-     "hold": {
-      "n": 27,
-      "hits": 5,
-      "hitPct": 18.5,
-      "chancePct": 17.5,
-      "lift": 1.06,
-      "p": 0.53173,
-      "pBinomial": 0.521
+      "chancePct": 34.0,
+      "lift": 0.94,
+      "p": 0.66417,
+      "pBinomial": 0.663
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -3792,6 +3768,30 @@
       "lift": 1.1,
       "p": 0.55622,
       "pBinomial": 0.543
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
+     "tool": "Square of Nine levels from the last major turn",
+     "family": "price levels",
+     "tol": "1% of price",
+     "sel": {
+      "n": 61,
+      "hits": 7,
+      "hitPct": 11.5,
+      "chancePct": 14.6,
+      "lift": 0.78,
+      "p": 0.82559,
+      "pBinomial": 0.808
+     },
+     "hold": {
+      "n": 27,
+      "hits": 5,
+      "hitPct": 18.5,
+      "chancePct": 17.7,
+      "lift": 1.04,
+      "p": 0.54923,
+      "pBinomial": 0.535
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -3891,22 +3891,22 @@
      "tool": "range squared in time, 0.1 pt/day",
      "family": "range squared",
      "sel": {
-      "n": 55,
+      "n": 56,
       "hits": 16,
-      "hitPct": 29.1,
-      "chancePct": 40.5,
-      "lift": 0.72,
-      "p": 0.98101,
-      "pBinomial": 0.971
+      "hitPct": 28.6,
+      "chancePct": 40.9,
+      "lift": 0.7,
+      "p": 0.98451,
+      "pBinomial": 0.98
      },
      "hold": {
       "n": 12,
       "hits": 5,
       "hitPct": 41.7,
-      "chancePct": 32.4,
-      "lift": 1.28,
-      "p": 0.32984,
-      "pBinomial": 0.343
+      "chancePct": 32.0,
+      "lift": 1.3,
+      "p": 0.32684,
+      "pBinomial": 0.329
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -3940,19 +3940,19 @@
       "n": 3,
       "hits": 1,
       "hitPct": 33.3,
-      "chancePct": 49.7,
-      "lift": 0.67,
-      "p": 0.87956,
-      "pBinomial": 0.872
+      "chancePct": 50.4,
+      "lift": 0.66,
+      "p": 0.87806,
+      "pBinomial": 0.878
      },
      "hold": {
       "n": 6,
       "hits": 3,
       "hitPct": 50.0,
-      "chancePct": 27.7,
-      "lift": 1.8,
-      "p": 0.2059,
-      "pBinomial": 0.215
+      "chancePct": 28.1,
+      "lift": 1.78,
+      "p": 0.21539,
+      "pBinomial": 0.221
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -4410,7 +4410,7 @@
       "n": 1,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 23.0,
+      "chancePct": 21.1,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -4419,10 +4419,10 @@
       "n": 2,
       "hits": 1,
       "hitPct": 50.0,
-      "chancePct": 26.8,
-      "lift": 1.87,
-      "p": 0.46527,
-      "pBinomial": 0.463
+      "chancePct": 26.1,
+      "lift": 1.92,
+      "p": 0.45327,
+      "pBinomial": 0.454
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -4433,7 +4433,7 @@
       "n": 3,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 28.7,
+      "chancePct": 28.2,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -4442,10 +4442,10 @@
       "n": 4,
       "hits": 1,
       "hitPct": 25.0,
-      "chancePct": 29.3,
-      "lift": 0.85,
-      "p": 0.75762,
-      "pBinomial": 0.751
+      "chancePct": 29.1,
+      "lift": 0.86,
+      "p": 0.75912,
+      "pBinomial": 0.748
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -4456,7 +4456,7 @@
       "n": 2,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 35.9,
+      "chancePct": 37.5,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -4465,10 +4465,10 @@
       "n": 2,
       "hits": 1,
       "hitPct": 50.0,
-      "chancePct": 44.6,
-      "lift": 1.12,
-      "p": 0.69265,
-      "pBinomial": 0.693
+      "chancePct": 45.0,
+      "lift": 1.11,
+      "p": 0.69315,
+      "pBinomial": 0.698
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -4500,10 +4500,10 @@
       "n": 27,
       "hits": 1,
       "hitPct": 3.7,
-      "chancePct": 0.2,
-      "lift": 22.47,
-      "p": 0.04498,
-      "pBinomial": 0.0436
+      "chancePct": 0.1,
+      "lift": 27.03,
+      "p": 0.03748,
+      "pBinomial": 0.0363
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -4524,7 +4524,7 @@
       "n": 27,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 0.9,
+      "chancePct": 1.0,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -4572,7 +4572,7 @@
       "n": 27,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 1.4,
+      "chancePct": 1.3,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -4596,7 +4596,7 @@
       "n": 27,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 3.6,
+      "chancePct": 3.5,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -4638,8 +4638,8 @@
   "QQQ": {
    "history": {
     "from": "1999-03-10",
-    "to": "2026-10-21",
-    "sessions": 6948
+    "to": "2026-10-28",
+    "sessions": 6953
    },
    "swingThresholdPct": 3.4,
    "majorThresholdPct": 8.5,
@@ -7046,7 +7046,7 @@
    ],
    "upcoming": [],
    "nullInPlay": [
-    9,
+    7,
     5,
     7
    ]
@@ -7054,8 +7054,8 @@
   "JPM": {
    "history": {
     "from": "1980-03-17",
-    "to": "2026-10-21",
-    "sessions": 11745
+    "to": "2026-10-28",
+    "sessions": 11750
    },
    "swingThresholdPct": 3.9,
    "majorThresholdPct": 9.8,
@@ -7097,9 +7097,9 @@
       "hits": 2,
       "hitPct": 0.3,
       "chancePct": 0.1,
-      "lift": 3.09,
-      "p": 0.13543,
-      "pBinomial": 0.138
+      "lift": 2.95,
+      "p": 0.13643,
+      "pBinomial": 0.148
      },
      "hold": {
       "n": 314,
@@ -7121,9 +7121,9 @@
       "hits": 2,
       "hitPct": 0.3,
       "chancePct": 0.1,
-      "lift": 1.96,
-      "p": 0.27086,
-      "pBinomial": 0.272
+      "lift": 1.97,
+      "p": 0.26437,
+      "pBinomial": 0.27
      },
      "hold": {
       "n": 314,
@@ -7145,18 +7145,18 @@
       "hits": 1,
       "hitPct": 0.1,
       "chancePct": 0.1,
-      "lift": 1.44,
-      "p": 0.52074,
-      "pBinomial": 0.5
+      "lift": 1.48,
+      "p": 0.50275,
+      "pBinomial": 0.49
      },
      "hold": {
       "n": 314,
       "hits": 4,
       "hitPct": 1.3,
       "chancePct": 0.5,
-      "lift": 2.64,
-      "p": 0.05597,
-      "pBinomial": 0.0668
+      "lift": 2.67,
+      "p": 0.05847,
+      "pBinomial": 0.0648
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -7279,13 +7279,13 @@
      "tool": "price squares time, 0.5 pt/day",
      "family": "price = time",
      "sel": {
-      "n": 94,
-      "hits": 77,
-      "hitPct": 81.9,
-      "chancePct": 69.2,
+      "n": 93,
+      "hits": 76,
+      "hitPct": 81.7,
+      "chancePct": 69.0,
       "lift": 1.18,
-      "p": 0.002,
-      "pBinomial": 0.00397
+      "p": 0.005,
+      "pBinomial": 0.00403
      },
      "hold": {
       "n": 68,
@@ -7293,7 +7293,7 @@
       "hitPct": 42.6,
       "chancePct": 29.5,
       "lift": 1.44,
-      "p": 0.01449,
+      "p": 0.01299,
       "pBinomial": 0.0145
      },
      "verdict": "NOT ABOVE CHANCE"
@@ -7305,10 +7305,10 @@
       "n": 9,
       "hits": 7,
       "hitPct": 77.8,
-      "chancePct": 65.9,
+      "chancePct": 65.8,
       "lift": 1.18,
       "p": 0.35232,
-      "pBinomial": 0.358
+      "pBinomial": 0.355
      },
      "hold": {
       "n": 0
@@ -7339,48 +7339,25 @@
      "verdict": "NOT ABOVE CHANCE"
     },
     {
-     "tool": "price squares time, 4 pt/day",
-     "family": "price = time",
-     "sel": {
-      "n": 4,
-      "hits": 4,
-      "hitPct": 100.0,
-      "chancePct": 85.7,
-      "lift": 1.17,
-      "p": 0.50925,
-      "pBinomial": 0.54
-     },
-     "hold": {
-      "n": 7,
-      "hits": 6,
-      "hitPct": 85.7,
-      "chancePct": 49.7,
-      "lift": 1.72,
-      "p": 0.03648,
-      "pBinomial": 0.0607
-     },
-     "verdict": "TOO FEW CALLS"
-    },
-    {
      "tool": "price on Sun's degree (price mod 360)",
      "family": "planet degree",
      "sel": {
       "n": 28,
       "hits": 14,
       "hitPct": 50.0,
-      "chancePct": 42.9,
+      "chancePct": 42.7,
       "lift": 1.17,
-      "p": 0.27186,
-      "pBinomial": 0.284
+      "p": 0.26737,
+      "pBinomial": 0.276
      },
      "hold": {
       "n": 9,
       "hits": 2,
       "hitPct": 22.2,
-      "chancePct": 33.6,
+      "chancePct": 33.9,
       "lift": 0.66,
-      "p": 0.87506,
-      "pBinomial": 0.86
+      "p": 0.86607,
+      "pBinomial": 0.864
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -7429,6 +7406,29 @@
       "pBinomial": 0.0831
      },
      "verdict": "NOT ABOVE CHANCE"
+    },
+    {
+     "tool": "price squares time, 4 pt/day",
+     "family": "price = time",
+     "sel": {
+      "n": 4,
+      "hits": 4,
+      "hitPct": 100.0,
+      "chancePct": 86.1,
+      "lift": 1.16,
+      "p": 0.51874,
+      "pBinomial": 0.549
+     },
+     "hold": {
+      "n": 7,
+      "hits": 6,
+      "hitPct": 85.7,
+      "chancePct": 48.9,
+      "lift": 1.75,
+      "p": 0.03798,
+      "pBinomial": 0.0556
+     },
+     "verdict": "TOO FEW CALLS"
     },
     {
      "tool": "Sun reaches the anchor price's degree",
@@ -7603,29 +7603,6 @@
      "verdict": "NOT ABOVE CHANCE"
     },
     {
-     "tool": "price squares time, 0.25 pt/day",
-     "family": "price = time",
-     "sel": {
-      "n": 196,
-      "hits": 131,
-      "hitPct": 66.8,
-      "chancePct": 60.8,
-      "lift": 1.1,
-      "p": 0.03498,
-      "pBinomial": 0.0481
-     },
-     "hold": {
-      "n": 131,
-      "hits": 43,
-      "hitPct": 32.8,
-      "chancePct": 32.5,
-      "lift": 1.01,
-      "p": 0.49675,
-      "pBinomial": 0.505
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
      "tool": "90 calendar days from a major turn",
      "family": "time counts",
      "sel": {
@@ -7718,6 +7695,29 @@
      "verdict": "NOT ABOVE CHANCE"
     },
     {
+     "tool": "price squares time, 0.25 pt/day",
+     "family": "price = time",
+     "sel": {
+      "n": 194,
+      "hits": 129,
+      "hitPct": 66.5,
+      "chancePct": 60.8,
+      "lift": 1.09,
+      "p": 0.04898,
+      "pBinomial": 0.0583
+     },
+     "hold": {
+      "n": 131,
+      "hits": 43,
+      "hitPct": 32.8,
+      "chancePct": 32.7,
+      "lift": 1.0,
+      "p": 0.52724,
+      "pBinomial": 0.521
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
      "tool": "price on Mercury's degree (price mod 360)",
      "family": "planet degree",
      "sel": {
@@ -7726,17 +7726,17 @@
       "hitPct": 44.0,
       "chancePct": 40.4,
       "lift": 1.09,
-      "p": 0.42979,
-      "pBinomial": 0.429
+      "p": 0.43878,
+      "pBinomial": 0.431
      },
      "hold": {
       "n": 14,
       "hits": 5,
       "hitPct": 35.7,
-      "chancePct": 29.4,
-      "lift": 1.21,
-      "p": 0.3983,
-      "pBinomial": 0.397
+      "chancePct": 29.2,
+      "lift": 1.23,
+      "p": 0.37831,
+      "pBinomial": 0.388
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -7748,10 +7748,10 @@
       "n": 732,
       "hits": 328,
       "hitPct": 44.8,
-      "chancePct": 41.5,
+      "chancePct": 41.6,
       "lift": 1.08,
-      "p": 0.02749,
-      "pBinomial": 0.0385
+      "p": 0.02599,
+      "pBinomial": 0.0411
      },
      "hold": {
       "n": 314,
@@ -7760,7 +7760,7 @@
       "chancePct": 42.8,
       "lift": 1.19,
       "p": 0.0005,
-      "pBinomial": 0.00216
+      "pBinomial": 0.00208
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -7796,17 +7796,17 @@
       "hitPct": 85.0,
       "chancePct": 79.4,
       "lift": 1.07,
-      "p": 0.23538,
-      "pBinomial": 0.257
+      "p": 0.23838,
+      "pBinomial": 0.254
      },
      "hold": {
       "n": 28,
       "hits": 16,
       "hitPct": 57.1,
-      "chancePct": 44.5,
-      "lift": 1.29,
-      "p": 0.09945,
-      "pBinomial": 0.123
+      "chancePct": 44.9,
+      "lift": 1.27,
+      "p": 0.10295,
+      "pBinomial": 0.133
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -8141,8 +8141,8 @@
       "hitPct": 44.0,
       "chancePct": 42.9,
       "lift": 1.03,
-      "p": 0.1944,
-      "pBinomial": 0.216
+      "p": 0.2024,
+      "pBinomial": 0.214
      },
      "hold": {
       "n": 513,
@@ -8150,8 +8150,8 @@
       "hitPct": 26.1,
       "chancePct": 29.6,
       "lift": 0.88,
-      "p": 0.96452,
-      "pBinomial": 0.962
+      "p": 0.96802,
+      "pBinomial": 0.963
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -8277,42 +8277,19 @@
       "n": 15,
       "hits": 13,
       "hitPct": 86.7,
-      "chancePct": 85.2,
+      "chancePct": 85.0,
       "lift": 1.02,
-      "p": 0.6067,
-      "pBinomial": 0.611
+      "p": 0.5992,
+      "pBinomial": 0.604
      },
      "hold": {
       "n": 16,
       "hits": 9,
       "hitPct": 56.2,
-      "chancePct": 40.6,
-      "lift": 1.39,
-      "p": 0.12194,
-      "pBinomial": 0.154
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
-     "tool": "history analog at 4x time scale",
-     "family": "analog scale",
-     "sel": {
-      "n": 1436,
-      "hits": 627,
-      "hitPct": 43.7,
-      "chancePct": 43.0,
-      "lift": 1.02,
-      "p": 0.29635,
-      "pBinomial": 0.319
-     },
-     "hold": {
-      "n": 658,
-      "hits": 190,
-      "hitPct": 28.9,
-      "chancePct": 29.0,
-      "lift": 0.99,
-      "p": 0.57771,
-      "pBinomial": 0.553
+      "chancePct": 40.8,
+      "lift": 1.38,
+      "p": 0.13043,
+      "pBinomial": 0.159
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -8325,8 +8302,8 @@
       "hitPct": 44.2,
       "chancePct": 43.4,
       "lift": 1.02,
-      "p": 0.26637,
-      "pBinomial": 0.28
+      "p": 0.27336,
+      "pBinomial": 0.278
      },
      "hold": {
       "n": 692,
@@ -8334,32 +8311,8 @@
       "hitPct": 28.2,
       "chancePct": 29.0,
       "lift": 0.97,
-      "p": 0.70965,
-      "pBinomial": 0.695
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
-     "tool": "Mars's longitude as a price",
-     "family": "price levels",
-     "tol": "1% of price",
-     "sel": {
-      "n": 732,
-      "hits": 1,
-      "hitPct": 0.1,
-      "chancePct": 0.1,
-      "lift": 1.02,
-      "p": 0.65117,
-      "pBinomial": 0.625
-     },
-     "hold": {
-      "n": 314,
-      "hits": 3,
-      "hitPct": 1.0,
-      "chancePct": 0.3,
-      "lift": 2.73,
-      "p": 0.09145,
-      "pBinomial": 0.0987
+      "p": 0.69715,
+      "pBinomial": 0.697
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -8383,6 +8336,29 @@
       "lift": 1.04,
       "p": 0.45027,
       "pBinomial": 0.458
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
+     "tool": "history analog at 4x time scale",
+     "family": "analog scale",
+     "sel": {
+      "n": 1436,
+      "hits": 627,
+      "hitPct": 43.7,
+      "chancePct": 43.1,
+      "lift": 1.01,
+      "p": 0.33433,
+      "pBinomial": 0.341
+     },
+     "hold": {
+      "n": 658,
+      "hits": 190,
+      "hitPct": 28.9,
+      "chancePct": 29.1,
+      "lift": 0.99,
+      "p": 0.56772,
+      "pBinomial": 0.559
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -8544,30 +8520,6 @@
       "lift": 1.16,
       "p": 0.14543,
       "pBinomial": 0.165
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
-     "tool": "Saturn's longitude as a price",
-     "family": "price levels",
-     "tol": "1% of price",
-     "sel": {
-      "n": 732,
-      "hits": 2,
-      "hitPct": 0.3,
-      "chancePct": 0.3,
-      "lift": 0.99,
-      "p": 0.6092,
-      "pBinomial": 0.6
-     },
-     "hold": {
-      "n": 314,
-      "hits": 0,
-      "hitPct": 0.0,
-      "chancePct": 0.1,
-      "lift": 0.0,
-      "p": 1.0,
-      "pBinomial": 1.0
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -8802,6 +8754,30 @@
      "verdict": "NOT ABOVE CHANCE"
     },
     {
+     "tool": "Mars's longitude as a price",
+     "family": "price levels",
+     "tol": "1% of price",
+     "sel": {
+      "n": 732,
+      "hits": 1,
+      "hitPct": 0.1,
+      "chancePct": 0.1,
+      "lift": 0.98,
+      "p": 0.66417,
+      "pBinomial": 0.641
+     },
+     "hold": {
+      "n": 314,
+      "hits": 3,
+      "hitPct": 1.0,
+      "chancePct": 0.3,
+      "lift": 2.73,
+      "p": 0.08596,
+      "pBinomial": 0.0987
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
      "tool": "45 calendar days from a major turn",
      "family": "time counts",
      "sel": {
@@ -8890,30 +8866,6 @@
       "lift": 1.09,
       "p": 0.36782,
       "pBinomial": 0.369
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
-     "tool": "Mercury's longitude as a price",
-     "family": "price levels",
-     "tol": "1% of price",
-     "sel": {
-      "n": 732,
-      "hits": 1,
-      "hitPct": 0.1,
-      "chancePct": 0.1,
-      "lift": 0.97,
-      "p": 0.66017,
-      "pBinomial": 0.644
-     },
-     "hold": {
-      "n": 314,
-      "hits": 3,
-      "hitPct": 1.0,
-      "chancePct": 0.5,
-      "lift": 1.8,
-      "p": 0.22289,
-      "pBinomial": 0.233
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -9033,6 +8985,54 @@
      "verdict": "NOT ABOVE CHANCE"
     },
     {
+     "tool": "Mercury's longitude as a price",
+     "family": "price levels",
+     "tol": "1% of price",
+     "sel": {
+      "n": 732,
+      "hits": 1,
+      "hitPct": 0.1,
+      "chancePct": 0.1,
+      "lift": 0.96,
+      "p": 0.66967,
+      "pBinomial": 0.648
+     },
+     "hold": {
+      "n": 314,
+      "hits": 3,
+      "hitPct": 1.0,
+      "chancePct": 0.5,
+      "lift": 1.82,
+      "p": 0.22689,
+      "pBinomial": 0.229
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
+     "tool": "Saturn's longitude as a price",
+     "family": "price levels",
+     "tol": "1% of price",
+     "sel": {
+      "n": 732,
+      "hits": 2,
+      "hitPct": 0.3,
+      "chancePct": 0.3,
+      "lift": 0.96,
+      "p": 0.63268,
+      "pBinomial": 0.616
+     },
+     "hold": {
+      "n": 314,
+      "hits": 0,
+      "hitPct": 0.0,
+      "chancePct": 0.1,
+      "lift": 0.0,
+      "p": 1.0,
+      "pBinomial": 1.0
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
      "tool": "major cycle / 2 repeating",
      "family": "swing ratios",
      "sel": {
@@ -9110,17 +9110,17 @@
       "hitPct": 40.1,
       "chancePct": 43.1,
       "lift": 0.93,
-      "p": 0.9935,
-      "pBinomial": 0.991
+      "p": 0.993,
+      "pBinomial": 0.99
      },
      "hold": {
       "n": 627,
       "hits": 173,
       "hitPct": 27.6,
-      "chancePct": 28.9,
+      "chancePct": 29.0,
       "lift": 0.95,
-      "p": 0.7901,
-      "pBinomial": 0.784
+      "p": 0.7991,
+      "pBinomial": 0.792
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -9203,8 +9203,8 @@
       "hitPct": 17.3,
       "chancePct": 19.1,
       "lift": 0.91,
-      "p": 0.90005,
-      "pBinomial": 0.899
+      "p": 0.90355,
+      "pBinomial": 0.894
      },
      "hold": {
       "n": 314,
@@ -9212,31 +9212,8 @@
       "hitPct": 37.9,
       "chancePct": 33.1,
       "lift": 1.14,
-      "p": 0.02999,
-      "pBinomial": 0.0422
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
-     "tool": "price on Venus's degree (price mod 360)",
-     "family": "planet degree",
-     "sel": {
-      "n": 34,
-      "hits": 13,
-      "hitPct": 38.2,
-      "chancePct": 42.6,
-      "lift": 0.9,
-      "p": 0.75912,
-      "pBinomial": 0.751
-     },
-     "hold": {
-      "n": 13,
-      "hits": 4,
-      "hitPct": 30.8,
-      "chancePct": 27.5,
-      "lift": 1.12,
-      "p": 0.50275,
-      "pBinomial": 0.499
+      "p": 0.03348,
+      "pBinomial": 0.0425
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -9260,6 +9237,29 @@
       "lift": 0.62,
       "p": 0.98751,
       "pBinomial": 0.988
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
+     "tool": "price on Venus's degree (price mod 360)",
+     "family": "planet degree",
+     "sel": {
+      "n": 34,
+      "hits": 13,
+      "hitPct": 38.2,
+      "chancePct": 42.7,
+      "lift": 0.89,
+      "p": 0.76962,
+      "pBinomial": 0.758
+     },
+     "hold": {
+      "n": 13,
+      "hits": 4,
+      "hitPct": 30.8,
+      "chancePct": 27.9,
+      "lift": 1.1,
+      "p": 0.52224,
+      "pBinomial": 0.513
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -9339,10 +9339,10 @@
       "n": 11,
       "hits": 4,
       "hitPct": 36.4,
-      "chancePct": 52.2,
+      "chancePct": 52.3,
       "lift": 0.7,
-      "p": 0.92804,
-      "pBinomial": 0.913
+      "p": 0.93053,
+      "pBinomial": 0.914
      },
      "hold": {
       "n": 0
@@ -9379,18 +9379,18 @@
       "n": 18,
       "hits": 3,
       "hitPct": 16.7,
-      "chancePct": 37.8,
+      "chancePct": 38.0,
       "lift": 0.44,
-      "p": 0.99,
+      "p": 0.9925,
       "pBinomial": 0.987
      },
      "hold": {
       "n": 9,
       "hits": 1,
       "hitPct": 11.1,
-      "chancePct": 30.3,
+      "chancePct": 30.2,
       "lift": 0.37,
-      "p": 0.96302,
+      "p": 0.96552,
       "pBinomial": 0.961
      },
      "verdict": "NOT ABOVE CHANCE"
@@ -9422,10 +9422,10 @@
       "n": 1,
       "hits": 1,
       "hitPct": 100.0,
-      "chancePct": 64.9,
-      "lift": 1.54,
-      "p": 0.64918,
-      "pBinomial": 0.649
+      "chancePct": 64.5,
+      "lift": 1.55,
+      "p": 0.64568,
+      "pBinomial": 0.645
      },
      "verdict": "TOO FEW CALLS"
     }
@@ -9433,20 +9433,20 @@
    "upcoming": [],
    "nullInPlay": [
     11,
-    11,
-    12
+    8,
+    13
    ]
   },
   "GOOGL": {
    "history": {
     "from": "2004-08-19",
-    "to": "2026-10-21",
-    "sessions": 5579
+    "to": "2026-10-28",
+    "sessions": 5584
    },
    "swingThresholdPct": 5.0,
    "majorThresholdPct": 12.5,
    "turns": 312,
-   "majorTurns": 87,
+   "majorTurns": 88,
    "split": "2020-02-24",
    "tested": 82,
    "inPlay": 0,
@@ -11514,6 +11514,17 @@
      "verdict": "TOO FEW CALLS"
     },
     {
+     "tool": "Saturn reaches the anchor price's degree",
+     "family": "planet degree",
+     "sel": {
+      "n": 0
+     },
+     "hold": {
+      "n": 0
+     },
+     "verdict": "TOO FEW CALLS"
+    },
+    {
      "tool": "range squared in time, 4 pt/day",
      "family": "range squared",
      "sel": {
@@ -11748,16 +11759,16 @@
    ],
    "upcoming": [],
    "nullInPlay": [
-    1,
-    3,
+    0,
+    0,
     0
    ]
   },
   "NVDA": {
    "history": {
     "from": "1999-01-22",
-    "to": "2026-10-21",
-    "sessions": 6980
+    "to": "2026-10-28",
+    "sessions": 6985
    },
    "swingThresholdPct": 10.0,
    "majorThresholdPct": 25.0,
@@ -14004,15 +14015,15 @@
    "upcoming": [],
    "nullInPlay": [
     0,
-    0,
+    1,
     0
    ]
   },
   "AMZN": {
    "history": {
     "from": "1997-05-15",
-    "to": "2026-10-21",
-    "sessions": 7405
+    "to": "2026-10-28",
+    "sessions": 7410
    },
    "swingThresholdPct": 10.0,
    "majorThresholdPct": 25.0,
@@ -16300,16 +16311,16 @@
    ],
    "upcoming": [],
    "nullInPlay": [
-    2,
     1,
+    2,
     0
    ]
   },
   "SPY": {
    "history": {
     "from": "1993-01-29",
-    "to": "2026-10-21",
-    "sessions": 8490
+    "to": "2026-10-28",
+    "sessions": 8495
    },
    "swingThresholdPct": 6.0,
    "majorThresholdPct": 15.0,
@@ -18683,8 +18694,8 @@
   "VOO": {
    "history": {
     "from": "2010-09-09",
-    "to": "2026-10-21",
-    "sessions": 4054
+    "to": "2026-10-28",
+    "sessions": 4059
    },
    "swingThresholdPct": 6.0,
    "majorThresholdPct": 15.0,
@@ -21016,13 +21027,13 @@
   "GC=F": {
    "history": {
     "from": "2000-08-30",
-    "to": "2026-10-22",
-    "sessions": 6562
+    "to": "2026-10-29",
+    "sessions": 6567
    },
    "swingThresholdPct": 5.7,
    "majorThresholdPct": 14.2,
    "turns": 157,
-   "majorTurns": 29,
+   "majorTurns": 30,
    "split": "2018-11-16",
    "tested": 84,
    "inPlay": 0,
@@ -23379,8 +23390,8 @@
   "META": {
    "history": {
     "from": "2012-05-18",
-    "to": "2026-10-21",
-    "sessions": 3627
+    "to": "2026-10-28",
+    "sessions": 3632
    },
    "swingThresholdPct": 10.0,
    "majorThresholdPct": 25.0,
@@ -23400,17 +23411,17 @@
       "hitPct": 3.4,
       "chancePct": 0.3,
       "lift": 10.08,
-      "p": 0.01249,
+      "p": 0.01749,
       "pBinomial": 0.0171
      },
      "hold": {
       "n": 25,
       "hits": 1,
       "hitPct": 4.0,
-      "chancePct": 3.7,
-      "lift": 1.07,
-      "p": 0.62919,
-      "pBinomial": 0.613
+      "chancePct": 3.8,
+      "lift": 1.05,
+      "p": 0.63218,
+      "pBinomial": 0.622
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -23421,19 +23432,19 @@
       "n": 1,
       "hits": 1,
       "hitPct": 100.0,
-      "chancePct": 21.4,
-      "lift": 4.66,
-      "p": 0.21489,
-      "pBinomial": 0.214
+      "chancePct": 21.9,
+      "lift": 4.58,
+      "p": 0.21889,
+      "pBinomial": 0.218
      },
      "hold": {
       "n": 3,
       "hits": 1,
       "hitPct": 33.3,
-      "chancePct": 12.6,
-      "lift": 2.65,
-      "p": 0.34033,
-      "pBinomial": 0.332
+      "chancePct": 13.0,
+      "lift": 2.56,
+      "p": 0.34683,
+      "pBinomial": 0.341
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -23490,19 +23501,19 @@
       "n": 3,
       "hits": 2,
       "hitPct": 66.7,
-      "chancePct": 20.8,
-      "lift": 3.21,
-      "p": 0.11194,
-      "pBinomial": 0.112
+      "chancePct": 21.2,
+      "lift": 3.15,
+      "p": 0.11644,
+      "pBinomial": 0.115
      },
      "hold": {
       "n": 7,
       "hits": 2,
       "hitPct": 28.6,
-      "chancePct": 14.9,
-      "lift": 1.92,
-      "p": 0.28886,
-      "pBinomial": 0.28
+      "chancePct": 14.6,
+      "lift": 1.95,
+      "p": 0.27386,
+      "pBinomial": 0.273
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -23645,6 +23656,29 @@
      "verdict": "NOT ABOVE CHANCE"
     },
     {
+     "tool": "price on Mars's degree (price mod 360)",
+     "family": "planet degree",
+     "sel": {
+      "n": 9,
+      "hits": 1,
+      "hitPct": 11.1,
+      "chancePct": 5.5,
+      "lift": 2.03,
+      "p": 0.4038,
+      "pBinomial": 0.397
+     },
+     "hold": {
+      "n": 3,
+      "hits": 1,
+      "hitPct": 33.3,
+      "chancePct": 18.5,
+      "lift": 1.8,
+      "p": 0.45927,
+      "pBinomial": 0.458
+     },
+     "verdict": "TOO FEW CALLS"
+    },
+    {
      "tool": "Saturn squares the anchor price's degree",
      "family": "planet degree",
      "sel": {
@@ -23664,29 +23698,6 @@
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
-     },
-     "verdict": "TOO FEW CALLS"
-    },
-    {
-     "tool": "price on Mars's degree (price mod 360)",
-     "family": "planet degree",
-     "sel": {
-      "n": 9,
-      "hits": 1,
-      "hitPct": 11.1,
-      "chancePct": 5.7,
-      "lift": 1.94,
-      "p": 0.42379,
-      "pBinomial": 0.412
-     },
-     "hold": {
-      "n": 3,
-      "hits": 1,
-      "hitPct": 33.3,
-      "chancePct": 17.1,
-      "lift": 1.95,
-      "p": 0.43128,
-      "pBinomial": 0.43
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -23852,6 +23863,29 @@
      "verdict": "TOO FEW CALLS"
     },
     {
+     "tool": "history analog at 4x time scale",
+     "family": "analog scale",
+     "sel": {
+      "n": 255,
+      "hits": 34,
+      "hitPct": 13.3,
+      "chancePct": 9.4,
+      "lift": 1.43,
+      "p": 0.02399,
+      "pBinomial": 0.023
+     },
+     "hold": {
+      "n": 157,
+      "hits": 22,
+      "hitPct": 14.0,
+      "chancePct": 14.0,
+      "lift": 1.0,
+      "p": 0.52824,
+      "pBinomial": 0.526
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
      "tool": "Jupiter returns to its place at the anchor turn",
      "family": "planet degree",
      "sel": {
@@ -23873,29 +23907,6 @@
       "pBinomial": 0.479
      },
      "verdict": "TOO FEW CALLS"
-    },
-    {
-     "tool": "history analog at 4x time scale",
-     "family": "analog scale",
-     "sel": {
-      "n": 255,
-      "hits": 34,
-      "hitPct": 13.3,
-      "chancePct": 9.4,
-      "lift": 1.42,
-      "p": 0.02249,
-      "pBinomial": 0.0242
-     },
-     "hold": {
-      "n": 157,
-      "hits": 22,
-      "hitPct": 14.0,
-      "chancePct": 14.0,
-      "lift": 1.0,
-      "p": 0.52824,
-      "pBinomial": 0.538
-     },
-     "verdict": "NOT ABOVE CHANCE"
     },
     {
      "tool": "1-year anniversaries of major turns",
@@ -24111,10 +24122,10 @@
       "n": 288,
       "hits": 32,
       "hitPct": 11.1,
-      "chancePct": 9.9,
+      "chancePct": 10.0,
       "lift": 1.12,
-      "p": 0.27436,
-      "pBinomial": 0.274
+      "p": 0.27686,
+      "pBinomial": 0.282
      },
      "hold": {
       "n": 125,
@@ -24123,7 +24134,7 @@
       "chancePct": 13.5,
       "lift": 1.24,
       "p": 0.16742,
-      "pBinomial": 0.172
+      "pBinomial": 0.171
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -24135,18 +24146,18 @@
       "hits": 33,
       "hitPct": 11.0,
       "chancePct": 9.9,
-      "lift": 1.11,
-      "p": 0.28436,
-      "pBinomial": 0.282
+      "lift": 1.12,
+      "p": 0.27936,
+      "pBinomial": 0.278
      },
      "hold": {
       "n": 170,
       "hits": 26,
       "hitPct": 15.3,
-      "chancePct": 13.8,
-      "lift": 1.11,
-      "p": 0.31334,
-      "pBinomial": 0.316
+      "chancePct": 13.7,
+      "lift": 1.12,
+      "p": 0.30735,
+      "pBinomial": 0.303
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -24640,43 +24651,19 @@
       "n": 184,
       "hits": 19,
       "hitPct": 10.3,
-      "chancePct": 12.4,
+      "chancePct": 12.5,
       "lift": 0.83,
-      "p": 0.84658,
-      "pBinomial": 0.837
+      "p": 0.84308,
+      "pBinomial": 0.844
      },
      "hold": {
       "n": 179,
       "hits": 30,
       "hitPct": 16.8,
       "chancePct": 14.0,
-      "lift": 1.2,
-      "p": 0.16492,
-      "pBinomial": 0.166
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
-     "tool": "1/8ths and 1/3rds of the last major range",
-     "family": "price levels",
-     "tol": "1% of price",
-     "sel": {
-      "n": 58,
-      "hits": 7,
-      "hitPct": 12.1,
-      "chancePct": 15.5,
-      "lift": 0.78,
-      "p": 0.86007,
-      "pBinomial": 0.815
-     },
-     "hold": {
-      "n": 25,
-      "hits": 7,
-      "hitPct": 28.0,
-      "chancePct": 19.2,
-      "lift": 1.46,
-      "p": 0.16742,
-      "pBinomial": 0.191
+      "lift": 1.19,
+      "p": 0.17391,
+      "pBinomial": 0.173
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -24702,6 +24689,30 @@
       "pBinomial": 1.0
      },
      "verdict": "TOO FEW CALLS"
+    },
+    {
+     "tool": "1/8ths and 1/3rds of the last major range",
+     "family": "price levels",
+     "tol": "1% of price",
+     "sel": {
+      "n": 58,
+      "hits": 7,
+      "hitPct": 12.1,
+      "chancePct": 15.8,
+      "lift": 0.76,
+      "p": 0.86457,
+      "pBinomial": 0.83
+     },
+     "hold": {
+      "n": 25,
+      "hits": 7,
+      "hitPct": 28.0,
+      "chancePct": 19.2,
+      "lift": 1.46,
+      "p": 0.16492,
+      "pBinomial": 0.189
+     },
+     "verdict": "NOT ABOVE CHANCE"
     },
     {
      "tool": "squares of numbers (25..729 days)",
@@ -24819,6 +24830,29 @@
      "verdict": "NOT ABOVE CHANCE"
     },
     {
+     "tool": "price squares time, 0.25 pt/day",
+     "family": "price = time",
+     "sel": {
+      "n": 28,
+      "hits": 3,
+      "hitPct": 10.7,
+      "chancePct": 19.4,
+      "lift": 0.55,
+      "p": 0.93603,
+      "pBinomial": 0.929
+     },
+     "hold": {
+      "n": 9,
+      "hits": 4,
+      "hitPct": 44.4,
+      "chancePct": 19.2,
+      "lift": 2.32,
+      "p": 0.07246,
+      "pBinomial": 0.075
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
      "tool": "90 calendar days from a major turn",
      "family": "time counts",
      "sel": {
@@ -24865,29 +24899,6 @@
      "verdict": "NOT ABOVE CHANCE"
     },
     {
-     "tool": "price squares time, 0.25 pt/day",
-     "family": "price = time",
-     "sel": {
-      "n": 29,
-      "hits": 3,
-      "hitPct": 10.3,
-      "chancePct": 19.1,
-      "lift": 0.54,
-      "p": 0.94403,
-      "pBinomial": 0.935
-     },
-     "hold": {
-      "n": 9,
-      "hits": 4,
-      "hitPct": 44.4,
-      "chancePct": 19.0,
-      "lift": 2.33,
-      "p": 0.06997,
-      "pBinomial": 0.0736
-     },
-     "verdict": "NOT ABOVE CHANCE"
-    },
-    {
      "tool": "Square of Nine levels from the last major turn",
      "family": "price levels",
      "tol": "1% of price",
@@ -24897,7 +24908,7 @@
       "hitPct": 5.2,
       "chancePct": 10.9,
       "lift": 0.48,
-      "p": 0.97001,
+      "p": 0.97751,
       "pBinomial": 0.959
      },
      "hold": {
@@ -24906,7 +24917,7 @@
       "hitPct": 4.0,
       "chancePct": 12.2,
       "lift": 0.33,
-      "p": 0.998,
+      "p": 0.9985,
       "pBinomial": 0.961
      },
      "verdict": "NOT ABOVE CHANCE"
@@ -24943,17 +24954,40 @@
       "hitPct": 9.5,
       "chancePct": 22.1,
       "lift": 0.43,
-      "p": 0.95652,
-      "pBinomial": 0.964
+      "p": 0.97251,
+      "pBinomial": 0.963
      },
      "hold": {
       "n": 24,
       "hits": 2,
       "hitPct": 8.3,
-      "chancePct": 19.3,
+      "chancePct": 19.4,
       "lift": 0.43,
-      "p": 0.96802,
-      "pBinomial": 0.961
+      "p": 0.96452,
+      "pBinomial": 0.962
+     },
+     "verdict": "NOT ABOVE CHANCE"
+    },
+    {
+     "tool": "price squares time, 0.5 pt/day",
+     "family": "price = time",
+     "sel": {
+      "n": 27,
+      "hits": 2,
+      "hitPct": 7.4,
+      "chancePct": 17.6,
+      "lift": 0.42,
+      "p": 0.96202,
+      "pBinomial": 0.964
+     },
+     "hold": {
+      "n": 21,
+      "hits": 2,
+      "hitPct": 9.5,
+      "chancePct": 19.3,
+      "lift": 0.49,
+      "p": 0.93203,
+      "pBinomial": 0.934
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -24979,29 +25013,6 @@
       "pBinomial": 0.808
      },
      "verdict": "TOO FEW CALLS"
-    },
-    {
-     "tool": "price squares time, 0.5 pt/day",
-     "family": "price = time",
-     "sel": {
-      "n": 27,
-      "hits": 2,
-      "hitPct": 7.4,
-      "chancePct": 17.9,
-      "lift": 0.41,
-      "p": 0.96502,
-      "pBinomial": 0.966
-     },
-     "hold": {
-      "n": 21,
-      "hits": 2,
-      "hitPct": 9.5,
-      "chancePct": 19.2,
-      "lift": 0.5,
-      "p": 0.93203,
-      "pBinomial": 0.932
-     },
-     "verdict": "NOT ABOVE CHANCE"
     },
     {
      "tool": "Sun squares the anchor price's degree",
@@ -25508,7 +25519,7 @@
       "n": 7,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 9.1,
+      "chancePct": 9.3,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -25517,7 +25528,7 @@
       "n": 6,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 12.8,
+      "chancePct": 13.2,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -25531,7 +25542,7 @@
       "n": 4,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 10.3,
+      "chancePct": 10.4,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -25563,10 +25574,10 @@
       "n": 1,
       "hits": 1,
       "hitPct": 100.0,
-      "chancePct": 12.4,
-      "lift": 8.03,
-      "p": 0.12494,
-      "pBinomial": 0.124
+      "chancePct": 13.9,
+      "lift": 7.19,
+      "p": 0.13943,
+      "pBinomial": 0.139
      },
      "verdict": "TOO FEW CALLS"
     },
@@ -25577,7 +25588,7 @@
       "n": 3,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 14.5,
+      "chancePct": 14.4,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -25594,7 +25605,7 @@
       "n": 3,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 7.6,
+      "chancePct": 7.1,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -25603,7 +25614,7 @@
       "n": 5,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 13.3,
+      "chancePct": 13.0,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -25627,7 +25638,7 @@
       "n": 25,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 4.2,
+      "chancePct": 4.3,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -25676,9 +25687,9 @@
       "hits": 1,
       "hitPct": 4.0,
       "chancePct": 3.0,
-      "lift": 1.32,
-      "p": 0.54623,
-      "pBinomial": 0.536
+      "lift": 1.35,
+      "p": 0.54223,
+      "pBinomial": 0.529
      },
      "verdict": "NOT ABOVE CHANCE"
     },
@@ -25690,7 +25701,7 @@
       "n": 58,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 0.6,
+      "chancePct": 0.5,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
@@ -25701,7 +25712,7 @@
       "hitPct": 4.0,
       "chancePct": 3.6,
       "lift": 1.1,
-      "p": 0.62769,
+      "p": 0.62569,
       "pBinomial": 0.603
      },
      "verdict": "NOT ABOVE CHANCE"
@@ -25723,7 +25734,7 @@
       "n": 25,
       "hits": 0,
       "hitPct": 0.0,
-      "chancePct": 2.9,
+      "chancePct": 2.8,
       "lift": 0.0,
       "p": 1.0,
       "pBinomial": 1.0
