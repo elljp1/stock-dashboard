@@ -3748,3 +3748,52 @@ pending orders (#74 HOOD, #75 TSLA) actually fills; the accelerating growth of
 `forecast_ledger.json`; whether the QQQ-high lag repeats a 4th time; and the standing list - NVDA's
 small-sample hit rate, the GOOGL-highs/AMZN-lows naive-baseline gaps, HOOD's calibration ceiling,
 and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
+
+## 2026-10-29 (Thu) — JPM's grading catches up in one big batch; HOOD's spread rolls into tomorrow's expiry at a locked-in loss; grade + log only
+
+**Today's data situation:** this sandbox's own `fetch_data.py` was blocked again - all 12
+tickers failed with the same proxy-level 403 seen on recent days (confirmed via the proxy's
+status log: "gateway answered 403 to CONNECT" on Yahoo's finance API, a policy block on this
+sandbox, not a Yahoo-side block). With no raw per-ticker CSVs available, `analyze.py` correctly
+refused to run and raised its own safety error rather than risk publishing a broken build. The
+live dashboard is instead running on the separate scheduled GitHub Actions refresh's own build,
+last updated today at 5:41 PM ET with the daily bar dated 2026-10-29 - today's real session did
+land there. Ran the coherence check (passes clean, 12/12 tickers), the full test suite (138
+tests, all passing) and the anomaly audit against that build: everything is clean, zero
+anomalies.
+
+**Grades reviewed:** the standout change is JPM, which jumped from n=29 (14%/21%) on Monday's
+review to n=62 (8%/13%) today - 33 more predictions resolved in a single cycle, and skewed
+heavily toward misses. This is not new data corruption: the grading code only resolves a
+prediction once its target date is 8+ trading days old *and* a matching swing has actually been
+confirmed in the price action, so a steady, mostly one-directional grind in JPM (it has climbed
+from about $332 to $345 over the last two weeks without a sizable pullback) lets a long backlog
+of old low-side calls get confirmed - and judged - all at once rather than a few per day. The
+mechanism checks out and every safety gate is clean, so this is logged as a one-time catch-up,
+not a bug, but the post-catch-up hit rate (8%/13%) is now JPM's grading baseline and is worth
+watching over the next few sessions to see if it holds or recovers. Smaller, ordinary moves
+elsewhere: QQQ n=65→66 (23%/27%, basically flat), GOOGL n=45→47 (20%/21%, basically flat). TSLA
+(13, 31%/38%), HOOD (67, 16%/24%), NVDA (19, 11%/16%) and GC=F (22, 18%/18%) are all unchanged
+since Wednesday. AMZN, SPY, VOO, META and SPCX remain at n=0.
+
+**Open real positions:** HOOD's put credit spread (trade 8, sold $101 / bought $96, x3) expires
+**tomorrow, Fri 10/30**, and HOOD has kept falling - now $88.00, a full $8 below even the $96 long
+strike, with zero trading time left to recover. This is effectively certain to close at its full
+~$1,185 max loss tomorrow. META's spread (trade 9, sold $670 / bought $660, x2, expires 11/20) also
+kept sliding, now $619.85 (down from $618.00 Wednesday and $633.00 Monday) - about $40 below its
+$660 long strike, with roughly three weeks still on the clock to recover before the $1,500 max
+loss would lock in.
+
+**What changed and why:** no dashboard logic change today. Coherence, the full test suite and the
+anomaly audit are all clean, and the JPM jump - while large - is a one-time grading catch-up
+explained by the code's own confirmation-delay design, not a 3+-day pattern or a demonstrated bug,
+so it does not meet the bar for a code change. `forecast_ledger.json` is at 37.9 MB, essentially
+flat versus the ~38.4 MB logged Wednesday. Honesty features (hit-rate displays, random-control
+comparisons, grading, coherence gate) and `tickers.txt` are untouched.
+
+**Watch next:** whether HOOD's spread actually closes Friday 10/30 at its ~$1,185 max loss (no
+realistic recovery path remains); whether META's slide below its $660 long strike continues or
+reverses with about three weeks still on the clock; whether JPM's post-catch-up 8%/13% hit rate
+holds, recovers, or keeps sliding over the next few graded days; whether today's pending GTC order
+(#76 TSLA 415/425C) fills; and the standing list - NVDA's small-sample hit rate, HOOD's calibration
+ceiling, and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
