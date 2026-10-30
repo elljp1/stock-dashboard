@@ -3439,7 +3439,7 @@
         "date": "2026-10-30",
         "time": "12:17 ET",
         "taken": false,
-        "outcome": "pending",
+        "outcome": "void",
         "contracts": 1,
         "id": 78,
         "kind": "sell put",
@@ -3459,7 +3459,7 @@
         "turnTime": "Venus 10:51-11:40 AM; Saturn 1:19-2:09 PM",
         "turnPrice": 103.7,
         "plannedExit": "GTC buy-back $1.58 (50%); close at the 11/16 projected high if not filled; stop $6.35 or HOOD close below 80",
-        "reason": "pushed 12:17pm at $3.175 (limit $3.15); awaiting user; first sold-put alert after spreads were retired; re-pushed 2:38pm at $3.95 (limit $3.95; HOOD 82.41, app low now 80.78; exit $1.98, stop $7.90)"
+        "reason": "pushed 12:17pm at $3.175 (limit $3.15); awaiting user; first sold-put alert after spreads were retired; re-pushed 2:38pm at $3.95 (limit $3.95; HOOD 82.41, app low now 80.78; exit $1.98, stop $7.90); void 3:38pm: app's exit high moved to 11/09 (~96.17), so the expiry moves to 11/13 (see #84)"
       },
       {
         "date": "2026-10-30",
@@ -3472,8 +3472,8 @@
         "symbol": "TSLA",
         "contract": "TSLA 11/20 415C",
         "spread": "11/20 415 call (sold, uncovered)",
-        "midAtAlert": 9.7,
-        "suggestedLimit": 9.7,
+        "midAtAlert": 10.025,
+        "suggestedLimit": 10.0,
         "delta": 0.377,
         "spot": 399.51,
         "collateral": null,
@@ -3485,7 +3485,7 @@
         "turnTime": "Venus 10:51-11:40 AM; Jupiter 2:09-2:58 PM",
         "turnPrice": 368.98,
         "plannedExit": "GTC buy-back $4.85 (50%); close at the 11/16 projected low if not filled; stop $19.40 or TSLA close above 415",
-        "reason": "pushed 12:17pm at $9.70; awaiting user; uncovered (no TSLA shares)"
+        "reason": "pushed 12:17pm at $9.70; awaiting user; uncovered (no TSLA shares); re-pushed 3:38pm at $10.00 (9.95/10.10; TSLA ~398; exit $5.00, stop $20.00)"
       },
       {
         "date": "2026-10-30",
@@ -3590,6 +3590,32 @@
         "turnPrice": 293.99,
         "plannedExit": "GTC buy-back $1.83 (50%); close at the 11/05 projected high; stop $7.30 or GOOGL close below 272.5",
         "reason": "pushed 2:38pm at $3.65; awaiting user; wide quote (3.20/4.10), no open interest; re-pushed 3:04pm at $3.90 (3.65/4.15; GOOGL ~277; exit $1.95, stop $7.80)"
+      },
+      {
+        "id": 84,
+        "date": "2026-10-30",
+        "time": "15:38 ET",
+        "taken": false,
+        "outcome": "pending",
+        "contracts": 1,
+        "kind": "sell put",
+        "symbol": "HOOD",
+        "contract": "HOOD 11/13 80P",
+        "spread": "11/13 80 put (sold, cash-secured)",
+        "midAtAlert": 2.755,
+        "suggestedLimit": 2.75,
+        "delta": -0.346,
+        "spot": 83.5,
+        "collateral": 8000,
+        "breakeven": 77.25,
+        "entryTurnDate": "2026-10-30",
+        "entryTurnTime": "Jupiter 10:54-11:46 AM; Sun 12:39-1:32 PM",
+        "entryTurnPrice": 80.78,
+        "turnDate": "2026-11-09",
+        "turnTime": "Venus 10:48-11:39 AM; Saturn 1:20-2:11 PM",
+        "turnPrice": 96.17,
+        "plannedExit": "GTC buy-back $1.38 (50%); close at the 11/09 projected high; stop $5.50 or HOOD close below 80",
+        "reason": "pushed 3:38pm at $2.755 (limit $2.75); replaces #78 after the app's exit high moved to 11/09"
       }
     ]
   },
