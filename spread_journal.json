@@ -64,7 +64,8 @@
       "setBy": "user",
       "quote": "The app's primary focus was date and time. And then from that predict the price.",
       "summary": "Timing-led. Direction = the app's current leg (next projected turn LOW -> call credit spread; HIGH -> put credit spread). Expiry = first listed expiry >= 2 trading days after the turn, before earnings. Enter any day with >= 2 trading days left in the leg; exit at the projected turn or 50% of credit; stop 2x credit or short strike breached. Put short strike >= 3% below any projected low before expiry. Replaces the down-day/RSI triggers and the fixed 28-50 DTE window. Option-mechanics and sizing rules unchanged; TSLA bearish rule unchanged."
-    }
+    },
+    "alertStyle": "10/30 11:47am ET user: no more spread alerts; scans alert single-leg sold puts (at projected LOWs) and sold calls (at projected HIGHs) only, premium >= 1% of strike, 1 contract, exit 50% buy-back or at the exit turn, stop 2x premium."
   },
   "monthly": [
     {
@@ -1515,8 +1516,8 @@
         "spread": "10/16 335/325 put credit",
         "midAtAlert": 2.33,
         "taken": false,
-        "reason": "user bearish on TSLA; declined",
-        "outcome": "pending"
+        "reason": "user bearish on TSLA; declined; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void"
       },
       {
         "id": 2,
@@ -1526,8 +1527,8 @@
         "midAtAlert": 1.03,
         "midLater": 1.18,
         "taken": false,
-        "reason": "not entered",
-        "outcome": "pending"
+        "reason": "not entered; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void"
       },
       {
         "id": 3,
@@ -1536,8 +1537,8 @@
         "spread": "10/23 375/380 call credit",
         "midAtAlert": 1.05,
         "taken": false,
-        "reason": "not entered",
-        "outcome": "pending"
+        "reason": "not entered; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void"
       },
       {
         "id": 4,
@@ -1548,8 +1549,8 @@
         "midAtAlert": 1.15,
         "midLater": 0.98,
         "taken": false,
-        "reason": "not entered; mid fell to 0.98 by 10:34am (credit/width 0.195, below rule)",
-        "outcome": "pending"
+        "reason": "not entered; mid fell to 0.98 by 10:34am (credit/width 0.195, below rule); void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void"
       },
       {
         "id": 5,
@@ -1582,8 +1583,8 @@
         "spot": 343.27,
         "dayChangePct": -1.75,
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "projectedTurn": 355.96,
         "projectedDate": "2026-09-25",
         "projectedTurnType": "high",
@@ -1601,8 +1602,8 @@
         "spot": 108.55,
         "dayChangePct": -1.72,
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "projectedTurn": 109.69,
         "projectedDate": "2026-10-05",
         "projectedTurnType": "low",
@@ -1620,8 +1621,8 @@
         "spot": 105.92,
         "dayChangePct": -4.1,
         "taken": false,
-        "reason": "re-alert: mid improved $0.15 from alert #7 (1.14); pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "re-alert: mid improved $0.15 from alert #7 (1.14); pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "projectedTurn": 100.21,
         "projectedDate": "2026-09-17",
         "projectedTurnType": "low",
@@ -1639,8 +1640,8 @@
         "spot": 103.42,
         "dayChangePct": -6.4,
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "projectedTurn": 100.21,
         "projectedDate": "2026-09-17",
         "projectedTurnType": "low",
@@ -1658,8 +1659,8 @@
         "spot": 356.51,
         "dayChangePct": 2.6,
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "projectedTurn": 372.21,
         "projectedDate": "2026-09-25",
         "projectedTurnType": "high",
@@ -1681,8 +1682,8 @@
         "maxLoss": 780,
         "breakeven": 767.2,
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "projectedTurn": 748.65,
         "projectedDate": "2026-09-24",
         "projectedTurnType": "high",
@@ -1728,8 +1729,8 @@
         "maxLoss": 1200,
         "breakeven": 319.0,
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "projectedTurn": 316.4,
         "projectedDate": "2026-10-07",
         "projectedTurnType": "low",
@@ -1751,8 +1752,8 @@
         "maxLoss": 1170,
         "breakeven": 318.9,
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "projectedTurn": 316.4,
         "projectedDate": "2026-10-07",
         "projectedTurnType": "low",
@@ -1784,8 +1785,8 @@
         },
         "plannedExit": "close at the 10/15 projected low or at 50% of credit; stop 2x credit or 760 breached",
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "note": "First timing-led alert. QQQ's projected high is today, so the scan evaluated the next leg (down to a 10/15 low). 10/16 is only 1 trading day after the turn, so expiry is 10/23. 770/780 failed (0.15 credit/width); 760/770: 760 mark 5.805 (5.76/5.85), 770 mark 3.405, credit/width 0.24, OI 4092. 1 contract (7%): 2 would be 13.8%, over the 13% cap. Open risk with GOOGL trade 6: 1,885 (17%). GOOGL 10/09 call spreads failed credit (355/360 0.18); HOOD 10/02 113/108 and 114/109 failed (0.15, 0.18); TSLA skipped: no expiry between the 10/15 low + 2 days and 10/21 earnings."
       },
       {
@@ -1837,8 +1838,8 @@
         "turnPrice": 316.4,
         "plannedExit": "close at the 10/07 projected low or at 50% of credit ($0.53); stop $2.10 debit or 360 breached",
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "note": "Timing-led. 365 (delta 0.208) nearest 0.20 but 365/370 too cheap; 360 (0.275) qualifies: 3.525-2.475 = 1.05, 0.21 of width, OI 1966, short quote 3.35/3.70 (10% of mark). 2 contracts (7.2%) keeps total open risk 21.7% with QQQ trade 7; 3 contracts would be 25.3%."
       },
       {
@@ -1860,8 +1861,8 @@
         "turnPrice": 316.4,
         "plannedExit": "close at the 10/07 projected low or at 50% of credit ($0.50); stop $2.00 debit or 355 breached",
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "note": "Timing-led. 360 (delta 0.193) nearest 0.20 but 360/365 only 0.125 of width; 355 (0.268) qualifies: 2.965-1.95 = 1.015, 0.203 of width, OI 7711, short quote 2.88/3.05 (6% of mark). 2 contracts (7.3%) keeps total open risk 21.8% with QQQ trade 7; 3 would be 25.4%. HOOD 10/09 126-130 calls failed (best 126/131 0.18), TSLA 10/16 385/395 0.16, QQQ 10/06 750/760 0.196."
       },
       {
@@ -1883,8 +1884,8 @@
         "turnPrice": 631.43,
         "plannedExit": "close at the 10/19 projected low or at 50% of credit ($1.00); stop $4.00 debit or 790 breached",
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "note": "First META alert (META added 9/28). 790 mark 10.825 (10.50/11.15, 6% of mark), 800 mark 8.825, credit/width 0.200 exactly, OI 353, earnings 10/28 (tentative) after the 10/23 expiry. 780 (delta 0.29) excluded. 1 contract = 7.3%; 2 would be 14.5% (over the 13% cap) and push total open risk with QQQ trade 7 to 29%. With 1 contract total risk is 21.8%."
       },
       {
@@ -2062,8 +2063,8 @@
         "turnPrice": 735.32,
         "plannedExit": "close at the 10/14 projected low or at 50% of credit ($1.03); stop $4.10 debit or 765 breached",
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "note": "770C (0.195) nearest 0.20: 770/780 1.42 (0.14 of width); next strike closer 765C (0.263) 3.62 (3.61/3.63), 775C 1.565; credit/width 0.205; OI 11,080. 1 contract = 7.2% (2 = 14.5%, over 13%); with trade 7 total open risk 21.8%. Same bearish QQQ bet as open trade 7 (10/23 770/780 call). With HOOD alert 25 also taken (3x), total 32.7%."
       },
       {
@@ -2183,8 +2184,8 @@
         "turnPrice": 653.06,
         "plannedExit": "close at the 10/19 projected low or at 50% of credit ($1.00); stop $4.00 debit or 790 breached",
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "note": "800C (0.207) nearest 0.20; next strike closer 790C (0.253) 8.725 (8.45/9.00), 800C 6.725; credit/width 0.200 at mid (limit at mid, no room below); OI 372. Same strikes as void alert 24 (10/2, >24h ago). Expiry 10/23 before 10/28 earnings. 1 contract = 7.3%; with QQQ trade 7 total open risk 21.8% (32.3% if HOOD alert 30 is also taken at 3x)."
       },
       {
@@ -2209,8 +2210,8 @@
         "turnPrice": 735.32,
         "plannedExit": "close at the 10/14 projected low or at 50% of credit ($1.03); stop $4.10 debit or 770 breached",
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "note": "775C (0.194) nearest 0.20; next strike closer 770C (0.268) 3.415 (3.41/3.42), 780C 1.365; credit/width 0.205; OI 31,272. Same bearish QQQ bet as open trade 7 (user asked 10/2 whether trade 7 was better than adding alert 26). 1 contract = 7.2%; with trade 7 total open risk 21.8%."
       },
       {
@@ -2307,8 +2308,8 @@
         "turnPrice": 642.18,
         "plannedExit": "close at the 10/19 projected low or at 50% of credit ($1.00); stop $4.00 debit or 760 breached",
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "note": "770C (+0.213) nearest 0.20: 770/780 1.60 (0.16, fails); next strike closer 760C (+0.266) 8.225 (8.05/8.40, 4% wide), 770C 6.225; credit/width 0.200; OI 2473. Expiry 10/23 before 10/28 earnings. 1 contract = 7.3%; with trades 7 and 8 total open risk 32.6% (over 25%). Timing method scored 37% direction-right in the 10/7 backtest; recommended skip. | Re-pushed 11:47am ET: mid improved to 2.125 (8.50/6.375), limit 2.10.",
         "realerts": [
           {
@@ -2370,8 +2371,8 @@
         "turnPrice": 121.2,
         "plannedExit": "close at the 10/19 projected high or at 50% of credit ($0.50); stop $2.00 debit or 100 breached",
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "note": "100P (-0.243) 1.71 (1.67/1.75), 95P 0.695; credit/width 0.203; OI 1689. 3% rule: lowest projected low before expiry 103.97 -> short <=100.85. Expiry 10/23 before 11/04 earnings. 3x = 10.9%; doubles the HOOD bet in trade 8; total open risk 36.2% (over 25%). Timing method scored 37% direction-right; recommended skip."
       },
       {
@@ -2486,8 +2487,8 @@
         "date": "2026-10-16",
         "time": "09:47 ET",
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "symbol": "HOOD",
         "spread": "10/30 94/89 put credit",
         "midAtAlert": 1.02,
@@ -2509,8 +2510,8 @@
         "date": "2026-10-16",
         "time": "09:47 ET",
         "taken": true,
-        "reason": "taken: trade 9 (user placed 2x at $2.50 GTC, filled 10:16am ET 10/16, before the 10/19 turn)",
-        "outcome": "pending",
+        "reason": "taken: trade 9 (user placed 2x at $2.50 GTC, filled 10:16am ET 10/16, before the 10/19 turn); void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "symbol": "META",
         "spread": "11/20 670/660 put credit",
         "midAtAlert": 2.375,
@@ -2535,8 +2536,8 @@
         "date": "2026-10-16",
         "time": "14:35 ET",
         "taken": false,
-        "reason": "pushed; re-pushed 3:46pm (mid +$0.10); awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; re-pushed 3:46pm (mid +$0.10); awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "symbol": "GOOGL",
         "spread": "10/30 320/315 put credit",
         "midAtAlert": 1.05,
@@ -2661,8 +2662,8 @@
         "date": "2026-10-19",
         "time": "11:47 ET",
         "taken": false,
-        "reason": "pushed; awaiting user",
-        "outcome": "pending",
+        "reason": "pushed; awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
+        "outcome": "void",
         "symbol": "META",
         "spread": "11/06 645/635 put credit",
         "midAtAlert": 2.125,
@@ -3335,9 +3336,9 @@
         "date": "2026-10-28",
         "time": "09:48 ET",
         "taken": false,
-        "outcome": "pending",
+        "outcome": "void",
         "entryTurnDate": "2026-10-28",
-        "reason": "pushed 9:48am at $1.84 (limit $1.80); awaiting user",
+        "reason": "pushed 9:48am at $1.84 (limit $1.80); awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
         "symbol": "HOOD",
         "spread": "11/13 88/83 put credit",
         "midAtAlert": 1.84,
@@ -3387,9 +3388,9 @@
         "date": "2026-10-29",
         "time": "10:09 ET",
         "taken": false,
-        "outcome": "pending",
+        "outcome": "void",
         "entryTurnDate": "2026-10-29",
-        "reason": "pushed 10:09am at $3.325 (limit $3.30); awaiting user; re-pushed 10:48am at $3.525 (limit $3.50; 2x max loss $1,300, breakeven 418.50; exit $2.45 until 11/06, then $1.75; stop $7.00; spot 405.09); void 10/29 12:08pm: app's 10/29 high moved to ~418.34, above the 415 short; 11/20 420/430 pays $3.075 (31%), under 33%, so no replacement; reinstated 10/29 2:39pm: app's 10/29 high back to ~411.67, below the 415 short; 415/425 mid $3.50 (35%), natural $3.35; same strikes, under the $0.10 re-push threshold, so chat note only (no push)",
+        "reason": "pushed 10:09am at $3.325 (limit $3.30); awaiting user; re-pushed 10:48am at $3.525 (limit $3.50; 2x max loss $1,300, breakeven 418.50; exit $2.45 until 11/06, then $1.75; stop $7.00; spot 405.09); void 10/29 12:08pm: app's 10/29 high moved to ~418.34, above the 415 short; 11/20 420/430 pays $3.075 (31%), under 33%, so no replacement; reinstated 10/29 2:39pm: app's 10/29 high back to ~411.67, below the 415 short; 415/425 mid $3.50 (35%), natural $3.35; same strikes, under the $0.10 re-push threshold, so chat note only (no push); void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
         "symbol": "TSLA",
         "spread": "11/20 415/425 call credit",
         "midAtAlert": 3.325,
@@ -3413,9 +3414,9 @@
         "date": "2026-10-30",
         "time": "11:42 ET",
         "taken": false,
-        "outcome": "pending",
+        "outcome": "void",
         "entryTurnDate": "2026-10-30",
-        "reason": "pushed 11:42am at $3.35 (limit $3.35); awaiting user",
+        "reason": "pushed 11:42am at $3.35 (limit $3.35); awaiting user; void 10/30 11:48am: user retired spread alerts (\"No more spread alerts\"), scans now alert sold puts/calls only",
         "symbol": "QQQ",
         "spread": "11/12 690/680 put credit",
         "midAtAlert": 3.35,

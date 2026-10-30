@@ -107,55 +107,55 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 
 | # | Date | Setup | Mid at alert | Taken | Outcome |
 |---|---|---|---|---|---|
-| 1 | 9/14 | TSLA 10/16 335/325 put | $2.33 | No (user bearish) | pending |
-| 2 | 9/14 | GOOGL 10/23 370/375 call | $1.03 (later $1.18) | No | pending |
-| 3 | 9/14 | GOOGL 10/23 375/380 call | $1.05 | No | pending |
-| 4 | 9/15 9:36am | HOOD 10/23 95/90 put | $1.15 (10:34am $0.98) | No | pending |
+| 1 | 9/14 | TSLA 10/16 335/325 put | $2.33 | No (user bearish) | void (user retired spread alerts 10/30) |
+| 2 | 9/14 | GOOGL 10/23 370/375 call | $1.03 (later $1.18) | No | void (user retired spread alerts 10/30) |
+| 3 | 9/14 | GOOGL 10/23 375/380 call | $1.05 | No | void (user retired spread alerts 10/30) |
+| 4 | 9/15 9:36am | HOOD 10/23 95/90 put | $1.15 (10:34am $0.98) | No | void (user retired spread alerts 10/30) |
 | 5 | 9/15 10:34am | HOOD 10/23 100/95 put | $1.41 (limit $1.45) | Yes, 2x at $1.85 GTC (trade 3) | FILLED 9/16 at $1.85, CLOSED 9/18 10:20am at $0.90, +$190 |
-| 6 | 9/15 11:46am | GOOGL 10/23 325/320 put | $1.23 (limit $1.25) | Pushed, open | pending |
-| 7 | 9/16 9:35am | HOOD 10/23 95/90 put | $1.14 (limit $1.15) | Pushed, open | pending |
-| 8 | 9/16 10:35am | HOOD 10/23 95/90 put | $1.29 (limit $1.45 GTC, app low $100.21 on 9/17) | Pushed, open (re-alert of #7) | pending |
-| 9 | 9/16 3:04pm | HOOD 10/23 90/85 put | $1.02 (limit $1.15 GTC, app low $100.21 on 9/17) | Pushed, open | pending |
-| 10 | 9/18 9:46am | GOOGL 10/23 385/390 call | $1.18 (limit $1.20; quotes wide, app high $372.21 on 9/25) | Pushed, open | pending |
-| 11 | 9/21 | QQQ 10/23 765/775 call | $2.09 | No | pending |
+| 6 | 9/15 11:46am | GOOGL 10/23 325/320 put | $1.23 (limit $1.25) | Pushed, open | void (user retired spread alerts 10/30) |
+| 7 | 9/16 9:35am | HOOD 10/23 95/90 put | $1.14 (limit $1.15) | Pushed, open | void (user retired spread alerts 10/30) |
+| 8 | 9/16 10:35am | HOOD 10/23 95/90 put | $1.29 (limit $1.45 GTC, app low $100.21 on 9/17) | Pushed, open (re-alert of #7) | void (user retired spread alerts 10/30) |
+| 9 | 9/16 3:04pm | HOOD 10/23 90/85 put | $1.02 (limit $1.15 GTC, app low $100.21 on 9/17) | Pushed, open | void (user retired spread alerts 10/30) |
+| 10 | 9/18 9:46am | GOOGL 10/23 385/390 call | $1.18 (limit $1.20; quotes wide, app high $372.21 on 9/25) | Pushed, open | void (user retired spread alerts 10/30) |
+| 11 | 9/21 | QQQ 10/23 765/775 call | $2.09 | No | void (user retired spread alerts 10/30) |
 | 12 | 9/23 | GOOGL 10/23 325/320 put | $1.20 | Yes (trade 6, $1.25) | closed 9/24 at $1.20, +$15 |
-| 13 | 9/23 11:46am | GOOGL 10/23 320/315 put | $1.00 | No | pending |
-| 14 | 9/23 3:33pm | GOOGL 10/23 320/315 put (re-alert) | $1.10 | No | pending |
-| 15 | 9/24 9:37am | QQQ 10/23 760/770 call (timing: leg down to 10/15 low) | $2.40 (limit $2.60 GTC) | No | pending |
+| 13 | 9/23 11:46am | GOOGL 10/23 320/315 put | $1.00 | No | void (user retired spread alerts 10/30) |
+| 14 | 9/23 3:33pm | GOOGL 10/23 320/315 put (re-alert) | $1.10 | No | void (user retired spread alerts 10/30) |
+| 15 | 9/24 9:37am | QQQ 10/23 760/770 call (timing: leg down to 10/15 low) | $2.40 (limit $2.60 GTC) | No | void (user retired spread alerts 10/30) |
 | 16 | 9/24 3:09pm | QQQ 10/23 770/780 call (timing: leg down to 10/15 low; answer to user question) | $1.92 (limit $2.00 GTC) | Yes, 2x at $2.00 GTC (trade 7) | closed 10/8 1:04pm at $1.48, +$104 |
-| 17 | 9/25 9:34am | GOOGL 10/09 360/365 call (timing: leg down to 10/07 low) | $1.05 (limit $1.05, 2x) | Pushed, open | pending |
-| 18 | 9/28 3:06pm | GOOGL 10/09 355/360 call (timing: leg down to 10/07 low) | $1.02 (limit $1.00, 2x) | Pushed, open | pending |
-| 19 | 9/29 3:05pm | META 10/23 790/800 call (timing: leg down to 10/19 low) | $2.00 (limit $2.00, 1x) | Pushed, open | pending |
+| 17 | 9/25 9:34am | GOOGL 10/09 360/365 call (timing: leg down to 10/07 low) | $1.05 (limit $1.05, 2x) | Pushed, open | void (user retired spread alerts 10/30) |
+| 18 | 9/28 3:06pm | GOOGL 10/09 355/360 call (timing: leg down to 10/07 low) | $1.02 (limit $1.00, 2x) | Pushed, open | void (user retired spread alerts 10/30) |
+| 19 | 9/29 3:05pm | META 10/23 790/800 call (timing: leg down to 10/19 low) | $2.00 (limit $2.00, 1x) | Pushed, open | void (user retired spread alerts 10/30) |
 | 20 | 9/30 9:35am | QQQ 10/16 760/770 call (timing: place at the 10/01 high, leg down to 10/14 low) | $2.24 (limit $2.20, 1x) | Pushed, open | void (10/01 high removed by 10/1 refresh) |
 | 21 | 10/1 9:47am | HOOD 10/23 103/98 put (timing: place at the 10/02 low, leg up to 10/19 high) | $1.03 (limit $1.00, 3x) | Pushed, open | void (10/02 low cut to $104, 3% rule fails) |
 | 22 | 10/1 12:17pm | HOOD 10/23 103/98 put (re-alert of 21, mid +$0.16; place at the 10/02 low) | $1.19 (limit $1.15, 3x) | Pushed, open | void (10/2: low back to $103.97, HOOD gapped to $117) |
 | 23 | 10/1 2:34pm | QQQ 10/16 760/770 call (timing: place at the 10/02 high, leg down to 10/14 low) | $2.28 (limit $2.25, 1x) | Pushed, open | void (10/2: QQQ gapped to $750, 760 delta 0.37) |
 | 24 | 10/2 9:35am | META 10/23 790/800 call (timing: leg down to 10/19 low) | $2.10 (limit $2.05, 1x) | Pushed, open | void (10/2 3:33pm: superseded by 27, 790/800 down to $1.30) |
 | 25 | 10/2 2:34pm | HOOD 10/23 104/99 put (timing: place at the 10/05 low, leg up to 10/19 high) | $1.025 (limit $1.00, 3x) | Pushed, open | void (10/2 3:05pm: 10/05 low back to $106.28, 104 fails the 3% rule) |
-| 26 | 10/2 2:34pm | QQQ 10/16 765/775 call (timing: 10/02 high passed, leg down to 10/14 low) | $2.055 (limit $2.05, 1x) | Pushed, open | pending |
+| 26 | 10/2 2:34pm | QQQ 10/16 765/775 call (timing: 10/02 high passed, leg down to 10/14 low) | $2.055 (limit $2.05, 1x) | Pushed, open | void (user retired spread alerts 10/30) |
 | 27 | 10/2 3:33pm | META 10/23 770/780 call (timing: leg down to 10/19 low) | $2.10 (limit $2.05, 1x) | Pushed, open | void (10/5 9:47am: superseded by 29, 770 delta 0.32) |
 | 28 | 10/5 9:35am | HOOD 10/30 100/95 put (timing: place at the 10/05 low, leg up to 10/22 high) | $1.015 (limit $1.00, 3x) | Pushed, open | void (10/5 10:34am: superseded by 30) |
 | 29 | 10/5 9:47am | META 10/23 780/790 call (timing: leg down to 10/19 low) | $2.075 (limit $2.05, 1x) | Pushed, open | void (10/5 11:46am: superseded by 31, 780 delta 0.31) |
 | 30 | 10/5 10:34am | HOOD 10/30 102/97 put (timing: place at the 10/05 low, leg up to 10/22 high) | $1.17 (limit $1.15, 3x) | Pushed, open | void (10/5 2:35pm: superseded by 33) |
-| 31 | 10/5 11:46am | META 10/23 790/800 call (timing: leg down to 10/19 low) | $2.00 (limit $2.00, 1x) | Pushed, open | pending |
-| 32 | 10/5 2:35pm | QQQ 10/16 770/780 call (timing: place at the 10/05 high, leg down to 10/14 low) | $2.05 (limit $2.05, 1x) | Pushed, open | pending |
+| 31 | 10/5 11:46am | META 10/23 790/800 call (timing: leg down to 10/19 low) | $2.00 (limit $2.00, 1x) | Pushed, open | void (user retired spread alerts 10/30) |
+| 32 | 10/5 2:35pm | QQQ 10/16 770/780 call (timing: place at the 10/05 high, leg down to 10/14 low) | $2.05 (limit $2.05, 1x) | Pushed, open | void (user retired spread alerts 10/30) |
 | 33 | 10/5 2:35pm | HOOD 10/30 101/96 put (timing: place at the 10/05 low, leg up to 10/22 high) | $1.015 (limit $1.00, 3x) | Taken (trade 8, 3x at $1.05) | pending |
 | 34 | 10/6 3:46pm | HOOD 10/23 104/99 put (timing: place at the 10/07 low, leg up to 10/19 high; over 25% risk cap, duplicates trade 8) | $1.01 (limit $1.00, 3x) | Pushed, open | void (10/7: app low moved to 99.47, 104 short fails 3% rule) |
 | 35 | 10/7 9:35am | META 10/23 770/780 call (timing: leg down to 10/19 low ~653; over 25% risk cap) | $2.025 (limit $2.00, 1x) | Pushed, open | void (10/7 10:34am: superseded by 36) |
-| 36 | 10/7 10:34am | META 10/23 760/770 call (timing: leg down to 10/19 low ~642; over 25% risk cap) | $2.00 (limit $2.00, 1x); re-pushed 11:47am at $2.125 (limit $2.10) | Pushed, open | pending |
+| 36 | 10/7 10:34am | META 10/23 760/770 call (timing: leg down to 10/19 low ~642; over 25% risk cap) | $2.00 (limit $2.00, 1x); re-pushed 11:47am at $2.125 (limit $2.10) | Pushed, open | void (user retired spread alerts 10/30) |
 | 37 | 10/7 2:34pm | QQQ 10/23 775/785 call (timing: place at the 10/07 high ~763, leg down to 10/21 low ~735; stacks on trade 7, over 25% risk cap) | $2.035 (limit $2.00, 1x) | Pushed, open | void (10/8: turns moved, superseded by 39) |
-| 38 | 10/8 9:35am | HOOD 10/23 100/95 put (timing: place at the 10/09 low ~104, leg up to 10/19 high ~121; doubles trade 8, over 25% risk cap) | $1.015 (limit $1.00, 3x) | Pushed, open | pending |
+| 38 | 10/8 9:35am | HOOD 10/23 100/95 put (timing: place at the 10/09 low ~104, leg up to 10/19 high ~121; doubles trade 8, over 25% risk cap) | $1.015 (limit $1.00, 3x) | Pushed, open | void (user retired spread alerts 10/30) |
 | 39 | 10/8 9:35am | QQQ 10/30 775/785 call (timing: place at the 10/09 high ~764, leg down to 10/22 low ~735; stacks on trade 7, over 25% risk cap) | $2.425 (limit $2.40, 1x) | Pushed, open | void (10/8 10:34am: superseded by 40) |
 | 40 | 10/8 10:34am | QQQ 10/30 780/790 call (timing: place at the 10/09 high ~764, leg down to 10/22 low ~735; stacks on trade 7, over 25% risk cap) | $2.04 (limit $2.00, 1x) | Pushed, void 10/8 2:34pm (app dropped the 10/09 high; next QQQ turn is a 10/16 low) | void |
 | 41 | 10/15 9:58am | META 11/06 675/665 put (timing: place at today's low ~710, leg up to 10/30 high ~801; spans META 10/21 report) | $2.275 (limit $2.25, 1x) | Pushed, void 10/16 9:47am (app moved the META high to 11/16; superseded by #44) | void |
 | 42 | 10/15 9:58am | HOOD 11/06 85/80 put (timing: place at today's low ~94, leg up to 11/02 high ~118; spans HOOD 10/27 report; stacks on trade 8; with #41 over 25% risk cap) | $1.115 (limit $1.10, 3x) | Pushed, void 10/16 9:47am (app now projects a HOOD high 10/23; superseded by #43) | void |
-| 43 | 10/16 9:47am | HOOD 10/30 94/89 put (timing: current leg up to 10/23 high ~120; spans HOOD 10/27 report; same expiry and bet as trade 8) | $1.02 (limit $1.00, 3x) | Pushed, open | pending |
-| 44 | 10/16 9:47am | META 11/20 670/660 put (timing: place at the 10/19 low ~710, leg up to 11/16 high ~837; spans META 10/21 report; with #43 and trade 8 over 25% risk cap) | $2.375 (limit $2.35, 1x) | Taken: trade 9 (user 2x at $2.50, filled 10/16 10:16am) | pending |
-| 45 | 10/16 2:35pm | GOOGL 10/30 320/315 put (timing: place at today's low ~335, leg up to 10/26 high ~353; spans GOOGL 10/28 report; over 25% risk cap with trades 8 and 9) | $1.05 (limit $1.05, 3x) | Pushed, open; re-pushed 3:46pm at $1.15 (limit $1.15) | pending |
+| 43 | 10/16 9:47am | HOOD 10/30 94/89 put (timing: current leg up to 10/23 high ~120; spans HOOD 10/27 report; same expiry and bet as trade 8) | $1.02 (limit $1.00, 3x) | Pushed, open | void (user retired spread alerts 10/30) |
+| 44 | 10/16 9:47am | META 11/20 670/660 put (timing: place at the 10/19 low ~710, leg up to 11/16 high ~837; spans META 10/21 report; with #43 and trade 8 over 25% risk cap) | $2.375 (limit $2.35, 1x) | Taken: trade 9 (user 2x at $2.50, filled 10/16 10:16am) | void (user retired spread alerts 10/30) |
+| 45 | 10/16 2:35pm | GOOGL 10/30 320/315 put (timing: place at today's low ~335, leg up to 10/26 high ~353; spans GOOGL 10/28 report; over 25% risk cap with trades 8 and 9) | $1.05 (limit $1.05, 3x) | Pushed, open; re-pushed 3:46pm at $1.15 (limit $1.15) | void (user retired spread alerts 10/30) |
 | 46 | 10/16 2:35pm | META 11/20 640/630 put (timing: place at the 10/19 low ~687, leg up to 11/16 high ~815; spans META 10/21 report; stacks on trade 9; over 25% risk cap) | $2.15 (limit $2.15, 1x) | Pushed; re-pushed 3:46pm at $2.275 (limit $2.25); superseded 10/19 by #47 | void |
 | 47 | 10/19 9:35am | META 10/30 650/640 put (timing: place at today's low ~685, leg up to 10/26 high ~743; spans META 10/21 report; over 25% risk cap with trades 8 and 9) | $2.10 (limit $2.10, 1x) | Pushed; superseded 10/19 10:38am by #48 | void |
 | 48 | 10/19 10:38am | META 10/30 645/635 put (timing: place at today's low ~685, leg up to 10/26 high ~744; spans META 10/21 report; over 25% risk cap with trades 8 and 9) | $2.00 (limit $2.00, 1x) | Pushed; superseded 10/19 11:47am by #49 | void |
-| 49 | 10/19 11:47am | META 11/06 645/635 put (timing: place at today's low ~685, leg up to 10/30 high ~768; spans META 10/21 report; over 25% risk cap with trades 8 and 9) | $2.125 (limit $2.10, 1x) | Pushed, open | pending |
+| 49 | 10/19 11:47am | META 11/06 645/635 put (timing: place at today's low ~685, leg up to 10/30 high ~768; spans META 10/21 report; over 25% risk cap with trades 8 and 9) | $2.125 (limit $2.10, 1x) | Pushed, open | void (user retired spread alerts 10/30) |
 | 50 | 10/20 9:40am | HOOD 11/06 93/88 put (timing: place at today's low ~93.89 2:29-3:24pm, leg up to 11/02 high ~114; strike from the app's low; credit 35% of width; spans HOOD 10/27 report) | $1.75 (limit $1.75, 4x) | Pushed, void 10/20 10:38am (app dropped today's HOOD low; next turn is a 10/23 high ~109) | void |
 | 51 | 10/20 9:48am | GOOGL 10/30 332.5/327.5 put (timing: place at the 10/21 low ~334.84, leg up to 10/26 high ~349; strike from the app's low; credit 33% of width; spans GOOGL 10/28 report) | $1.65 (limit $1.65, 4x) | Pushed; re-pushed 2:39pm at $1.80 and 3:38pm at $1.925; superseded 10/21 by #52 (app moved the exit high to 11/02, low to ~326.10) | superseded |
 | 52 | 10/21 9:39am | GOOGL 11/04 325/320 put (timing: place at today's low ~326.10 9:56-10:51am or 11:45am-12:40pm, leg up to 11/02 high ~346; strike from the app's low; credit 38.5% of width; spans GOOGL 10/28 report) | $1.925 (limit $1.90, 4x) | Pushed; superseded 9:47am by #53 (app moved the exit high to 11/04) | superseded |
@@ -180,10 +180,10 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 71 | 10/27 9:46am | GOOGL 11/06 310/305 put (timing: place at the 10/28 low ~311.76 10:00-10:53am or 11:46am-12:39pm, leg up to 11/04 high ~333; credit 33% of width; spans GOOGL 10/28 report; replaces #66) | $1.65 (limit $1.65, 4x); re-pushed 10:04am $1.825 (limit $1.80) | Pushed; void 10/28 (app dropped the 10/28 low) | void |
 | 72 | 10/27 9:46am | META 11/13 615/605 put (timing: place at the 10/28 low ~616.30 12:39-1:32pm, leg up to 11/09 high ~697; credit 41% of width; replaces #69) | $4.125 (limit $4.10, 2x); re-pushed 4:04pm $4.225 (limit $4.20); re-pushed 10/28 9:48am $4.425 (limit $4.40) | Pushed; void 10/28 10:44am (low moved to ~594.85, below the 615 short) | void |
 | 73 | 10/27 11:46am | TSLA 11/13 410/420 call (timing: place at today's high ~406.89 11:46am-12:39pm, leg down to 11/05 low ~379; credit 40% of width; replaces #70) | $3.975 (limit $3.95, 2x) | Pushed; void 10/28 (high moved to 10/29 ~411.67, above the 410 short) | void |
-| 74 | 10/28 9:48am | HOOD 11/13 88/83 put (timing: place at today's low ~88.33 10:00-10:53am or 11:46am-12:39pm, leg up to 11/09 high ~105.54; credit 37% of width; replaces #67) | $1.84 (limit $1.80, 4x) | Pushed, open | pending |
+| 74 | 10/28 9:48am | HOOD 11/13 88/83 put (timing: place at today's low ~88.33 10:00-10:53am or 11:46am-12:39pm, leg up to 11/09 high ~105.54; credit 37% of width; replaces #67) | $1.84 (limit $1.80, 4x) | Pushed, open | void (user retired spread alerts 10/30) |
 | 75 | 10/28 2:38pm | TSLA 11/13 412.5/422.5 call (timing: place at the 10/29 high ~411.67 11:46am-1:32pm, leg down to 11/05 low ~382; credit 35% of width) | $3.50 (limit $3.50, 2x) | Pushed; void 10/29 (exit low moved to 11/16, after the 11/13 expiry; replaced by #76) | void |
-| 76 | 10/29 10:09am | TSLA 11/20 415/425 call (timing: place at today's high ~411.67 11:46am-1:32pm, leg down to 11/16 low ~368; credit 33% of width; replaces #75) | $3.325 (limit $3.30, 2x); re-pushed 10:48am $3.525 (limit $3.50) | Pushed; void 10/29 12:08pm (high moved to ~418.34, above the 415 short); reinstated 2:39pm (high back to ~411.67; mid $3.50) | pending |
-| 77 | 10/30 11:42am | QQQ 11/12 690/680 put (timing: place at today's low ~692.66 10:01-11:46am, leg up to 11/10 high ~707.71; credit 33.5% of width) | $3.35 (limit $3.35, 2x) | Pushed, open | pending |
+| 76 | 10/29 10:09am | TSLA 11/20 415/425 call (timing: place at today's high ~411.67 11:46am-1:32pm, leg down to 11/16 low ~368; credit 33% of width; replaces #75) | $3.325 (limit $3.30, 2x); re-pushed 10:48am $3.525 (limit $3.50) | Pushed; void 10/29 12:08pm (high moved to ~418.34, above the 415 short); reinstated 2:39pm (high back to ~411.67; mid $3.50) | void (user retired spread alerts 10/30) |
+| 77 | 10/30 11:42am | QQQ 11/12 690/680 put (timing: place at today's low ~692.66 10:01-11:46am, leg up to 11/10 high ~707.71; credit 33.5% of width) | $3.35 (limit $3.35, 2x) | Pushed, open | void (user retired spread alerts 10/30) |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
