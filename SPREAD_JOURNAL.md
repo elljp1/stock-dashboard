@@ -189,7 +189,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 80 | 10/30 12:17pm | SELL PUT QQQ 11/12 690P (timing: today's low ~690.41, leg up to 11/10 high ~707.71; premium 1.8% of strike; collateral $69,000) | $12.675 (limit $12.65, 1x) | Pushed, open | void (strike moved to 685, see #82) |
 | 81 | 10/30 2:38pm | SELL PUT META 11/13 592.5P (timing: today's low ~594.85, leg up to 11/09 high ~658.42; premium 2.0%; collateral $59,250) | $11.70 (1x) | Pushed, open | pending |
 | 82 | 10/30 2:38pm | SELL PUT QQQ 11/12 685P (timing: today's low ~685.72, leg up to 11/10 high ~707.71; premium 2.3%; collateral $68,500; replaces #80) | $15.73 (limit $15.70, 1x) | Pushed, open | pending |
-| 83 | 10/30 2:38pm | SELL PUT GOOGL 11/09 272.5P (timing: today's low ~274.96, leg up to 11/05 high ~293.99; premium 1.3%; collateral $27,250) | $3.65 (1x) | Pushed, open | pending |
+| 83 | 10/30 2:38pm | SELL PUT GOOGL 11/09 272.5P (timing: today's low ~274.96, leg up to 11/05 high ~293.99; premium 1.3%; collateral $27,250) | $3.65 (1x) | Pushed, open; re-pushed 3:04pm $3.90 | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
