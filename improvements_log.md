@@ -3797,3 +3797,58 @@ reverses with about three weeks still on the clock; whether JPM's post-catch-up 
 holds, recovers, or keeps sliding over the next few graded days; whether today's pending GTC order
 (#76 TSLA 415/425C) fills; and the standing list - NVDA's small-sample hit rate, HOOD's calibration
 ceiling, and whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
+
+## 2026-10-30 (Fri) — HOOD's spread closes at its predicted max loss; META keeps sliding; grade + log only
+
+**Today's data situation:** same story as the last several days - this sandbox's own
+`fetch_data.py` was blocked before reaching Yahoo (confirmed via the proxy's own status log:
+"gateway answered 403 to CONNECT" on `query1.finance.yahoo.com`, a policy block on this sandbox,
+not a Yahoo-side block). With no raw per-ticker CSVs available locally (they're gitignored and
+only exist after a successful fetch), `analyze.py` correctly refused to run and raised its own
+safety error rather than risk publishing a broken build. The live dashboard is instead running on
+the separate scheduled GitHub Actions refresh's own build, generated today at 5:40 PM ET with the
+last daily bar dated 2026-10-30 - today's real session did land there. Ran the coherence check
+(passes clean, 12/12 tickers), the full test suite (every `test_*.py` file, all passing) and the
+anomaly audit against that build: everything is clean, zero anomalies.
+
+**Grades reviewed:** all six tickers with resolved history are essentially flat versus yesterday -
+TSLA n=13 (31%/38%), HOOD n=67 (16%/24%), QQQ n=66 (23%/27%), JPM n=63 (8%/13%, basically unchanged
+from Thursday's catch-up), GOOGL n=49 (18%/20%), NVDA n=19 (11%/16%), GC=F n=22 (18%/18%). AMZN,
+SPY, VOO, META and SPCX remain at n=0, the same ongoing condition. Daily horizon errors for the
+last few graded sessions (through 10/29) stay mostly in the low single digits with no new
+systemic bias standing out beyond what's already logged.
+
+**Open real positions - the headline item today:** HOOD's put credit spread (trade 8, sold $101
+put / bought $96 put x3) expired today exactly as flagged all week - it closed at a realized loss
+of **-$1,195** (effectively its full ~$1,185 max loss, plus ~$10 of slippage from the way the last
+contract had to be unwound). Two of the three short puts were assigned early Wednesday night,
+forcing 200 HOOD shares to be bought at $101 and then exercised away at $96 (-$790 combined); the
+last single-leg pair had to be closed by hand Friday morning as two separate orders since the
+broker won't route multi-leg orders for the agent, adding another -$405. Net result matches what
+the model's own timing call implied days ago once HOOD kept falling through its short strike -
+this is a real, measured loss, not a surprise, and it's now a closed, bookable data point for the
+real-money track record. META's spread (trade 9, sold $670 / bought $660 put x2, expires 11/20)
+kept sliding too - now $611.82 (down from $619.85 Thursday, $633.00 Monday), about $48 below its
+$660 long strike and still falling, though roughly three weeks remain before its $1,500 max loss
+would lock in.
+
+**What changed and why:** no dashboard logic change today. Coherence, the full test suite and the
+anomaly audit are all clean. Nothing crossed the 3+-day pattern-plus-fix bar for a code change -
+HOOD's loss and META's slide are both already-tracked, already-anticipated outcomes playing out as
+expected, not new bugs, and the data pipeline itself is blocked by sandbox networking rather than
+by anything wrong in the code. `forecast_ledger.json` continues its steady growth, now ~40.0 MB
+(up from ~37.9 MB logged Thursday) - still not breaking any build, but this is the fourth straight
+review flagging the same climb, so it has crossed from "watch" to "worth a real look": the next
+session with working network access should trace how `forecast_ledger.json` is read by the
+self-grading code and scope a safe retention/compaction policy (e.g. dropping snapshots whose
+predictions have long since resolved), tested against a real `analyze.py` run rather than guessed
+at blind. Honesty features (hit-rate displays, random-control comparisons, grading, coherence
+gate) and `tickers.txt` are untouched.
+
+**Watch next:** scoping and testing a `forecast_ledger.json` retention fix the next time fetch
+access works (now the top queued item, after four straight days of flagged growth); whether META's
+slide below its $660 long strike continues toward the $1,500 max loss or finally reverses with
+about three weeks left; whether JPM's post-catch-up 8%/13% hit rate holds, recovers, or keeps
+sliding over the next few graded days; whether the pending #76 TSLA 415/425C GTC order fills; and
+the standing list - NVDA's small-sample hit rate, HOOD's calibration ceiling, and whether
+SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
