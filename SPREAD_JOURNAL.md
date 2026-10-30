@@ -184,9 +184,12 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 75 | 10/28 2:38pm | TSLA 11/13 412.5/422.5 call (timing: place at the 10/29 high ~411.67 11:46am-1:32pm, leg down to 11/05 low ~382; credit 35% of width) | $3.50 (limit $3.50, 2x) | Pushed; void 10/29 (exit low moved to 11/16, after the 11/13 expiry; replaced by #76) | void |
 | 76 | 10/29 10:09am | TSLA 11/20 415/425 call (timing: place at today's high ~411.67 11:46am-1:32pm, leg down to 11/16 low ~368; credit 33% of width; replaces #75) | $3.325 (limit $3.30, 2x); re-pushed 10:48am $3.525 (limit $3.50) | Pushed; void 10/29 12:08pm (high moved to ~418.34, above the 415 short); reinstated 2:39pm (high back to ~411.67; mid $3.50) | void (user retired spread alerts 10/30) |
 | 77 | 10/30 11:42am | QQQ 11/12 690/680 put (timing: place at today's low ~692.66 10:01-11:46am, leg up to 11/10 high ~707.71; credit 33.5% of width) | $3.35 (limit $3.35, 2x) | Pushed, open | void (user retired spread alerts 10/30) |
-| 78 | 10/30 12:17pm | SELL PUT HOOD 11/20 80P (timing: today's low ~82.18, leg up to 11/16 high ~103.70; premium 4.0% of strike; collateral $8,000) | $3.175 (limit $3.15, 1x) | Pushed, open | pending |
+| 78 | 10/30 12:17pm | SELL PUT HOOD 11/20 80P (timing: today's low ~82.18, leg up to 11/16 high ~103.70; premium 4.0% of strike; collateral $8,000) | $3.175 (limit $3.15, 1x) | Pushed, open; re-pushed 2:38pm $3.95 | pending |
 | 79 | 10/30 12:17pm | SELL CALL TSLA 11/20 415C, uncovered (timing: Mon 11/02 high ~411.67, leg down to 11/16 low ~369; premium 2.3% of strike) | $9.70 (limit $9.70, 1x) | Pushed, open | pending |
-| 80 | 10/30 12:17pm | SELL PUT QQQ 11/12 690P (timing: today's low ~690.41, leg up to 11/10 high ~707.71; premium 1.8% of strike; collateral $69,000) | $12.675 (limit $12.65, 1x) | Pushed, open | pending |
+| 80 | 10/30 12:17pm | SELL PUT QQQ 11/12 690P (timing: today's low ~690.41, leg up to 11/10 high ~707.71; premium 1.8% of strike; collateral $69,000) | $12.675 (limit $12.65, 1x) | Pushed, open | void (strike moved to 685, see #82) |
+| 81 | 10/30 2:38pm | SELL PUT META 11/13 592.5P (timing: today's low ~594.85, leg up to 11/09 high ~658.42; premium 2.0%; collateral $59,250) | $11.70 (1x) | Pushed, open | pending |
+| 82 | 10/30 2:38pm | SELL PUT QQQ 11/12 685P (timing: today's low ~685.72, leg up to 11/10 high ~707.71; premium 2.3%; collateral $68,500; replaces #80) | $15.73 (limit $15.70, 1x) | Pushed, open | pending |
+| 83 | 10/30 2:38pm | SELL PUT GOOGL 11/09 272.5P (timing: today's low ~274.96, leg up to 11/05 high ~293.99; premium 1.3%; collateral $27,250) | $3.65 (1x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
