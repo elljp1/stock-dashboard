@@ -97,7 +97,7 @@ jobs:
       - name: Package last validated site
         run: |
           mkdir -p public-site
-          cp index.html dashboard_single.html data.js daily_review.json public-site/
+          cp index.html dashboard_single.html data.js daily_review.json hilo.json public-site/
           touch public-site/.nojekyll
       - uses: actions/upload-pages-artifact@v3
         with:
