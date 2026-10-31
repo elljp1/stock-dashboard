@@ -3852,3 +3852,62 @@ about three weeks left; whether JPM's post-catch-up 8%/13% hit rate holds, recov
 sliding over the next few graded days; whether the pending #76 TSLA 415/425C GTC order fills; and
 the standing list - NVDA's small-sample hit rate, HOOD's calibration ceiling, and whether
 SPY/VOO/META/SPCX ever produce a confirmed swing to grade.
+
+## 2026-10-31 (Sat) — weekend, no new session; fetch blocked again; looked hard at the growing ledger file and chose not to touch it; grade + log only
+
+**Today's data situation:** today is a Saturday, so there was no new trading session to grade
+regardless. This sandbox's own attempt to re-download prices (`fetch_data.py`) was blocked before
+it ever reached Yahoo - the proxy's own status log shows a 403 on every `query1.finance.yahoo.com`
+connection attempt, which is this sandbox's network policy refusing the connection, not a Yahoo-side
+block. No raw per-ticker CSVs exist locally (they're gitignored and weren't recreated), so per the
+standing rule `analyze.py` was correctly left untouched rather than run against missing files. The
+dashboard is still running on the separate scheduled GitHub Actions refresh's last build (generated
+Friday 10/30 9:07 PM ET, last daily bar 10/30 - the most recent real trading session; nothing new
+has landed from that workflow since, as expected on a weekend). Ran the coherence check and all 14
+`test_*.py` files against that published build: coherence passes clean (12/12 tickers) and every
+test passes. The anomaly audit reports 5 "chain still shows a PAST event 2026-10-30" flags (QQQ,
+GOOGL, SPY, VOO, META) - this is the same well-documented weekend staleness artifact logged on
+every prior Saturday/Sunday this quarter (the confluence chain hasn't rolled forward since Friday's
+refresh and today is later than the dated event it still points to); it is not a logic bug and
+reliably clears the moment Monday's scheduled refresh runs.
+
+**Grades reviewed:** every swing-grading number is byte-for-byte identical to Friday's entry,
+exactly as expected with no new session to grade: TSLA n=13 (31%/38%), HOOD n=67 (16%/24%), QQQ
+n=66 (23%/27%), JPM n=63 (8%/13%), GOOGL n=49 (18%/20%), NVDA n=19 (11%/16%), GC=F n=22 (18%/18%).
+AMZN, SPY, VOO, META and SPCX remain at n=0, the same ongoing condition. The owner's trading journal
+shows spread alerts were manually retired on 10/30, and several pending GTC orders from that day
+(including #76, the TSLA 415/425C call flagged in yesterday's "watch next") were voided as part of
+that; HOOD's trade-8 spread and META's trade-9 spread are unchanged from Friday's close over the
+weekend as markets were shut, matching yesterday's entry exactly.
+
+**What changed and why - no code change today.** Friday's entry queued "scope and test a
+`forecast_ledger.json` retention/compaction fix" as the top item once the pattern had held 4+
+straight days. I spent today's session on exactly that, and the honest conclusion is: no safe
+compaction exists that wouldn't weaken an existing honesty guarantee, so none was applied. The file
+is now 41.3 MB (11,466 snapshots; up from ~40.0 MB Thursday) because every scheduled refresh writes
+one new row per ticker regardless of whether its prediction actually changed (the dedup key
+embeds the build's own timestamp, so it practically never matches a prior row) - and `reliability.py`'s
+own docstring and its test (`test_revision_preserves_original_and_retry_dedupes`) require that
+revised snapshots stay visible and are never allowed to replace or hide an earlier one in the
+scorecard. The obvious compaction I'd sketched - keep only each ticker/date/type's first-ever
+snapshot, drop the rest - is exactly what that test forbids: it would delete the very revision
+history the ledger exists to preserve, i.e. weaken an audit/honesty feature rather than just trim
+bloat. I also checked whether the growth rate pointed to a scheduling bug: `schedule_gate.py`
+intentionally refreshes roughly 25 times on a trading weekday (several pre-market checks plus
+every 30 minutes from 10:00 AM-5:00 PM ET, plus the 6 PM review, plus one run every day including
+weekends), not the "3x/weekday" I'd been assuming - so the row count is working as designed, just
+on a faster clock than expected, and is not a bug to fix. A real fix would mean redesigning how the
+ledger stores history (e.g. archiving fully-resolved months to a separate file instead of deleting
+anything) rather than deleting rows, and that kind of structural change to a shared, graded ledger
+needs a session with working network access to validate end-to-end against a real `analyze.py` +
+`reliability.py` run before it ships, not a blind edit on a day with no data. Coherence, the full
+test suite and the anomaly audit are all clean on today's committed build. Honesty features
+(hit-rate displays, random-control comparisons, grading, coherence gate) and `tickers.txt` are
+untouched.
+
+**Watch next:** scoping a non-destructive `forecast_ledger.json` archival design (move fully-resolved
+history out rather than delete it) for a future session with live network to build and test against;
+whether HOOD's and META's open spreads move once Monday's session reopens the market; whether JPM's
+8%/13% hit rate holds or shifts over the next few graded days; and the standing list - NVDA's
+small-sample hit rate, HOOD's calibration ceiling, and whether SPY/VOO/META/SPCX ever produce a
+confirmed swing to grade.
