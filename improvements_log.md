@@ -3911,3 +3911,41 @@ whether HOOD's and META's open spreads move once Monday's session reopens the ma
 8%/13% hit rate holds or shifts over the next few graded days; and the standing list - NVDA's
 small-sample hit rate, HOOD's calibration ceiling, and whether SPY/VOO/META/SPCX ever produce a
 confirmed swing to grade.
+
+## 2026-11-01 (Sun) — weekend, no new session; fetch blocked again; grade + log only
+
+**Today's data situation:** Sunday, so no new trading session to grade regardless. `fetch_data.py`
+was tried first as instructed and failed before reaching Yahoo - the agent proxy's own status log
+shows 20 straight `connect_rejected` refusals to `query1.finance.yahoo.com`, i.e. this sandbox's
+network policy blocking the connection, not a Yahoo-side error. Per the standing rule, with no raw
+per-ticker data recovered, `analyze.py` was correctly left untouched and the review instead checked
+the dashboard's last real build (generated Fri 10/31 10:14 PM ET from Friday 10/30's session, the
+most recent trading day, with Monday 11/02 as the next target - no stale past-dated chain this time,
+unlike the last two weekends). Ran coherence_check.py (12/12 tickers, clean), all 14 `test_*.py`
+files (all pass) and anomaly_audit.py (no anomalies - chain, levels, horizons and trade cards all
+line up) against that build.
+
+**Grades reviewed:** every swing-grading number is byte-for-byte identical to Friday/Saturday's
+entries, exactly as expected with no new session: TSLA n=13 (31%/38%), HOOD n=67 (16%/24%), QQQ
+n=66 (23%/27%), JPM n=63 (8%/13%), GOOGL n=49 (18%/20%), NVDA n=19 (11%/16%), GC=F n=22 (18%/18%).
+AMZN, SPY, VOO, META and SPCX remain at n=0. The last trade card logged (TSLA, Sat 10/31) still
+targets Monday 11/02's projected high, matching the last two days. Spread journal and real trades
+files have no changes since Friday 10/30 close, consistent with the market being shut all weekend.
+
+**What changed and why - no code change today.** `forecast_ledger.json` grew only modestly over the
+weekend (11,478 snapshots, same 41.3 MB as yesterday's entry since the file only gets one scheduled
+refresh per weekend day per `schedule_gate.py`'s own design) - this matches yesterday's investigation
+exactly and confirms that growth is on the slow weekend clock, not runaway. Yesterday already
+concluded no safe compaction exists without weakening the revision-history honesty guarantee that
+`reliability.py`'s tests require, and nothing today changes that conclusion, so it was left alone
+again rather than re-litigated. No bug and no 3+ day pattern surfaced today that would justify the
+one allowed code change, so none was made. Coherence, the full test suite and the anomaly audit are
+all clean on today's committed build. Honesty features (hit-rate displays, random-control
+comparisons, grading, coherence gate) and `tickers.txt` are untouched.
+
+**Watch next:** whether Monday's scheduled refresh (the first live trading session since Friday)
+moves TSLA's trade card as projected, and whether any of HOOD, QQQ, JPM, GOOGL, NVDA or GC=F's hit
+rates shift once new sessions resolve; the still-scoped (not yet built) `forecast_ledger.json`
+archival design for a future session with live network; and the standing list - NVDA's small-sample
+hit rate, HOOD's calibration ceiling, and whether SPY/VOO/META/SPCX ever produce a confirmed swing
+to grade.
