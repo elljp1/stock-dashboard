@@ -3949,3 +3949,55 @@ rates shift once new sessions resolve; the still-scoped (not yet built) `forecas
 archival design for a future session with live network; and the standing list - NVDA's small-sample
 hit rate, HOOD's calibration ceiling, and whether SPY/VOO/META/SPCX ever produce a confirmed swing
 to grade.
+
+## 2026-11-02 (Mon) — fetch blocked again this session; dashboard itself is current from the cloud refresh; grade + log only
+
+**Today's data situation:** `fetch_data.py` was tried first, as instructed, and never reached
+Yahoo - the sandbox's own egress proxy rejected every connection to `query1.finance.yahoo.com`
+(and, checked further this time, `query2.finance.yahoo.com` and `finance.yahoo.com` too) with a
+403 at the gateway, confirming this is this session's own network policy refusing the host, not a
+Yahoo-side block. No raw per-ticker CSVs exist locally (gitignored by design, never committed), so
+`analyze.py` correctly refused to run - it threw its own "incomplete analysis" safeguard rather
+than touching the published build. The good news: this is not a stale-data day. The separate
+scheduled GitHub Actions refresh (which runs on normal infrastructure with full internet access)
+had already produced a brand-new build for today's real session - generated 11/02 5:40 PM ET with
+today's actual daily bar - before this review ran, so the numbers graded below are live Monday
+data, not a leftover from Friday. Ran `coherence_check.py` against that build: clean, 12/12
+tickers. Ran all 14 `test_*.py` files: all 131 tests pass. Ran `anomaly_audit.py`: no anomalies -
+chain, levels, horizons and trade cards all line up.
+
+**Grades reviewed:** TSLA n=13 (31%/38%), HOOD n=69 (16%/23%), QQQ n=66 (23%/27%), JPM n=64
+(8%/12%), GOOGL n=49 (18%/20%), NVDA n=19 (11%/16%), GC=F n=22 (18%/18%), SPCX n=1 (100%/100%,
+still a single sample). AMZN, SPY, VOO and META remain at n=0 - still no confirmed swing to grade
+for any of them. JPM's weak hit rate has now held for 3+ straight graded days (8%/13% on 10/31,
+8%/13% on 11/01, 8%/12% today), which is the standing watch item finally crossing the "3+ days"
+bar for a possible code change.
+
+**What changed and why - no code change today, despite the 3-day JPM pattern.** I dug into *why*
+JPM specifically keeps missing: its per-method breakdown is uniformly poor across every family
+(Gann 0/14, Fib 0/12, Rhythm 2/33, Moon 1/11, Hurst 3/24 - versus, e.g., QQQ's Hurst at 7/21 or
+Rhythm at 10/39 on the same engine), which smells less like a bug in one method and more like JPM's
+own price action (a lower-volatility, more range-bound mega-cap bank stock) just not suiting
+swing-turn timing as well as the other names. I then checked whether the self-grading system was
+already accounting for this: JPM's learned `methodFactors` are Gann 0.69 and Fib 0.79, both below
+the neutral 1.0. Working through `analyze.py`'s formula by hand - `((hits+1)/(n+2))/base_rate`,
+floored at 0.5 and capped at 2.0 - reproduces those exact numbers from JPM's own hit counts, so the
+engine is already correctly down-weighting the methods that haven't worked for this ticker; that is
+the honesty/self-grading feature doing its job, not a bug to patch. I found no clear defect to fix,
+and even if I had, this session has no way to re-run `analyze.py` against real data to prove a fix
+doesn't regress something else - shipping an unverified change on a day with no data access would
+risk exactly the kind of blind edit the standing rule warns against. So JPM's pattern is logged and
+watched, not coded against, until a session with live network can validate a real change. Coherence,
+the full test suite and the anomaly audit are all clean on today's committed build. Honesty features
+(hit-rate displays, random-control comparisons, grading, coherence gate) and `tickers.txt` are
+untouched.
+
+**Watch next:** whether JPM's hit rate keeps holding near 8%/12% (now 3-for-3) or starts to move as
+more sessions resolve - if it stays this low for another week it may be worth a deliberate change
+(e.g. a per-ticker confidence note) rather than relying on the existing per-method down-weighting
+alone, but that still needs a live-network session to test; whether SPY/VOO/META/SPCX ever produce
+a confirmed swing to grade; NVDA's small-sample hit rate; HOOD's calibration ceiling; and whether
+this sandbox's Yahoo Finance block is a permanent feature of this session type worth flagging to the
+owner, since it means this particular daily review can study grades and run the test/coherence
+suite against the cloud build, but can never itself fetch fresh data or safely verify a code change
+end-to-end - only the separate GitHub Actions workflow can do that today.
