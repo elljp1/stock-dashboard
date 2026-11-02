@@ -23,6 +23,14 @@ class ScheduleTests(unittest.TestCase):
             self.assertEqual(due_slot(now), now)
             self.assertIsNone(due_slot(now.replace(hour=9)))
 
+    def test_sunday_gold_reopen_gets_one_recovery_slot(self):
+        now = datetime.fromisoformat("2026-11-01T18:30:00-05:00")
+        self.assertEqual(due_slot(now), now)
+        self.assertTrue(decision(now, "2026-11-01T18:10:00-05:00")[0])
+        self.assertFalse(decision(now, "2026-11-01T18:30:00-05:00")[0])
+        saturday = datetime.fromisoformat("2026-10-31T18:30:00-04:00")
+        self.assertEqual(due_slot(saturday).strftime("%H:%M"), "18:00")
+
     def test_no_grace_delay_and_no_duplicate_current_slot(self):
         now = datetime.fromisoformat("2026-09-09T09:20:00-04:00")
         self.assertTrue(decision(now, "2026-09-09T09:15:30-04:00")[0])
