@@ -192,7 +192,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 83 | 10/30 2:38pm | SELL PUT GOOGL 11/09 272.5P (timing: today's low ~274.96, leg up to 11/05 high ~293.99; premium 1.3%; collateral $27,250) | $3.65 (1x) | Pushed, open; re-pushed 3:04pm $3.90 | expired (entry turn passed) |
 | 84 | 10/30 3:38pm | SELL PUT HOOD 11/13 80P (timing: today's low ~80.78, leg up to 11/09 high ~96.17; premium 3.4%; collateral $8,000; replaces #78) | $2.755 (limit $2.75, 1x) | Pushed, open | expired (entry turn passed) |
 | 85 | 11/02 10:21am | SELL CALL TSLA 11/20 415C, uncovered (timing: today's high ~411.67, leg down to 11/16 low ~372.16; premium 3.4%; replaces #79) | $14.175 (limit $14.15, 1x) | Pushed, open; 10:35am app high moved to 418.34, use 420C at $11.80; re-pushed 11:54am 420C $12.85 | pending |
-| 86 | 11/02 10:21am | SELL PUT META 11/13 592.5P (timing: today's low ~594.85, leg up to 11/09 high ~651.20; premium 1.3%; collateral $59,250; replaces #81) | $7.80 (1x) | Pushed, open; re-pushed 11:54am $9.65 | pending |
+| 86 | 11/02 10:21am | SELL PUT META 11/13 592.5P (timing: today's low ~594.85, leg up to 11/09 high ~651.20; premium 1.3%; collateral $59,250; replaces #81) | $7.80 (1x) | Pushed, open; re-pushed 11:54am $9.65, 12:23pm $10.40 | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
