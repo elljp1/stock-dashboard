@@ -18,6 +18,11 @@ def due_slot(now):
     if not 360 <= minute <= 1439:
         return None
     slots = [1080]  # Daily 18:00 review, including weekends.
+    # Gold futures reopen Sunday at 18:00 ET.  The review can run before the
+    # provider publishes its first 5-minute bar, so require one later recovery
+    # slot instead of treating a fresh build with a Friday fallback as final.
+    if now.weekday() == 6:
+        slots.append(1110)  # Sunday 18:30 futures-quote recovery.
     if now.weekday() < 5:
         slots += [360, 420, 480, 540, 555, 560, 565, 570, 575, 585]
         slots += list(range(600, 1021, 30))
