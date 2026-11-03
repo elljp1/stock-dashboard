@@ -4001,3 +4001,41 @@ this sandbox's Yahoo Finance block is a permanent feature of this session type w
 owner, since it means this particular daily review can study grades and run the test/coherence
 suite against the cloud build, but can never itself fetch fresh data or safely verify a code change
 end-to-end - only the separate GitHub Actions workflow can do that today.
+
+## 2026-11-03 (Tue) — fetch blocked again this session; today's cloud build is current; grade + log only
+
+**Today's data situation:** ran `fetch_data.py` first, as instructed. All 12 tickers failed with
+`Tunnel connection failed: 403 Forbidden` - this session's own network proxy refuses the connection
+to Yahoo's chart API before it ever leaves the sandbox, same as every recent session. No per-ticker
+CSVs exist locally (gitignored, never committed), so `analyze.py` cannot run here. The good news:
+the separate scheduled GitHub Actions refresh, which has normal internet access, already produced a
+fresh build for today - generated 2026-11-03 5:41 PM ET with today's actual daily bar - before this
+review started, so the grades below are live Tuesday data, not stale. Ran `coherence_check.py`
+against that build: PASSED, 12/12 tickers. Ran all 14 `test_*.py` files (131 tests) plus
+`test_sensitive_data.py`: all pass. Ran `anomaly_audit.py`: no anomalies - chain, levels, horizons
+and trade cards all line up. Ran the full `npm` test suite (`smoke_test.js`, `reliability_test.js`,
+`hilo_refresh_test.js`, `ui_layout_test.js`): all pass.
+
+**Grades reviewed:** TSLA n=13 (31%/38%), HOOD n=70 (16%/23%, up from n=69 yesterday, rate
+unchanged), QQQ n=66 (23%/27%), JPM n=64 (8%/12%), GOOGL n=50 (18%/20%, up from n=49, rate
+unchanged), NVDA n=19 (11%/16%), GC=F n=22 (18%/18%), SPCX n=1 (100%/100%, still a single sample).
+AMZN, SPY, VOO and META remain at n=0 - still no confirmed swing to grade for any of them. JPM's
+sample size (n=64) hasn't moved since the 10/29 catch-up batch, so there's nothing new to grade for
+it today; its 8%/12% hit rate is simply carrying forward unchanged, now the 5th straight review
+where it holds at that level.
+
+**What changed and why - no code change today.** With JPM producing no new resolved swings to
+analyze, there's no new evidence to act on beyond what was already dug into on 11/01 and 11/02 (its
+per-method hit rates are uniformly weak across every family, and the self-grading system's learned
+`methodFactors` for JPM - Gann 0.69, Fib 0.79 - already reflect that correctly; this looks like
+JPM's own range-bound price action not suiting swing-turn timing, not a bug). Everything else
+(coherence, the full test suite, the anomaly audit) is clean on today's committed build. Honesty
+features (hit-rate displays, random-control comparisons, grading, coherence gate) and `tickers.txt`
+are untouched.
+
+**Watch next:** whether JPM finally produces a new resolved swing and whether its rate moves once it
+does; whether SPY/VOO/META/SPCX ever produce a confirmed swing to grade; NVDA's small-sample hit
+rate; HOOD's calibration ceiling. This sandbox's Yahoo Finance block continues to be a consistent
+feature of this session type - this daily review can study grades and run the test/coherence suite
+against the cloud build, but still cannot itself fetch fresh data or validate a code change
+end-to-end; only the separate GitHub Actions workflow can do that today.
