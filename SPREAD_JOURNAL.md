@@ -198,7 +198,10 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 89 | 11/02 3:04pm | SELL PUT GOOGL 11/13 272.5P (timing: tomorrow's low ~274.96, leg up to 11/09 high ~296.66; premium 1.0%; collateral $27,250) | $2.765 (limit $2.77, 1x) | Pushed, open; voided 3:38pm, reinstated 3:46pm at $3.50; re-pushed 11/03 9:38am $3.85, 10:38am $4.15 | expired (entry turn passed) |
 | 90 | 11/03 9:38am | SELL PUT HOOD 11/20 80P (timing: Wed 11/04 low ~81.84, leg up to 11/16 high ~100.51; premium 3.9%; collateral $8,000; replaces #87) | $3.10 (1x) | Pushed, open; void 12:16pm, reinstated 2:38pm ($2.85, no re-push), void again 3:05pm (11/04 low dropped again) | void |
 | 91 | 11/03 9:38am | SELL CALL TSLA 11/27 420C, uncovered (timing: Wed 11/04 high ~418.34, leg down to 11/23 low ~370.24; premium 2.8%; replaces #85) | $11.875 (limit $11.90, 1x) | Pushed, open; 9:47am exit low back to 11/16, use 11/20 420C $9.58; void 3:47pm (app dropped the 11/04 high), reinstated 4:04pm (high restored; 420C $7.70, no re-push) | expired (entry turn passed) |
-| 92 | 11/05 9:39am | SELL PUT QQQ 11/27 675P (timing: Fri 11/06 low ~678.97, leg up to 11/23 high ~707.71; premium 2.4%; collateral $67,500; QQQ already 674.93) | $16.04 (1x) | Pushed, open | pending |
+| 92 | 11/05 9:39am | SELL PUT QQQ 11/27 675P (timing: Fri 11/06 low ~678.97, leg up to 11/23 high ~707.71; premium 2.4%; collateral $67,500; QQQ already 674.93) | $16.04 (1x) | Pushed, open; replaced 9:47am by #93 (11/06 low moved to ~661.73) | replaced |
+| 93 | 11/05 9:47am | SELL PUT QQQ 11/27 660P (timing: Fri 11/06 low ~661.73, leg up to 11/23 high ~700.72; premium 1.9%; collateral $66,000; replaces #92) | $12.56 (1x) | Pushed, open | pending |
+| 94 | 11/05 9:47am | SELL PUT META 11/20 590P (timing: Fri 11/06 low ~594.85 at 9:30am, leg up to 11/17 high ~674.01; premium 1.7%; collateral $59,000) | $10.25 (1x) | Pushed, open | pending |
+| 95 | 11/05 9:47am | SELL PUT HOOD 11/20 80P (timing: Fri 11/06 low ~81.84, leg up to 11/16 high ~97.14; premium 4.8%; collateral $8,000) | $3.85 (1x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
