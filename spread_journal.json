@@ -1519,6 +1519,90 @@
         }
       ],
       "note": "Cash-secured short put placed by the user at the open on 10/30 (QQQ ~696). Not part of the Agentic spread P&L."
+    },
+    {
+      "order": "sell to open TSLA $315 put 12/11 x1",
+      "limit": 10.0,
+      "tif": "gtc",
+      "status": "filled 11/05 10:01 ET at $10.00; buy-to-close $5.00 GTC resting",
+      "placed": "2026-11-05T10:00 ET",
+      "placedAgent": "user",
+      "account": "Individual ••••8549",
+      "quantity": 1,
+      "premium": 1000,
+      "collateral": 31500,
+      "breakeven": 305.0,
+      "orderId": "6aec9a2b-c66c-4c76-bbe1-5705246a37ee",
+      "filled": "2026-11-05T10:01 ET",
+      "fillPrice": 10.0,
+      "openQty": 1,
+      "closeOrders": [
+        {
+          "qty": 1,
+          "limit": 5.0,
+          "tif": "gtc",
+          "orderId": "6aec9b95-2295-4379-a0f4-7c46a78bb5cb",
+          "placed": "2026-11-05T10:07 ET",
+          "state": "working"
+        }
+      ],
+      "note": "Cash-secured short put placed by the user during the 11/05 selloff (TSLA ~352); app's next TSLA turn is the 11/10 low ~331.51, so against the app's leg at entry."
+    },
+    {
+      "order": "sell to open TSLA $315 put 12/11 x2",
+      "limit": 10.0,
+      "tif": "gtc",
+      "status": "filled 11/05 10:01 ET at $10.00; buy-to-close $5.00 GTC resting",
+      "placed": "2026-11-05T10:01 ET",
+      "placedAgent": "user",
+      "account": "Joint ••••6540",
+      "quantity": 2,
+      "premium": 2000,
+      "collateral": 63000,
+      "breakeven": 305.0,
+      "orderId": "6aec9a64-4fe2-48a8-b537-8900113bee7e",
+      "filled": "2026-11-05T10:01 ET",
+      "fillPrice": 10.0,
+      "openQty": 2,
+      "closeOrders": [
+        {
+          "qty": 2,
+          "limit": 5.0,
+          "tif": "gtc",
+          "orderId": "6aec9b5d-cc95-4b94-8181-85d7e03b37e9",
+          "placed": "2026-11-05T10:06 ET",
+          "state": "working"
+        }
+      ],
+      "note": "Cash-secured short puts placed by the user during the 11/05 selloff; against the app's leg at entry (next TSLA turn 11/10 low ~331.51)."
+    },
+    {
+      "order": "sell to open QQQ $650 put 12/11 x1",
+      "limit": 16.0,
+      "tif": "gtc",
+      "status": "filled 11/05 10:03 ET at $16.00; buy-to-close $8.00 GTC resting",
+      "placed": "2026-11-05T10:03 ET",
+      "placedAgent": "user",
+      "account": "Joint ••••6540",
+      "quantity": 1,
+      "premium": 1600,
+      "collateral": 65000,
+      "breakeven": 634.0,
+      "orderId": "6aec9ac2-33c1-4c6d-a157-5eead8ecbcae",
+      "filled": "2026-11-05T10:03 ET",
+      "fillPrice": 16.0,
+      "openQty": 1,
+      "closeOrders": [
+        {
+          "qty": 1,
+          "limit": 8.0,
+          "tif": "gtc",
+          "orderId": "6aec9b74-41de-4477-bad2-31e83b25ab9c",
+          "placed": "2026-11-05T10:06 ET",
+          "state": "working"
+        }
+      ],
+      "note": "Cash-secured short put placed by the user (QQQ ~668 at fill); app's next QQQ turn is the 11/06 low ~661.73, so against the app's leg at entry."
     }
   ],
   "alerts": {
@@ -3861,11 +3945,11 @@
         "breakeven": 647.44,
         "entryTurnTime": "Saturn 9:30-9:56 AM; Jupiter 9:56-10:48 AM; Saturn 3:04-3:55 PM",
         "entryTurnPrice": 661.73,
-        "turnDate": "2026-11-23",
-        "turnTime": "Saturn 1:19-2:07 PM",
-        "turnPrice": 700.72,
+        "turnDate": "2026-11-19",
+        "turnTime": "Saturn 11:41 AM-12:30 PM",
+        "turnPrice": 698.75,
         "plannedExit": "GTC buy-back $6.28 (50%); close at the 11/23 projected high if not filled; stop $25.12 or QQQ close below 660",
-        "reason": "D is tomorrow's projected low ~661.73 (moved down from 678.97), E the 11/23 high ~700.72; expiry 11/27 (first listed 2+ trading days after E; half day); premium 1.9%; replaces #92; collateral fits Individual/Joint"
+        "reason": "D is tomorrow's projected low ~661.73 (moved down from 678.97), E the 11/23 high ~700.72; expiry 11/27 (first listed 2+ trading days after E; half day); premium 1.9%; replaces #92; collateral fits Individual/Joint; RE-PUSHED 10:39am at $20.02 (QQQ 659.47, below the 660 strike and the projected low); E moved to the 11/19 high ~698.75 but no 11/23-11/24 660P is listed, so 11/27 stays"
       },
       {
         "date": "2026-11-05",
@@ -3889,15 +3973,15 @@
         "entryTurnPrice": 594.85,
         "turnDate": "2026-11-17",
         "turnTime": "Saturn 10:51-11:40 AM; Sun 1:19-2:08 PM",
-        "turnPrice": 674.01,
+        "turnPrice": 680.55,
         "plannedExit": "GTC buy-back $5.15 (50%); close at the 11/17 projected high if not filled; stop $20.50 or META close below 590",
-        "reason": "D is tomorrow's projected low ~594.85 (9:30am), E the 11/17 high ~674.01; expiry 11/20; no 592.5 strike on 11/20, so 590; premium 1.7%; collateral fits Individual/Joint"
+        "reason": "D is tomorrow's projected low ~594.85 (9:30am), E the 11/17 high ~674.01; expiry 11/20; no 592.5 strike on 11/20, so 590; premium 1.7%; collateral fits Individual/Joint; RE-PUSHED 10:39am at $21.23 (META 593.22, below the 594.85 projected low and near the 590 strike); E high now ~680.55"
       },
       {
         "date": "2026-11-05",
         "time": "09:47 ET",
         "taken": false,
-        "outcome": "pending",
+        "outcome": "replaced",
         "contracts": 1,
         "kind": "sell put",
         "entryTurnDate": "2026-11-06",
@@ -3917,7 +4001,33 @@
         "turnTime": "Venus 10:51-11:40 AM; Saturn 1:19-2:09 PM",
         "turnPrice": 97.14,
         "plannedExit": "GTC buy-back $1.93 (50%); close at the 11/16 projected high if not filled; stop $7.70 or HOOD close below 80",
-        "reason": "D is tomorrow's projected low ~81.84, E the 11/16 high ~97.14; expiry 11/20; no 81 strike on 11/20, so 80; premium 4.8%; collateral $8,000 fits any account incl. Agentic"
+        "reason": "D is tomorrow's projected low ~81.84, E the 11/16 high ~97.14; expiry 11/20; no 81 strike on 11/20, so 80; premium 4.8%; collateral $8,000 fits any account incl. Agentic; REPLACED by #96 at 10:39am: app moved the 11/06 HOOD low down to ~77.35, so the rule strike is now 75"
+      },
+      {
+        "id": 96,
+        "date": "2026-11-05",
+        "time": "10:39 ET",
+        "taken": false,
+        "outcome": "pending",
+        "contracts": 1,
+        "kind": "sell put",
+        "symbol": "HOOD",
+        "contract": "HOOD 11/20 75P",
+        "spread": "11/20 75 put (sold, cash-secured)",
+        "midAtAlert": 3.43,
+        "suggestedLimit": 3.43,
+        "delta": -0.366,
+        "spot": 78.34,
+        "collateral": 7500,
+        "breakeven": 71.57,
+        "entryTurnDate": "2026-11-06",
+        "entryTurnTime": "Sun 11:39 AM-12:30 PM; Moon 2:13-3:04 PM",
+        "entryTurnPrice": 77.35,
+        "turnDate": "2026-11-16",
+        "turnTime": "Venus 10:51-11:40 AM; Saturn 1:19-2:09 PM",
+        "turnPrice": 94.13,
+        "plannedExit": "GTC buy-back $1.72 (50%); close at the 11/16 projected high if not filled; stop $6.86 or HOOD close below 75",
+        "reason": "D is tomorrow's projected low ~77.35 (moved down from 81.84), E the 11/16 high ~94.13; expiry 11/20; no 77 strike, so 75; premium 4.6%; collateral $7,500 fits any account incl. Agentic; replaces #95"
       }
     ]
   },

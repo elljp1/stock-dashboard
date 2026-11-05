@@ -100,6 +100,9 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open META $670 put 11/20 x1 | $25.00 GTC | filled 10/20 9:30am at $25.00; closed 10/21 9:40am at $20.00 (buy to close placed 10/20 9:32am), +$500 | $67,000 | 10/19 1:28pm |
 | Individual | Sell to open META $650 put 11/20 x1 | $25.00 GTC | filled 10/22 9:36am at $25.00; buy to close $12.50 GTC resting (placed 11/04 9:34am; replaced the 10/22 $20.00) | $65,000 | 10/22 9:32am |
 | Joint | Sell to open META $650 put 11/20 x1 | $25.00 GTC | filled 10/22 9:36am at $25.00; buy to close $12.50 GTC resting (placed 11/04 9:34am; replaced the 10/22 $20.00) | $65,000 | 10/22 9:33am |
+| Individual | Sell to open TSLA $315 put 12/11 x1 | $10.00 GTC | filled 11/05 10:01am at $10.00; buy to close $5.00 GTC resting (placed 10:07am) | $31,500 | 11/05 10:00am |
+| Joint | Sell to open TSLA $315 put 12/11 x2 | $10.00 GTC | filled 11/05 10:01am at $10.00; buy to close $5.00 GTC x2 resting (placed 10:06am) | $63,000 | 11/05 10:01am |
+| Joint | Sell to open QQQ $650 put 12/11 x1 | $16.00 GTC | filled 11/05 10:03am at $16.00; buy to close $8.00 GTC resting (placed 10:06am) | $65,000 | 11/05 10:03am |
 | Individual | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; bought to close 10/27 11:02am at $6.25, +$625 (+50%) | $68,500 | 10/22 10:40am |
 | Joint | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; bought to close 10/27 11:02am at $6.25, +$625 (+50%) | $68,500 | 10/22 10:40am |
 
@@ -199,9 +202,10 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 90 | 11/03 9:38am | SELL PUT HOOD 11/20 80P (timing: Wed 11/04 low ~81.84, leg up to 11/16 high ~100.51; premium 3.9%; collateral $8,000; replaces #87) | $3.10 (1x) | Pushed, open; void 12:16pm, reinstated 2:38pm ($2.85, no re-push), void again 3:05pm (11/04 low dropped again) | void |
 | 91 | 11/03 9:38am | SELL CALL TSLA 11/27 420C, uncovered (timing: Wed 11/04 high ~418.34, leg down to 11/23 low ~370.24; premium 2.8%; replaces #85) | $11.875 (limit $11.90, 1x) | Pushed, open; 9:47am exit low back to 11/16, use 11/20 420C $9.58; void 3:47pm (app dropped the 11/04 high), reinstated 4:04pm (high restored; 420C $7.70, no re-push) | expired (entry turn passed) |
 | 92 | 11/05 9:39am | SELL PUT QQQ 11/27 675P (timing: Fri 11/06 low ~678.97, leg up to 11/23 high ~707.71; premium 2.4%; collateral $67,500; QQQ already 674.93) | $16.04 (1x) | Pushed, open; replaced 9:47am by #93 (11/06 low moved to ~661.73) | replaced |
-| 93 | 11/05 9:47am | SELL PUT QQQ 11/27 660P (timing: Fri 11/06 low ~661.73, leg up to 11/23 high ~700.72; premium 1.9%; collateral $66,000; replaces #92) | $12.56 (1x) | Pushed, open | pending |
-| 94 | 11/05 9:47am | SELL PUT META 11/20 590P (timing: Fri 11/06 low ~594.85 at 9:30am, leg up to 11/17 high ~674.01; premium 1.7%; collateral $59,000) | $10.25 (1x) | Pushed, open | pending |
-| 95 | 11/05 9:47am | SELL PUT HOOD 11/20 80P (timing: Fri 11/06 low ~81.84, leg up to 11/16 high ~97.14; premium 4.8%; collateral $8,000) | $3.85 (1x) | Pushed, open | pending |
+| 93 | 11/05 9:47am | SELL PUT QQQ 11/27 660P (timing: Fri 11/06 low ~661.73, leg up to 11/23 high ~700.72; premium 1.9%; collateral $66,000; replaces #92) | $12.56 (1x) | Pushed, open; re-pushed 10:39am $20.02 (QQQ 659.47, below strike) | pending |
+| 94 | 11/05 9:47am | SELL PUT META 11/20 590P (timing: Fri 11/06 low ~594.85 at 9:30am, leg up to 11/17 high ~674.01; premium 1.7%; collateral $59,000) | $10.25 (1x) | Pushed, open; re-pushed 10:39am $21.23 (META 593.22) | pending |
+| 95 | 11/05 9:47am | SELL PUT HOOD 11/20 80P (timing: Fri 11/06 low ~81.84, leg up to 11/16 high ~97.14; premium 4.8%; collateral $8,000) | $3.85 (1x) | Pushed, open; replaced 10:39am by #96 (11/06 low moved to ~77.35) | replaced |
+| 96 | 11/05 10:39am | SELL PUT HOOD 11/20 75P (timing: Fri 11/06 low ~77.35, leg up to 11/16 high ~94.13; premium 4.6%; collateral $7,500; replaces #95) | $3.43 (1x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
