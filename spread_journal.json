@@ -3929,7 +3929,7 @@
         "date": "2026-11-05",
         "time": "09:47 ET",
         "taken": false,
-        "outcome": "pending",
+        "outcome": "void",
         "contracts": 1,
         "kind": "sell put",
         "entryTurnDate": "2026-11-06",
@@ -3949,13 +3949,13 @@
         "turnTime": "Saturn 11:41 AM-12:30 PM",
         "turnPrice": 698.75,
         "plannedExit": "GTC buy-back $6.28 (50%); close at the 11/23 projected high if not filled; stop $25.12 or QQQ close below 660",
-        "reason": "D is tomorrow's projected low ~661.73 (moved down from 678.97), E the 11/23 high ~700.72; expiry 11/27 (first listed 2+ trading days after E; half day); premium 1.9%; replaces #92; collateral fits Individual/Joint; RE-PUSHED 10:39am at $20.02 (QQQ 659.47, below the 660 strike and the projected low); E moved to the 11/19 high ~698.75 but no 11/23-11/24 660P is listed, so 11/27 stays"
+        "reason": "D is tomorrow's projected low ~661.73 (moved down from 678.97), E the 11/23 high ~700.72; expiry 11/27 (first listed 2+ trading days after E; half day); premium 1.9%; replaces #92; collateral fits Individual/Joint; RE-PUSHED 10:39am at $20.02 (QQQ 659.47, below the 660 strike and the projected low); E moved to the 11/19 high ~698.75 but no 11/23-11/24 660P is listed, so 11/27 stays; VOID 11:47am: app dropped the QQQ 11/06 low (next turn is the 11/19 high ~694.02)"
       },
       {
         "date": "2026-11-05",
         "time": "09:47 ET",
         "taken": false,
-        "outcome": "pending",
+        "outcome": "replaced",
         "contracts": 1,
         "kind": "sell put",
         "entryTurnDate": "2026-11-06",
@@ -3975,7 +3975,7 @@
         "turnTime": "Saturn 10:51-11:40 AM; Sun 1:19-2:08 PM",
         "turnPrice": 680.55,
         "plannedExit": "GTC buy-back $5.15 (50%); close at the 11/17 projected high if not filled; stop $20.50 or META close below 590",
-        "reason": "D is tomorrow's projected low ~594.85 (9:30am), E the 11/17 high ~674.01; expiry 11/20; no 592.5 strike on 11/20, so 590; premium 1.7%; collateral fits Individual/Joint; RE-PUSHED 10:39am at $21.23 (META 593.22, below the 594.85 projected low and near the 590 strike); E high now ~680.55"
+        "reason": "D is tomorrow's projected low ~594.85 (9:30am), E the 11/17 high ~674.01; expiry 11/20; no 592.5 strike on 11/20, so 590; premium 1.7%; collateral fits Individual/Joint; RE-PUSHED 10:39am at $21.23 (META 593.22, below the 594.85 projected low and near the 590 strike); E high now ~680.55; REPLACED by #97 at 11:47am: app moved the META 11/06 low down to ~582.63, so the rule strike is now 580"
       },
       {
         "date": "2026-11-05",
@@ -4008,7 +4008,7 @@
         "date": "2026-11-05",
         "time": "10:39 ET",
         "taken": false,
-        "outcome": "pending",
+        "outcome": "void",
         "contracts": 1,
         "kind": "sell put",
         "symbol": "HOOD",
@@ -4027,7 +4027,33 @@
         "turnTime": "Venus 10:51-11:40 AM; Saturn 1:19-2:09 PM",
         "turnPrice": 94.13,
         "plannedExit": "GTC buy-back $1.72 (50%); close at the 11/16 projected high if not filled; stop $6.86 or HOOD close below 75",
-        "reason": "D is tomorrow's projected low ~77.35 (moved down from 81.84), E the 11/16 high ~94.13; expiry 11/20; no 77 strike, so 75; premium 4.6%; collateral $7,500 fits any account incl. Agentic; replaces #95"
+        "reason": "D is tomorrow's projected low ~77.35 (moved down from 81.84), E the 11/16 high ~94.13; expiry 11/20; no 77 strike, so 75; premium 4.6%; collateral $7,500 fits any account incl. Agentic; replaces #95; VOID 11:47am: app dropped the HOOD 11/06 low (next turn is the 11/16 high ~98.41)"
+      },
+      {
+        "id": 97,
+        "date": "2026-11-05",
+        "time": "11:47 ET",
+        "taken": false,
+        "outcome": "pending",
+        "contracts": 1,
+        "kind": "sell put",
+        "symbol": "META",
+        "contract": "META 11/20 580P",
+        "spread": "11/20 580 put (sold, cash-secured)",
+        "midAtAlert": 13.53,
+        "suggestedLimit": 13.5,
+        "delta": -0.315,
+        "spot": 605.79,
+        "collateral": 58000,
+        "breakeven": 566.47,
+        "entryTurnDate": "2026-11-06",
+        "entryTurnTime": "9:30 AM ET",
+        "entryTurnPrice": 582.63,
+        "turnDate": "2026-11-17",
+        "turnTime": "Saturn 10:51-11:40 AM; Sun 1:19-2:08 PM",
+        "turnPrice": 663.78,
+        "plannedExit": "GTC buy-back $6.75 (50%); close at the 11/17 projected high if not filled; stop $27.05 or META close below 580",
+        "reason": "D is tomorrow's projected low ~582.63 at the open (moved down from 594.85), E the 11/17 high ~663.78; expiry 11/20; no 582.5 strike, so 580; premium 2.3%; replaces #94; collateral fits Individual/Joint"
       }
     ]
   },
