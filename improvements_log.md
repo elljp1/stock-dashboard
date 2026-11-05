@@ -4039,3 +4039,45 @@ rate; HOOD's calibration ceiling. This sandbox's Yahoo Finance block continues t
 feature of this session type - this daily review can study grades and run the test/coherence suite
 against the cloud build, but still cannot itself fetch fresh data or validate a code change
 end-to-end; only the separate GitHub Actions workflow can do that today.
+
+## 2026-11-05 (Thu) — fetch blocked again; no daily review ran yesterday (11/04); grade + log only
+
+**Note first:** there is no 11/04 entry in this log, and the only commits from that day are the
+automatic "auto refresh and review (cloud)" ones from the scheduled refresh workflow, not a daily
+review session. Yesterday's review appears to have not run at all - worth checking the schedule
+if that happens again.
+
+**Today's data situation:** ran `fetch_data.py` first, as instructed. All 12 tickers failed with
+`Tunnel connection failed: 403 Forbidden` - this session's sandbox still can't reach Yahoo's chart
+API, same as every recent review. No per-ticker CSVs exist locally (gitignored, never committed),
+so `analyze.py` cannot run in this session. The separate scheduled GitHub Actions refresh, which has
+normal internet access, already produced today's build before this review started - generated
+2026-11-05 5:41 PM ET with today's actual daily bar. Ran `coherence_check.py` against it: PASSED,
+12/12 tickers. Ran all `test_*.py` files: 139 passed (14 subtests). Ran `anomaly_audit.py`: no
+anomalies - chain, levels, horizons and trade cards all line up. Ran the full `npm`/node test suite
+(`smoke_test.js`, `reliability_test.js`, `pin_test.js`, `hilo_refresh_test.js`, `ui_layout_test.js`,
+`scheduler_test.mjs`): all pass.
+
+**Grades reviewed:** the biggest change today is that AMZN, SPY and VOO - all stuck at n=0 for
+weeks with no confirmed swing to grade - jumped to real sample sizes in one day: AMZN n=21
+(0%/5% hit rate), SPY n=32 (6%/9%), VOO n=31 (3%/3%). That's a big batch of swings resolving at
+once, and the hit rates are low, but since this is the *first* day any of these three have had
+data, there's nothing to compare against yet and no 3+-day pattern to act on - it gets watched, not
+coded against, starting now. TSLA n=52 (13%/15%), HOOD n=72 (15%/22%), QQQ n=68 (22%/26%), JPM
+n=77 (6%/10%, essentially unchanged - still the ticker the engine's own per-method weighting has
+correctly marked down, as dug into on 11/01-11/03), GOOGL n=54 (17%/19%), NVDA n=20 (10%/15%),
+GC=F n=22 (18%/18%), SPCX n=1 (100%/100%, still one sample). META remains at n=0.
+
+**What changed and why - no code change today.** Coherence, the full test suite and the anomaly
+audit are all clean on today's committed build. The new AMZN/SPY/VOO numbers are the only
+noteworthy thing today, and one day of data for three tickers that had none before is exactly the
+kind of pattern this review is supposed to let sit and accumulate before touching any code - not
+something to react to on day one. Honesty features (hit-rate displays, random-control comparisons,
+grading, coherence gate) and `tickers.txt` are untouched.
+
+**Watch next:** whether AMZN/SPY/VOO's hit rates hold near today's levels or move once more swings
+resolve - if they stay this low for a week that's worth a closer look; whether JPM's rate finally
+shifts; whether META ever produces a confirmed swing; whether tomorrow's review actually runs. This
+sandbox's Yahoo Finance block continues to be a consistent feature of this session type - it can
+study grades and run the test/coherence suite against the cloud build, but still cannot fetch fresh
+data or validate a code change end-to-end; only the separate GitHub Actions workflow can do that.
