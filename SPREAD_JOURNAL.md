@@ -205,8 +205,9 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 93 | 11/05 9:47am | SELL PUT QQQ 11/27 660P (timing: Fri 11/06 low ~661.73, leg up to 11/23 high ~700.72; premium 1.9%; collateral $66,000; replaces #92) | $12.56 (1x) | Pushed, open; re-pushed 10:39am $20.02 (QQQ 659.47, below strike); void 11:47am (app dropped the 11/06 low) | void |
 | 94 | 11/05 9:47am | SELL PUT META 11/20 590P (timing: Fri 11/06 low ~594.85 at 9:30am, leg up to 11/17 high ~674.01; premium 1.7%; collateral $59,000) | $10.25 (1x) | Pushed, open; re-pushed 10:39am $21.23 (META 593.22); replaced 11:47am by #97 (11/06 low moved to ~582.63) | replaced |
 | 95 | 11/05 9:47am | SELL PUT HOOD 11/20 80P (timing: Fri 11/06 low ~81.84, leg up to 11/16 high ~97.14; premium 4.8%; collateral $8,000) | $3.85 (1x) | Pushed, open; replaced 10:39am by #96 (11/06 low moved to ~77.35) | replaced |
-| 96 | 11/05 10:39am | SELL PUT HOOD 11/20 75P (timing: Fri 11/06 low ~77.35, leg up to 11/16 high ~94.13; premium 4.6%; collateral $7,500; replaces #95) | $3.43 (1x) | Pushed, open; void 11:47am (app dropped the 11/06 low) | void |
+| 96 | 11/05 10:39am | SELL PUT HOOD 11/20 75P (timing: Fri 11/06 low ~77.35, leg up to 11/16 high ~94.13; premium 4.6%; collateral $7,500; replaces #95) | $3.43 (1x) | Pushed, open; void 11:47am (app dropped the 11/06 low), reinstated 12:16pm (low ~75.36 restored; $3.55, no re-push) | pending |
 | 97 | 11/05 11:47am | SELL PUT META 11/20 580P (timing: Fri 11/06 low ~582.63 at 9:30am, leg up to 11/17 high ~663.78; premium 2.3%; collateral $58,000; replaces #94) | $13.53 (limit $13.50, 1x) | Pushed, open | pending |
+| 98 | 11/05 12:16pm | SELL PUT QQQ 11/27 645P (timing: Fri 11/06 low ~646.17, leg up to 11/19 high ~686.21; premium 2.5%; collateral $64,500) | $16.33 (1x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
