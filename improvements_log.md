@@ -4081,3 +4081,37 @@ shifts; whether META ever produces a confirmed swing; whether tomorrow's review 
 sandbox's Yahoo Finance block continues to be a consistent feature of this session type - it can
 study grades and run the test/coherence suite against the cloud build, but still cannot fetch fresh
 data or validate a code change end-to-end; only the separate GitHub Actions workflow can do that.
+
+## 2026-11-06 (Fri) — grades mostly flat, SPCX's one-sample 100% drops to a realistic 25%; grade + log only
+
+**Today's data situation:** ran `fetch_data.py` first as instructed; all 12 tickers failed with the
+same `403 Forbidden` this sandbox always gets from Yahoo, so I skipped straight to checking the
+already-committed build. The separate scheduled GitHub Actions refresh had already produced today's
+dashboard before this review started - generated 2026-11-06 5:41 PM ET with today's daily bar.
+`coherence_check.py` PASSED on it (12/12 tickers). Ran all 13 `test_*.py` files: all pass. Ran
+`anomaly_audit.py`: no anomalies - chain, levels, horizons and trade cards all line up. Ran the full
+node test suite (`smoke_test.js`, `reliability_test.js`, `pin_test.js`, `hilo_refresh_test.js`,
+`ui_layout_test.js`, `scheduler_test.mjs`): all pass.
+
+**Grades reviewed (comparing today's build to yesterday's):** most tickers' recent-window hit rates
+held essentially flat day over day - TSLA, QQQ, JPM, GOOGL, NVDA, SPY, VOO and GC=F all unchanged.
+AMZN improved slightly as a new swing resolved favorably (hit-within-2-days and hit-within-3-days
+both ticked up). The one thing worth flagging: SPCX picked up three newly-resolved swings today,
+and its measured hit rate dropped from a lucky 100% (on a single sample) down to a much more
+realistic 25% now that there are four. That is exactly the kind of small-sample swing this review
+is supposed to expect and not react to - it is the system correctly getting more honest as data
+accumulates, not a regression. JPM remains the softest performer, same as prior reviews, with
+nothing new today pushing it past the 3-day bar for a code change. META still has zero confirmed
+swings to grade. The three logged real option trades (two closed QQQ puts, one assigned TSLA
+covered-call position) are unchanged from prior reviews - no new real trades today.
+
+**What changed and why - no code change today.** Coherence, the full test suite, and the anomaly
+audit are all clean on today's committed build, and nothing in today's grades crossed the 3+-day
+persistence bar this project uses before touching the engine. Honesty features (hit-rate displays,
+random-control comparisons, grading, coherence gate) and `tickers.txt` are untouched.
+
+**Watch next:** whether SPCX's hit rate keeps falling or stabilizes as more swings resolve (four
+samples is still too few to read anything into); whether AMZN's improvement holds up over a few more
+sessions; whether JPM's weak rate ever shifts; whether META finally produces a confirmed swing. This
+sandbox's Yahoo block is unchanged - still can only grade and test against the cloud-refreshed build,
+not fetch fresh data or validate a code change end-to-end itself.
