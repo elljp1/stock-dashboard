@@ -4115,3 +4115,38 @@ samples is still too few to read anything into); whether AMZN's improvement hold
 sessions; whether JPM's weak rate ever shifts; whether META finally produces a confirmed swing. This
 sandbox's Yahoo block is unchanged - still can only grade and test against the cloud-refreshed build,
 not fetch fresh data or validate a code change end-to-end itself.
+
+## 2026-11-07 (Sat) — weekend, no new session; fetch blocked again; grade + log only
+
+**Today's data situation:** today is Saturday, so there was no new trading session for the
+scheduled GitHub Actions refresh to pick up - the last real update is still Friday 11/6's close,
+committed 11/6 11:15pm ET. `fetch_data.py` failed on all 12 tickers with the same `403 Forbidden`
+this sandbox always gets reaching Yahoo, as expected on a weekend with no fresh bar to fetch anyway.
+No per-ticker CSVs exist locally (gitignored, never committed), so `analyze.py` can't run standalone
+in this session; proceeded on the already-committed Friday build instead. `coherence_check.py`
+PASSED on it (12/12 tickers). Ran all `test_*.py` files: 139 passed. Ran `anomaly_audit.py`: no
+anomalies - chain, levels, horizons and trade cards all line up. Ran the full node test suite
+(`smoke_test.js`, `reliability_test.js`, `pin_test.js`, `hilo_refresh_test.js`, `ui_layout_test.js`,
+`scheduler_test.mjs`): all pass.
+
+**Grades reviewed:** nothing new to grade since there's no new session - today's build is the exact
+same Friday-close snapshot already covered in yesterday's review. For the record: TSLA n=52
+(13%/15%), HOOD n=74 (15%/22%), QQQ n=69 (22%/26%), JPM n=78 (6%/10%, still the softest performer,
+already dug into on 11/01-11/03 and already marked down by the engine's own per-method weighting),
+GOOGL n=54 (17%/19%), NVDA n=20 (10%/15%), AMZN n=22 (5%/9%), SPY n=32 (6%/9%), VOO n=31 (3%/3%),
+GC=F n=22 (18%/18%), SPCX n=4 (25%/25%). META remains at n=0. The real-money ledger is unchanged:
+the three closed option trades (two QQQ puts, one assigned TSLA covered-call) and the one open META
+put credit spread (sold $670/bought $660, exp 11/20) are all the same as last reviewed - META's spot
+is still well under the spread's $667.50 breakeven, which is an already-tracked, already-anticipated
+outcome, not new information today.
+
+**What changed and why - no code change today.** There's no new data to react to on a weekend, and
+nothing here crosses the 3+-day persistence bar this project uses before touching the engine.
+Coherence, the full test suite, and the anomaly audit are all clean. Honesty features (hit-rate
+displays, random-control comparisons, grading, coherence gate) and `tickers.txt` are untouched.
+
+**Watch next:** Monday's session for fresh grades across the board, in particular whether JPM's weak
+rate ever shifts, whether META's open spread keeps sinking or recovers before 11/20 expiry, and
+whether META ever produces a confirmed swing to grade. This sandbox's Yahoo block is unchanged -
+still can only grade and test against the cloud-refreshed build, not fetch fresh data or validate a
+code change end-to-end itself.
