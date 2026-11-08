@@ -4150,3 +4150,32 @@ rate ever shifts, whether META's open spread keeps sinking or recovers before 11
 whether META ever produces a confirmed swing to grade. This sandbox's Yahoo block is unchanged -
 still can only grade and test against the cloud-refreshed build, not fetch fresh data or validate a
 code change end-to-end itself.
+
+## 2026-11-08 (Sun) — weekend, still no new session; fetch blocked again; grade + log only
+
+**Today's data situation:** Sunday, so there was still no new trading session - the newest build on
+the site is the same Friday 11/6 close that both this review and yesterday's already covered.
+`fetch_data.py` failed on all 12 tickers with this sandbox's usual `403 Forbidden` reaching Yahoo
+(confirmed at the proxy level: the gateway rejects the CONNECT to Yahoo's servers outright, a policy
+block rather than anything fixable here). No per-ticker CSVs exist locally, so proceeded on the
+already-committed build as instructed. `coherence_check.py` PASSED (12/12 tickers). Ran all 139
+Python unit tests: all pass. Ran `anomaly_audit.py`: no anomalies. Ran the full Node test suite
+(`smoke_test.js`, `reliability_test.js`, `pin_test.js`, `hilo_refresh_test.js`, `ui_layout_test.js`,
+`scheduler_test.mjs`): all pass.
+
+**Grades reviewed:** identical numbers to yesterday, since it's the same snapshot - TSLA n=52
+(13%/15%), HOOD n=74 (15%/22%), QQQ n=69 (22%/26%), JPM n=78 (6%/10%, still the softest performer,
+already addressed by the engine's own per-method weighting rather than a fresh code change), GOOGL
+n=54 (17%/19%), NVDA n=20 (10%/15%), AMZN n=22 (5%/9%), SPY n=32 (6%/9%), VOO n=31 (3%/3%), GC=F n=22
+(18%/18%), SPCX n=4 (25%/25%), META n=0. The real-money ledger (three closed option trades: two QQQ
+puts, one assigned TSLA covered call) is unchanged - nothing new to grade there either.
+
+**What changed and why - no code change today.** No new data means nothing new to react to, and
+nothing here is a fresh pattern - it's the same figures already reviewed. Coherence, the full test
+suite, and the anomaly audit are all clean. Honesty features (hit-rate displays, random-control
+comparisons, grading, coherence gate) and `tickers.txt` are untouched.
+
+**Watch next:** Monday's session for the first fresh grades since Friday, in particular whether
+JPM's weak rate ever shifts and whether META finally produces a confirmed swing. This sandbox's
+Yahoo block is unchanged - still can only grade and test against the cloud-refreshed build, not
+fetch fresh data or validate a code change end-to-end itself.
