@@ -4179,3 +4179,52 @@ comparisons, grading, coherence gate) and `tickers.txt` are untouched.
 JPM's weak rate ever shifts and whether META finally produces a confirmed swing. This sandbox's
 Yahoo block is unchanged - still can only grade and test against the cloud-refreshed build, not
 fetch fresh data or validate a code change end-to-end itself.
+
+## 2026-11-09 (Mon) — first fresh grades since Friday; HOOD still pinned at its calibration ceiling; grade + log only
+
+**Today's data situation:** ran `fetch_data.py` first, as instructed. All 12 tickers failed with
+`Tunnel connection failed: 403 Forbidden` - this sandbox's usual block reaching Yahoo, unchanged.
+No per-ticker CSVs exist locally (gitignored, never committed), so `analyze.py` correctly refused to
+run and retained the last published dashboard rather than build on incomplete data. The good news:
+the separate scheduled GitHub Actions refresh already ran three times today with normal internet
+access and produced a fresh build - generated 2026-11-09 9:40 AM ET, including Monday's live
+pre/post-market price - before this review started, so today's grades are live, not stale. Ran
+`coherence_check.py` against that build: PASSED, 12/12 tickers. Ran all 14 `test_*.py` files (139
+tests): all pass. Ran `anomaly_audit.py`: no anomalies - chain, levels, horizons and trade cards all
+line up. Ran the full `npm` test suite (`smoke_test.js`, `reliability_test.js`, `pin_test.js`,
+`hilo_refresh_test.js`, `ui_layout_test.js`, `scheduler_test.mjs`): all pass.
+
+**Grades reviewed:** TSLA n=53 (15%/17%, up from n=52 Friday), HOOD n=75 (15%/21%), QQQ n=70
+(21%/26%), JPM n=80 (6%/10%, still the softest performer, already addressed by the engine's own
+per-method weighting rather than a fresh code change), GOOGL n=63 (16%/17%, up sharply from n=54 as
+several older predictions resolved), NVDA n=20 (10%/15%), AMZN n=23 (9%/13%), SPY n=32 (6%/9%), VOO
+n=31 (3%/3%), GC=F n=65 (9%/9%, up from n=22 as a batch of older gold predictions resolved together -
+the rate dropped with the bigger sample but isn't a new pattern, just more data), META still n=0,
+SPCX n=4 (0%/0%, down from 25%/25% - still just a 4-sample size, not a basis for any change). Looked
+specifically at HOOD's longer-horizon price calibration since it's been a recurring watch item:
+`priceCalibHigh` is sitting exactly at the engine's 1.15 ceiling, meaning HOOD's actual prices have
+kept running above its confluence-chain "high" targets by more than the clamp allows it to correct
+for. This has been true for at least two weeks running. The code's own comment at `analyze.py:1133`
+already anticipated this - it deliberately keeps the bound tight and notes that hitting the ceiling
+on historical samples isn't by itself evidence that widening it in production would help on
+untouched forward sessions - so today's observation doesn't clear the bar for a change; it's the
+same situation already reasoned through, not a new one. On the real-money ledger: the TSLA 12/11
+$315 put (opened 11/5, 1x Individual / 2x Joint) hit its 50%-profit GTC target and closed this
+morning at $5.00 for +$500/+$1,000 - a clean, textbook execution of the project's own exit rule. The
+META 11/20 670/660 put credit spread remains open, spot still under the spread's breakeven as
+already anticipated.
+
+**What changed and why - no code change today.** Coherence, the full test suite, and the anomaly
+audit are all clean. The one borderline finding (HOOD's calibration ceiling) is a continuation of an
+already-reasoned-through situation, not a fresh 3-day pattern, so it doesn't warrant touching the
+clamp today. Honesty features (hit-rate displays, random-control comparisons, grading, coherence
+gate) and `tickers.txt` are untouched.
+
+**Watch next:** whether HOOD's calibration ratio ever drops back under 1.15 on its own as more
+sessions resolve, or whether it stays pinned long enough to revisit the clamp with real evidence;
+whether JPM's weak rate ever shifts; whether META finally produces a confirmed swing to grade; and
+the monthly-horizon day-timing hit rate, which sits at or slightly below its random control (6% vs
+8% for highs, 2% vs 8% for lows) but on only ~48 samples each - too small to tell signal from noise
+yet, worth re-checking once the sample grows. This sandbox's Yahoo block is unchanged - still can
+only grade and test against the cloud-refreshed build, not fetch fresh data or validate a code
+change end-to-end itself.
