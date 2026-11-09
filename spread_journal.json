@@ -1524,7 +1524,7 @@
       "order": "sell to open TSLA $315 put 12/11 x1",
       "limit": 10.0,
       "tif": "gtc",
-      "status": "filled 11/05 10:01 ET at $10.00; buy-to-close $5.00 GTC resting",
+      "status": "filled 11/05 10:01 ET at $10.00; closed 11/09 9:40 ET at $5.00 (buy-to-close GTC filled); P&L +$500 (+50% of premium)",
       "placed": "2026-11-05T10:00 ET",
       "placedAgent": "user",
       "account": "Individual ••••8549",
@@ -1535,7 +1535,7 @@
       "orderId": "6aec9a2b-c66c-4c76-bbe1-5705246a37ee",
       "filled": "2026-11-05T10:01 ET",
       "fillPrice": 10.0,
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 1,
@@ -1543,16 +1543,21 @@
           "tif": "gtc",
           "orderId": "6aec9b95-2295-4379-a0f4-7c46a78bb5cb",
           "placed": "2026-11-05T10:07 ET",
-          "state": "working"
+          "state": "filled",
+          "filled": "2026-11-09T09:40 ET"
         }
       ],
-      "note": "Cash-secured short put placed by the user during the 11/05 selloff (TSLA ~352); app's next TSLA turn is the 11/10 low ~331.51, so against the app's leg at entry."
+      "note": "Cash-secured short put placed by the user during the 11/05 selloff (TSLA ~352); app's next TSLA turn is the 11/10 low ~331.51, so against the app's leg at entry.",
+      "closed": "2026-11-09T09:40 ET",
+      "closePrice": 5.0,
+      "pnl": 500,
+      "pctKept": 0.5
     },
     {
       "order": "sell to open TSLA $315 put 12/11 x2",
       "limit": 10.0,
       "tif": "gtc",
-      "status": "filled 11/05 10:01 ET at $10.00; buy-to-close $5.00 GTC resting",
+      "status": "filled 11/05 10:01 ET at $10.00; closed 11/09 9:40 ET at $5.00 (buy-to-close GTC filled); P&L +$1000 (+50% of premium)",
       "placed": "2026-11-05T10:01 ET",
       "placedAgent": "user",
       "account": "Joint ••••6540",
@@ -1563,7 +1568,7 @@
       "orderId": "6aec9a64-4fe2-48a8-b537-8900113bee7e",
       "filled": "2026-11-05T10:01 ET",
       "fillPrice": 10.0,
-      "openQty": 2,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 2,
@@ -1571,10 +1576,15 @@
           "tif": "gtc",
           "orderId": "6aec9b5d-cc95-4b94-8181-85d7e03b37e9",
           "placed": "2026-11-05T10:06 ET",
-          "state": "working"
+          "state": "filled",
+          "filled": "2026-11-09T09:40 ET"
         }
       ],
-      "note": "Cash-secured short puts placed by the user during the 11/05 selloff; against the app's leg at entry (next TSLA turn 11/10 low ~331.51)."
+      "note": "Cash-secured short puts placed by the user during the 11/05 selloff; against the app's leg at entry (next TSLA turn 11/10 low ~331.51).",
+      "closed": "2026-11-09T09:40 ET",
+      "closePrice": 5.0,
+      "pnl": 1000,
+      "pctKept": 0.5
     },
     {
       "order": "sell to open QQQ $650 put 12/11 x1",
