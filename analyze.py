@@ -2396,7 +2396,14 @@ def analyze(tkr):
                       "price": round(last_piv["price"], 2)},
         "medianSpacing": med_spacing, "medianAmpPct": round(med_amp * 100, 1),
         "medianUpPct": round(med_up * 100, 1), "medianDownPct": round(med_dn * 100, 1),
-        "hitRate2d": out["swing"]["hitRate2d"], "hitRate3d": out["swing"]["hitRate3d"]}
+        "hitRate2d": out["swing"]["hitRate2d"], "hitRate3d": out["swing"]["hitRate3d"],
+        # the zigzag threshold used to build `pivots` for this run, which is
+        # what trackRecord.resolved is graded against. Recomputed fresh from
+        # volatility each run, so it can drift day to day and reshuffle which
+        # historical closes count as confirmed pivots - this field is logged
+        # purely so a day-to-day swing in trackRecord.n can be checked against
+        # a THRESH change rather than guessed at (see 2026-11-10 log entry).
+        "zigzagThreshPct": round(THRESH * 100, 2)}
 
     # ===== UNIFIED OUTLOOK: one story, one action, drawn from every surface ==
     _bf = BACKFILL.get("perTicker", {}).get(tkr, {})

@@ -4228,3 +4228,65 @@ the monthly-horizon day-timing hit rate, which sits at or slightly below its ran
 yet, worth re-checking once the sample grows. This sandbox's Yahoo block is unchanged - still can
 only grade and test against the cloud-refreshed build, not fetch fresh data or validate a code
 change end-to-end itself.
+
+## 2026-11-10 (Tue) — found the day's grade-count swings are not from new data; added one diagnostic field, no behavior change
+
+**Today's data situation:** ran `fetch_data.py` first as instructed; all 12 tickers failed with the
+same `403 Forbidden` this sandbox always gets from Yahoo, so I moved to checking the already-live
+build. The separate scheduled GitHub Actions refresh had already produced today's dashboard before
+this review started - generated 2026-11-10 5:40 PM ET with today's daily bar and live pre/post-market
+price. Running `analyze.py` here (with no local CSVs) correctly refused and left that build alone.
+`coherence_check.py`: PASSED, 12/12 tickers. All 145 `pytest` cases across the 14 `test_*.py` files
+pass. `anomaly_audit.py`: no anomalies. The 6 node test files (`smoke_test.js`, `reliability_test.js`,
+`pin_test.js`, `hilo_refresh_test.js`, `ui_layout_test.js`, `scheduler_test.mjs`) all pass.
+
+**Grades reviewed, and something worth digging into:** TSLA n=75 (11%/13%), HOOD n=76 (14%/21%), QQQ
+n=81 (19%/22%), JPM n=81 (6%/11%), GOOGL n=54 (17%/19%), NVDA n=20 (10%/15%), AMZN n=23 (9%/13%), SPY
+n=32 (6%/9%), VOO n=31 (3%/3%), GC=F n=22 (18%/18%), META still n=0, SPCX n=5 (0%/0%). Comparing these
+sample sizes against the last several days' published builds (pulled straight from git history, not
+guessed) turned up something odd: GOOGL's resolved-prediction count went 54 (through 11/8) -> 63
+(Mon 11/9 morning) -> 54 again (today) - back to the exact same number it started at. GC=F did the
+same thing even more dramatically: 22 -> 65 (Monday) -> 22 (today). Meanwhile TSLA and QQQ, which had
+looked like they were growing normally day to day, each took one outsized jump today (TSLA 53->75,
+QQQ 70->81 - both far bigger than their usual +1/+2 daily drip). Checked the actual resolved-entry
+records behind GC=F's swing: the 43 entries that appeared Monday and vanished again today were almost
+entirely "low"-type matches, replaced by a different set of "high"-type matches - not simply the same
+predictions losing a match, but the *ground truth being graded against* changing shape entirely. That
+ground truth is the zigzag swing-pivot list computed fresh every run from a threshold that's itself
+re-derived from trailing volatility each run (`analyze.py`'s `THRESH = round(dvol * 1.3, 3)`, clamped
+4-10%). This project's own history already establishes that predictions quietly turning into *new*
+matches as more price history accumulates is expected, honest behavior, not a bug (see the 2026-08-07
+entry). But a resolved count reverting back down to an earlier value, then back up, for the exact
+same historical window, is a different thing: it means the "did this prediction come true" verdict
+for a months-old call can flip depending on noise in a same-day volatility recalculation, which is
+exactly the kind of instability the self-grading feature is supposed to protect against. I don't have
+real price data in this sandbox to prove the THRESH-drift theory outright (Yahoo stays blocked here),
+so rather than guess at a fix to the core grading match (and risk a change to the one feature these
+instructions specifically say never to weaken), I made the smallest possible non-behavioral change:
+added one new read-only field, `predictionBasis.zigzagThreshPct`, that logs the exact threshold each
+run actually used. It changes nothing about how pivots are found or predictions are graded - it only
+makes the threshold visible so the next review (or any day this sandbox can reach Yahoo) can check
+whether it moved in lockstep with these count swings, instead of relying on git archaeology each time.
+HOOD's longstanding calibration-ceiling watch item is unchanged today (still pinned at the 1.15 bound,
+nothing new). Real-money ledger: no new real trades since the TSLA put noted Monday; the META 11/20
+670/660 credit spread is still open per the last review. The spread-timing alert journal shows no new
+real fills today (entry #99 from 11/9 voided, nothing new logged for 11/10).
+
+**What changed and why.** One additive field only (`zigzagThreshPct` in `predictionBasis`), no logic
+change: confirmed by diffing the edit, re-running the full `pytest` suite (145/145) and all 6 node
+test files, and confirming `coherence_check.py` and `anomaly_audit.py` still pass clean on the
+unaffected live build (this sandbox can't run `analyze.py` end-to-end without Yahoo access, so I
+leaned on compiling the file cleanly and keeping the change to a single exposed read of an existing
+variable rather than touching any grading or matching logic). Honesty features (hit-rate displays,
+random-control comparisons, the grading itself, the coherence gate) are untouched - if anything this
+makes the grading more honest by instrumenting a real stability question rather than answering it with
+a guess. `tickers.txt` is untouched.
+
+**Watch next:** whether `zigzagThreshPct` actually moves for TSLA/QQQ/GOOGL/GC=F on the next few
+cloud-refreshed builds, which would confirm the THRESH-drift theory and point to a real fix (e.g.
+smoothing or freezing the threshold, or caching resolved grades once first confirmed instead of
+re-deriving the whole pivot list from scratch every run); whether TSLA and QQQ's big jumps today hold
+or revert tomorrow the way GOOGL/GC=F's did; HOOD's calibration ceiling; and whether JPM or META ever
+move off their weak/zero readings. This sandbox's Yahoo block is unchanged - still can only grade and
+test against the cloud-refreshed build, not fetch fresh data or validate a code change end-to-end
+itself.
