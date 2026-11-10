@@ -84,6 +84,18 @@ class ForecastVelocityAuditTests(unittest.TestCase):
         self.assertNotEqual(bad.returncode, 0)
         self.assertIn("expires Jan 15 before its exit", bad.stdout)
 
+    def test_trade_order_crossing_new_year(self):
+        trade = {"label": "rollover", "premium": 1, "hz": "", "sortd": "2026-12-07",
+                 "execute": "Mon 12/07", "exitWin": "Mon 01/04",
+                 "exp": "Jan 15", "expIso": "2027-01-15"}
+        # Explicit build date makes this independent of the test execution date.
+        good = self.run_audit([], {"TEST": {"asof": "2026-11-09", "trades": [trade]}})
+        self.assertEqual(good.returncode, 0, good.stdout + good.stderr)
+        trade["exitWin"] = "Tue 12/01"
+        bad = self.run_audit([], {"TEST": {"asof": "2026-11-09", "trades": [trade]}})
+        self.assertNotEqual(bad.returncode, 0)
+        self.assertIn("exits before entry", bad.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()
