@@ -228,11 +228,17 @@ for t, d in D.items():
     # 4. trade cards line up with the chain + horizon labels
     for tr in T.get(t, {}).get("trades", []):
         a, b = md(tr.get("execute")), md(tr.get("exitWin"))
-        if a and b and b < a:
+        anchor = date.fromisoformat(T[t].get("asof", today.isoformat())[:10])
+        def label_date(value):
+            if value is None:
+                return None
+            return date(anchor.year + (value < (anchor.month, anchor.day)), *value)
+        entry_label, exit_label = label_date(a), label_date(b)
+        if entry_label and exit_label and exit_label < entry_label:
             issues.append(f"{t}: '{tr['label'][:40]}' exits before entry")
         # horizon tag must match the execute date
         if a:
-            ed = date(today.year, a[0], a[1])
+            ed = entry_label
             n = (ed - today).days
             tag = tr.get("hz", "")
             if tag == "TODAY" and n > 1 and "now" not in (tr.get("execute") or ""):
