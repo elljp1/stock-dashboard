@@ -9,7 +9,7 @@ Checks per ticker:
 import json
 import re
 import sys
-from datetime import datetime
+from datetime import date, datetime
 from scoring import monthly_chain_failures
 
 raw = open("data.js", encoding="utf-8").read()
@@ -97,9 +97,23 @@ try:
         if m and m.group(1) in mon:
             return (mon[m.group(1)], int(m.group(2)))
         return None
+    def dated_label(md, anchor):
+        # Labels omit years; resolve each independently from the build date,
+        # not from entry (which would silently roll real reversed exits forward).
+        if md is None:
+            return None
+        year = anchor.year + (md < (anchor.month, anchor.day))
+        return date(year, *md)
+
     for t, v in tj.items():
+        anchor = date.fromisoformat(v["asof"][:10])
         for tr in v.get("trades", []):
             a, b = parse_md(tr.get("execute")), parse_md(tr.get("exitWin"))
+            if b is None:
+                continue
+            a, b = dated_label(a, anchor), dated_label(b, anchor)
+            if re.fullmatch(r"\d{4}-\d{2}-\d{2}", tr.get("sortd", "")):
+                a = date.fromisoformat(tr["sortd"][:10])
             if a and b and b < a:
                 fails.append(f"{t}: trade '{tr.get('label')}' exits {tr.get('exitWin')} "
                              f"BEFORE it enters {tr.get('execute')}")
