@@ -102,7 +102,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open META $650 put 11/20 x1 | $25.00 GTC | filled 10/22 9:36am at $25.00; buy to close $12.50 GTC resting (placed 11/04 9:34am; replaced the 10/22 $20.00) | $65,000 | 10/22 9:33am |
 | Individual | Sell to open TSLA $315 put 12/11 x1 | $10.00 GTC | filled 11/05 10:01am at $10.00; closed 11/09 9:40am at $5.00 (GTC buy-back filled), +$500 (+50%) | $31,500 | 11/05 10:00am |
 | Joint | Sell to open TSLA $315 put 12/11 x2 | $10.00 GTC | filled 11/05 10:01am at $10.00; closed 11/09 9:40am at $5.00 x2 (GTC buy-back filled), +$1,000 (+50%) | $63,000 | 11/05 10:01am |
-| Joint | Sell to open QQQ $650 put 12/11 x1 | $16.00 GTC | filled 11/05 10:03am at $16.00; buy to close $8.00 GTC resting (placed 10:06am) | $65,000 | 11/05 10:03am |
+| Joint | Sell to open QQQ $650 put 12/11 x1 | $16.00 GTC | filled 11/05 10:03am at $16.00; closed 11/11 7:30am at $8.00 (GTC buy-back filled pre-market); P&L +$800 (+50%) | $65,000 | 11/05 10:03am |
 | Individual | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; bought to close 10/27 11:02am at $6.25, +$625 (+50%) | $68,500 | 10/22 10:40am |
 | Joint | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; bought to close 10/27 11:02am at $6.25, +$625 (+50%) | $68,500 | 10/22 10:40am |
 

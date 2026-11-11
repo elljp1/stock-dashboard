@@ -1590,7 +1590,7 @@
       "order": "sell to open QQQ $650 put 12/11 x1",
       "limit": 16.0,
       "tif": "gtc",
-      "status": "filled 11/05 10:03 ET at $16.00; buy-to-close $8.00 GTC resting",
+      "status": "filled 11/05 10:03 ET at $16.00; closed 11/11 7:30 ET at $8.00 (buy-to-close GTC filled, extended hours); P&L +$800 (+50% of premium)",
       "placed": "2026-11-05T10:03 ET",
       "placedAgent": "user",
       "account": "Joint ••••6540",
@@ -1601,7 +1601,7 @@
       "orderId": "6aec9ac2-33c1-4c6d-a157-5eead8ecbcae",
       "filled": "2026-11-05T10:03 ET",
       "fillPrice": 16.0,
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 1,
@@ -1609,10 +1609,15 @@
           "tif": "gtc",
           "orderId": "6aec9b74-41de-4477-bad2-31e83b25ab9c",
           "placed": "2026-11-05T10:06 ET",
-          "state": "working"
+          "state": "filled",
+          "filled": "2026-11-11T07:30 ET"
         }
       ],
-      "note": "Cash-secured short put placed by the user (QQQ ~668 at fill); app's next QQQ turn is the 11/06 low ~661.73, so against the app's leg at entry."
+      "note": "Cash-secured short put placed by the user (QQQ ~668 at fill); app's next QQQ turn is the 11/06 low ~661.73, so against the app's leg at entry.",
+      "closed": "2026-11-11T07:30 ET",
+      "closePrice": 8.0,
+      "pnl": 800,
+      "pctKept": 0.5
     }
   ],
   "alerts": {
