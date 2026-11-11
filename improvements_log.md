@@ -4290,3 +4290,52 @@ or revert tomorrow the way GOOGL/GC=F's did; HOOD's calibration ceiling; and whe
 move off their weak/zero readings. This sandbox's Yahoo block is unchanged - still can only grade and
 test against the cloud-refreshed build, not fetch fresh data or validate a code change end-to-end
 itself.
+
+## 2026-11-11 (Wed) — zigzagThreshPct diagnostic held steady all day; grade + log only, no code change
+
+**Today's data situation:** ran `fetch_data.py` first as instructed; all 12 tickers failed with the
+same `403 Forbidden` this sandbox always gets from Yahoo, so I moved to the already-live build. The
+separate scheduled GitHub Actions refresh (which does have real Yahoo access) had already run four
+times today - 12:13 PM, 2:48 PM, 7:12 PM and 9:42 PM UTC - producing a dashboard generated 4:41 PM ET
+with today's daily bar and a live pre/post-market quote. Running `analyze.py` here (no local CSVs)
+correctly refused with "Incomplete analysis; retaining last published dashboard" and left that build
+alone. `coherence_check.py`: PASSED, 12/12 tickers. All 145 `pytest` cases pass. `anomaly_audit.py`:
+no anomalies.
+
+**Grades.** Combined across all 12 tickers, 283 resolved predictions stand at a 9.9% 2-day-window hit
+rate and 14.1% 3-day-window hit rate - both still well above the near-zero rate a baseline random-date
+guess would produce, so the honesty framing (measured hit rate next to the claim) continues to hold
+up to scrutiny. Per-ticker, GOOGL (16.7%/20.0%) and HOOD (13.3%/20.0%) lead; VOO (3.3%/3.3%) and JPM
+(3.3%/10.0%) trail. The most recent graded session (11/10) came in tighter than 11/09 for most names
+- SPY/VOO/QQQ/GC=F all under 1% error on both high and low - but HOOD's high miss widened to 6.0% and
+NVDA logged its third straight session with an error over 4% in magnitude (though the sign flipped
+each time, so this reads as real volatility, not a one-directional bias).
+
+**Checking yesterday's watch item.** Yesterday I added a read-only `predictionBasis.zigzagThreshPct`
+field to see whether the day's prediction-count swings were caused by the per-ticker zigzag threshold
+drifting as it's recomputed each run. Today gives the first real test: across all four of today's
+cloud-refresh runs (12:13 PM through 9:42 PM), the threshold was bit-for-bit identical for every one
+of TSLA, QQQ, GOOGL, GC=F and HOOD. HOOD's resolved-hit count did tick down by one (5 to 4) between
+the 12:13 PM and 2:48 PM runs, with the threshold unchanged both times - so today's small blip was
+driven by new price data confirming a different swing, not by threshold drift, which argues against
+yesterday's drift theory as the explanation for this particular wobble. That's one day of evidence,
+not three, so no conclusion yet and no code change: HOOD, TSLA, NVDA, AMZN, META and SPCX remain
+pinned at the 10% clamp ceiling on this threshold (six of twelve tickers), which is the thing actually
+worth watching if HOOD's miscalibration there turns out to be shared by the others rather than
+HOOD-specific.
+
+**What changed and why.** Nothing. No pattern has reached three graded days and `coherence_check.py`,
+the full test suite and the anomaly audit are all clean, so per the daily discipline this is a
+grade-and-log day. Honesty features (hit-rate displays, random-control comparisons, the grading
+itself, the coherence gate) are untouched. Real-money ledger: no new real trades (`real_trades.json`
+unchanged, last closed 9/11); the spread-timing alert journal (`SPREAD_JOURNAL.md`) has no new entries
+since #99 (11/9, voided 11/10) - consistent with the user having retired that feature on 10/30.
+`tickers.txt` is untouched.
+
+**Watch next:** whether the six tickers pinned at the 10% threshold ceiling (TSLA, HOOD, NVDA, AMZN,
+META, SPCX) keep clustering there over the next few sessions, which would suggest the clamp itself -
+not any one ticker's data - is the thing worth revisiting; whether HOOD's 6.0% high-error session on
+11/10 is a one-off or the start of another stretch like late October's; and whether NVDA's run of
+large (but sign-flipping) errors continues. This sandbox's Yahoo block is unchanged - still can only
+grade and test against the cloud-refreshed build, not fetch fresh data or validate a code change
+end-to-end itself.
