@@ -4339,3 +4339,56 @@ not any one ticker's data - is the thing worth revisiting; whether HOOD's 6.0% h
 large (but sign-flipping) errors continues. This sandbox's Yahoo block is unchanged - still can only
 grade and test against the cloud-refreshed build, not fetch fresh data or validate a code change
 end-to-end itself.
+
+## 2026-11-12 (Thu) — zigzagThreshPct diagnostic now steady for two straight days; grade + log only, no code change
+
+**Today's data situation:** ran `fetch_data.py` first as instructed; all 12 tickers failed with the
+same `403 Forbidden` this sandbox always gets from Yahoo, so I moved to the already-live build. The
+separate scheduled GitHub Actions refresh (which does have real Yahoo access) had already run many
+times today under its normal weekday schedule - every ~30 minutes from 6:12 AM ET through the 5:40 PM
+ET daily review - producing a dashboard current as of today's close with a live pre/post-market quote.
+Running `analyze.py` here (no local CSVs) correctly refused with "Incomplete analysis; retaining last
+published dashboard" and left that live build alone. `coherence_check.py`: PASSED, 12/12 tickers. All
+147 `pytest` cases pass. `anomaly_audit.py`: no anomalies - chain, levels, horizons and trade cards all
+line up.
+
+**Grades.** Using each ticker's actual all-time resolved count (`trackRecord.n`) rather than the
+on-page preview list (which is capped at the last 30 entries per ticker and understates the total for
+any ticker with more history than that), today's totals are: TSLA n=75 (11%/13%), HOOD n=77 (14%/21%),
+QQQ n=84 (19%/24%), JPM n=82 (7%/12%), GOOGL n=66 (18%/20%), NVDA n=21 (10%/14%), AMZN n=24 (12%/17%),
+SPY n=32 (6%/9%), VOO n=31 (3%/3%), GC=F n=22 (18%/18%), META still n=0, SPCX n=6 (0%/17%). Combined
+across all 520 resolved predictions: a 12.4% 2-day-window hit rate and 16.3% 3-day-window hit rate -
+both comfortably above a near-zero random-date baseline, so the honesty framing continues to hold up.
+(Note for the record: yesterday's entry quoted "283 resolved" and 9.9%/14.1% - that number was the sum
+of the capped 30-per-ticker preview list, not the true all-time total; today's 520/12.4%/16.3% is the
+correct like-for-like figure and the one worth tracking going forward.)
+
+**Checking the zigzagThreshPct watch item.** Pulled the `predictionBasis.zigzagThreshPct` field (added
+11/10 to test whether the day's prediction-count swings come from the per-ticker zigzag threshold
+drifting) across all 27 of today's cloud-refresh commits, for TSLA, QQQ, GOOGL, GC=F and HOOD. The
+threshold was bit-for-bit identical in every single one of today's runs for all five tickers. QQQ's
+resolved count did tick up by exactly one (83 to 84, mid-afternoon) with the threshold completely
+unchanged - new data confirming a new match, the expected honest behavior, not drift. That makes two
+consecutive clean days (11/11 and 11/12) with zero threshold movement despite normal count drift from
+new confirmations. The original worry - GOOGL swinging 54→63→54 and GC=F swinging 22→65→22 across
+Monday 11/9 - has not reproduced since, which points toward that Monday jump being a one-off from the
+weekend's catch-up batch resolving (and partially un-resolving) a backlog all at once, rather than a
+standing instability in the threshold recalculation. Two days of stability isn't the same as proof,
+but it's enough to de-prioritize this as today's top watch item; I'll keep the field in place (it's
+read-only and costs nothing) in case a real jump shows up again. HOOD's calibration ceiling is
+unchanged - `priceCalibHigh` still sitting exactly at 1.15 with n=77, same already-reasoned-through
+situation as the last several days, not a fresh pattern. Real-money ledger: no new real trades
+(`real_trades.json` unchanged, last closed 9/11); the spread-timing alert journal has no new entries
+since #99 (11/9, voided 11/10), consistent with the user retiring that feature on 10/30.
+
+**What changed and why.** Nothing. No pattern reached three graded days that calls for a fix, and
+`coherence_check.py`, the full test suite, and the anomaly audit are all clean, so per the daily
+discipline this is a grade-and-log day. Honesty features (hit-rate displays, random-control
+comparisons, the grading itself, the coherence gate) are untouched. `tickers.txt` is untouched.
+
+**Watch next:** whether the zigzagThreshPct field keeps holding steady or a real jump ever shows up
+again (if it does, that's the trigger to dig into smoothing or freezing the threshold); whether HOOD's
+calibration ratio ever drops back under 1.15 on its own; whether JPM or META ever move off their
+weak/zero readings; and whether SPCX's one-sample-of-six 0%/17% split means anything yet (it doesn't -
+still too small). This sandbox's Yahoo block is unchanged - still can only grade and test against the
+cloud-refreshed build, not fetch fresh data or validate a code change end-to-end itself.
