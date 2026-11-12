@@ -128,7 +128,10 @@ def build_trades(dall):
                 ps = sorted(puts1)
 
                 k0 = _nearest(ps, entry["price"])
-                if k0 and _mid(puts1[k0]) > 0:
+                # The release audit requires MODEL strikes within 3% of the
+                # target. A sparse option grid can have no qualifying strike;
+                # omit that card instead of blocking every price update.
+                if k0 and abs(k0 / entry["price"] - 1) <= 0.03 and _mid(puts1[k0]) > 0:
                     m0 = _mid(puts1[k0])
                     trades.append({
                         "kind": "MODEL", "hz": hz, "sortd": ed.isoformat(),
