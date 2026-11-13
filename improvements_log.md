@@ -4392,3 +4392,54 @@ calibration ratio ever drops back under 1.15 on its own; whether JPM or META eve
 weak/zero readings; and whether SPCX's one-sample-of-six 0%/17% split means anything yet (it doesn't -
 still too small). This sandbox's Yahoo block is unchanged - still can only grade and test against the
 cloud-refreshed build, not fetch fresh data or validate a code change end-to-end itself.
+
+## 2026-11-13 (Fri) — checked the HOOD calibration ceiling against the code directly; still a deliberate guard, not a bug; grade + log only
+
+**Today's data situation:** ran `fetch_data.py` first as instructed; all 12 tickers failed with the
+same `403 Forbidden` this sandbox always gets from Yahoo, so I moved to the already-live build (the
+separate GitHub Actions cloud refresh, which does have real Yahoo access, had already run its normal
+weekday schedule and left the dashboard current through today's close with a live pre/post-market
+quote). Running `analyze.py` here with no local CSVs correctly refused with "Incomplete analysis;
+retaining last published dashboard" and left that live build alone - the expected, safe behavior.
+`coherence_check.py`: PASSED, 12/12 tickers. All 147 `pytest` cases (14 subtests) pass.
+`anomaly_audit.py`: no anomalies - chain, levels, horizons and trade cards all line up.
+
+**Grades.** Per-ticker `trackRecord.n` / 2-day hit rate / 3-day hit rate / median price error: TSLA
+76/12%/14%/11.5%, HOOD 77/14%/21%/13.9%, QQQ 86/20%/24%/2.6%, JPM 82/7%/12%/2.2%, GOOGL
+67/19%/21%/5.5%, NVDA 21/10%/14%/1.6%, AMZN 24/12%/17%/2%, SPY 32/6%/9%/0.2%, VOO 31/3%/3%/0.5%, GC=F
+22/18%/18%/3.6%, META still 0, SPCX 7/14%/29%/11.3% (up from n=6 yesterday - still far too small a
+sample to read anything into the jump). Weighting each ticker's rate by its own `n` gives roughly
+525 resolved predictions combined, around 13% hitting within 2 days and 17% within 3 - both still
+comfortably above a near-zero random-date baseline, so the honesty framing holds up. Real-money
+ledger: no new real trades (`real_trades.json` unchanged, last closed 9/11); no new spread-journal
+alerts since #99 (voided 10/30), consistent with the user having retired that feature.
+
+**Went deeper on today's top watch item - HOOD's calibration ceiling.** HOOD's `priceCalibHigh` has
+sat at exactly 1.15 for many days running, which is the top of the `np.clip(..., 0.85, 1.15)` bound in
+`analyze.py` (around line 1137) that scales future high/low targets based on how far off past targets
+actually ran. Rather than just noting it again, I pulled HOOD's own resolved high/low predictions and
+computed the *unclamped* median actual-over-predicted ratios myself: 1.17 for highs (n=7 with a
+resolved actual price) and 1.19 for lows (n=6). Both are only a little past the 1.15 ceiling, not a
+runaway miscalibration - and the code already carries an explicit comment explaining why the bound is
+intentionally conservative: "Keep calibration bounded until a wider candidate beats this setting on
+untouched forward sessions. Reaching the ceiling on historical samples is not by itself evidence that
+widening the production bound will help." That is exactly the situation here, so widening it today
+would be undoing a deliberate, already-reasoned decision on the same evidence it was made with, not
+responding to new evidence. I also re-checked the other long-running watch item - the six tickers
+(TSLA, HOOD, NVDA, AMZN, META, SPCX) pinned at the 10% zigzag-threshold ceiling - and they are still
+the same six today, still consistent with those simply being the more volatile names in the list
+(`THRESH = min(0.10, max(0.04, dvol*1.3))` naturally caps for high-volatility stocks), not drift or
+instability.
+
+**What changed and why.** Nothing. Both of today's watch items turned out to be deliberate, already-
+justified design choices rather than new bugs or a persisting problem calling for a fix, so per the
+daily discipline this stays a grade-and-log day. Honesty features (hit-rate displays, random-control
+comparisons, the grading itself, the coherence gate) are untouched. `tickers.txt` is untouched.
+
+**Watch next:** whether HOOD's unclamped high/low ratios keep drifting further past 1.15-1.19 over
+more sessions (if the gap widens meaningfully rather than hovering near the bound, that becomes real
+evidence for revisiting it, not just reaching the ceiling); whether the six-ticker zigzag-ceiling
+cluster ever breaks apart; whether JPM or META ever move off their weak/zero readings; and whether
+SPCX's n=7 sample starts to mean anything as it grows. This sandbox's Yahoo block is unchanged -
+still can only grade and test against the cloud-refreshed build, not fetch fresh data or validate a
+code change end-to-end itself.
