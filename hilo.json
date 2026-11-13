@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-13T20:08:00+00:00",
+ "generatedAt": "2026-11-13T20:40:16+00:00",
  "model": "hilo-2",
  "targetSession": "2026-11-13",
  "kind": "intraday",
@@ -101,94 +101,94 @@
     "v": 1
    },
    "intraday": {
-    "target": "final full-session high and low of 2026-11-13, including bars already traded",
     "anchor": 392.0,
     "anchorKind": "last completed bar close",
-    "observed": {
-     "high": 404.3999938964844,
-     "highTime": "09:30",
-     "low": 385.8302001953125,
-     "lowTime": "11:15",
-     "bars": 22
-    },
-    "history": {
-     "n": 60,
-     "from": "2026-08-20",
-     "to": "2026-11-12"
-    },
+    "checkpoint": 22,
+    "dataCutoff": "2026-11-13T15:00:00-05:00",
     "high": {
-     "price": 404.4,
-     "lo": 404.4,
      "hi": 404.4,
-     "time": "09:30",
+     "lo": 404.4,
+     "pAlreadySet": 1.0,
      "pBar": 1.0,
+     "price": 404.4,
+     "time": "09:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "09:30",
-       "p": 1.0
+       "p": 1.0,
+       "time": "09:30"
       }
      ],
      "window": {
       "centre": "09:30",
-      "p60": 1.0,
-      "p30": 1.0
-     },
-     "pAlreadySet": 1.0,
-     "timeBasis": "order-assigned"
+      "p30": 1.0,
+      "p60": 1.0
+     }
     },
+    "history": {
+     "from": "2026-08-20",
+     "n": 60,
+     "to": "2026-11-12"
+    },
+    "id": "353badb3147ec440",
+    "issuedAt": "2026-11-13T20:08:00+00:00",
+    "kind": "intraday",
+    "lagMin": 8.0,
+    "lastBar": "2026-11-13 14:45",
+    "late": false,
     "low": {
-     "price": 385.83,
-     "lo": 385.83,
      "hi": 385.83,
-     "time": "11:15",
+     "lo": 385.83,
+     "pAlreadySet": 1.0,
      "pBar": 1.0,
+     "price": 385.83,
+     "time": "11:15",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "11:15",
-       "p": 1.0
+       "p": 1.0,
+       "time": "11:15"
       }
      ],
      "window": {
       "centre": "11:15",
-      "p60": 1.0,
-      "p30": 1.0
-     },
-     "pAlreadySet": 1.0,
-     "timeBasis": "order-assigned"
-    },
-    "timing": {
-     "early": {
-      "time": "09:30",
-      "pBar": 1.0,
+      "p30": 1.0,
       "p60": 1.0
+     }
+    },
+    "model": "hilo-2",
+    "observed": {
+     "bars": 22,
+     "high": 404.3999938964844,
+     "highTime": "09:30",
+     "low": 385.8302001953125,
+     "lowTime": "11:15"
+    },
+    "prevHash": "c244165ae3de205b3bc156744ebce281422223ae92d456eab2577c50165eecea",
+    "session": "2026-11-13",
+    "target": "final full-session high and low of 2026-11-13, including bars already traded",
+    "ticker": "TSLA",
+    "timing": {
+     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair",
+     "consistent": true,
+     "early": {
+      "p60": 1.0,
+      "pBar": 1.0,
+      "time": "09:30"
      },
      "late": {
-      "time": "11:15",
+      "p60": 1.0,
       "pBar": 1.0,
-      "p60": 1.0
+      "time": "11:15"
      },
-     "pPair": 1.0,
+     "n": 60,
      "pHighFirst": 1.0,
+     "pPair": 1.0,
      "pPairHighFirst": 1.0,
      "pSameBar": 0.0,
-     "consistent": true,
-     "resolved": true,
-     "n": 60,
-     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair"
+     "resolved": true
     },
-    "dataCutoff": "2026-11-13T15:00:00-05:00",
-    "lastBar": "2026-11-13 14:45",
-    "checkpoint": 22,
-    "v": 1,
-    "model": "hilo-2",
-    "ticker": "TSLA",
-    "session": "2026-11-13",
-    "kind": "intraday",
-    "issuedAt": "2026-11-13T20:08:00+00:00",
-    "lagMin": 8.0,
-    "late": false,
-    "prevHash": "c244165ae3de205b3bc156744ebce281422223ae92d456eab2577c50165eecea",
-    "id": "353badb3147ec440"
+    "v": 1
    }
   },
   "HOOD": {
@@ -287,102 +287,102 @@
     "v": 1
    },
    "intraday": {
-    "target": "final full-session high and low of 2026-11-13, including bars already traded",
     "anchor": 78.4,
     "anchorKind": "last completed bar close",
-    "observed": {
-     "high": 79.95999908447266,
-     "highTime": "09:30",
-     "low": 76.61000061035156,
-     "lowTime": "11:15",
-     "bars": 22
-    },
-    "history": {
-     "n": 60,
-     "from": "2026-08-20",
-     "to": "2026-11-12"
-    },
+    "checkpoint": 22,
+    "dataCutoff": "2026-11-13T15:00:00-05:00",
     "high": {
-     "price": 79.96,
-     "lo": 79.96,
      "hi": 79.96,
-     "time": "09:30",
+     "lo": 79.96,
+     "pAlreadySet": 0.95,
      "pBar": 0.95,
+     "price": 79.96,
+     "time": "09:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "09:30",
-       "p": 0.95
+       "p": 0.95,
+       "time": "09:30"
       },
       {
-       "time": "15:45",
-       "p": 0.05
+       "p": 0.05,
+       "time": "15:45"
       }
      ],
      "window": {
       "centre": "09:30",
-      "p60": 0.95,
-      "p30": 0.95
-     },
-     "pAlreadySet": 0.95,
-     "timeBasis": "order-assigned"
+      "p30": 0.95,
+      "p60": 0.95
+     }
     },
+    "history": {
+     "from": "2026-08-20",
+     "n": 60,
+     "to": "2026-11-12"
+    },
+    "id": "e36b5c30d4f7e981",
+    "issuedAt": "2026-11-13T20:08:00+00:00",
+    "kind": "intraday",
+    "lagMin": 8.0,
+    "lastBar": "2026-11-13 14:45",
+    "late": false,
     "low": {
-     "price": 76.61,
-     "lo": 76.61,
      "hi": 76.61,
-     "time": "11:15",
+     "lo": 76.61,
+     "pAlreadySet": 0.983,
      "pBar": 0.983,
+     "price": 76.61,
+     "time": "11:15",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "11:15",
-       "p": 0.983
+       "p": 0.983,
+       "time": "11:15"
       },
       {
-       "time": "15:45",
-       "p": 0.017
+       "p": 0.017,
+       "time": "15:45"
       }
      ],
      "window": {
       "centre": "11:15",
-      "p60": 0.983,
-      "p30": 0.983
-     },
-     "pAlreadySet": 0.983,
-     "timeBasis": "order-assigned"
+      "p30": 0.983,
+      "p60": 0.983
+     }
     },
+    "model": "hilo-2",
+    "observed": {
+     "bars": 22,
+     "high": 79.95999908447266,
+     "highTime": "09:30",
+     "low": 76.61000061035156,
+     "lowTime": "11:15"
+    },
+    "prevHash": "e47102bb442898e210db718713e661d29ff8e4addcd9dbac5a483746f38ddd67",
+    "session": "2026-11-13",
+    "target": "final full-session high and low of 2026-11-13, including bars already traded",
+    "ticker": "HOOD",
     "timing": {
+     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair",
+     "consistent": true,
      "early": {
-      "time": "09:30",
+      "p60": 0.95,
       "pBar": 0.95,
-      "p60": 0.95
+      "time": "09:30"
      },
      "late": {
-      "time": "11:15",
+      "p60": 0.933,
       "pBar": 0.933,
-      "p60": 0.933
+      "time": "11:15"
      },
-     "pPair": 0.933,
+     "n": 60,
      "pHighFirst": 0.95,
+     "pPair": 0.933,
      "pPairHighFirst": 1.0,
      "pSameBar": 0.0,
-     "consistent": true,
-     "resolved": true,
-     "n": 60,
-     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair"
+     "resolved": true
     },
-    "dataCutoff": "2026-11-13T15:00:00-05:00",
-    "lastBar": "2026-11-13 14:45",
-    "checkpoint": 22,
-    "v": 1,
-    "model": "hilo-2",
-    "ticker": "HOOD",
-    "session": "2026-11-13",
-    "kind": "intraday",
-    "issuedAt": "2026-11-13T20:08:00+00:00",
-    "lagMin": 8.0,
-    "late": false,
-    "prevHash": "e47102bb442898e210db718713e661d29ff8e4addcd9dbac5a483746f38ddd67",
-    "id": "e36b5c30d4f7e981"
+    "v": 1
    }
   },
   "QQQ": {
@@ -481,98 +481,98 @@
     "v": 1
    },
    "intraday": {
-    "target": "final full-session high and low of 2026-11-13, including bars already traded",
     "anchor": 679.87,
     "anchorKind": "last completed bar close",
-    "observed": {
-     "high": 688.75,
-     "highTime": "09:30",
-     "low": 671.7100219726562,
-     "lowTime": "11:15",
-     "bars": 22
-    },
-    "history": {
-     "n": 60,
-     "from": "2026-08-20",
-     "to": "2026-11-12"
-    },
+    "checkpoint": 22,
+    "dataCutoff": "2026-11-13T15:00:00-05:00",
     "high": {
-     "price": 688.75,
-     "lo": 688.75,
      "hi": 688.75,
-     "time": "09:30",
+     "lo": 688.75,
+     "pAlreadySet": 1.0,
      "pBar": 1.0,
+     "price": 688.75,
+     "time": "09:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "09:30",
-       "p": 1.0
+       "p": 1.0,
+       "time": "09:30"
       }
      ],
      "window": {
       "centre": "09:30",
-      "p60": 1.0,
-      "p30": 1.0
-     },
-     "pAlreadySet": 1.0,
-     "timeBasis": "order-assigned"
+      "p30": 1.0,
+      "p60": 1.0
+     }
     },
+    "history": {
+     "from": "2026-08-20",
+     "n": 60,
+     "to": "2026-11-12"
+    },
+    "id": "8a51ce9ad2601280",
+    "issuedAt": "2026-11-13T20:08:00+00:00",
+    "kind": "intraday",
+    "lagMin": 8.0,
+    "lastBar": "2026-11-13 14:45",
+    "late": false,
     "low": {
-     "price": 671.71,
-     "lo": 671.71,
      "hi": 671.71,
-     "time": "11:15",
+     "lo": 671.71,
+     "pAlreadySet": 0.983,
      "pBar": 0.983,
+     "price": 671.71,
+     "time": "11:15",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "11:15",
-       "p": 0.983
+       "p": 0.983,
+       "time": "11:15"
       },
       {
-       "time": "15:45",
-       "p": 0.017
+       "p": 0.017,
+       "time": "15:45"
       }
      ],
      "window": {
       "centre": "11:15",
-      "p60": 0.983,
-      "p30": 0.983
-     },
-     "pAlreadySet": 0.983,
-     "timeBasis": "order-assigned"
+      "p30": 0.983,
+      "p60": 0.983
+     }
     },
+    "model": "hilo-2",
+    "observed": {
+     "bars": 22,
+     "high": 688.75,
+     "highTime": "09:30",
+     "low": 671.7100219726562,
+     "lowTime": "11:15"
+    },
+    "prevHash": "d1747ce58a02e301dada94e7cb2aff820896d7a2e3e469867ebdfe7e048dd88f",
+    "session": "2026-11-13",
+    "target": "final full-session high and low of 2026-11-13, including bars already traded",
+    "ticker": "QQQ",
     "timing": {
+     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair",
+     "consistent": true,
      "early": {
-      "time": "09:30",
+      "p60": 1.0,
       "pBar": 1.0,
-      "p60": 1.0
+      "time": "09:30"
      },
      "late": {
-      "time": "11:15",
+      "p60": 0.983,
       "pBar": 0.983,
-      "p60": 0.983
+      "time": "11:15"
      },
-     "pPair": 0.983,
+     "n": 60,
      "pHighFirst": 1.0,
+     "pPair": 0.983,
      "pPairHighFirst": 1.0,
      "pSameBar": 0.0,
-     "consistent": true,
-     "resolved": true,
-     "n": 60,
-     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair"
+     "resolved": true
     },
-    "dataCutoff": "2026-11-13T15:00:00-05:00",
-    "lastBar": "2026-11-13 14:45",
-    "checkpoint": 22,
-    "v": 1,
-    "model": "hilo-2",
-    "ticker": "QQQ",
-    "session": "2026-11-13",
-    "kind": "intraday",
-    "issuedAt": "2026-11-13T20:08:00+00:00",
-    "lagMin": 8.0,
-    "late": false,
-    "prevHash": "d1747ce58a02e301dada94e7cb2aff820896d7a2e3e469867ebdfe7e048dd88f",
-    "id": "8a51ce9ad2601280"
+    "v": 1
    }
   },
   "JPM": {
@@ -671,110 +671,110 @@
     "v": 1
    },
    "intraday": {
-    "target": "final full-session high and low of 2026-11-13, including bars already traded",
     "anchor": 344.9,
     "anchorKind": "last completed bar close",
-    "observed": {
-     "high": 346.79998779296875,
-     "highTime": "09:30",
-     "low": 342.7900085449219,
-     "lowTime": "10:15",
-     "bars": 22
-    },
-    "history": {
-     "n": 60,
-     "from": "2026-08-20",
-     "to": "2026-11-12"
-    },
+    "checkpoint": 22,
+    "dataCutoff": "2026-11-13T15:00:00-05:00",
     "high": {
-     "price": 346.8,
-     "lo": 346.8,
      "hi": 346.8,
-     "time": "09:30",
+     "lo": 346.8,
+     "pAlreadySet": 0.95,
      "pBar": 0.95,
+     "price": 346.8,
+     "time": "09:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "09:30",
-       "p": 0.95
+       "p": 0.95,
+       "time": "09:30"
       },
       {
-       "time": "15:15",
-       "p": 0.017
+       "p": 0.017,
+       "time": "15:15"
       },
       {
-       "time": "15:30",
-       "p": 0.017
+       "p": 0.017,
+       "time": "15:30"
       }
      ],
      "window": {
       "centre": "09:30",
-      "p60": 0.95,
-      "p30": 0.95
-     },
-     "pAlreadySet": 0.95,
-     "timeBasis": "order-assigned"
+      "p30": 0.95,
+      "p60": 0.95
+     }
     },
+    "history": {
+     "from": "2026-08-20",
+     "n": 60,
+     "to": "2026-11-12"
+    },
+    "id": "4d3d4e4d73d2d23c",
+    "issuedAt": "2026-11-13T20:08:00+00:00",
+    "kind": "intraday",
+    "lagMin": 8.0,
+    "lastBar": "2026-11-13 14:45",
+    "late": false,
     "low": {
-     "price": 342.79,
-     "lo": 342.79,
      "hi": 342.79,
-     "time": "10:15",
+     "lo": 342.79,
+     "pAlreadySet": 0.933,
      "pBar": 0.933,
+     "price": 342.79,
+     "time": "10:15",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "10:15",
-       "p": 0.933
+       "p": 0.933,
+       "time": "10:15"
       },
       {
-       "time": "15:45",
-       "p": 0.033
+       "p": 0.033,
+       "time": "15:45"
       },
       {
-       "time": "15:15",
-       "p": 0.017
+       "p": 0.017,
+       "time": "15:15"
       }
      ],
      "window": {
       "centre": "10:15",
-      "p60": 0.933,
-      "p30": 0.933
-     },
-     "pAlreadySet": 0.933,
-     "timeBasis": "order-assigned"
+      "p30": 0.933,
+      "p60": 0.933
+     }
     },
+    "model": "hilo-2",
+    "observed": {
+     "bars": 22,
+     "high": 346.79998779296875,
+     "highTime": "09:30",
+     "low": 342.7900085449219,
+     "lowTime": "10:15"
+    },
+    "prevHash": "5fa8a3cc08ced4a68ec812b7fbb89c3ba886e8575ddf4fcb22590ab9233d73c0",
+    "session": "2026-11-13",
+    "target": "final full-session high and low of 2026-11-13, including bars already traded",
+    "ticker": "JPM",
     "timing": {
+     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair",
+     "consistent": true,
      "early": {
-      "time": "09:30",
+      "p60": 1.0,
       "pBar": 0.95,
-      "p60": 1.0
+      "time": "09:30"
      },
      "late": {
-      "time": "10:15",
+      "p60": 0.883,
       "pBar": 0.883,
-      "p60": 0.883
+      "time": "10:15"
      },
-     "pPair": 0.883,
+     "n": 60,
      "pHighFirst": 0.95,
+     "pPair": 0.883,
      "pPairHighFirst": 1.0,
      "pSameBar": 0.0,
-     "consistent": true,
-     "resolved": true,
-     "n": 60,
-     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair"
+     "resolved": true
     },
-    "dataCutoff": "2026-11-13T15:00:00-05:00",
-    "lastBar": "2026-11-13 14:45",
-    "checkpoint": 22,
-    "v": 1,
-    "model": "hilo-2",
-    "ticker": "JPM",
-    "session": "2026-11-13",
-    "kind": "intraday",
-    "issuedAt": "2026-11-13T20:08:00+00:00",
-    "lagMin": 8.0,
-    "late": false,
-    "prevHash": "5fa8a3cc08ced4a68ec812b7fbb89c3ba886e8575ddf4fcb22590ab9233d73c0",
-    "id": "4d3d4e4d73d2d23c"
+    "v": 1
    }
   },
   "GOOGL": {
@@ -873,98 +873,98 @@
     "v": 1
    },
    "intraday": {
-    "target": "final full-session high and low of 2026-11-13, including bars already traded",
     "anchor": 295.13,
     "anchorKind": "last completed bar close",
-    "observed": {
-     "high": 304.96990966796875,
-     "highTime": "09:30",
-     "low": 293.44000244140625,
-     "lowTime": "11:30",
-     "bars": 22
-    },
-    "history": {
-     "n": 60,
-     "from": "2026-08-20",
-     "to": "2026-11-12"
-    },
+    "checkpoint": 22,
+    "dataCutoff": "2026-11-13T15:00:00-05:00",
     "high": {
-     "price": 304.97,
-     "lo": 304.97,
      "hi": 304.97,
-     "time": "09:30",
+     "lo": 304.97,
+     "pAlreadySet": 1.0,
      "pBar": 1.0,
+     "price": 304.97,
+     "time": "09:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "09:30",
-       "p": 1.0
+       "p": 1.0,
+       "time": "09:30"
       }
      ],
      "window": {
       "centre": "09:30",
-      "p60": 1.0,
-      "p30": 1.0
-     },
-     "pAlreadySet": 1.0,
-     "timeBasis": "order-assigned"
+      "p30": 1.0,
+      "p60": 1.0
+     }
     },
+    "history": {
+     "from": "2026-08-20",
+     "n": 60,
+     "to": "2026-11-12"
+    },
+    "id": "26c6ecf089d9d8b3",
+    "issuedAt": "2026-11-13T20:08:00+00:00",
+    "kind": "intraday",
+    "lagMin": 8.0,
+    "lastBar": "2026-11-13 14:45",
+    "late": false,
     "low": {
-     "price": 293.44,
-     "lo": 293.42,
      "hi": 293.44,
-     "time": "11:30",
+     "lo": 293.42,
+     "pAlreadySet": 0.9,
      "pBar": 0.9,
+     "price": 293.44,
+     "time": "11:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "11:30",
-       "p": 0.9
+       "p": 0.9,
+       "time": "11:30"
       },
       {
-       "time": "15:45",
-       "p": 0.1
+       "p": 0.1,
+       "time": "15:45"
       }
      ],
      "window": {
       "centre": "11:30",
-      "p60": 0.9,
-      "p30": 0.9
-     },
-     "pAlreadySet": 0.9,
-     "timeBasis": "order-assigned"
+      "p30": 0.9,
+      "p60": 0.9
+     }
     },
+    "model": "hilo-2",
+    "observed": {
+     "bars": 22,
+     "high": 304.96990966796875,
+     "highTime": "09:30",
+     "low": 293.44000244140625,
+     "lowTime": "11:30"
+    },
+    "prevHash": "22318727f4655c29627196c5e467b9bcee41ae91891c67a90abb537df3e00cb2",
+    "session": "2026-11-13",
+    "target": "final full-session high and low of 2026-11-13, including bars already traded",
+    "ticker": "GOOGL",
     "timing": {
+     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair",
+     "consistent": true,
      "early": {
-      "time": "09:30",
+      "p60": 1.0,
       "pBar": 1.0,
-      "p60": 1.0
+      "time": "09:30"
      },
      "late": {
-      "time": "11:30",
+      "p60": 0.9,
       "pBar": 0.9,
-      "p60": 0.9
+      "time": "11:30"
      },
-     "pPair": 0.9,
+     "n": 60,
      "pHighFirst": 1.0,
+     "pPair": 0.9,
      "pPairHighFirst": 1.0,
      "pSameBar": 0.0,
-     "consistent": true,
-     "resolved": true,
-     "n": 60,
-     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair"
+     "resolved": true
     },
-    "dataCutoff": "2026-11-13T15:00:00-05:00",
-    "lastBar": "2026-11-13 14:45",
-    "checkpoint": 22,
-    "v": 1,
-    "model": "hilo-2",
-    "ticker": "GOOGL",
-    "session": "2026-11-13",
-    "kind": "intraday",
-    "issuedAt": "2026-11-13T20:08:00+00:00",
-    "lagMin": 8.0,
-    "late": false,
-    "prevHash": "22318727f4655c29627196c5e467b9bcee41ae91891c67a90abb537df3e00cb2",
-    "id": "26c6ecf089d9d8b3"
+    "v": 1
    }
   },
   "NVDA": {
@@ -1063,94 +1063,94 @@
     "v": 1
    },
    "intraday": {
-    "target": "final full-session high and low of 2026-11-13, including bars already traded",
     "anchor": 163.175,
     "anchorKind": "last completed bar close",
-    "observed": {
-     "high": 170.0,
-     "highTime": "09:30",
-     "low": 158.38999938964844,
-     "lowTime": "11:00",
-     "bars": 22
-    },
-    "history": {
-     "n": 60,
-     "from": "2026-08-20",
-     "to": "2026-11-12"
-    },
+    "checkpoint": 22,
+    "dataCutoff": "2026-11-13T15:00:00-05:00",
     "high": {
-     "price": 170.0,
-     "lo": 170.0,
      "hi": 170.0,
-     "time": "09:30",
+     "lo": 170.0,
+     "pAlreadySet": 1.0,
      "pBar": 1.0,
+     "price": 170.0,
+     "time": "09:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "09:30",
-       "p": 1.0
+       "p": 1.0,
+       "time": "09:30"
       }
      ],
      "window": {
       "centre": "09:30",
-      "p60": 1.0,
-      "p30": 1.0
-     },
-     "pAlreadySet": 1.0,
-     "timeBasis": "order-assigned"
+      "p30": 1.0,
+      "p60": 1.0
+     }
     },
+    "history": {
+     "from": "2026-08-20",
+     "n": 60,
+     "to": "2026-11-12"
+    },
+    "id": "6430f0dceafb4abd",
+    "issuedAt": "2026-11-13T20:08:00+00:00",
+    "kind": "intraday",
+    "lagMin": 8.0,
+    "lastBar": "2026-11-13 14:45",
+    "late": false,
     "low": {
-     "price": 158.39,
-     "lo": 158.39,
      "hi": 158.39,
-     "time": "11:00",
+     "lo": 158.39,
+     "pAlreadySet": 1.0,
      "pBar": 1.0,
+     "price": 158.39,
+     "time": "11:00",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "11:00",
-       "p": 1.0
+       "p": 1.0,
+       "time": "11:00"
       }
      ],
      "window": {
       "centre": "11:00",
-      "p60": 1.0,
-      "p30": 1.0
-     },
-     "pAlreadySet": 1.0,
-     "timeBasis": "order-assigned"
-    },
-    "timing": {
-     "early": {
-      "time": "09:30",
-      "pBar": 1.0,
+      "p30": 1.0,
       "p60": 1.0
+     }
+    },
+    "model": "hilo-2",
+    "observed": {
+     "bars": 22,
+     "high": 170.0,
+     "highTime": "09:30",
+     "low": 158.38999938964844,
+     "lowTime": "11:00"
+    },
+    "prevHash": "80e40f8a8c37043517c2f7332e0440f6bca30a357538769f258c18e431dc482e",
+    "session": "2026-11-13",
+    "target": "final full-session high and low of 2026-11-13, including bars already traded",
+    "ticker": "NVDA",
+    "timing": {
+     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair",
+     "consistent": true,
+     "early": {
+      "p60": 1.0,
+      "pBar": 1.0,
+      "time": "09:30"
      },
      "late": {
-      "time": "11:00",
+      "p60": 1.0,
       "pBar": 1.0,
-      "p60": 1.0
+      "time": "11:00"
      },
-     "pPair": 1.0,
+     "n": 60,
      "pHighFirst": 1.0,
+     "pPair": 1.0,
      "pPairHighFirst": 1.0,
      "pSameBar": 0.0,
-     "consistent": true,
-     "resolved": true,
-     "n": 60,
-     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair"
+     "resolved": true
     },
-    "dataCutoff": "2026-11-13T15:00:00-05:00",
-    "lastBar": "2026-11-13 14:45",
-    "checkpoint": 22,
-    "v": 1,
-    "model": "hilo-2",
-    "ticker": "NVDA",
-    "session": "2026-11-13",
-    "kind": "intraday",
-    "issuedAt": "2026-11-13T20:08:00+00:00",
-    "lagMin": 8.0,
-    "late": false,
-    "prevHash": "80e40f8a8c37043517c2f7332e0440f6bca30a357538769f258c18e431dc482e",
-    "id": "6430f0dceafb4abd"
+    "v": 1
    }
   },
   "AMZN": {
@@ -1249,102 +1249,102 @@
     "v": 1
    },
    "intraday": {
-    "target": "final full-session high and low of 2026-11-13, including bars already traded",
     "anchor": 265.45,
     "anchorKind": "last completed bar close",
-    "observed": {
-     "high": 269.94000244140625,
-     "highTime": "09:30",
-     "low": 263.9100036621094,
-     "lowTime": "11:45",
-     "bars": 22
-    },
-    "history": {
-     "n": 60,
-     "from": "2026-08-20",
-     "to": "2026-11-12"
-    },
+    "checkpoint": 22,
+    "dataCutoff": "2026-11-13T15:00:00-05:00",
     "high": {
-     "price": 269.94,
-     "lo": 269.94,
      "hi": 269.94,
-     "time": "09:30",
+     "lo": 269.94,
+     "pAlreadySet": 1.0,
      "pBar": 1.0,
+     "price": 269.94,
+     "time": "09:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "09:30",
-       "p": 1.0
+       "p": 1.0,
+       "time": "09:30"
       }
      ],
      "window": {
       "centre": "09:30",
-      "p60": 1.0,
-      "p30": 1.0
-     },
-     "pAlreadySet": 1.0,
-     "timeBasis": "order-assigned"
+      "p30": 1.0,
+      "p60": 1.0
+     }
     },
+    "history": {
+     "from": "2026-08-20",
+     "n": 60,
+     "to": "2026-11-12"
+    },
+    "id": "a64ffbe8d97c1cfc",
+    "issuedAt": "2026-11-13T20:08:00+00:00",
+    "kind": "intraday",
+    "lagMin": 8.0,
+    "lastBar": "2026-11-13 14:45",
+    "late": false,
     "low": {
-     "price": 263.91,
-     "lo": 263.54,
      "hi": 263.91,
-     "time": "11:45",
+     "lo": 263.54,
+     "pAlreadySet": 0.8,
      "pBar": 0.8,
+     "price": 263.91,
+     "time": "11:45",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "11:45",
-       "p": 0.8
+       "p": 0.8,
+       "time": "11:45"
       },
       {
-       "time": "15:45",
-       "p": 0.167
+       "p": 0.167,
+       "time": "15:45"
       },
       {
-       "time": "15:15",
-       "p": 0.017
+       "p": 0.017,
+       "time": "15:15"
       }
      ],
      "window": {
       "centre": "11:45",
-      "p60": 0.8,
-      "p30": 0.8
-     },
-     "pAlreadySet": 0.8,
-     "timeBasis": "order-assigned"
+      "p30": 0.8,
+      "p60": 0.8
+     }
     },
+    "model": "hilo-2",
+    "observed": {
+     "bars": 22,
+     "high": 269.94000244140625,
+     "highTime": "09:30",
+     "low": 263.9100036621094,
+     "lowTime": "11:45"
+    },
+    "prevHash": "b84d9983fdb1f6247654c09d83e7318d8e36ed5358f9a2e6e063ad41ddac974f",
+    "session": "2026-11-13",
+    "target": "final full-session high and low of 2026-11-13, including bars already traded",
+    "ticker": "AMZN",
     "timing": {
+     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair",
+     "consistent": true,
      "early": {
-      "time": "09:30",
+      "p60": 1.0,
       "pBar": 1.0,
-      "p60": 1.0
+      "time": "09:30"
      },
      "late": {
-      "time": "11:45",
+      "p60": 0.8,
       "pBar": 0.8,
-      "p60": 0.8
+      "time": "11:45"
      },
-     "pPair": 0.8,
+     "n": 60,
      "pHighFirst": 1.0,
+     "pPair": 0.8,
      "pPairHighFirst": 1.0,
      "pSameBar": 0.0,
-     "consistent": true,
-     "resolved": true,
-     "n": 60,
-     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair"
+     "resolved": true
     },
-    "dataCutoff": "2026-11-13T15:00:00-05:00",
-    "lastBar": "2026-11-13 14:45",
-    "checkpoint": 22,
-    "v": 1,
-    "model": "hilo-2",
-    "ticker": "AMZN",
-    "session": "2026-11-13",
-    "kind": "intraday",
-    "issuedAt": "2026-11-13T20:08:00+00:00",
-    "lagMin": 8.0,
-    "late": false,
-    "prevHash": "b84d9983fdb1f6247654c09d83e7318d8e36ed5358f9a2e6e063ad41ddac974f",
-    "id": "a64ffbe8d97c1cfc"
+    "v": 1
    }
   },
   "SPY": {
@@ -1443,94 +1443,94 @@
     "v": 1
    },
    "intraday": {
-    "target": "final full-session high and low of 2026-11-13, including bars already traded",
     "anchor": 753.64,
     "anchorKind": "last completed bar close",
-    "observed": {
-     "high": 760.1199951171875,
-     "highTime": "09:30",
-     "low": 745.2000122070312,
-     "lowTime": "11:30",
-     "bars": 22
-    },
-    "history": {
-     "n": 60,
-     "from": "2026-08-20",
-     "to": "2026-11-12"
-    },
+    "checkpoint": 22,
+    "dataCutoff": "2026-11-13T15:00:00-05:00",
     "high": {
-     "price": 760.12,
-     "lo": 760.12,
      "hi": 760.12,
-     "time": "09:30",
+     "lo": 760.12,
+     "pAlreadySet": 1.0,
      "pBar": 1.0,
+     "price": 760.12,
+     "time": "09:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "09:30",
-       "p": 1.0
+       "p": 1.0,
+       "time": "09:30"
       }
      ],
      "window": {
       "centre": "09:30",
-      "p60": 1.0,
-      "p30": 1.0
-     },
-     "pAlreadySet": 1.0,
-     "timeBasis": "order-assigned"
+      "p30": 1.0,
+      "p60": 1.0
+     }
     },
+    "history": {
+     "from": "2026-08-20",
+     "n": 60,
+     "to": "2026-11-12"
+    },
+    "id": "0efc499f5d64fd96",
+    "issuedAt": "2026-11-13T20:08:00+00:00",
+    "kind": "intraday",
+    "lagMin": 8.0,
+    "lastBar": "2026-11-13 14:45",
+    "late": false,
     "low": {
-     "price": 745.2,
-     "lo": 745.2,
      "hi": 745.2,
-     "time": "11:30",
+     "lo": 745.2,
+     "pAlreadySet": 1.0,
      "pBar": 1.0,
+     "price": 745.2,
+     "time": "11:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "11:30",
-       "p": 1.0
+       "p": 1.0,
+       "time": "11:30"
       }
      ],
      "window": {
       "centre": "11:30",
-      "p60": 1.0,
-      "p30": 1.0
-     },
-     "pAlreadySet": 1.0,
-     "timeBasis": "order-assigned"
-    },
-    "timing": {
-     "early": {
-      "time": "09:30",
-      "pBar": 1.0,
+      "p30": 1.0,
       "p60": 1.0
+     }
+    },
+    "model": "hilo-2",
+    "observed": {
+     "bars": 22,
+     "high": 760.1199951171875,
+     "highTime": "09:30",
+     "low": 745.2000122070312,
+     "lowTime": "11:30"
+    },
+    "prevHash": "1589677b8b65a6133258829f1f8f314fba69ae19ca464ab6c2326199980afd79",
+    "session": "2026-11-13",
+    "target": "final full-session high and low of 2026-11-13, including bars already traded",
+    "ticker": "SPY",
+    "timing": {
+     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair",
+     "consistent": true,
+     "early": {
+      "p60": 1.0,
+      "pBar": 1.0,
+      "time": "09:30"
      },
      "late": {
-      "time": "11:30",
+      "p60": 1.0,
       "pBar": 1.0,
-      "p60": 1.0
+      "time": "11:30"
      },
-     "pPair": 1.0,
+     "n": 60,
      "pHighFirst": 1.0,
+     "pPair": 1.0,
      "pPairHighFirst": 1.0,
      "pSameBar": 0.0,
-     "consistent": true,
-     "resolved": true,
-     "n": 60,
-     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair"
+     "resolved": true
     },
-    "dataCutoff": "2026-11-13T15:00:00-05:00",
-    "lastBar": "2026-11-13 14:45",
-    "checkpoint": 22,
-    "v": 1,
-    "model": "hilo-2",
-    "ticker": "SPY",
-    "session": "2026-11-13",
-    "kind": "intraday",
-    "issuedAt": "2026-11-13T20:08:00+00:00",
-    "lagMin": 8.0,
-    "late": false,
-    "prevHash": "1589677b8b65a6133258829f1f8f314fba69ae19ca464ab6c2326199980afd79",
-    "id": "0efc499f5d64fd96"
+    "v": 1
    }
   },
   "VOO": {
@@ -1629,98 +1629,98 @@
     "v": 1
    },
    "intraday": {
-    "target": "final full-session high and low of 2026-11-13, including bars already traded",
     "anchor": 692.795,
     "anchorKind": "last completed bar close",
-    "observed": {
-     "high": 698.8099975585938,
-     "highTime": "09:30",
-     "low": 687.5,
-     "lowTime": "10:15",
-     "bars": 22
-    },
-    "history": {
-     "n": 60,
-     "from": "2026-08-20",
-     "to": "2026-11-12"
-    },
+    "checkpoint": 22,
+    "dataCutoff": "2026-11-13T15:00:00-05:00",
     "high": {
-     "price": 698.81,
-     "lo": 698.81,
      "hi": 698.81,
-     "time": "09:30",
+     "lo": 698.81,
+     "pAlreadySet": 1.0,
      "pBar": 1.0,
+     "price": 698.81,
+     "time": "09:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "09:30",
-       "p": 1.0
+       "p": 1.0,
+       "time": "09:30"
       }
      ],
      "window": {
       "centre": "09:30",
-      "p60": 1.0,
-      "p30": 1.0
-     },
-     "pAlreadySet": 1.0,
-     "timeBasis": "order-assigned"
+      "p30": 1.0,
+      "p60": 1.0
+     }
     },
+    "history": {
+     "from": "2026-08-20",
+     "n": 60,
+     "to": "2026-11-12"
+    },
+    "id": "8edd41f81324932a",
+    "issuedAt": "2026-11-13T20:08:00+00:00",
+    "kind": "intraday",
+    "lagMin": 8.0,
+    "lastBar": "2026-11-13 14:45",
+    "late": false,
     "low": {
-     "price": 687.5,
-     "lo": 687.5,
      "hi": 687.5,
-     "time": "10:15",
+     "lo": 687.5,
+     "pAlreadySet": 0.983,
      "pBar": 0.983,
+     "price": 687.5,
+     "time": "10:15",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "10:15",
-       "p": 0.983
+       "p": 0.983,
+       "time": "10:15"
       },
       {
-       "time": "15:45",
-       "p": 0.017
+       "p": 0.017,
+       "time": "15:45"
       }
      ],
      "window": {
       "centre": "10:15",
-      "p60": 0.983,
-      "p30": 0.983
-     },
-     "pAlreadySet": 0.983,
-     "timeBasis": "order-assigned"
+      "p30": 0.983,
+      "p60": 0.983
+     }
     },
+    "model": "hilo-2",
+    "observed": {
+     "bars": 22,
+     "high": 698.8099975585938,
+     "highTime": "09:30",
+     "low": 687.5,
+     "lowTime": "10:15"
+    },
+    "prevHash": "776827613a7df57599f25e44cd48ae49273ce62a2540232a8c4e317f325da5f5",
+    "session": "2026-11-13",
+    "target": "final full-session high and low of 2026-11-13, including bars already traded",
+    "ticker": "VOO",
     "timing": {
+     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair",
+     "consistent": true,
      "early": {
-      "time": "09:30",
+      "p60": 1.0,
       "pBar": 1.0,
-      "p60": 1.0
+      "time": "09:30"
      },
      "late": {
-      "time": "10:15",
+      "p60": 0.983,
       "pBar": 0.983,
-      "p60": 0.983
+      "time": "10:15"
      },
-     "pPair": 0.983,
+     "n": 60,
      "pHighFirst": 1.0,
+     "pPair": 0.983,
      "pPairHighFirst": 1.0,
      "pSameBar": 0.0,
-     "consistent": true,
-     "resolved": true,
-     "n": 60,
-     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair"
+     "resolved": true
     },
-    "dataCutoff": "2026-11-13T15:00:00-05:00",
-    "lastBar": "2026-11-13 14:45",
-    "checkpoint": 22,
-    "v": 1,
-    "model": "hilo-2",
-    "ticker": "VOO",
-    "session": "2026-11-13",
-    "kind": "intraday",
-    "issuedAt": "2026-11-13T20:08:00+00:00",
-    "lagMin": 8.0,
-    "late": false,
-    "prevHash": "776827613a7df57599f25e44cd48ae49273ce62a2540232a8c4e317f325da5f5",
-    "id": "8edd41f81324932a"
+    "v": 1
    }
   },
   "META": {
@@ -1819,102 +1819,102 @@
     "v": 1
    },
    "intraday": {
-    "target": "final full-session high and low of 2026-11-13, including bars already traded",
     "anchor": 641.285,
     "anchorKind": "last completed bar close",
-    "observed": {
-     "high": 642.5999755859375,
-     "highTime": "14:00",
-     "low": 624.8300170898438,
-     "lowTime": "10:30",
-     "bars": 22
-    },
-    "history": {
-     "n": 60,
-     "from": "2026-08-20",
-     "to": "2026-11-12"
-    },
+    "checkpoint": 22,
+    "dataCutoff": "2026-11-13T15:00:00-05:00",
     "high": {
-     "price": 643.45,
-     "lo": 642.6,
      "hi": 647.28,
-     "time": "15:45",
+     "lo": 642.6,
+     "pAlreadySet": 0.283,
      "pBar": 0.317,
+     "price": 643.45,
+     "time": "15:45",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "15:45",
-       "p": 0.317
+       "p": 0.317,
+       "time": "15:45"
       },
       {
-       "time": "14:00",
-       "p": 0.283
+       "p": 0.283,
+       "time": "14:00"
       },
       {
-       "time": "15:00",
-       "p": 0.167
+       "p": 0.167,
+       "time": "15:00"
       }
      ],
      "window": {
       "centre": "15:00",
-      "p60": 1.0,
-      "p30": 0.4
-     },
-     "pAlreadySet": 0.283,
-     "timeBasis": "order-assigned"
+      "p30": 0.4,
+      "p60": 1.0
+     }
     },
+    "history": {
+     "from": "2026-08-20",
+     "n": 60,
+     "to": "2026-11-12"
+    },
+    "id": "7e5f3cd6e5d62a97",
+    "issuedAt": "2026-11-13T20:08:00+00:00",
+    "kind": "intraday",
+    "lagMin": 8.0,
+    "lastBar": "2026-11-13 14:45",
+    "late": false,
     "low": {
-     "price": 624.83,
-     "lo": 624.83,
      "hi": 624.83,
-     "time": "10:30",
+     "lo": 624.83,
+     "pAlreadySet": 1.0,
      "pBar": 1.0,
+     "price": 624.83,
+     "time": "10:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "10:30",
-       "p": 1.0
+       "p": 1.0,
+       "time": "10:30"
       }
      ],
      "window": {
       "centre": "10:30",
-      "p60": 1.0,
-      "p30": 1.0
-     },
-     "pAlreadySet": 1.0,
-     "timeBasis": "order-assigned"
-    },
-    "timing": {
-     "early": {
-      "time": "10:30",
-      "pBar": 1.0,
+      "p30": 1.0,
       "p60": 1.0
+     }
+    },
+    "model": "hilo-2",
+    "observed": {
+     "bars": 22,
+     "high": 642.5999755859375,
+     "highTime": "14:00",
+     "low": 624.8300170898438,
+     "lowTime": "10:30"
+    },
+    "prevHash": "84fd4b96377ba17cc7956f2aabe190473062eac80edee3f1cff3bd08cd8c2928",
+    "session": "2026-11-13",
+    "target": "final full-session high and low of 2026-11-13, including bars already traded",
+    "ticker": "META",
+    "timing": {
+     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair",
+     "consistent": true,
+     "early": {
+      "p60": 1.0,
+      "pBar": 1.0,
+      "time": "10:30"
      },
      "late": {
-      "time": "15:45",
+      "p60": 0.717,
       "pBar": 0.317,
-      "p60": 0.717
+      "time": "15:45"
      },
-     "pPair": 0.317,
+     "n": 60,
      "pHighFirst": 0.0,
+     "pPair": 0.317,
      "pPairHighFirst": 0.0,
      "pSameBar": 0.0,
-     "consistent": true,
-     "resolved": true,
-     "n": 60,
-     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair"
+     "resolved": true
     },
-    "dataCutoff": "2026-11-13T15:00:00-05:00",
-    "lastBar": "2026-11-13 14:45",
-    "checkpoint": 22,
-    "v": 1,
-    "model": "hilo-2",
-    "ticker": "META",
-    "session": "2026-11-13",
-    "kind": "intraday",
-    "issuedAt": "2026-11-13T20:08:00+00:00",
-    "lagMin": 8.0,
-    "late": false,
-    "prevHash": "84fd4b96377ba17cc7956f2aabe190473062eac80edee3f1cff3bd08cd8c2928",
-    "id": "7e5f3cd6e5d62a97"
+    "v": 1
    }
   },
   "SPCX": {
@@ -2013,102 +2013,114 @@
     "v": 1
    },
    "intraday": {
-    "target": "final full-session high and low of 2026-11-13, including bars already traded",
     "anchor": 140.245,
     "anchorKind": "last completed bar close",
-    "observed": {
-     "high": 142.24000549316406,
-     "highTime": "09:30",
-     "low": 136.64010620117188,
-     "lowTime": "10:30",
-     "bars": 22
-    },
-    "history": {
-     "n": 60,
-     "from": "2026-08-20",
-     "to": "2026-11-12"
-    },
+    "checkpoint": 22,
+    "dataCutoff": "2026-11-13T15:00:00-05:00",
     "high": {
-     "price": 142.24,
-     "lo": 142.24,
      "hi": 142.24,
-     "time": "09:30",
+     "lo": 142.24,
+     "pAlreadySet": 0.933,
      "pBar": 0.933,
+     "price": 142.24,
+     "time": "09:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "09:30",
-       "p": 0.933
+       "p": 0.933,
+       "time": "09:30"
       },
       {
-       "time": "15:45",
-       "p": 0.067
+       "p": 0.067,
+       "time": "15:45"
       }
      ],
      "window": {
       "centre": "09:30",
-      "p60": 0.933,
-      "p30": 0.933
-     },
-     "pAlreadySet": 0.933,
-     "timeBasis": "order-assigned"
+      "p30": 0.933,
+      "p60": 0.933
+     }
     },
+    "history": {
+     "from": "2026-08-20",
+     "n": 60,
+     "to": "2026-11-12"
+    },
+    "id": "925cf0b4e50adf3a",
+    "issuedAt": "2026-11-13T20:08:00+00:00",
+    "kind": "intraday",
+    "lagMin": 8.0,
+    "lastBar": "2026-11-13 14:45",
+    "late": false,
     "low": {
-     "price": 136.64,
-     "lo": 136.64,
      "hi": 136.64,
-     "time": "10:30",
+     "lo": 136.64,
+     "pAlreadySet": 1.0,
      "pBar": 1.0,
+     "price": 136.64,
+     "time": "10:30",
+     "timeBasis": "order-assigned",
      "topBins": [
       {
-       "time": "10:30",
-       "p": 1.0
+       "p": 1.0,
+       "time": "10:30"
       }
      ],
      "window": {
       "centre": "10:30",
-      "p60": 1.0,
-      "p30": 1.0
-     },
-     "pAlreadySet": 1.0,
-     "timeBasis": "order-assigned"
-    },
-    "timing": {
-     "early": {
-      "time": "09:30",
-      "pBar": 0.933,
+      "p30": 1.0,
       "p60": 1.0
+     }
+    },
+    "model": "hilo-2",
+    "observed": {
+     "bars": 22,
+     "high": 142.24000549316406,
+     "highTime": "09:30",
+     "low": 136.64010620117188,
+     "lowTime": "10:30"
+    },
+    "prevHash": "7e6ef17ac1f8cc1ab3038d3dd718615adb4621519c7c9e87373f809ff8823a04",
+    "session": "2026-11-13",
+    "target": "final full-session high and low of 2026-11-13, including bars already traded",
+    "ticker": "SPCX",
+    "timing": {
+     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair",
+     "consistent": true,
+     "early": {
+      "p60": 1.0,
+      "pBar": 0.933,
+      "time": "09:30"
      },
      "late": {
-      "time": "10:30",
+      "p60": 0.933,
       "pBar": 0.933,
-      "p60": 0.933
+      "time": "10:30"
      },
-     "pPair": 0.933,
+     "n": 60,
      "pHighFirst": 0.933,
+     "pPair": 0.933,
      "pPairHighFirst": 1.0,
      "pSameBar": 0.0,
-     "consistent": true,
-     "resolved": true,
-     "n": 60,
-     "basis": "per past session (or replayed scenario): (early, late) = the earlier and later of the high and low bars; the reported pair is the most frequent such ordered pair (pPair); pBar/p60 are each bar's own share; pHighFirst = share of sessions where the high came first; pPairHighFirst = the same share among sessions that produced the selected pair"
+     "resolved": true
     },
-    "dataCutoff": "2026-11-13T15:00:00-05:00",
-    "lastBar": "2026-11-13 14:45",
-    "checkpoint": 22,
-    "v": 1,
-    "model": "hilo-2",
-    "ticker": "SPCX",
-    "session": "2026-11-13",
-    "kind": "intraday",
-    "issuedAt": "2026-11-13T20:08:00+00:00",
-    "lagMin": 8.0,
-    "late": false,
-    "prevHash": "7e6ef17ac1f8cc1ab3038d3dd718615adb4621519c7c9e87373f809ff8823a04",
-    "id": "925cf0b4e50adf3a"
+    "v": 1
    }
   }
  },
- "notes": {},
+ "notes": {
+  "TSLA": "checkpoint 22 already recorded",
+  "HOOD": "checkpoint 22 already recorded",
+  "QQQ": "checkpoint 22 already recorded",
+  "JPM": "checkpoint 22 already recorded",
+  "GOOGL": "checkpoint 22 already recorded",
+  "NVDA": "checkpoint 22 already recorded",
+  "AMZN": "checkpoint 22 already recorded",
+  "SPY": "checkpoint 22 already recorded",
+  "VOO": "checkpoint 22 already recorded",
+  "META": "checkpoint 22 already recorded",
+  "SPCX": "checkpoint 22 already recorded"
+ },
  "excluded": {
   "GC=F": "futures session calendar not implemented"
  },
@@ -7686,7 +7698,7 @@
   }
  },
  "build": {
-  "commit": "50bbacbc3026ad469d0fa555024e81654c7503bd",
-  "run": "43498193861"
+  "commit": "e3523ecfad9ee80de3c86547233976969842fa0b",
+  "run": "43503500127"
  }
 }
