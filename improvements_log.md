@@ -4443,3 +4443,50 @@ cluster ever breaks apart; whether JPM or META ever move off their weak/zero rea
 SPCX's n=7 sample starts to mean anything as it grows. This sandbox's Yahoo block is unchanged -
 still can only grade and test against the cloud-refreshed build, not fetch fresh data or validate a
 code change end-to-end itself.
+
+## 2026-11-14 (Sat) — weekend, no new session; fetch blocked again; grade + log only
+
+**Today's data situation:** `fetch_data.py` failed on all 12 tickers plus the pre/post-market
+quote, each with "Tunnel connection failed: 403 Forbidden" - this sandbox's own network proxy
+refusing the connection, not a Yahoo-side block, same as every prior run from here. No raw per-
+ticker CSVs exist locally (gitignored), so per the standing rule `analyze.py` was run but correctly
+refused with "Incomplete analysis; retaining last published dashboard" rather than touching the
+published build - the expected, safe behavior. The dashboard is still running on the separate
+scheduled GitHub Actions refresh's last build (generated Friday 11/13 6:11 PM ET, last daily bar
+still 11/13 - the most recent real trading session; today is Saturday, so nothing new was expected
+from that workflow either). `coherence_check.py` passed cleanly against that build (12/12 tickers),
+and the full test suite (all `test_*.py` files, 147 tests, 14 subtests) passed.
+
+**One thing flagged, not fixed:** `anomaly_audit.py` reports 1 anomaly - "GC=F: chain still shows a
+PAST event 2026-11-13 (low)" - because the confluence chain hasn't rolled forward since Friday's
+refresh and today (Saturday) is later than the dated event it's still pointing to. This is the same
+well-documented weekend staleness artifact noted on prior Saturdays/Sundays (e.g. 10/24-10/25,
+10/17-10/18), confirmed again by checking the earlier log entries - it is not a logic bug and it
+reliably clears itself the moment Monday's scheduled refresh runs. No action needed.
+
+**Grades reviewed:** every swing-grading number is byte-for-byte identical to yesterday's (Friday
+11/13) entry, exactly as expected with no new session to grade. Per-ticker `trackRecord.n` / 2-day
+hit rate / 3-day hit rate / median price error: TSLA 76/12%/14%/11.5%, HOOD 77/14%/21%/13.9%, QQQ
+86/20%/24%/2.6%, JPM 82/7%/12%/2.2%, GOOGL 67/19%/21%/5.5%, NVDA 21/10%/14%/1.6%, AMZN
+24/12%/17%/2.0%, SPY 32/6%/9%/0.2%, VOO 31/3%/3%/0.5%, GC=F 22/18%/18%/3.6%, META still 0, SPCX
+7/14%/29%/11.3% (same small sample as Friday - still too few to read into). Weighted combined across
+525 resolved predictions: ~13% hitting within 2 days and ~17% within 3, both still comfortably above
+a near-zero random-date baseline, so the honesty framing holds up unchanged. Real-money ledger:
+`real_trades.json` unchanged (last closed trade TSLA, 9/11). `SPREAD_JOURNAL.md` shows alert #100
+(HOOD 11/27 75P) still pending as of Friday and #101 (HOOD 87C) voided when the app flipped the
+11/16 turn back to a low - both unchanged since no new session has run to move them.
+
+**What changed and why.** Nothing. This stays a grade-and-log day: no new data, no new pattern
+clearing the 3+-day bar for a code change, and the one anomaly is an already-diagnosed, self-
+resolving weekend artifact rather than a new bug. Honesty features (hit-rate displays, random-
+control comparisons, the grading itself, the coherence gate) are untouched. `tickers.txt` is
+untouched.
+
+**Watch next:** confirm Monday's scheduled refresh clears today's stale GC=F 11/13 chain entry, as
+it has every prior weekend; whether HOOD's calibration ceiling (still pinned at 1.15) keeps drifting
+further past its unclamped ratios or settles back; whether the six-ticker zigzag-threshold ceiling
+cluster (TSLA, HOOD, NVDA, AMZN, META, SPCX) ever breaks apart; whether JPM or META ever move off
+their weak/zero readings; whether SPCX's small sample starts to mean anything as it grows; and
+whether HOOD alert #100 (75P) gets filled once Monday's session opens. This sandbox's Yahoo block
+is unchanged - still can only grade and test against the cloud-refreshed build, not fetch fresh data
+or validate a code change end-to-end itself.
