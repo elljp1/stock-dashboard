@@ -4490,3 +4490,44 @@ their weak/zero readings; whether SPCX's small sample starts to mean anything as
 whether HOOD alert #100 (75P) gets filled once Monday's session opens. This sandbox's Yahoo block
 is unchanged - still can only grade and test against the cloud-refreshed build, not fetch fresh data
 or validate a code change end-to-end itself.
+
+## 2026-11-15 (Sun) — weekend, no new session; fetch blocked again; grade + log only
+
+**Today's data situation:** `fetch_data.py` failed on all 12 tickers plus the pre/post-market
+quote, each with "Tunnel connection failed: 403 Forbidden" - checked against the sandbox's own
+proxy status log and confirmed it's a gateway policy denial on `query1.finance.yahoo.com`, the same
+recurring sandbox network restriction seen on every prior run from here, not a Yahoo-side block. No
+raw per-ticker CSVs exist locally (gitignored), so per the standing rule `analyze.py` was run but
+correctly refused with "Incomplete analysis; retaining last published dashboard" rather than
+touching the published build. The dashboard is still running on the separate scheduled GitHub
+Actions refresh's last build (generated Friday 11/13's session, committed Saturday 11/14 6:12 PM
+ET) - expected, since it's the weekend and no new trading session has happened since. `coherence_
+check.py` passed cleanly (12/12 tickers), `anomaly_audit.py` reported zero anomalies (a clean read
+today, unlike the GC=F weekend chain-staleness flag seen on several prior Saturdays/Sundays - this
+time the chain's next dated event, 11/16, is still in the future relative to today so nothing reads
+as stale), and the full test suite passed: 147 Python tests (14 subtests) plus all 6 Node UI/
+scheduler tests (smoke, reliability, pin, hilo refresh, layout, scheduler).
+
+**Grades reviewed:** every swing-grading number is byte-for-byte identical to yesterday's (Saturday
+11/14) entry, exactly as expected with no new session to grade. Per-ticker `trackRecord.n` / 2-day
+hit rate / 3-day hit rate / median price error: TSLA 76/12%/14%/11.5%, HOOD 77/14%/21%/13.9%, QQQ
+86/20%/24%/2.6%, JPM 82/7%/12%/2.2%, GOOGL 67/19%/21%/5.5%, NVDA 21/10%/14%/1.6%, AMZN
+24/12%/17%/2.0%, SPY 32/6%/9%/0.2%, VOO 31/3%/3%/0.5%, GC=F 22/18%/18%/3.6%, META still 0, SPCX
+7/14%/29%/11.3% (same small sample as Saturday). HOOD's `priceCalibHigh` is still pinned at the
+deliberate 1.15 ceiling and the six-ticker zigzag-threshold cluster (TSLA, HOOD, NVDA, AMZN, META,
+SPCX) is unchanged - both already-diagnosed, deliberate design points, not new drift. Real-money
+ledger: `real_trades.json` unchanged (last closed trade TSLA, 9/11). `SPREAD_JOURNAL.md` shows
+alert #100 (HOOD 11/27 75P) still pending and #101 (HOOD 87C) still void, both unchanged since no
+new session has run to move them.
+
+**What changed and why.** Nothing. This stays a grade-and-log day: no new data, no new pattern
+clearing the 3+-day bar for a code change, and no bug surfaced anywhere in the pipeline. Honesty
+features (hit-rate displays, random-control comparisons, the grading itself, the coherence gate)
+are untouched. `tickers.txt` is untouched.
+
+**Watch next:** whether HOOD's calibration ceiling (still pinned at 1.15) keeps drifting further
+past its unclamped ratios or settles back; whether the six-ticker zigzag-threshold ceiling cluster
+ever breaks apart; whether JPM or META ever move off their weak/zero readings; whether SPCX's small
+sample starts to mean anything as it grows; and whether HOOD alert #100 (75P) gets filled once
+Monday's session opens. This sandbox's Yahoo block is unchanged - still can only grade and test
+against the cloud-refreshed build, not fetch fresh data or validate a code change end-to-end itself.
