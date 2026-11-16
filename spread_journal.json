@@ -4145,8 +4145,8 @@
         "turnPrice": 89.41,
         "plannedExit": "GTC buy-back $1.50 (50%); close at the 11/23 projected high if not filled; stop $6.00 or HOOD close below 75",
         "taken": false,
-        "outcome": "pending",
-        "reason": "D is Monday's projected low ~75.36, E the 11/23 high ~89.41; first listed expiry 2+ trading days after E is 11/27; lowest projected low to expiry 75.36 so 75 strike; premium 4.0%; collateral $7,500 fits Agentic, Individual or Joint; HOOD 76.98, 2% above the projected low; no HOOD report before 11/27; void 11/13 2:37pm (app flipped the 11/16 turn to a high ~86.92 with a low 11/23 ~72.34; put no longer on the app's leg; mid $2.33); reinstated 11/13 3:04pm (app flipped 11/16 back to a low ~75.36, high 11/23 ~89.2; mid $2.38; not re-pushed per 24h de-dup)"
+        "outcome": "void",
+        "reason": "D is Monday's projected low ~75.36, E the 11/23 high ~89.41; first listed expiry 2+ trading days after E is 11/27; lowest projected low to expiry 75.36 so 75 strike; premium 4.0%; collateral $7,500 fits Agentic, Individual or Joint; HOOD 76.98, 2% above the projected low; no HOOD report before 11/27; void 11/13 2:37pm (app flipped the 11/16 turn to a high ~86.92 with a low 11/23 ~72.34; put no longer on the app's leg; mid $2.33); reinstated 11/13 3:04pm (app flipped 11/16 back to a low ~75.36, high 11/23 ~89.2; mid $2.38; not re-pushed per 24h de-dup) | Void 11/16 9:38am: the app moved the 11/16 low to ~72.34 (11/23 high ~84.35), so the strike moves to 72; replaced by #102. 75P mid was $3.48."
       },
       {
         "id": 101,
@@ -4173,6 +4173,32 @@
         "taken": false,
         "outcome": "void",
         "reason": "D is Monday's projected high ~86.92, E the 11/23 low ~72.34; first listed expiry 2+ trading days after E is 11/27; highest projected high to expiry 86.92 so 87 strike; premium 1.3%; covered by Individual's 700 HOOD shares; HOOD 78.45, 11% below the projected high; no HOOD report before 11/27; void 11/13 3:04pm (app flipped 11/16 back to a low ~75.36; call no longer on the app's leg; mid $1.08)"
+      },
+      {
+        "id": 102,
+        "kind": "sell put",
+        "date": "2026-11-16",
+        "time": "09:38 ET",
+        "symbol": "HOOD",
+        "contract": "HOOD 11/27 72P",
+        "spread": "11/27 72 put (sold, cash-secured)",
+        "contracts": 1,
+        "midAtAlert": 2.27,
+        "suggestedLimit": 2.27,
+        "delta": -0.34,
+        "spot": 75.53,
+        "collateral": 7200,
+        "breakeven": 69.73,
+        "entryTurnDate": "2026-11-16",
+        "entryTurnTime": "Moon 12:30-1:19 PM",
+        "entryTurnPrice": 72.34,
+        "turnDate": "2026-11-23",
+        "turnTime": "Moon 12:30-1:19 PM; Saturn 1:19-2:07 PM",
+        "turnPrice": 84.35,
+        "plannedExit": "GTC buy-back $1.14 (50%); close at the 11/23 projected high if not filled; stop $4.54 or HOOD close below 72",
+        "taken": false,
+        "outcome": "pending",
+        "reason": "D is today's projected low ~72.34 (Moon 12:30-1:19 PM), E the 11/23 high ~84.35; first listed expiry 2+ trading days after E is 11/27; lowest projected low to expiry 72.34 so 72 strike; premium 3.2%; collateral $7,200 fits Agentic, Individual or Joint. Replaces #100."
       }
     ]
   },
