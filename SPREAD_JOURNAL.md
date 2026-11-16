@@ -211,7 +211,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 99 | 11/09 9:38am | SELL PUT TSLA 11/27 335P (timing: Tue 11/10 low ~337.47, leg up to 11/23 high ~384.14; premium 1.6%; collateral $33,500) | $5.40 (1x) | Pushed, open; void 11/10 9:37am (app dropped the 11/10 low; next turn 11/19 high; mid $3.15) | void |
 | 100 | 11/13 10:39am | SELL PUT HOOD 11/27 75P (timing: Mon 11/16 low ~75.36, leg up to 11/23 high ~89.41; premium 4.0%; collateral $7,500) | $3.00 (1x) | Pushed, open; void 11/13 2:37pm (app flipped 11/16 to a high ~86.92; mid $2.33; reinstated 3:04pm when the app flipped back to a low; mid $2.38); void 11/16 9:38am (app moved the 11/16 low to ~72.34; see #102) | void |
 | 101 | 11/13 2:37pm | SELL CALL HOOD 11/27 87C (timing: Mon 11/16 high ~86.92, leg down to 11/23 low ~72.34; premium 1.3%; covered by Individual 700 sh) | $1.10 (1x) | Pushed, open; void 11/13 3:04pm (app flipped 11/16 back to a low; mid $1.08) | void |
-| 102 | 11/16 9:38am | SELL PUT HOOD 11/27 72P (timing: today's low ~72.34 12:30-1:19pm, leg up to 11/23 high ~84.35; premium 3.2%; collateral $7,200; replaces #100) | $2.27 (1x) | Pushed, open | pending |
+| 102 | 11/16 9:38am | SELL PUT HOOD 11/27 72P (timing: today's low ~72.34 12:30-1:19pm, leg up to 11/23 high ~84.35; premium 3.2%; collateral $7,200; replaces #100) | $2.27 (1x) | Pushed, open; re-pushed 10:38am $3.05 (HOOD 73.40) | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
