@@ -4531,3 +4531,72 @@ ever breaks apart; whether JPM or META ever move off their weak/zero readings; w
 sample starts to mean anything as it grows; and whether HOOD alert #100 (75P) gets filled once
 Monday's session opens. This sandbox's Yahoo block is unchanged - still can only grade and test
 against the cloud-refreshed build, not fetch fresh data or validate a code change end-to-end itself.
+
+## 2026-11-16 (Mon) — traced META's 8-week zero-grade streak to its root cause; confirmed not a bug; grade + log only
+
+**Today's data situation:** ran `fetch_data.py` first as instructed; all 12 tickers plus the pre/
+post-market quote failed with the same "Tunnel connection failed: 403 Forbidden" this sandbox always
+gets - checked the proxy status log and confirmed it's a gateway policy denial on
+`query1.finance.yahoo.com` (`connect_rejected`, "gateway answered 403 to CONNECT"), the same
+recurring sandbox network restriction as every prior run from here, not a Yahoo-side block. No raw
+per-ticker CSVs exist locally (gitignored), so `analyze.py` correctly refused with "Incomplete
+analysis; retaining last published dashboard" rather than touching the published build - the
+expected, safe behavior. The dashboard is running on the separate scheduled GitHub Actions refresh's
+build from earlier today (generated 2026-11-16, 5:41 PM ET, including Monday's live pre/post-market
+quote and Alert #104, sell HOOD 11/27 $69P, logged 3:04 PM after voiding #103 twice as the app's
+projected low moved intraday). `coherence_check.py` passed cleanly (12/12 tickers), `anomaly_audit.py`
+reported zero anomalies, and the full test suite passed: 147 Python tests (14 subtests, after
+installing `pytest` and `node_modules` fresh in this session) plus all 6 Node UI/scheduler tests
+(smoke, reliability, pin, hilo refresh, layout, scheduler).
+
+**Grades reviewed.** Per-ticker `trackRecord.n` / 2-day hit rate / 3-day hit rate / median price
+error: TSLA 78/13%/15%/11.5%, HOOD 77/14%/21%/13.9%, QQQ 87/20%/24%/3.0%, JPM 83/8%/13%/2.3%, GOOGL
+70/19%/20%/6.1%, NVDA 21/10%/14%/1.6%, AMZN 24/12%/17%/2.0%, SPY 32/6%/9%/0.2%, VOO 31/3%/3%/0.5%,
+GC=F 22/18%/18%/3.6%, META still 0, SPCX 8/25%/38%/11.3% (n up from 7 to 8 - still far too small to
+read into). Weighting each ticker by its own `n` gives 533 resolved predictions combined, ~13.5%
+hitting within 2 days and ~17.1% within 3 - both still comfortably above a near-zero random-date
+baseline, so the honesty framing holds up. Real-money ledger: `real_trades.json` unchanged (last
+closed trade TSLA, 9/11). `SPREAD_JOURNAL.md` shows Alert #104 (HOOD 11/27 $69P) now the live pending
+alert, replacing #103 (voided) and #102 (voided) earlier today as the app's projected 11/16 low kept
+moving intraday - normal churn, not a new issue.
+
+**Went deeper on the longest-running watch item - why META has graded exactly zero predictions for
+nearly 8 weeks.** META's predictions have been logged since 2026-09-28 with target dates stretching
+back to 10/19, 10/26 and 11/12 - all now well in the past - yet `trackRecord.n` for META has read 0
+every single day since tracking began. That is a much longer unexplained stretch than the usual
+3-day bar for action, so today I traced it in the code rather than just re-noting it. The grading
+function (`nearest_prospective_pivot` in `scoring.py`) only counts a prediction once a *confirmed*
+zigzag swing pivot exists after the date the prediction was logged; a prediction with no qualifying
+pivot afterward is silently skipped (not counted as a miss, just excluded from `n`). META's own
+`swing.recentPivots` list shows 35 pivots total, but the most recent one is a high on 2026-09-24 -
+nothing confirmed since. I checked why by hand-tracing META's daily closes from `daily_extremes.json`:
+META closed at $777.59 on 9/24, then ground down to a closing low of $605.08 on 11/05 (a genuine
+22% decline), but the best closing bounce off that low so far is only to $641.69 on 11/13 - a 6.1%
+move, short of the 10% zigzag threshold `THRESH` pinned for META (the same volatility-driven ceiling
+already documented for TSLA/HOOD/NVDA/AMZN/SPCX). The dashboard's own `ranges.monthly` field (low
+$583.80, high $648.45 - an apparent 11.1% spread) looked at first like it contradicted this, but
+those are *intraday* extremes, while the zigzag confirms off *daily closes* only, which is a
+deliberate, documented noise-reduction choice elsewhere in `analyze.py`, not a bug. So the zero is
+real and correct: META has simply not had a 10%-close-to-close reversal since 9/24, meaning every
+prediction logged in that stretch has had nothing yet to grade against - a legitimate, if unlucky,
+consequence of pairing a high (ceiling) threshold with a stock that has been trending one direction
+without a qualifying bounce, not a defect in the grading code. No fix is warranted; if META does
+confirm a new pivot (it is close - roughly 4 more points of closing strength would clear the 10%
+mark from the 11/05 low), the backlog of 50 logged entries should start resolving in a batch.
+
+**What changed and why.** Nothing. The deep-dive confirmed today's top watch item is expected
+behavior given the zigzag's close-only, 10%-threshold design, not a new bug or a 3+-day pattern
+calling for a change, so per the daily discipline this stays a grade-and-log day. Honesty features
+(hit-rate displays, random-control comparisons, the grading itself, the coherence gate) are
+untouched. `tickers.txt` is untouched.
+
+**Watch next:** whether META's closing price clears $605.08 x 1.10 = $665.59 (confirming the 9/24
+high's countertrend) or instead rolls back under $605.08 (extending the unconfirmed decline) - either
+way `trackRecord.n` for META should finally move off zero once one side confirms; whether HOOD's
+calibration ceiling (still pinned at 1.15, unclamped ratios unchanged at 1.17 highs / 1.19 lows, same
+n=7/6 sample as recent days) keeps drifting or settles back; whether the six-ticker zigzag-threshold
+cluster (TSLA, HOOD, NVDA, AMZN, META, SPCX) ever breaks apart; whether JPM's hit rate (now 8%/13%,
+still the weakest among the liquid names) is a persistent pattern or noise as `n` grows past 83; and
+whether SPCX's n=8 sample starts to mean anything as it grows. This sandbox's Yahoo block is
+unchanged - still can only grade and test against the cloud-refreshed build, not fetch fresh data or
+validate a code change end-to-end itself.
