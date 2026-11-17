@@ -4277,8 +4277,34 @@
         "turnPrice": 87.56,
         "plannedExit": "GTC buy-back $1.78 (50%); close at the 12/02 projected high if not filled; stop $7.10 or HOOD close below 69",
         "taken": false,
+        "outcome": "void",
+        "reason": "D is tomorrow's projected low ~69.08, E the 12/02 high ~87.56; first listed expiry 2+ trading days after E is 12/04; lowest projected low to expiry 69.08 so 69 strike; premium 5.2%; collateral $6,900 fits Agentic, Individual or Joint. | Re-pushed 11/17 10:38am: mid $4.20 (+$0.62), HOOD 69.48; limit $4.20, buy-back $2.10, stop $8.40. | Void 11/17 11:46am: the app cut the 11/18 low to ~65.22 (12/02 high ~83.75), so the strike moves to 65; replaced by #106. 69P mid was $5.15 with HOOD 67.41."
+      },
+      {
+        "id": 106,
+        "kind": "sell put",
+        "date": "2026-11-17",
+        "time": "11:46 ET",
+        "symbol": "HOOD",
+        "contract": "HOOD 12/04 65P",
+        "spread": "12/04 65 put (sold, cash-secured)",
+        "contracts": 1,
+        "midAtAlert": 3.48,
+        "suggestedLimit": 3.45,
+        "delta": -0.382,
+        "spot": 67.41,
+        "collateral": 6500,
+        "breakeven": 61.55,
+        "entryTurnDate": "2026-11-18",
+        "entryTurnTime": "Jupiter 9:30-10:02 AM; Jupiter 2:57-3:46 PM",
+        "entryTurnPrice": 65.22,
+        "turnDate": "2026-12-02",
+        "turnTime": "Moon 1:20-2:07 PM; Saturn 2:07-2:54 PM",
+        "turnPrice": 83.75,
+        "plannedExit": "GTC buy-back $1.73 (50%); close at the 12/02 projected high if not filled; stop $6.90 or HOOD close below 65",
+        "taken": false,
         "outcome": "pending",
-        "reason": "D is tomorrow's projected low ~69.08, E the 12/02 high ~87.56; first listed expiry 2+ trading days after E is 12/04; lowest projected low to expiry 69.08 so 69 strike; premium 5.2%; collateral $6,900 fits Agentic, Individual or Joint. | Re-pushed 11/17 10:38am: mid $4.20 (+$0.62), HOOD 69.48; limit $4.20, buy-back $2.10, stop $8.40."
+        "reason": "D is tomorrow's projected low ~65.22, E the 12/02 high ~83.75; first listed expiry 2+ trading days after E is 12/04; lowest projected low to expiry 65.22 so 65 strike; premium 5.3%; collateral $6,500 fits Agentic, Individual or Joint. Replaces #105."
       }
     ]
   },
