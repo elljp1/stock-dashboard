@@ -4600,3 +4600,50 @@ still the weakest among the liquid names) is a persistent pattern or noise as `n
 whether SPCX's n=8 sample starts to mean anything as it grows. This sandbox's Yahoo block is
 unchanged - still can only grade and test against the cloud-refreshed build, not fetch fresh data or
 validate a code change end-to-end itself.
+
+## 2026-11-17 (Tue) — fetch blocked again; grades reviewed by method family; grade + log only
+
+**Today's data situation:** ran `fetch_data.py` first as instructed; all 12 tickers plus the pre/
+post-market quote failed with "Tunnel connection failed: 403 Forbidden" - checked the sandbox's own
+proxy status log and confirmed it's a gateway policy denial on `query1.finance.yahoo.com`
+(`connect_rejected`, "gateway answered 403 to CONNECT"), the same recurring sandbox restriction as
+every prior run from here, not a Yahoo-side block. No raw per-ticker CSVs exist locally (gitignored),
+so `analyze.py` correctly refused with "Incomplete analysis; retaining last published dashboard"
+rather than touching the published build. The live dashboard is already running on the separate
+scheduled GitHub Actions refresh's build from earlier today (last auto-refresh commit 2026-11-17,
+10:42pm UTC). `coherence_check.py` passed cleanly (12/12 tickers), `anomaly_audit.py` reported zero
+anomalies, and the full test suite passed: 147 Python tests (14 subtests).
+
+**Grades reviewed, broken down by method family this time.** Per-ticker `trackRecord.n` / 2-day hit
+rate / 3-day hit rate / median price error match yesterday's readings closely (TSLA, HOOD, QQQ, JPM,
+GOOGL, NVDA, AMZN, SPY, VOO, GC=F, META, SPCX all in the same ranges as recent days). Looking at the
+combined `trackRecord` by method family instead of by ticker: Gann 5/25 hit (20%), Fibonacci 4/25
+(16%), planetary rhythm 5/45 (11%), Hurst 1/14 (7%), lunar 2/9 (22%), vibration-lab aspects 3/28
+(11%), other 1/6 (17%). These are still small samples per family, but the ranking lines up with what
+the engine has already learned on its own: its internal `methodFactors` weights already favor Gann
+(1.62x) and lunar (1.98x) and already discount Hurst/rhythm/vibration (~0.9x) - so the method-family
+spread is evidence the self-learning weights are tracking real differences, not a sign anything is
+broken. Separately, the last 10 graded daily sessions (11/03-11/16) show the high/low % error
+flipping sign session to session (no run of 3+ same-direction misses), and the daily calibration
+factors sit near-neutral (0.984 high, 1.015 low) - no persistent over/under-shoot to correct there
+either. Weighted combined across roughly 525+ resolved predictions, hit rates remain around 13%
+within 2 days and 17% within 3, both comfortably above a near-zero random-date baseline, so the
+honesty framing holds up. Trade cards in `trades_log.json` are forward-looking proposals graded
+through this same mechanism rather than a separate win/loss ledger, so nothing new to report there.
+Real-money ledger: `real_trades.json` unchanged (last closed trade TSLA, 9/11). `SPREAD_JOURNAL.md`
+shows alert #106 (HOOD 12/04 $65P) as the current pending alert, replacing several voided same-day
+alerts (#100-#105) as the app's projected 11/18 low kept moving - normal churn, not a new issue.
+
+**What changed and why.** Nothing. No method family, ticker, or daily-grading check turned up a
+3+-day persistent pattern or a demonstrated bug, so per the daily discipline this stays a grade-and-
+log day. Honesty features (hit-rate displays, random-control comparisons, the grading itself, the
+coherence gate) are untouched. `tickers.txt` is untouched.
+
+**Watch next:** whether HOOD's calibration ceiling (pinned at 1.15, unclamped ratios ~1.17/1.19)
+keeps drifting or settles back; whether the six-ticker zigzag-threshold cluster (TSLA, HOOD, NVDA,
+AMZN, META, SPCX) ever breaks apart; whether META's zigzag finally confirms a new pivot one way or
+the other now that it's close to the 10% close-to-close threshold off its 11/05 low; whether JPM's
+hit rate stays the weakest among the liquid names as `n` grows; and whether the Gann/lunar vs Hurst/
+rhythm/vibration method-family split holds up as more predictions resolve. This sandbox's Yahoo
+block is unchanged - still can only grade and test against the cloud-refreshed build, not fetch
+fresh data or validate a code change end-to-end itself.
