@@ -98,8 +98,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open TSLA $330 put 11/20 x1 | $10.00 GTC | filled 10/16 1:03pm at $10.00; closed 10/19 9:50am at $7.30, **+$270** ($5.00 GTC cancelled) | $33,000 | 10/15 3:12pm |
 | Individual | Sell to open META $670 put 11/20 x1 | $25.00 GTC | filled 10/20 9:30am at $25.00; closed 10/21 9:40am at $20.00 (buy to close placed 10/20 9:32am), +$500 | $67,000 | 10/19 1:29pm |
 | Joint | Sell to open META $670 put 11/20 x1 | $25.00 GTC | filled 10/20 9:30am at $25.00; closed 10/21 9:40am at $20.00 (buy to close placed 10/20 9:32am), +$500 | $67,000 | 10/19 1:28pm |
-| Individual | Sell to open META $650 put 11/20 x1 | $25.00 GTC | filled 10/22 9:36am at $25.00; buy to close $12.50 GTC resting (placed 11/04 9:34am; replaced the 10/22 $20.00) | $65,000 | 10/22 9:32am |
-| Joint | Sell to open META $650 put 11/20 x1 | $25.00 GTC | filled 10/22 9:36am at $25.00; buy to close $12.50 GTC resting (placed 11/04 9:34am; replaced the 10/22 $20.00) | $65,000 | 10/22 9:33am |
+| Individual | Sell to open META $650 put 11/20 x1 | $25.00 GTC | filled 10/22 9:36am at $25.00; buy to close $12.50 GTC (placed 11/04 9:34am; replaced the 10/22 $20.00) cancelled 11/17 10:19am, no exit order | $65,000 | 10/22 9:32am |
+| Joint | Sell to open META $650 put 11/20 x1 | $25.00 GTC | filled 10/22 9:36am at $25.00; buy to close $12.50 GTC (placed 11/04 9:34am; replaced the 10/22 $20.00) cancelled 11/17 10:19am, no exit order | $65,000 | 10/22 9:33am |
 | Individual | Sell to open TSLA $315 put 12/11 x1 | $10.00 GTC | filled 11/05 10:01am at $10.00; closed 11/09 9:40am at $5.00 (GTC buy-back filled), +$500 (+50%) | $31,500 | 11/05 10:00am |
 | Joint | Sell to open TSLA $315 put 12/11 x2 | $10.00 GTC | filled 11/05 10:01am at $10.00; closed 11/09 9:40am at $5.00 x2 (GTC buy-back filled), +$1,000 (+50%) | $63,000 | 11/05 10:01am |
 | Joint | Sell to open QQQ $650 put 12/11 x1 | $16.00 GTC | filled 11/05 10:03am at $16.00; closed 11/11 7:30am at $8.00 (GTC buy-back filled pre-market); P&L +$800 (+50%) | $65,000 | 11/05 10:03am |
@@ -214,7 +214,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 102 | 11/16 9:38am | SELL PUT HOOD 11/27 72P (timing: today's low ~72.34 12:30-1:19pm, leg up to 11/23 high ~84.35; premium 3.2%; collateral $7,200; replaces #100) | $2.27 (1x) | Pushed, open; re-pushed 10:38am $3.05 (HOOD 73.40); void 2:37pm (app moved the low to ~71.48; see #103) | void |
 | 103 | 11/16 2:37pm | SELL PUT HOOD 11/27 71P (timing: today's low ~71.48, leg up to 11/23 high ~83.49; premium 4.7%; collateral $7,100; replaces #102) | $3.35 (1x) | Pushed, open; void 3:04pm (app moved the low to ~69.08; see #104) | void |
 | 104 | 11/16 3:04pm | SELL PUT HOOD 11/27 69P (timing: today's low ~69.08, leg up to 11/23 high ~80.80; premium 3.4%; collateral $6,900; replaces #103) | $2.37 (1x) | Pushed, open | expired (entry turn passed; see #105) |
-| 105 | 11/17 9:38am | SELL PUT HOOD 12/04 69P (timing: Wed 11/18 low ~69.08, leg up to 12/02 high ~87.56; premium 5.2%; collateral $6,900) | $3.58 (limit $3.55, 1x) | Pushed, open | pending |
+| 105 | 11/17 9:38am | SELL PUT HOOD 12/04 69P (timing: Wed 11/18 low ~69.08, leg up to 12/02 high ~87.56; premium 5.2%; collateral $6,900) | $3.58 (limit $3.55, 1x) | Pushed, open; re-pushed 10:38am $4.20 (HOOD 69.48) | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
