@@ -106,8 +106,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open QQQ $650 put 12/11 x1 | $16.00 GTC | filled 11/05 10:03am at $16.00; closed 11/11 7:30am at $8.00 (GTC buy-back filled pre-market); P&L +$800 (+50%) | $65,000 | 11/05 10:03am |
 | Individual | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; bought to close 10/27 11:02am at $6.25, +$625 (+50%) | $68,500 | 10/22 10:40am |
 | Joint | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; bought to close 10/27 11:02am at $6.25, +$625 (+50%) | $68,500 | 10/22 10:40am |
-| Individual | Sell to open QQQ $625 put 12/18 x1 | $16.00 GFD (extended hours) | resting, unfilled (mark $14.69 at 3:46pm); against the app's leg (QQQ low 11/23 ~634.49) | $62,500 | 11/19 3:38pm |
-| Joint | Sell to open QQQ $625 put 12/18 x1 | $16.00 GFD (extended hours) | resting, unfilled (mark $14.69 at 3:46pm); against the app's leg (QQQ low 11/23 ~634.49) | $62,500 | 11/19 3:37pm |
+| Individual | Sell to open QQQ $625 put 12/18 x1 | $16.00 GFD (extended hours) | filled 11/19 4:00pm at $16.00 (QQQ ~645.10); no exit order; against the app's leg at entry (QQQ low 11/23 ~634.49) | $62,500 | 11/19 3:38pm |
+| Joint | Sell to open QQQ $625 put 12/18 x1 | $16.00 GFD (extended hours) | filled 11/19 4:00pm at $16.00 (QQQ ~645.10); no exit order; against the app's leg at entry (QQQ low 11/23 ~634.49) | $62,500 | 11/19 3:37pm |
 
 ## Alert log (graded at expiry, taken or not)
 
