@@ -215,8 +215,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 103 | 11/16 2:37pm | SELL PUT HOOD 11/27 71P (timing: today's low ~71.48, leg up to 11/23 high ~83.49; premium 4.7%; collateral $7,100; replaces #102) | $3.35 (1x) | Pushed, open; void 3:04pm (app moved the low to ~69.08; see #104) | void |
 | 104 | 11/16 3:04pm | SELL PUT HOOD 11/27 69P (timing: today's low ~69.08, leg up to 11/23 high ~80.80; premium 3.4%; collateral $6,900; replaces #103) | $2.37 (1x) | Pushed, open | expired (entry turn passed; see #105) |
 | 105 | 11/17 9:38am | SELL PUT HOOD 12/04 69P (timing: Wed 11/18 low ~69.08, leg up to 12/02 high ~87.56; premium 5.2%; collateral $6,900) | $3.58 (limit $3.55, 1x) | Pushed, open; re-pushed 10:38am $4.20 (HOOD 69.48); void 11:46am (app cut the 11/18 low to ~65.22; see #106) | void |
-| 106 | 11/17 11:46am | SELL PUT HOOD 12/04 65P (timing: Wed 11/18 low ~65.22, leg up to 12/02 high ~83.75; premium 5.3%; collateral $6,500; replaces #105) | $3.48 (limit $3.45, 1x) | Pushed, open; 11/18 9:37am app moved the low to Thu 11/19 12:30-1:19pm (~65.22), 12/02 high ~82.35 | pending |
-| 107 | 11/18 9:37am | SELL CALL TSLA 11/30 407.5C (timing: Thu 11/19 high ~405.21, leg down to 11/25 low ~371.48; premium 1.2%; uncovered) | $4.80 (limit $4.80, 1x) | Pushed, open | pending |
+| 106 | 11/17 11:46am | SELL PUT HOOD 12/04 65P (timing: Wed 11/18 low ~65.22, leg up to 12/02 high ~83.75; premium 5.3%; collateral $6,500; replaces #105) | $3.48 (limit $3.45, 1x) | Pushed, open; 11/18 9:37am app moved the low to Thu 11/19 12:30-1:19pm (~65.22), 12/02 high ~82.35; void 11/19 9:37am (app dropped the 11/19 low; next turn 11/26 high ~86.39) | void |
+| 107 | 11/18 9:37am | SELL CALL TSLA 11/30 407.5C (timing: Thu 11/19 high ~405.21, leg down to 11/25 low ~371.48; premium 1.2%; uncovered) | $4.80 (limit $4.80, 1x) | Pushed, open; void 11/19 9:37am (app raised the 11/19 high to ~412.61; 415C mid $3.80 below 1%, no replacement) | void |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
