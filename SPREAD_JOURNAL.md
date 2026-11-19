@@ -220,7 +220,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 107 | 11/18 9:37am | SELL CALL TSLA 11/30 407.5C (timing: Thu 11/19 high ~405.21, leg down to 11/25 low ~371.48; premium 1.2%; uncovered) | $4.80 (limit $4.80, 1x) | Pushed, open; void 11/19 9:37am (app raised the 11/19 high to ~412.61; 415C mid $3.80 below 1%, no replacement) | void |
 | 108 | 11/19 9:46am | SELL CALL TSLA 11/30 407.5C (timing: today's high ~405.21 restored by app, leg down to 11/25 low ~377.21; premium 1.1%; uncovered; reinstates #107) | $4.50 (limit $4.50, 1x) | Pushed, open; void 10:37am (app dropped today's high; next turn 11/27 low ~358) | void |
 | 109 | 11/19 9:46am | SELL CALL META 12/02 650C (timing: Fri 11/20 high ~649.75, leg down to 11/27 low ~595.97; premium 1.3%; uncovered) | $8.58 (limit $8.55, 1x) | Pushed, open; void 12:17pm (app flipped META's 11/20 turn to a low ~582.63) | void |
-| 110 | 11/19 12:17pm | SELL PUT HOOD 12/04 65P (timing: Fri 11/20 low ~65.22, leg up to 12/02 high ~79.82; premium 3.7%; collateral $6,500) | $2.42 (limit $2.40, 1x) | Pushed, open | pending |
+| 110 | 11/19 12:17pm | SELL PUT HOOD 12/04 65P (timing: Fri 11/20 low ~65.22, leg up to 12/02 high ~79.82; premium 3.7%; collateral $6,500) | $2.42 (limit $2.40, 1x) | Pushed, open; void 2:37pm (app dropped the 11/20 low; next turn 11/26 high ~82.53) | void |
+| 111 | 11/19 2:37pm | SELL PUT META 12/02 580P (timing: Fri 11/20 low ~582.63, leg up to 11/27 high ~634.62; premium 1.7%; collateral $58,000) | $9.90 (limit $9.90, 1x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 

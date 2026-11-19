@@ -4421,8 +4421,35 @@
         "turnPrice": 79.82,
         "plannedExit": "GTC buy-back $1.20 (50%); close at the 12/02 projected high if not filled; stop $4.80 or HOOD close below 65",
         "taken": false,
+        "outcome": "void",
+        "reason": "D is tomorrow's projected HOOD low ~65.22, E the 12/02 high ~79.82; first listed expiry 2+ trading days after E is 12/04; lowest projected low to expiry 65.22 so 65 strike; premium 3.7%; collateral $6,500 fits Agentic, Individual or Joint. Same contract as void #106 (alerted 11/17, over 24h ago).",
+        "note": "11/19 2:37pm: app dropped the 11/20 HOOD low; next turn is now the 11/26 high ~82.53 (HOOD 69.83). Void, never taken. 65P mid was $2.20."
+      },
+      {
+        "id": 111,
+        "kind": "sell put",
+        "date": "2026-11-19",
+        "time": "14:37 ET",
+        "symbol": "META",
+        "contract": "META 12/02 580P",
+        "spread": "12/02 580 put (sold, cash-secured)",
+        "contracts": 1,
+        "midAtAlert": 9.9,
+        "suggestedLimit": 9.9,
+        "delta": -0.295,
+        "spot": 604.23,
+        "collateral": 58000,
+        "breakeven": 570.1,
+        "entryTurnDate": "2026-11-20",
+        "entryTurnTime": "9:30 AM ET",
+        "entryTurnPrice": 582.63,
+        "turnDate": "2026-11-27",
+        "turnTime": "9:30 AM ET",
+        "turnPrice": 634.62,
+        "plannedExit": "GTC buy-back $4.95 (50%); close at the 11/27 projected high if not filled; stop $19.80 or META close below 580",
+        "taken": false,
         "outcome": "pending",
-        "reason": "D is tomorrow's projected HOOD low ~65.22, E the 12/02 high ~79.82; first listed expiry 2+ trading days after E is 12/04; lowest projected low to expiry 65.22 so 65 strike; premium 3.7%; collateral $6,500 fits Agentic, Individual or Joint. Same contract as void #106 (alerted 11/17, over 24h ago)."
+        "reason": "D is tomorrow's projected META low ~582.63, E the 11/27 high ~634.62; first listed expiry 2+ trading days after E is 12/02; lowest projected low to expiry 582.63 so 580 strike; premium 1.7%; collateral $58,000 fits Individual or Joint only. Quotes wide (8.40/11.40), open interest 4."
       }
     ]
   },
