@@ -91,6 +91,18 @@
       "wins": 1,
       "losses": 1,
       "note": "Growth measured from 11,205 (11,000 + September realized)."
+    },
+    {
+      "month": "2026-11",
+      "startValue": 10114,
+      "deposits": 0,
+      "realizedPnl": -1490,
+      "fees": 0,
+      "growthPct": -14.73,
+      "trades": 1,
+      "wins": 0,
+      "losses": 1,
+      "note": "Growth measured from 10,114 (11,205 + October realized -1,091)."
     }
   ],
   "trades": [
@@ -664,7 +676,7 @@
     },
     {
       "id": 9,
-      "status": "open",
+      "status": "closed",
       "account": "••••2831 Agentic",
       "orderId": "6ad231ab-e1e9-4af9-a549-dc78fd97cf28",
       "ticker": "META",
@@ -710,17 +722,15 @@
       },
       "fillCredit": 2.5,
       "opened": "2026-10-16T10:16 ET",
-      "closed": null,
-      "closeCost": null,
-      "pnl": null,
-      "notes": "Alert 44 suggested 1x at $2.35 as a GTC to place at the 10/19 projected low (~710, Saturn 2:30-3:25 PM). User placed 2x at $2.50 GTC at 10:16am 10/16, filled at once: sold 670P at 14.30, bought 660P at 11.80 ($2.50 credit, $500 total). $1,500 risk (13.6%); with trade 8 total open risk $2,685 (24.4%). Entered before the 10/19 low, so the spread is against the app's leg until that turn. Exit at $1.25 debit or the 11/16 high; stop $5.00 debit or 670 breached. Spans META 10/21 report. No exit order resting yet. 10/16 11:13am: user placed a $1.25 GTC buy-to-close x2 (order 6ad23f0d), +$250 if filled (50% of credit).",
-      "exitOrder": {
-        "orderId": "6ad23f0d-c375-4795-956b-971c5a664f89",
-        "limitDebit": 1.25,
-        "tif": "gtc",
-        "placed": "2026-10-16T11:13 ET",
-        "placedBy": "user in app"
-      }
+      "closed": "2026-11-19T10:36 ET",
+      "closeCost": 9.95,
+      "pnl": -1490,
+      "notes": "Alert 44 suggested 1x at $2.35 as a GTC to place at the 10/19 projected low (~710, Saturn 2:30-3:25 PM). User placed 2x at $2.50 GTC at 10:16am 10/16, filled at once: sold 670P at 14.30, bought 660P at 11.80 ($2.50 credit, $500 total). $1,500 risk (13.6%); with trade 8 total open risk $2,685 (24.4%). Entered before the 10/19 low, so the spread is against the app's leg until that turn. Exit at $1.25 debit or the 11/16 high; stop $5.00 debit or 670 breached. Spans META 10/21 report. No exit order resting yet. 10/16 11:13am: user placed a $1.25 GTC buy-to-close x2 (order 6ad23f0d), +$250 if filled (50% of credit). | CLOSED 11/19 10:36am ET at $9.95 debit ($1,990): -$1,490 (99% of max loss).",
+      "exitOrder": "user in app: limit $9.85 GTC 10:34am, replaced at $9.95, filled 10:36am",
+      "daysHeld": 34,
+      "spotAtClose": 615.7,
+      "closeOrderId": "6aff1799-5604-4cef-917f-8b0893a244b0",
+      "exitReason": "Closed by user in app on 11/19 (day before expiry), both legs deep ITM, to avoid assignment/forced liquidation. Bought 670P at 55.05, sold 660P at 45.10, net 9.95 debit. Earlier $1.25 GTC and $9.85 limit cancelled. 2x stop ($5.00) was never placed as an order."
     }
   ],
   "otherAccountOrders": [
@@ -2646,7 +2656,7 @@
         "turnTime": "9:30 AM ET",
         "turnPrice": 836.97,
         "plannedExit": "close at the 11/16 projected high or at 50% of credit ($1.18); stop $4.70 debit or 670 breached",
-        "note": "660P (-0.189) nearest 0.20: 660/650 1.95 (0.195, fails); next closer 670P (-0.221) 13.075 (12.75/13.40), 660P 10.70; credit/width 0.2375; OI 2224. 3% rule: short <= 688.95 (below the 10/19 710.26 low). Expiry 11/20 (no 11/18 listed). Spans META 10/21 report. 1x = 7.0% (2x 13.9%, over 13%). Supersedes #41."
+        "note": "660P (-0.189) nearest 0.20: 660/650 1.95 (0.195, fails); next closer 670P (-0.221) 13.075 (12.75/13.40), 660P 10.70; credit/width 0.2375; OI 2224. 3% rule: short <= 688.95 (below the 10/19 710.26 low). Expiry 11/20 (no 11/18 listed). Spans META 10/21 report. 1x = 7.0% (2x 13.9%, over 13%). Supersedes #41. | Trade 9 closed 11/19 at $9.95, -$1,490."
       },
       {
         "id": 45,

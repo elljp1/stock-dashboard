@@ -31,10 +31,10 @@ Only filled trades get a number. Old internal ids are in the Ref column.
 | 3 | 9/24 | Agentic | QQQ 10/23 770/780 call credit spread x2 | $2.00 | $1.48 | 10/8 | **+$104** |
 | 4 | 9/30 | Individual | TSLA 10/30 330 put x2 (short) | $10.00 | $8.00 / $7.00 | 10/1 | **+$500** |
 | 5 | 9/30 | Joint | TSLA 10/30 330 put x3 (short) | $10.00 | $8.00 x2 / $7.00 | 10/1 | **+$700** |
-| 6 | 10/5 | Agentic | HOOD 10/30 101/96 put credit spread x3 | $1.05 | | | open (exit order $1.00 GTC resting since 10/15 10:38am; the $0.50 order was cancelled) |
+| 6 | 10/5 | Agentic | HOOD 10/30 101/96 put credit spread x3 | $1.05 | $5.03 | 10/30 | **-$1,195** |
 | 7 | 10/8 | Individual | META 10/30 700 put x1 (short) | $24.43 | $19.00 | 10/9 | **+$543** |
 | 8 | 10/8 | Joint | META 10/30 700 put x1 (short) | $24.00 | $19.00 | 10/9 | **+$500** |
-| 9 | 10/16 | Agentic | META 11/20 670/660 put credit spread x2 | $2.50 | | | open (exit order $1.25 GTC resting since 10/16 11:13am) |
+| 9 | 10/16 | Agentic | META 11/20 670/660 put credit spread x2 | $2.50 | $9.95 | 11/19 | **-$1,490** |
 | 10 | 10/16 | Individual | QQQ 11/20 700 put x1 (short) | $12.50 | | | open |
 | 11 | 10/16 | Joint | QQQ 11/20 700 put x1 (short) | $12.50 | | | open |
 | 12 | 10/16 | Individual | TSLA 11/20 330 put x1 (short) | $10.00 | | | open |
@@ -66,13 +66,14 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 6 | 9/23 11:27am | GOOGL | 10/23 $325/$320 put credit spread x3 | $1.25 | $1,125 | $323.75 | 76% | 10.2% | $1.20 GTC (replaced $0.60 9/24) | 9/24 12:41pm at $1.20 | **+$15** (break-even; exited against the app's leg) |
 | 7 | 9/24 3:53pm | QQQ | 10/23 $770/$780 call credit spread x2 | $2.00 | $1,600 | $772.00 | ~82% | 14.5% (user accepted) | $1.00 GTC, replaced by user with $1.50 GTC 10/8 | 10/8 1:04pm at $1.48 | **+$104** (26% of max) |
 | 8 | 10/5 2:45pm | HOOD | 10/30 $101/$96 put credit spread x3 | $1.05 | $1,185 | $99.95 | ~78% | 10.8% (25.3% total with #7, user accepted) | $0.53 or the 10/19 projected high (~121; app turn moved 10/22 → 10/09 → 10/19 → 10/15 → 10/19 on 10/8, low 10/09 ~104 first); stop $2.10 / HOOD close below $101 | | closed 10/30: 2 by early assignment/exercise + last at $5.10; **-$1,195** |
-| 9 | 10/16 10:16am | META | 11/20 $670/$660 put credit spread x2 | $2.50 | $1,500 | $667.50 | ~76% | 13.6% (24.4% total with #8) | $1.25 or the 11/16 projected high (~837); entered before the 10/19 low (~710), against the app's leg until then; stop $5.00 / 670 breached; exit order $1.25 GTC placed 10/16 11:13am | | open |
+| 9 | 10/16 10:16am | META | 11/20 $670/$660 put credit spread x2 | $2.50 | $1,500 | $667.50 | ~76% | 13.6% (24.4% total with #8) | $1.25 or the 11/16 projected high (~837); entered before the 10/19 low (~710), against the app's leg until then; stop $5.00 / 670 breached; exit order $1.25 GTC placed 10/16 11:13am | 11/19 10:36am at $9.95 (user in app, day before expiry, both legs ITM) | **-$1,490** (99% of max loss) |
 
 ## Monthly results
 | Month | Start | Deposits | Realized P&L | Growth | Trades | W/L |
 |---|---|---|---|---|---|---|
 | 2026-09 | $11,000 (incl. $10k deposit 9/9) | $10,000 | +$205 | +1.9% | 2 | 2/0 |
-| 2026-10 | $11,205 | $0 | +$104 | +0.9% | 1 | 1/0 |
+| 2026-10 | $11,205 | $0 | -$1,091 | -9.7% | 2 | 1/1 |
+| 2026-11 | $10,114 | $0 | -$1,490 | -14.7% | 1 | 0/1 |
 
 ## Other-account orders (read-only, not part of the spread P&L)
 | Account | Order | Limit | Status | Collateral | Placed |
