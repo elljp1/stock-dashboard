@@ -4688,3 +4688,49 @@ a pivot (needs a close above $665.59 or below $544.57 off the 11/05 low) now tha
 back down to $615 from the $641.69 bounce; and whether SPCX's sample starts to mean anything as it
 grows past n=9. This sandbox's Yahoo block is unchanged - still can only grade and test against the
 cloud-refreshed build, not fetch fresh data or validate a code change end-to-end itself.
+
+## 2026-11-19 (Thu) — fetch blocked again; ninth straight grade-and-log day; no new pattern found
+
+**Today's data situation:** ran `fetch_data.py` first as instructed; confirmed directly (a plain
+test request to Yahoo's chart API) that this sandbox's outbound connection to
+`query1.finance.yahoo.com` still gets an immediate "403 Forbidden" from the sandbox's own network
+gateway, not from Yahoo - the same recurring sandbox restriction as every prior review, nothing new.
+No raw per-ticker CSVs exist locally (gitignored), so there was nothing for `analyze.py` to run
+against; I left the published build untouched rather than risk damaging it. The live dashboard is
+already current from the separate, automatic GitHub Actions refresh, which last published today at
+10:42pm UTC. `coherence_check.py` passed cleanly (12/12 tickers), `anomaly_audit.py` reported zero
+anomalies, and the full test suite passed: 147 Python tests.
+
+**Grades reviewed.** Weighting each ticker's `trackRecord` by its own sample size gives a combined
+14.0% hit rate within 2 days and 18.2% within 3 days across 544 resolved predictions - essentially
+flat versus two days ago's 13.7%/17.9% on 540, both still comfortably above a near-zero random-date
+baseline, so the honesty framing holds up. Per ticker, nothing moved outside its recent range: HOOD
+remains pinned at its calibration ceiling (priceCalibHigh 1.15) with the highest price error among
+the liquid names (13.9%) - the same deliberate, already-explained clamp, not new drift. I also
+checked HOOD's last 10 graded daily sessions specifically, since every one of them shows the
+predicted high landing above the actual high (a same-direction miss each time) - but this is exactly
+what that calibration factor exists to correct (today's daily calibHigh for HOOD is 0.972, already
+pulling predicted highs down), and it's being computed from the full 77-prediction history rather
+than just the last 10 sessions, so a short streak like this doesn't by itself indicate a bug. JPM
+stays the weakest liquid name (hit2 8%, hit3 14%), in line with its established pattern. META's
+`trackRecord.n` is still 0, same mechanical zigzag gap as before. SPCX's sample is still too small
+to read into (n=9). No open real-money trades (`real_trades.json` unchanged, last closed TSLA 9/11);
+`SPREAD_JOURNAL.md` shows alerts #108-111 (TSLA, META x2, HOOD) as the current pending/void paper
+alerts - normal day-to-day churn, not trades placed.
+
+**What changed and why.** Nothing. HOOD's 10-for-10 same-direction daily miss looked at first glance
+like it might be the "3+ day persistent pattern" the daily discipline watches for, but it turned out
+to be the calibration system already catching and correcting exactly that bias from a much longer
+history - so tightening it further today would risk overfitting to one ticker's recent volatility
+rather than fixing a real bug. No other ticker, method family, or calibration check turned up a new
+pattern or a demonstrated bug, so per the daily discipline this stays a ninth straight grade-and-log
+day. Honesty features (hit-rate displays, random-control comparisons, the grading itself, the
+coherence gate) are untouched. `tickers.txt` is untouched.
+
+**Watch next:** whether HOOD's 10-for-10 same-direction daily miss keeps going even as the
+calibration factor keeps adjusting (worth revisiting if it's still one-sided after another week);
+whether HOOD's price calibration ceiling ever settles back from 1.15; whether JPM's hit rate stays
+the weakest among the liquid names as `n` grows; whether META's zigzag finally confirms a pivot; and
+whether SPCX's sample starts to mean anything as it grows past n=9. This sandbox's Yahoo block is
+unchanged - still can only grade and test against the cloud-refreshed build, not fetch fresh data or
+validate a code change end-to-end itself.
