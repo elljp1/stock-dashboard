@@ -4394,8 +4394,35 @@
         "turnPrice": 595.97,
         "plannedExit": "GTC buy-back $4.30 (50%); close at the 11/27 projected low if not filled; stop $17.10 or META close above 650",
         "taken": false,
+        "outcome": "void",
+        "reason": "D is tomorrow's projected META high ~649.75, E the 11/27 low ~595.97; first expiry 2+ trading days after E is 12/02; highest projected high to expiry 649.75 so 650 strike; premium 1.3%; quotes wide (5.60/11.55).",
+        "note": "11/19 12:17pm: app flipped META's next turn to a Fri 11/20 LOW ~582.63 (then 11/27 high ~633.35); no projected high before expiry, so the sell-call entry is gone. Void, never taken. 650C mid was $5.28 with META 606.62."
+      },
+      {
+        "id": 110,
+        "kind": "sell put",
+        "date": "2026-11-19",
+        "time": "12:17 ET",
+        "symbol": "HOOD",
+        "contract": "HOOD 12/04 65P",
+        "spread": "12/04 65 put (sold, cash-secured)",
+        "contracts": 1,
+        "midAtAlert": 2.42,
+        "suggestedLimit": 2.4,
+        "delta": -0.305,
+        "spot": 69.58,
+        "collateral": 6500,
+        "breakeven": 62.6,
+        "entryTurnDate": "2026-11-20",
+        "entryTurnTime": "Jupiter 10:03-10:52 AM; Jupiter 3:45-4:00 PM",
+        "entryTurnPrice": 65.22,
+        "turnDate": "2026-12-02",
+        "turnTime": "Venus 11:45 AM-12:32 PM; Moon 1:20-2:07 PM",
+        "turnPrice": 79.82,
+        "plannedExit": "GTC buy-back $1.20 (50%); close at the 12/02 projected high if not filled; stop $4.80 or HOOD close below 65",
+        "taken": false,
         "outcome": "pending",
-        "reason": "D is tomorrow's projected META high ~649.75, E the 11/27 low ~595.97; first expiry 2+ trading days after E is 12/02; highest projected high to expiry 649.75 so 650 strike; premium 1.3%; quotes wide (5.60/11.55)."
+        "reason": "D is tomorrow's projected HOOD low ~65.22, E the 12/02 high ~79.82; first listed expiry 2+ trading days after E is 12/04; lowest projected low to expiry 65.22 so 65 strike; premium 3.7%; collateral $6,500 fits Agentic, Individual or Joint. Same contract as void #106 (alerted 11/17, over 24h ago)."
       }
     ]
   },
