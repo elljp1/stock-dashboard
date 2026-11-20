@@ -4734,3 +4734,41 @@ the weakest among the liquid names as `n` grows; whether META's zigzag finally c
 whether SPCX's sample starts to mean anything as it grows past n=9. This sandbox's Yahoo block is
 unchanged - still can only grade and test against the cloud-refreshed build, not fetch fresh data or
 validate a code change end-to-end itself.
+
+## 2026-11-20 (Fri) — fetch blocked again; tenth straight grade-and-log day; no new pattern found
+
+**Today's data situation:** ran `fetch_data.py` as instructed; this sandbox's own network gateway
+still returns an immediate "403 Forbidden" on every outbound request to Yahoo's chart API, for all
+12 tickers and the pre/post-market quotes - the same recurring sandbox restriction as every prior
+review, not a new block. No raw per-ticker CSVs exist locally (they're gitignored by design), so
+there was nothing for `analyze.py` to run against; I left the published build untouched rather than
+risk it. The live dashboard is already current from the separate, automatic GitHub Actions refresh,
+which last published today at 10:41pm UTC (and ran its own grading pass at 10:40pm). `coherence_check.py`
+passed cleanly (12/12 tickers), `anomaly_audit.py` reported zero anomalies, and all 14 Python test
+files passed.
+
+**Grades reviewed.** Weighting each ticker's `trackRecord` by its own sample size gives a combined
+13.9% hit rate within 2 days and 18.0% within 3 days across 555 resolved predictions - essentially
+flat versus yesterday's 14.0%/18.2% on 544, both still comfortably above a near-zero random-date
+baseline, so the honesty framing holds up. Per ticker, nothing moved outside its recent range: HOOD
+remains pinned at its calibration ceiling (priceCalibHigh 1.15) with the highest price error among
+the liquid names (13.9%) - the same deliberate, already-explained clamp, not new drift. JPM stays
+the weakest liquid name (hit2 8%, hit3 14%), in line with its established pattern. META's
+`trackRecord.n` is still 0, same mechanical zigzag gap as before. SPCX's sample grew from n=9 to
+n=13, still too small to read into but moving in the right direction. The `zigzagThreshPct`
+diagnostic (logged since 11/10 to separate a real bug from ordinary day-to-day recomputation) held
+at the same per-ticker values as recent days. No open real-money trades (`real_trades.json`
+unchanged, last closed TSLA 9/11); `SPREAD_JOURNAL.md` shows alerts #112-120 (META, QQQ, HOOD, each
+replaced multiple times intraday) as the current pending/void paper alerts - normal day-to-day churn
+as the app's projected turn shifts, not trades placed.
+
+**What changed and why.** Nothing. No ticker, method family, or calibration check turned up a new
+pattern or a demonstrated bug, so per the daily discipline this stays a tenth straight grade-and-log
+day. Honesty features (hit-rate displays, random-control comparisons, the grading itself, the
+coherence gate) are untouched. `tickers.txt` is untouched.
+
+**Watch next:** whether HOOD's price calibration ceiling ever settles back from 1.15; whether JPM's
+hit rate stays the weakest among the liquid names as `n` grows; whether META's zigzag finally
+confirms a pivot; and whether SPCX's hit rates stay stable as its sample keeps growing past n=13.
+This sandbox's Yahoo block is unchanged - still can only grade and test against the cloud-refreshed
+build, not fetch fresh data or validate a code change end-to-end itself.
