@@ -4461,7 +4461,7 @@
         "taken": false,
         "outcome": "pending",
         "reason": "D is tomorrow's projected HOOD low ~65.22, E the 12/02 high ~79.82; first listed expiry 2+ trading days after E is 12/04; lowest projected low to expiry 65.22 so 65 strike; premium 3.7%; collateral $6,500 fits Agentic, Individual or Joint. Same contract as void #106 (alerted 11/17, over 24h ago).",
-        "note": "11/19 2:37pm: app dropped the 11/20 HOOD low; next turn is now the 11/26 high ~82.53 (HOOD 69.83). Void, never taken. 65P mid was $2.20. | 11/19 3:04pm: app restored the Fri 11/20 low ~65.22 (12/02 high ~79.75); reinstated, mid $2.41 (no improvement, no re-push). | Re-pushed 11/20 9:37am: mid $2.73 (+$0.31), HOOD 68.11; limit $2.72, buy-back $1.36, stop $5.44; E now 12/02 high ~78.99."
+        "note": "11/19 2:37pm: app dropped the 11/20 HOOD low; next turn is now the 11/26 high ~82.53 (HOOD 69.83). Void, never taken. 65P mid was $2.20. | 11/19 3:04pm: app restored the Fri 11/20 low ~65.22 (12/02 high ~79.75); reinstated, mid $2.41 (no improvement, no re-push). | Re-pushed 11/20 9:37am: mid $2.73 (+$0.31), HOOD 68.11; limit $2.72, buy-back $1.36, stop $5.44; E now 12/02 high ~78.99. | Re-pushed 11/20 9:46am: mid $3.13 (+$0.40), HOOD 67.02; limit $3.10, buy-back $1.55, stop $6.20."
       },
       {
         "id": 111,
@@ -4513,8 +4513,9 @@
         "turnPrice": 612.75,
         "plannedExit": "GTC buy-back $6.90 (50%); close at the 11/27 projected high if not filled; stop $27.60 or META close below 565",
         "taken": false,
-        "outcome": "pending",
-        "reason": "D is today's projected META low ~566.98, E the 11/27 high ~612.75; first listed expiry 2+ trading days after E is 12/02; lowest projected low to expiry 566.98 so 565 strike; premium 2.4%; collateral $56,500 fits Individual or Joint. Quotes wide (10.65/17.00), open interest 0. Replaces #111."
+        "outcome": "void",
+        "reason": "D is today's projected META low ~566.98, E the 11/27 high ~612.75; first listed expiry 2+ trading days after E is 12/02; lowest projected low to expiry 566.98 so 565 strike; premium 2.4%; collateral $56,500 fits Individual or Joint. Quotes wide (10.65/17.00), open interest 0. Replaces #111.",
+        "note": "11/20 9:46am: app moved the exit high to 12/03 ~634.01, so the expiry moves to 12/11 (first listed 565P 2+ trading days after 12/03); replaced by #114. 12/02 565P mid was $12.85. Never taken."
       },
       {
         "id": 113,
@@ -4541,6 +4542,32 @@
         "taken": false,
         "outcome": "pending",
         "reason": "D is Monday's (next trading day) projected QQQ low ~617.28, E the 12/07 high ~661.73; 12/09 and 12/10 have no 615-617 puts listed, so first listed expiry is 12/11; lowest projected low to expiry 617.28 so 615 strike (616/617 not listed); premium 2.2%; collateral $61,500 fits Individual or Joint. Quote crossed at alert (13.40/13.92)."
+      },
+      {
+        "id": 114,
+        "kind": "sell put",
+        "date": "2026-11-20",
+        "time": "09:46 ET",
+        "symbol": "META",
+        "contract": "META 12/11 565P",
+        "spread": "12/11 565 put (sold, cash-secured)",
+        "contracts": 1,
+        "midAtAlert": 18.83,
+        "suggestedLimit": 18.8,
+        "delta": -0.379,
+        "spot": 580.13,
+        "collateral": 56500,
+        "breakeven": 546.2,
+        "entryTurnDate": "2026-11-20",
+        "entryTurnTime": "9:30 AM ET (window passed; place by the close)",
+        "entryTurnPrice": 566.98,
+        "turnDate": "2026-12-03",
+        "turnTime": "Saturn 11:45 AM-12:32 PM",
+        "turnPrice": 634.01,
+        "plannedExit": "GTC buy-back $9.40 (50%); close at the 12/03 projected high if not filled; stop $37.60 or META close below 565",
+        "taken": false,
+        "outcome": "pending",
+        "reason": "D is today's projected META low ~566.98, E the 12/03 high ~634.01; first listed 565P expiry 2+ trading days after E is 12/11; lowest projected low to expiry 566.98 so 565 strike; premium 3.3%; collateral $56,500 fits Individual or Joint. Replaces #112."
       }
     ]
   },
