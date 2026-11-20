@@ -4461,7 +4461,7 @@
         "taken": false,
         "outcome": "pending",
         "reason": "D is tomorrow's projected HOOD low ~65.22, E the 12/02 high ~79.82; first listed expiry 2+ trading days after E is 12/04; lowest projected low to expiry 65.22 so 65 strike; premium 3.7%; collateral $6,500 fits Agentic, Individual or Joint. Same contract as void #106 (alerted 11/17, over 24h ago).",
-        "note": "11/19 2:37pm: app dropped the 11/20 HOOD low; next turn is now the 11/26 high ~82.53 (HOOD 69.83). Void, never taken. 65P mid was $2.20. | 11/19 3:04pm: app restored the Fri 11/20 low ~65.22 (12/02 high ~79.75); reinstated, mid $2.41 (no improvement, no re-push). | Re-pushed 11/20 9:37am: mid $2.73 (+$0.31), HOOD 68.11; limit $2.72, buy-back $1.36, stop $5.44; E now 12/02 high ~78.99. | Re-pushed 11/20 9:46am: mid $3.13 (+$0.40), HOOD 67.02; limit $3.10, buy-back $1.55, stop $6.20."
+        "note": "11/19 2:37pm: app dropped the 11/20 HOOD low; next turn is now the 11/26 high ~82.53 (HOOD 69.83). Void, never taken. 65P mid was $2.20. | 11/19 3:04pm: app restored the Fri 11/20 low ~65.22 (12/02 high ~79.75); reinstated, mid $2.41 (no improvement, no re-push). | Re-pushed 11/20 9:37am: mid $2.73 (+$0.31), HOOD 68.11; limit $2.72, buy-back $1.36, stop $5.44; E now 12/02 high ~78.99. | Re-pushed 11/20 9:46am: mid $3.13 (+$0.40), HOOD 67.02; limit $3.10, buy-back $1.55, stop $6.20. | Re-pushed 11/20 10:37am: mid $3.65 (+$0.52), HOOD 65.65 (inside the 10:03-10:52 window); limit $3.65, buy-back $1.85, stop $7.30."
       },
       {
         "id": 111,
@@ -4540,8 +4540,9 @@
         "turnPrice": 661.73,
         "plannedExit": "GTC buy-back $6.85 (50%); close at the 12/07 projected high if not filled; stop $27.30 or QQQ close below 615",
         "taken": false,
-        "outcome": "pending",
-        "reason": "D is Monday's (next trading day) projected QQQ low ~617.28, E the 12/07 high ~661.73; 12/09 and 12/10 have no 615-617 puts listed, so first listed expiry is 12/11; lowest projected low to expiry 617.28 so 615 strike (616/617 not listed); premium 2.2%; collateral $61,500 fits Individual or Joint. Quote crossed at alert (13.40/13.92)."
+        "outcome": "void",
+        "reason": "D is Monday's (next trading day) projected QQQ low ~617.28, E the 12/07 high ~661.73; 12/09 and 12/10 have no 615-617 puts listed, so first listed expiry is 12/11; lowest projected low to expiry 617.28 so 615 strike (616/617 not listed); premium 2.2%; collateral $61,500 fits Individual or Joint. Quote crossed at alert (13.40/13.92).",
+        "note": "11/20 10:37am: app raised the 11/23 QQQ low to ~632.59 (12/07 high ~681.09), so the strike moves to 630 (632/631 not listed for 12/11); replaced by #115. 615P mid was $13.36 at 9:46am. Never taken."
       },
       {
         "id": 114,
@@ -4567,7 +4568,33 @@
         "plannedExit": "GTC buy-back $9.40 (50%); close at the 12/03 projected high if not filled; stop $37.60 or META close below 565",
         "taken": false,
         "outcome": "pending",
-        "reason": "D is today's projected META low ~566.98, E the 12/03 high ~634.01; first listed 565P expiry 2+ trading days after E is 12/11; lowest projected low to expiry 566.98 so 565 strike; premium 3.3%; collateral $56,500 fits Individual or Joint. Replaces #112."
+        "reason": "D is today's projected META low ~566.98, E the 12/03 high ~634.01; first listed 565P expiry 2+ trading days after E is 12/11; lowest projected low to expiry 566.98 so 565 strike; premium 3.3%; collateral $56,500 fits Individual or Joint. Replaces #112. | Re-pushed 11/20 10:37am: mid $20.63 (+$1.80; 20.30/20.95), META 577.31; limit $20.60, buy-back $10.30, stop $41.25."
+      },
+      {
+        "id": 115,
+        "kind": "sell put",
+        "date": "2026-11-20",
+        "time": "10:37 ET",
+        "symbol": "QQQ",
+        "contract": "QQQ 12/11 630P",
+        "spread": "12/11 630 put (sold, cash-secured)",
+        "contracts": 1,
+        "midAtAlert": 21.22,
+        "suggestedLimit": 21.2,
+        "delta": -0.474,
+        "spot": 629.8,
+        "collateral": 63000,
+        "breakeven": 608.8,
+        "entryTurnDate": "2026-11-23",
+        "entryTurnTime": "Sun 10:05-10:53 AM; Sun 3:44-4:00 PM",
+        "entryTurnPrice": 632.59,
+        "turnDate": "2026-12-07",
+        "turnTime": "Saturn 1:21-2:08 PM",
+        "turnPrice": 681.09,
+        "plannedExit": "GTC buy-back $10.60 (50%); close at the 12/07 projected high if not filled; stop $42.40 or QQQ close below 630",
+        "taken": false,
+        "outcome": "pending",
+        "reason": "D is Monday's (next trading day) projected QQQ low ~632.59, E the 12/07 high ~681.09; first listed expiry with nearby strikes 2+ trading days after E is 12/11; lowest projected low to expiry 632.59 so 630 strike (631/632 not listed); premium 3.4%; collateral $63,000 fits Individual or Joint. QQQ 629.80 is already below the projected low, so the strike is at the money. Replaces #113."
       }
     ]
   },
