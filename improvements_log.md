@@ -4811,3 +4811,43 @@ comparisons, the grading itself, the coherence gate) are untouched. `tickers.txt
 zigzag finally confirms a pivot; and whether SPCX's hit rates hold up as its sample keeps growing.
 This sandbox's Yahoo block is unchanged - still can only grade and test against the cloud-refreshed
 build, not fetch fresh data or validate a code change end-to-end itself.
+
+## 2026-11-22 (Sun) — fetch blocked again; weekend, no new data; thirteenth straight grade-and-log day
+
+**Today's data situation.** Ran `fetch_data.py` as instructed; this sandbox's network gateway still
+refuses every outbound request to Yahoo's chart API for all 12 tickers, now with an explicit
+"403 Forbidden (agent proxy: no rule or network setting allows this host)" - confirming this is a
+network policy setting on this cloud sandbox, not Yahoo itself blocking the IP. Same recurring
+restriction as every prior review. No raw per-ticker CSVs exist locally (gitignored by design), so
+`analyze.py` correctly refused with "Incomplete analysis; retaining last published dashboard" and
+left the live build untouched rather than risk it. It's also the weekend, so there's no new trading
+session to react to regardless - the live dashboard is already current from Friday's automatic
+GitHub Actions refresh (last commit 2026-11-21, 11:10pm UTC). `coherence_check.py` passed cleanly
+(12/12 tickers). All 147 `pytest` cases (14 subtests) passed, and the full Node/JS test suite
+(`smoke_test.js`, `reliability_test.js`, `pin_test.js`, `hilo_refresh_test.js`, `ui_layout_test.js`,
+`scheduler_test.mjs`) all passed after installing `node_modules` (jsdom) fresh in this sandbox.
+`anomaly_audit.py` reported zero anomalies today - cleaner than the last two days' weekend
+chain-staleness artifact, which has evidently self-resolved as expected.
+
+**Grades reviewed.** Weighting each ticker's `trackRecord` by its own sample size gives a combined
+13.9% hit rate within 2 days and 18.0% within 3 days across the same 555 resolved predictions as
+Friday and Saturday - unchanged, exactly as expected with no new trading session. Per-ticker figures
+are all identical to the last two reviews: HOOD still pinned at its calibration ceiling
+(`priceCalibHigh` 1.15) with the highest price error among the liquid names (13.9%); JPM still the
+weakest liquid name (hit2 8%, hit3 14%); META's `trackRecord.n` still 0; SPCX still at n=13. No open
+real-money trades (`real_trades.json` unchanged, last closed TSLA 9/11); `SPREAD_JOURNAL.md` shows
+paper alerts #117 (QQQ 12/11 610P), #119 (HOOD 12/04 61P) and #120 (META 12/11 540P) still pending
+from Friday afternoon, unchanged over the weekend - journal entries, not trades placed.
+
+**What changed and why.** Nothing. No new data, no ticker or method family crossed the 3+-day
+persistence bar this project uses before touching the engine, and today's anomaly audit came back
+completely clean. So per the daily discipline this stays a thirteenth straight grade-and-log day.
+Honesty features (hit-rate displays, random-control comparisons, the grading itself, the coherence
+gate) are untouched. `tickers.txt` is untouched.
+
+**Watch next:** same items as the last several days - whether HOOD's calibration ceiling ever
+settles back from 1.15; whether JPM's hit rate stays the weakest among the liquid names as `n`
+grows; whether META's zigzag finally confirms a pivot; and whether SPCX's hit rates hold up as its
+sample keeps growing past n=13. This sandbox's Yahoo block is unchanged - still can only grade and
+test against the cloud-refreshed build, not fetch fresh data or validate a code change end-to-end
+itself.
