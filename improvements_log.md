@@ -4851,3 +4851,50 @@ grows; whether META's zigzag finally confirms a pivot; and whether SPCX's hit ra
 sample keeps growing past n=13. This sandbox's Yahoo block is unchanged - still can only grade and
 test against the cloud-refreshed build, not fetch fresh data or validate a code change end-to-end
 itself.
+
+## 2026-11-23 (Mon) — first fresh trading-day grades since Friday; NVDA's hit rate dipped as its sample
+grew; fourteenth straight grade-and-log day
+
+**Today's data situation.** Ran `fetch_data.py` as instructed; this sandbox's network gateway still
+returns an immediate "403 Forbidden (agent proxy: no rule or network setting allows this host)" on
+every outbound request to Yahoo's chart API, for all 12 tickers and the pre/post-market quotes - the
+same recurring sandbox restriction as every prior review, not a new block. No raw per-ticker CSVs
+exist locally (gitignored by design), so `analyze.py` correctly refused with "Incomplete analysis;
+retaining last published dashboard" and nothing was overwritten locally. The live dashboard is
+already current from today's automatic GitHub Actions refresh (commit 22:41pm UTC, which also ran
+its own grading pass). `coherence_check.py` passed cleanly (12/12 tickers), `anomaly_audit.py`
+reported zero anomalies, all 147 `pytest` cases (14 subtests) passed, and the full Node/JS suite
+(`smoke_test.js`, `reliability_test.js`, `pin_test.js`, `hilo_refresh_test.js`, `ui_layout_test.js`,
+`scheduler_test.mjs`, 6 suites) all passed after a fresh `npm install`.
+
+**Grades reviewed.** Today is the first fresh Monday session since Friday, so the resolved-prediction
+count grew for the first time in several reviews: 595 resolved predictions versus 555 on Friday/over
+the weekend. Weighting each ticker's `trackRecord` by its own sample size gives a combined 13.2% hit
+rate within 2 days and 17.0% within 3 days - down slightly from 13.9%/18.0%, still comfortably above
+a near-zero random-date baseline. Per ticker: HOOD remains pinned at its calibration ceiling
+(`priceCalibHigh` 1.15) with the highest price error among the liquid names (13.9%, n=77) - the same
+already-explained deliberate clamp, not new drift. JPM stays the weakest liquid name (hit2 8%, hit3
+14%, n=87), in line with its established pattern. The one change worth flagging: NVDA's sample grew
+from n=21 to n=55 and its hit rate dropped from 10%/14% to 4%/5% - the biggest single-day swing in
+recent memory. This reads as a rolling-window effect (older, better-performing predictions aging out
+as a block of newer ones resolved together over the weekend) rather than a new bug - `trackRecord.n`
+has moved both up and down before (e.g. TSLA's n went from 86 to 81 this same update), which only
+makes sense if the ledger windows rather than accumulates forever. One day's data isn't the 3+-day
+persistence bar this project requires before touching the engine, so no code change today - but it's
+now on the watch list. META's `trackRecord.n` is still 0, same mechanical zigzag gap as before.
+SPCX grew to n=13 unchanged from Friday (23%/31%). No open real-money trades (`real_trades.json`
+unchanged, last closed TSLA 9/11); `SPREAD_JOURNAL.md`'s newest entries (#117-120, QQQ/HOOD/META)
+are all void or expired from Friday afternoon - no new paper alerts logged since, normal churn.
+
+**What changed and why.** No code change. NVDA's hit-rate drop is new today and needs at least two
+more days of the same direction before it crosses this project's persistence bar; everything else
+(HOOD's ceiling, JPM's weak hit rate, META's zero sample) is the same already-diagnosed, unchanged
+pattern as recent days. Honesty features (hit-rate displays, random-control comparisons, the grading
+itself, the coherence gate) are untouched. `tickers.txt` is untouched.
+
+**Watch next:** whether NVDA's hit rate keeps falling or recovers as more of this weekend's batch
+resolves and the window rolls forward; whether HOOD's calibration ceiling ever settles back from
+1.15; whether JPM's hit rate stays the weakest among the liquid names as `n` grows; and whether
+META's zigzag finally confirms a pivot. This sandbox's Yahoo block is unchanged - still can only
+grade and test against the cloud-refreshed build, not fetch fresh data or validate a code change
+end-to-end itself.
