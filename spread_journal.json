@@ -1342,7 +1342,7 @@
       "order": "sell to open META $650 put 11/20 x1",
       "limit": 25.0,
       "tif": "gtc",
-      "status": "filled 10/22 9:36am ET at $25.00; buy-to-close $12.50 GTC cancelled 11/17 10:19am; no exit order (placed 11/04 9:34am, replaced $20.00)",
+      "status": "filled 10/22 9:36am ET at $25.00; no exit order; expired in the money 11/20 (META closed $560.84) and assigned: 100 META shares bought at $650, $625 basis net of premium (shown 11/23)",
       "placed": "2026-10-22T09:32 ET",
       "placedAgent": "user",
       "account": "Individual ••••8549",
@@ -1353,7 +1353,7 @@
       "orderId": "6ada106c-a454-41dd-a98e-cf628a203645",
       "filled": "2026-10-22T09:36 ET",
       "fillPrice": 25.0,
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 1,
@@ -1373,7 +1373,15 @@
           "cancelled": "2026-11-17T10:19 ET"
         }
       ],
-      "note": "Cash-secured short put placed by the user after the META 670P closed. Not part of the Agentic spread P&L."
+      "note": "Cash-secured short put placed by the user after the META 670P closed. Not part of the Agentic spread P&L.",
+      "closed": "2026-11-20 expiry (assigned)",
+      "assignment": {
+        "shares": 100,
+        "strike": 650.0,
+        "basisNetOfPremium": 625.0,
+        "underlyingCloseAtExpiry": 560.84,
+        "valueAtExpiry": -6416
+      }
     },
     {
       "order": "sell to open QQQ $685 put 11/20 x1",
@@ -1411,7 +1419,7 @@
       "order": "sell to open META $650 put 11/20 x1",
       "limit": 25.0,
       "tif": "gtc",
-      "status": "filled 10/22 9:36am ET at $25.00; buy-to-close $12.50 GTC cancelled 11/17 10:19am; no exit order (placed 11/04 9:34am, replaced $20.00)",
+      "status": "filled 10/22 9:36am ET at $25.00; no exit order; expired in the money 11/20 (META closed $560.84) and assigned: 100 META shares bought at $650, $625 basis net of premium (shown 11/23)",
       "placed": "2026-10-22T09:33 ET",
       "placedAgent": "user",
       "account": "Joint ••••6540",
@@ -1422,7 +1430,7 @@
       "orderId": "6ada10ac-6e27-492e-a788-80bc41010ab1",
       "filled": "2026-10-22T09:36 ET",
       "fillPrice": 25.0,
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 1,
@@ -1442,7 +1450,15 @@
           "cancelled": "2026-11-17T10:19 ET"
         }
       ],
-      "note": "Cash-secured short put placed by the user after the META 670P closed. Not part of the Agentic spread P&L."
+      "note": "Cash-secured short put placed by the user after the META 670P closed. Not part of the Agentic spread P&L.",
+      "closed": "2026-11-20 expiry (assigned)",
+      "assignment": {
+        "shares": 100,
+        "strike": 650.0,
+        "basisNetOfPremium": 625.0,
+        "underlyingCloseAtExpiry": 560.84,
+        "valueAtExpiry": -6416
+      }
     },
     {
       "order": "sell to open QQQ $685 put 11/20 x1",
@@ -4647,8 +4663,8 @@
         "turnPrice": 647.05,
         "plannedExit": "GTC buy-back $12.35 (50%); close at the 12/07 projected high if not filled; stop $49.30 or QQQ close below 610",
         "taken": false,
-        "outcome": "pending",
-        "reason": "D is Monday's projected QQQ low ~611.45, E the 12/07 high ~647.05; expiry 12/11 (first listed with nearby strikes 2+ trading days after E); lowest projected low to expiry ~611.31 so 610 strike; premium 4.0%; collateral $61,000 fits Individual or Joint. QQQ 610.55 at alert, so at the money. Replaces #113. | 11/20 3:46pm: app lowered the 11/23 QQQ low to ~607.70; rule strike 605 is one strike away and its mid ($21.67) is lower, so no re-push. 610P mid $23.50."
+        "outcome": "void",
+        "reason": "D is Monday's projected QQQ low ~611.45, E the 12/07 high ~647.05; expiry 12/11 (first listed with nearby strikes 2+ trading days after E); lowest projected low to expiry ~611.31 so 610 strike; premium 4.0%; collateral $61,000 fits Individual or Joint. QQQ 610.55 at alert, so at the money. Replaces #113. | 11/20 3:46pm: app lowered the 11/23 QQQ low to ~607.70; rule strike 605 is one strike away and its mid ($21.67) is lower, so no re-push. 610P mid $23.50. | 11/23 9:37am: void; QQQ gapped to ~649 and the app dropped the 11/23 low (next turn now a 12/02 high ~661.73). Not taken."
       },
       {
         "id": 118,
@@ -4699,8 +4715,8 @@
         "turnPrice": 76.5,
         "plannedExit": "GTC buy-back $1.83 (50%); close at the 12/02 projected high if not filled; stop $7.30 or HOOD close below 61",
         "taken": false,
-        "outcome": "pending",
-        "reason": "D is today's projected HOOD low ~61.84 (window 3:45-4:00 PM), E the 12/02 high ~76.50; expiry 12/04; lowest projected low to expiry 61.84 so 61 strike; premium 6.0%; collateral $6,100 fits Agentic, Individual or Joint. Replaces #116."
+        "outcome": "expired (entry turn passed)",
+        "reason": "D is today's projected HOOD low ~61.84 (window 3:45-4:00 PM), E the 12/02 high ~76.50; expiry 12/04; lowest projected low to expiry 61.84 so 61 strike; premium 6.0%; collateral $6,100 fits Agentic, Individual or Joint. Replaces #116. | 11/23 9:37am: entry turn (11/20 close) passed, not taken."
       },
       {
         "id": 120,
@@ -4725,8 +4741,8 @@
         "turnPrice": 612.34,
         "plannedExit": "GTC buy-back $9.25 (50%); close at the 12/03 projected high if not filled; stop $37.05 or META close below 540",
         "taken": false,
-        "outcome": "pending",
-        "reason": "D is today's projected META low ~541.86, E the 12/03 high ~612.34; expiry 12/11; lowest projected low to expiry 541.86 so 540 strike; premium 3.4%; collateral $54,000 fits Individual or Joint. Replaces #118."
+        "outcome": "expired (entry turn passed)",
+        "reason": "D is today's projected META low ~541.86, E the 12/03 high ~612.34; expiry 12/11; lowest projected low to expiry 541.86 so 540 strike; premium 3.4%; collateral $54,000 fits Individual or Joint. Replaces #118. | 11/23 9:37am: entry turn (11/20 close) passed, not taken."
       }
     ]
   },
