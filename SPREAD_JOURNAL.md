@@ -233,7 +233,7 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 118 | 11/20 3:37pm | SELL PUT META 12/11 560P (timing: today's low ~560.08, leg up to 12/03 high ~631.93; premium 4.9%; collateral $56,000; at the money; replaces #114) | $27.35 (limit $27.35, 1x) | Pushed, open; void 3:46pm (app lowered the low to ~541.86; replaced by #120) | void |
 | 119 | 11/20 3:46pm | SELL PUT HOOD 12/04 61P (timing: today's low ~61.84, leg up to 12/02 high ~76.50; premium 6.0%; collateral $6,100; replaces #116) | $3.65 (limit $3.65, 1x) | Pushed, open; entry turn passed, not taken | expired |
 | 120 | 11/20 3:46pm | SELL PUT META 12/11 540P (timing: today's low ~541.86, leg up to 12/03 high ~612.34; premium 3.4%; collateral $54,000; replaces #118) | $18.53 (limit $18.50, 1x) | Pushed, open; entry turn passed, not taken | expired |
-| 121 | 11/24 11:46am | SELL PUT HOOD 12/04 61P (timing: Wed 11/25 low ~61.63, leg up to 12/02 high ~73.88; premium 3.6%; collateral $6,100) | $2.20 (limit $2.20, 1x) | Pushed, open | pending |
+| 121 | 11/24 11:46am | SELL PUT HOOD 12/04 61P (timing: Wed 11/25 low ~61.63, leg up to 12/02 high ~73.88; premium 3.6%; collateral $6,100) | $2.20 (limit $2.20, 1x) | Pushed, open; void 12:16pm (app dropped the 11/25 low) | void |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
