@@ -4898,3 +4898,43 @@ resolves and the window rolls forward; whether HOOD's calibration ceiling ever s
 META's zigzag finally confirms a pivot. This sandbox's Yahoo block is unchanged - still can only
 grade and test against the cloud-refreshed build, not fetch fresh data or validate a code change
 end-to-end itself.
+
+## 2026-11-24 (Tue) — quiet trading day; grades essentially flat; fifteenth straight grade-and-log day
+
+**Today's data situation.** Ran `fetch_data.py` as instructed; this sandbox's network gateway still
+returns an immediate "403 Forbidden (agent proxy: no rule or network setting allows this host)" on
+every outbound request to Yahoo's chart API, for all 12 tickers and the pre/post-market quotes - the
+same recurring sandbox restriction as every prior review, not a new block. No raw per-ticker CSVs
+exist locally (gitignored by design), so `analyze.py` correctly refused with "Incomplete analysis;
+retaining last published dashboard" and nothing was overwritten locally. The live dashboard is
+already current from today's automatic GitHub Actions refresh (commit 8968068, 22:42pm UTC, which
+also ran its own grading pass). `coherence_check.py` passed cleanly (12/12 tickers), `anomaly_audit.py`
+reported zero anomalies, all 147 `pytest` cases (14 subtests) passed, and the full Node/JS suite
+(`smoke_test.js`, `reliability_test.js`, `pin_test.js`, `hilo_refresh_test.js`, `ui_layout_test.js`,
+`scheduler_test.mjs`, 6 suites) all passed after a fresh `npm install`.
+
+**Grades reviewed.** Resolved-prediction count grew only slightly (595 to 597) - a quiet session with
+almost nothing new rolling off the ledger since Monday. Weighting each ticker's `trackRecord` by its
+own sample size gives a combined 13.2% hit rate within 2 days and 16.9% within 3 days - essentially
+unchanged from Monday's 13.2%/17.0%, still comfortably above a near-zero random-date baseline. Per
+ticker, nothing moved: HOOD stays pinned at its calibration ceiling (`priceCalibHigh` 1.15) with the
+highest price error among the liquid names (13.9%, n=77) - the same already-explained deliberate
+clamp. JPM stays the weakest liquid name (hit2 8%, hit3 14%, n=87). NVDA's sample held flat at n=55
+(hit2 4%, hit3 5%) - no new NVDA predictions resolved today, so Monday's "biggest single-day swing"
+still has not gained a second day of evidence either way; it stays on the watch list rather than
+triggering any change. META's `trackRecord.n` is still 0, same mechanical zigzag gap as before. SPCX
+grew from n=13 to n=14 (21%/29%, down slightly from 23%/31% - just one new data point diluting a
+small sample, not a trend). No open real-money trades (`real_trades.json` unchanged, last closed TSLA
+9/11); `SPREAD_JOURNAL.md`'s newest entry (#121, HOOD put, logged 11:46am) voided by 12:16pm the same
+day when the app dropped the projected low - normal churn, no new paper alerts standing.
+
+**What changed and why.** No code change. Today's numbers barely moved from Monday's, nothing crossed
+the 3+-day persistence bar this project requires before touching the engine, and the anomaly audit
+came back completely clean. Honesty features (hit-rate displays, random-control comparisons, the
+grading itself, the coherence gate) are untouched. `tickers.txt` is untouched.
+
+**Watch next:** whether NVDA's hit rate ever gets a second day of data to confirm or reverse Monday's
+drop; whether HOOD's calibration ceiling ever settles back from 1.15; whether JPM's hit rate stays the
+weakest among the liquid names as `n` grows; and whether META's zigzag finally confirms a pivot. This
+sandbox's Yahoo block is unchanged - still can only grade and test against the cloud-refreshed build,
+not fetch fresh data or validate a code change end-to-end itself.
