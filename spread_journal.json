@@ -1496,7 +1496,7 @@
       "order": "sell to open QQQ $690 put 11/30 x1",
       "limit": 16.0,
       "tif": "gtc (extended hours)",
-      "status": "filled 10/30 at $16.00; buy-to-close $8.00 GTC resting",
+      "status": "filled 10/30 at $16.00; buy-to-close $8.00 GTC cancelled 11/25 12:01am ET; assigned early (shown 11/25): 100 QQQ shares bought at $690, $674.0 basis net of premium",
       "placed": "2026-10-30T09:32 ET",
       "placedAgent": "user",
       "account": "Individual ••••8549",
@@ -1507,7 +1507,7 @@
       "orderId": "6ae49c7a-73a6-475c-92db-7111392fcf8a",
       "filled": "2026-10-30T09:32 ET",
       "fillPrice": 16.0,
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 1,
@@ -1515,16 +1515,26 @@
           "tif": "gtc (extended hours)",
           "orderId": "6ae49f16-4c56-4c2a-8232-faa25146318e",
           "placed": "2026-10-30T09:43 ET",
-          "state": "working"
+          "state": "cancelled",
+          "cancelled": "2026-11-25T00:01 ET (with assignment)"
         }
       ],
-      "note": "Cash-secured short put placed by the user at the open on 10/30 (QQQ ~696). Not part of the Agentic spread P&L."
+      "note": "Cash-secured short put placed by the user at the open on 10/30 (QQQ ~696). Not part of the Agentic spread P&L.",
+      "closed": "2026-11-25 early assignment",
+      "assignment": {
+        "shares": 100,
+        "strike": 690.0,
+        "basisNetOfPremium": 674.0,
+        "underlyingPrevClose": 638.1,
+        "spotWhenSeen": 611.9,
+        "valueWhenSeen": -6210
+      }
     },
     {
       "order": "sell to open QQQ $690 put 11/30 x1",
       "limit": 16.15,
       "tif": "gfd (extended hours)",
-      "status": "filled 10/30 at $16.15; buy-to-close $8.00 GTC resting",
+      "status": "filled 10/30 at $16.15; buy-to-close $8.00 GTC cancelled 11/25 12:01am ET; assigned early (shown 11/25): 100 QQQ shares bought at $690, $673.85 basis net of premium",
       "placed": "2026-10-30T09:33 ET",
       "placedAgent": "user",
       "account": "Joint ••••6540",
@@ -1535,7 +1545,7 @@
       "orderId": "6ae49c9f-59af-4950-a45a-24ef78e2de23",
       "filled": "2026-10-30T09:33 ET",
       "fillPrice": 16.15,
-      "openQty": 1,
+      "openQty": 0,
       "closeOrders": [
         {
           "qty": 1,
@@ -1543,10 +1553,20 @@
           "tif": "gtc (extended hours)",
           "orderId": "6ae49f3d-0bf8-40d8-9b6c-11d40b48492d",
           "placed": "2026-10-30T09:44 ET",
-          "state": "working"
+          "state": "cancelled",
+          "cancelled": "2026-11-25T00:01 ET (with assignment)"
         }
       ],
-      "note": "Cash-secured short put placed by the user at the open on 10/30 (QQQ ~696). Not part of the Agentic spread P&L."
+      "note": "Cash-secured short put placed by the user at the open on 10/30 (QQQ ~696). Not part of the Agentic spread P&L.",
+      "closed": "2026-11-25 early assignment",
+      "assignment": {
+        "shares": 100,
+        "strike": 690.0,
+        "basisNetOfPremium": 673.85,
+        "underlyingPrevClose": 638.1,
+        "spotWhenSeen": 611.9,
+        "valueWhenSeen": -6195
+      }
     },
     {
       "order": "sell to open TSLA $315 put 12/11 x1",
@@ -4769,6 +4789,58 @@
         "taken": false,
         "outcome": "void",
         "reason": "D is Wednesday's projected HOOD low ~61.63, E the 12/02 high ~73.88; expiry 12/04 (first listed 2+ trading days after E); lowest projected low to expiry 61.63 so 61 strike; premium 3.6%; collateral $6,100 fits Agentic, Individual or Joint. HOOD 64.14 at alert. | 11/24 12:16pm: void; app dropped the 11/25 HOOD low (next turn back to the 12/02 high ~76.92). 61P mid $1.99."
+      },
+      {
+        "id": 122,
+        "symbol": "HOOD",
+        "contract": "HOOD 12/04 61P",
+        "spread": "12/04 61 put (sold, cash-secured)",
+        "midAtAlert": 2.84,
+        "suggestedLimit": 2.84,
+        "delta": -0.414,
+        "spot": 62.22,
+        "collateral": 6100,
+        "breakeven": 58.16,
+        "entryTurnDate": "2026-11-26",
+        "entryTurnTime": "Jupiter 12:31-1:19 PM (market closed Thanksgiving; place 11/25 or 11/27)",
+        "entryTurnPrice": 61.63,
+        "turnDate": "2026-12-02",
+        "turnTime": "Venus 11:45-12:32 PM; Moon 1:20-2:07 PM",
+        "turnPrice": 72.21,
+        "plannedExit": "GTC buy-back $1.42 (50%); close at the 12/02 projected high if not filled; stop $5.68 or HOOD close below 61",
+        "reason": "D is the 11/26 projected HOOD low ~61.63 (holiday, so the turn falls before the next trading day 11/27), E the 12/02 high ~72.21; expiry 12/04; lowest projected low to expiry 61.63 so 61 strike; premium 4.7%; collateral $6,100 fits Agentic, Individual or Joint. Re-alert of #121: mid up $0.645. HOOD 62.22 at alert.",
+        "kind": "sell put",
+        "date": "2026-11-25",
+        "time": "9:37 ET",
+        "contracts": 1,
+        "taken": false,
+        "outcome": "pending"
+      },
+      {
+        "id": 123,
+        "symbol": "META",
+        "contract": "META 12/11 557.5P",
+        "spread": "12/11 557.5 put (sold, cash-secured)",
+        "midAtAlert": 17.275,
+        "suggestedLimit": 17.25,
+        "delta": -0.364,
+        "spot": 575.92,
+        "collateral": 55750,
+        "breakeven": 540.25,
+        "entryTurnDate": "2026-11-26",
+        "entryTurnTime": "9:30 AM ET (market closed Thanksgiving; place 11/25 or 11/27)",
+        "entryTurnPrice": 557.56,
+        "turnDate": "2026-12-08",
+        "turnTime": "Saturn 11:01-11:47 AM",
+        "turnPrice": 622.73,
+        "plannedExit": "GTC buy-back $8.65 (50%); close at the 12/08 projected high if not filled; stop $34.50 or META close below 557.5",
+        "reason": "D is the 11/26 projected META low ~557.56 (holiday, before the next trading day 11/27), E the 12/08 high ~622.73; expiry 12/11 (first listed 2+ trading days after E); lowest projected low to expiry 557.56 so 557.5 strike; premium 3.1%; collateral $55,750 fits Individual or Joint only (both already hold 100 META from the 650P assignment). META 575.92 at alert.",
+        "kind": "sell put",
+        "date": "2026-11-25",
+        "time": "9:37 ET",
+        "contracts": 1,
+        "taken": false,
+        "outcome": "pending"
       }
     ]
   },

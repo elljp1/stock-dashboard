@@ -106,6 +106,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open QQQ $650 put 12/11 x1 | $16.00 GTC | filled 11/05 10:03am at $16.00; closed 11/11 7:30am at $8.00 (GTC buy-back filled pre-market); P&L +$800 (+50%) | $65,000 | 11/05 10:03am |
 | Individual | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; bought to close 10/27 11:02am at $6.25, +$625 (+50%) | $68,500 | 10/22 10:40am |
 | Joint | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; bought to close 10/27 11:02am at $6.25, +$625 (+50%) | $68,500 | 10/22 10:40am |
+| Individual | Sell to open QQQ $690 put 11/30 x1 | $16.00 GTC (extended hours) | filled 10/30 9:32am at $16.00; buy to close $8.00 GTC cancelled 11/25 12:01am; assigned early (shown 11/25): 100 shares at $690, $674.00 basis net of premium | $69,000 | 10/30 9:32am |
+| Joint | Sell to open QQQ $690 put 11/30 x1 | $16.15 GFD (extended hours) | filled 10/30 9:33am at $16.15; buy to close $8.00 GTC cancelled 11/25 12:01am; assigned early (shown 11/25): 100 shares at $690, $673.85 basis net of premium | $69,000 | 10/30 9:33am |
 | Individual | Sell to open QQQ $625 put 12/18 x1 | $16.00 GFD (extended hours) | filled 11/19 4:00pm at $16.00 (QQQ ~645.10); no exit order; against the app's leg at entry (QQQ low 11/23 ~634.49) | $62,500 | 11/19 3:38pm |
 | Joint | Sell to open QQQ $625 put 12/18 x1 | $16.00 GFD (extended hours) | filled 11/19 4:00pm at $16.00 (QQQ ~645.10); no exit order; against the app's leg at entry (QQQ low 11/23 ~634.49) | $62,500 | 11/19 3:37pm |
 
@@ -234,6 +236,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | 119 | 11/20 3:46pm | SELL PUT HOOD 12/04 61P (timing: today's low ~61.84, leg up to 12/02 high ~76.50; premium 6.0%; collateral $6,100; replaces #116) | $3.65 (limit $3.65, 1x) | Pushed, open; entry turn passed, not taken | expired |
 | 120 | 11/20 3:46pm | SELL PUT META 12/11 540P (timing: today's low ~541.86, leg up to 12/03 high ~612.34; premium 3.4%; collateral $54,000; replaces #118) | $18.53 (limit $18.50, 1x) | Pushed, open; entry turn passed, not taken | expired |
 | 121 | 11/24 11:46am | SELL PUT HOOD 12/04 61P (timing: Wed 11/25 low ~61.63, leg up to 12/02 high ~73.88; premium 3.6%; collateral $6,100) | $2.20 (limit $2.20, 1x) | Pushed, open; void 12:16pm (app dropped the 11/25 low) | void |
+| 122 | 11/25 9:37am | SELL PUT HOOD 12/04 61P (timing: 11/26 low ~61.63 on the holiday, leg up to 12/02 high ~72.21; premium 4.7%; collateral $6,100; re-alert of #121, mid +$0.65) | $2.84 (limit $2.84, 1x) | Pushed, open | pending |
+| 123 | 11/25 9:37am | SELL PUT META 12/11 557.5P (timing: 11/26 low ~557.56 on the holiday, leg up to 12/08 high ~622.73; premium 3.1%; collateral $55,750) | $17.28 (limit $17.25, 1x) | Pushed, open | pending |
 
 ## Trade 3 (CLOSED 10:20am ET 9/18 at $0.90, +$190)
 
