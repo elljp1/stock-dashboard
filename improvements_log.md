@@ -4991,3 +4991,51 @@ pivot now that price ($608.76) sits roughly in the middle of its pending range; 
 11/23 down-day error spike in `horizonGrades` washes out as new sessions roll in or turns out to be
 the start of a real pattern. This sandbox's Yahoo block is unchanged - still can only grade and test
 against the cloud-refreshed build, not fetch fresh data or validate a code change end-to-end itself.
+
+## 2026-11-26 (Thu) — Thanksgiving: markets closed, grades frozen since yesterday; 11/23 error spike
+confirmed washed out; seventeenth straight grade-and-log day
+
+**Today's data situation.** Ran `fetch_data.py` as instructed; this sandbox's network gateway still
+returns an immediate "403 Forbidden (agent proxy: no rule or network setting allows this host)" on
+every outbound request to Yahoo's chart API, for all 12 tickers and the pre/post-market quotes - the
+same recurring sandbox restriction as every prior review, not a new block. No raw per-ticker CSVs
+exist locally (gitignored by design), so `analyze.py` correctly refused with "Incomplete analysis;
+retaining last published dashboard" and nothing was overwritten locally. The live dashboard is already
+current from today's automatic GitHub Actions refresh (commit 489b1a8, 22:42 UTC). `coherence_check.py`
+passed cleanly (12/12 tickers), `anomaly_audit.py` reported zero anomalies, all 147 `pytest` cases (14
+subtests) passed, and the full Node/JS suite (`smoke_test.js`, `reliability_test.js`, `pin_test.js`,
+`hilo_refresh_test.js`, `ui_layout_test.js`, `scheduler_test.mjs`, 6 suites) all passed after a fresh
+`npm install`.
+
+**Grades reviewed.** Today is Thanksgiving - US markets were closed, so there was no new trading
+session to grade. Every number in `data.js` is byte-for-byte identical to yesterday's post-review
+state: resolved-prediction count still 608, weighted hit rate still 13.4% within 2 days / 17.1% within
+3 days. Per ticker, nothing moved from yesterday: HOOD stays pinned at its calibration ceiling
+(`priceCalibHigh` 1.15, n=78); JPM stays the weakest liquid name (hit2 8%, hit3 13%, n=89); NVDA's
+sample held flat at n=55 (hit2 4%, hit3 5%) for a fourth straight day with no new NVDA predictions
+resolving; META's `trackRecord.n` is still 0; SPCX holds at n=16 (25%/31%). I followed up on Monday's
+open question - whether the 11/23 market-wide `horizonGrades.daily` error spike (SPY -4.0%/-4.1%, QQQ
+-6.1%/-5.8%, TSLA -9.0%/-11.5%, NVDA -21.5%/-24.5%) would wash out or turn into a real pattern. It
+washed out: the very next session (11/24) returned to normal-range error for every name I checked
+(SPY +1.1%/+0.7%, TSLA +1.9%/+0.8%), and even NVDA - the worst hit - recovered most of the way
+(+11.9% high error, down from -21.5%, still a bit elevated but nowhere near Monday's outlier). This
+confirms last Monday's read: one real volatile trading day, not a bug, no action needed. The
+long-standing GOOGL-highs/AMZN-lows naive-baseline watch items are unchanged from recent days (no new
+sessions to move them). No open real-money trades (`real_trades.json` unchanged, last closed TSLA
+9/11); `SPREAD_JOURNAL.md`'s newest entries (#122-123, HOOD/META puts, logged 11/25) were both voided
+by early afternoon that day when the app's projected low moved - normal churn, nothing new logged
+today since the market was shut.
+
+**What changed and why.** No code change. There was no new trading session for any metric to move on,
+the one open question from this week (the 11/23 spike) resolved itself as ordinary market volatility
+rather than a defect, and nothing has crossed the 3+-day persistence bar this project requires before
+touching the engine. Honesty features (hit-rate displays, random-control comparisons, the grading
+itself, the coherence gate) are untouched. `tickers.txt` is untouched.
+
+**Watch next:** whether NVDA's hit rate gets a fresh data point once Friday's session resolves and the
+window rolls forward past this flat holiday stretch; whether NVDA's lingering +11.9% daily high error
+on 11/24 fades to its normal range or turns out to be residual from Monday's volatility; whether HOOD's
+calibration ceiling ever settles back from 1.15; whether JPM's hit rate stays the weakest among the
+liquid names as `n` grows; and whether META's zigzag finally confirms a pivot. This sandbox's Yahoo
+block is unchanged - still can only grade and test against the cloud-refreshed build, not fetch fresh
+data or validate a code change end-to-end itself.
