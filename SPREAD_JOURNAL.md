@@ -108,8 +108,8 @@ Closed: 7 trades, 7 wins, **+$2,552** (Agentic +$309, Individual +$1,043, Joint 
 | Joint | Sell to open QQQ $685 put 11/20 x1 | $12.50 GTC | filled 10/22 12:50pm at $12.50; bought to close 10/27 11:02am at $6.25, +$625 (+50%) | $68,500 | 10/22 10:40am |
 | Individual | Sell to open QQQ $690 put 11/30 x1 | $16.00 GTC (extended hours) | filled 10/30 9:32am at $16.00; buy to close $8.00 GTC cancelled 11/25 12:01am; assigned early (shown 11/25): 100 shares at $690, $674.00 basis net of premium | $69,000 | 10/30 9:32am |
 | Joint | Sell to open QQQ $690 put 11/30 x1 | $16.15 GFD (extended hours) | filled 10/30 9:33am at $16.15; buy to close $8.00 GTC cancelled 11/25 12:01am; assigned early (shown 11/25): 100 shares at $690, $673.85 basis net of premium | $69,000 | 10/30 9:33am |
-| Individual | Sell to open QQQ $625 put 12/18 x1 | $16.00 GFD (extended hours) | filled 11/19 4:00pm at $16.00 (QQQ ~645.10); no exit order; against the app's leg at entry (QQQ low 11/23 ~634.49) | $62,500 | 11/19 3:38pm |
-| Joint | Sell to open QQQ $625 put 12/18 x1 | $16.00 GFD (extended hours) | filled 11/19 4:00pm at $16.00 (QQQ ~645.10); no exit order; against the app's leg at entry (QQQ low 11/23 ~634.49) | $62,500 | 11/19 3:37pm |
+| Individual | Sell to open QQQ $625 put 12/18 x1 | $16.00 GFD (extended hours) | filled 11/19 4:00pm at $16.00 (QQQ ~645.10); buy to close $8.00 GTC resting (placed 11/27 11:47-11:48am); against the app's leg at entry (QQQ low 11/23 ~634.49) | $62,500 | 11/19 3:38pm |
+| Joint | Sell to open QQQ $625 put 12/18 x1 | $16.00 GFD (extended hours) | filled 11/19 4:00pm at $16.00 (QQQ ~645.10); buy to close $8.00 GTC resting (placed 11/27 11:47-11:48am); against the app's leg at entry (QQQ low 11/23 ~634.49) | $62,500 | 11/19 3:37pm |
 
 ## Alert log (graded at expiry, taken or not)
 
